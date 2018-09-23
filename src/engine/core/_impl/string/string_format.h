@@ -1,0 +1,102 @@
+#pragma once
+
+#include <core/platform.h>
+#include <core/error.h>
+#include <core/conversion.h>
+#include <core/container/span.h>
+
+#include <libc++/utility>
+
+namespace sb {
+
+template <typename T>
+inline usize fmtArgFwCall(void const * value, Span<char> dest_buffer)
+{
+    return fmtArg(*reinterpret_cast<T *>(value), dest_buffer);
+}
+
+typedef usize (*FmtFwCallCB)(void const *, Span<char>);
+
+struct FmtArg
+{
+    void const * m_value;
+    FmtFwCallCB m_fmt_cb;
+};
+
+inline void expandFmtArgs(Span<FmtArg>) {}
+
+template <typename T, typename = void>
+struct FmtArgDesc
+{
+    using ValueType = T;
+};
+
+template <typename T>
+struct FmtArgDesc<T, wstd::enable_if_t<wstdx::is_string_raw<wstd::decay_t<T>>::value>>
+{
+    using ValueType = char const *;
+
+    inline static void const * storeValue(ValueType value)
+    {
+        return reinterpret_cast<void const *>(value);
+    }
+
+    inline static ValueType extractValue(void const * value)
+    {
+        return reinterpret_cast<ValueType>(value);
+    }
+};
+
+template <typename T>
+struct FmtArgDesc<T, wstd::enable_if_t<wstd::is_arithmetic<T>::value>>
+{
+    using ValueType = wstd::remove_cv_t<wstd::remove_reference_t<T>>;
+
+    inline static void const * storeValue(ValueType const & value)
+    {
+        return reinterpret_cast<void const *>(&value);
+    }
+
+    inline static ValueType const & extractValue(void const * value)
+    {
+        return *reinterpret_cast<ValueType const *>(value);
+    }
+};
+
+template <typename T, typename... TArgs>
+inline void expandFmtArgs(Span<FmtArg> argList, T const & arg, TArgs &&... args)
+{
+    sbAssert(!argList.empty());
+
+    FmtArg & arg_desc = argList[0];
+
+    using TypeDesc = FmtArgDesc<T>;
+
+    arg_desc.m_value = TypeDesc::storeValue(arg);
+    arg_desc.m_fmt_cb = [](void const * arg_value, Span<char> dest) { return stringCast(TypeDesc::extractValue(arg_value), dest); };
+
+    expandFmtArgs(argList.sub(1), args...);
+}
+
+namespace detail {
+
+usize stringFormat(Span<char> dest_buffer, char const * const format, Span<FmtArg> agrs);
+}
+
+template <typename... TArgs>
+inline usize stringFormat(Span<char> dest_buffer, char const * const format, TArgs &&... args)
+{
+    sbAssert(nullptr != format);
+
+    constexpr usize MAX_FMT_PARAM = 10;
+
+    constexpr usize arg_cnt = sizeof...(TArgs);
+    sbExpectTrue(MAX_FMT_PARAM >= arg_cnt);
+
+    FmtArg arg_list[MAX_FMT_PARAM];
+    expandFmtArgs(arg_list, args...);
+
+    return detail::stringFormat(dest_buffer, format, {arg_list, arg_cnt});
+}
+
+} // namespace sb

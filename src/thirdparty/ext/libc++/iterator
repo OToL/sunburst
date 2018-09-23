@@ -1,0 +1,14 @@
+#pragma once
+
+#include "../../inc/libc++/iterator"
+
+SB_STD_NS_BEGIN
+
+    namespace ext {
+        template <typename T>
+        using iterator_tag_t = typename wstd::iterator_traits<T>::iterator_category;
+    }
+
+SB_STD_NS_END
+
+#include "epilog.h"

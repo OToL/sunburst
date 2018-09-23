@@ -1,0 +1,81 @@
+#pragma once
+
+#include "../../inc/libc++/type_traits"
+
+#include <libc++/iterator>
+
+SB_STD_NS_BEGIN
+
+    template <class...>
+    using void_t = void;
+
+    template <bool B>
+    using bool_constant = integral_constant<bool, B>;
+
+    // TODO: move to ext folder
+    // TODO: rename
+    namespace ext {
+
+        #define DECLARE_HAS_MEMBER_FUNC(name, func)                                                     \
+            template <typename T>                                                                       \
+            struct has_member_func_##name                                                               \
+            {                                                                                           \
+                template <typename U>                                                                   \
+                struct type_check;                                                                      \
+                template <typename _1>                                                                  \
+                static wstd::true_type chk(type_check<decltype(&_1::func)> *);                          \
+                template <typename>                                                                     \
+                static wstd::false_type chk(...);                                                       \
+                static bool const value = wstd::is_same<decltype(chk<T>(0)), wstd::true_type>::value;   \
+            }
+
+        template <typename ...>
+        struct unreachable_t
+        {
+            constexpr static bool value = false;
+        };
+
+        template <typename ... TArgs>
+        inline constexpr bool unreachable_v = unreachable_t<TArgs...>::value;
+
+        struct null_t
+        {
+        };
+
+        DECLARE_HAS_MEMBER_FUNC(cstr, c_str);
+
+        template <typename T>
+        struct is_string_raw : public wstd::false_type
+        {
+        };
+
+        template <>
+        struct is_string_raw<char *> : public wstd::true_type
+        {
+        };
+
+        template <>
+        struct is_string_raw<char const *> : public wstd::true_type
+        {
+        };
+
+        template <typename T, typename = wstd::void_t<T>>
+        struct is_contiguous_sequence_container
+        {
+            using value_type = wstd::false_type;
+            static constexpr bool value = false;
+        };
+
+        template <typename T>
+        struct is_contiguous_sequence_container<
+            T, wstd::void_t<decltype(wstd::declval<T>().data()), typename wstd::is_same<wstdx::iterator_tag_t<typename T::iterator>, wstd::random_access_iterator_tag>::type>>
+        {
+            using value_type = wstd::true_type;
+            static constexpr bool value = true;
+        };
+
+    }
+
+SB_STD_NS_END
+
+#include "epilog.h"

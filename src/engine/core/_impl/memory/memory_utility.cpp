@@ -1,0 +1,21 @@
+
+#include <core/utility.h>
+
+#include <libc++/cstdlib>
+#include <libc++/cstring>
+
+namespace sb {
+
+void zeroMemory(void * const memPtr, usize const byteCount)
+{
+    wstd::memset(memPtr, 0, byteCount);
+}
+
+void notifyOOM(usize /*requestedSize*/, char const * message)
+{
+    outputDebugString(message);
+
+    wstd::exit(-1);
+}
+
+} // namespace sb

@@ -1,0 +1,19 @@
+#pragma once
+
+#include "prolog.h"
+
+#include SB_SRC_STD_INC(cstring)
+
+SB_STD_NS_BEGIN
+
+      SB_STD_USE(strrchr);
+      SB_STD_USE(strlen);
+      SB_STD_USE(strncpy);
+      SB_STD_USE(strncmp);
+      SB_STD_USE(strcpy);
+      SB_STD_USE(strncat);
+      SB_STD_USE(strcat);
+      SB_STD_USE(memset);
+      SB_STD_USE(memcpy);
+
+SB_STD_NS_END

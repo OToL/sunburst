@@ -1,0 +1,11 @@
+#pragma once
+
+#include "prolog.h"
+
+#include SB_SRC_STD_INC(cctype)
+
+SB_STD_NS_BEGIN
+
+    SB_STD_USE(isdigit);
+
+SB_STD_NS_END

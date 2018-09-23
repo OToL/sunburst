@@ -1,0 +1,11 @@
+#pragma once
+
+#include "prolog.h"
+
+#include SB_SRC_STD_INC(limits)
+
+SB_STD_NS_BEGIN
+
+	SB_STD_USE(numeric_limits);
+
+SB_STD_NS_END

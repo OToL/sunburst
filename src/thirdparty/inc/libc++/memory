@@ -1,0 +1,19 @@
+#pragma once
+
+#include "prolog.h"
+
+#include SB_SRC_STD_INC(memory)
+
+SB_STD_NS_BEGIN
+
+    SB_STD_USE(const_pointer_cast);
+    SB_STD_USE(static_pointer_cast);
+    SB_STD_USE(allocator);
+    SB_STD_USE(uninitialized_move);
+    SB_STD_USE(allocator_traits);
+    SB_STD_USE(remove_all_extents);
+    SB_STD_USE(remove_all_extents_t);
+
+    SB_STD_PRIVATE_USE(unique_ptr);
+
+SB_STD_NS_END
