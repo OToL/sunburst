@@ -17,9 +17,9 @@
 
 ## Misc
 
-- [] Rename sandbox to ... sunburst
-- [] Delete sandbox & upload sunburst to github
-- [] Upload sb_playground to github
+- [x] Rename sandbox to sunburst
+- [x] Delete sandbox & upload sunburst to github
+- [x] Upload sb_playground to github
 
 ## Quality
 

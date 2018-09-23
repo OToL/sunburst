@@ -42,8 +42,6 @@ struct FileSystem
     static FileSize readFile(FileHdl hdl, Span<ui8> buffer, FileSize cnt = -1);
 
     static FileSize getFileLength(FileHdl hdl);
-
-protected:
 };
 
 using FS = FileSystem;
