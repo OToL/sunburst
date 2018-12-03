@@ -3,9 +3,9 @@
 
 namespace sb { namespace detail {
 
-usize stringToCharBuffer(char const * src, Span<char> & dst)
+usize stringToCharBuffer(char const * src, wstd::span<char> & dst)
 {
-    return sb::strCpyT(dst.data(), dst.size(), src);
+    return sb::strCpyT(dst.data(), numericCast<usize>(dst.size()), src);
 }
 
 // String cast functions are taken from folly:
@@ -104,7 +104,7 @@ inline ui32 convertToBuffer(ui64 v, char * const buffer, usize capacity)
 }
 
 template <typename T>
-typename wstd::enable_if_t<wstd::is_signed<T>::value, usize> decimalToStringImpl(T src, sb::Span<char> & dest)
+typename wstd::enable_if_t<wstd::is_signed<T>::value, usize> decimalToStringImpl(T src, wstd::span<char> & dest)
 {
     if (!dest.empty())
     {
@@ -113,7 +113,7 @@ typename wstd::enable_if_t<wstd::is_signed<T>::value, usize> decimalToStringImpl
             if (2 <= dest.size())
             {
                 dest[0] = '-';
-                ui32 const bytes_cnt = convertToBuffer(ui64(-ui64(src)), dest.data() + 1, dest.size() - 1);
+                ui32 const bytes_cnt = convertToBuffer(ui64(-ui64(src)), dest.data() + 1, numericCast<usize>(dest.size() - 1));
 
                 if (0 != bytes_cnt)
                 {
@@ -124,7 +124,7 @@ typename wstd::enable_if_t<wstd::is_signed<T>::value, usize> decimalToStringImpl
         }
         else
         {
-            ui32 const bytes_cnt = convertToBuffer(ui64(src), dest.data(), dest.size());
+            ui32 const bytes_cnt = convertToBuffer(ui64(src), dest.data(), numericCast<usize>(dest.size()));
 
             if (0 != bytes_cnt)
             {
@@ -139,9 +139,9 @@ typename wstd::enable_if_t<wstd::is_signed<T>::value, usize> decimalToStringImpl
 }
 
 template <typename T>
-typename wstd::enable_if_t<!wstd::is_signed<T>::value, usize> decimalToStringImpl(T src, sb::Span<char> & dest)
+typename wstd::enable_if_t<!wstd::is_signed<T>::value, usize> decimalToStringImpl(T src, wstd::span<char> & dest)
 {
-    auto const bytes_cnt = convertToBuffer(ui64(src), dest.data(), dest.size());
+    auto const bytes_cnt = convertToBuffer(ui64(src), dest.data(), numericCast<usize>(dest.size()));
 
     if (0 != bytes_cnt)
     {
@@ -155,23 +155,23 @@ typename wstd::enable_if_t<!wstd::is_signed<T>::value, usize> decimalToStringImp
 }
 
 template <typename T>
-usize decimalToString(T src, sb::Span<char> & dest)
+usize decimalToString(T src, wstd::span<char> & dest)
 {
     return decimalToStringImpl(src, dest);
 }
 
-template usize decimalToString<si64>(si64 src, sb::Span<char> & dest);
-template usize decimalToString<si32>(si32 src, sb::Span<char> & dest);
-template usize decimalToString<si16>(si16 src, sb::Span<char> & dest);
-template usize decimalToString<si8>(si8 src, sb::Span<char> & dest);
+template usize decimalToString<si64>(si64 src, wstd::span<char> & dest);
+template usize decimalToString<si32>(si32 src, wstd::span<char> & dest);
+template usize decimalToString<si16>(si16 src, wstd::span<char> & dest);
+template usize decimalToString<si8>(si8 src, wstd::span<char> & dest);
 
-template usize decimalToString<ui64>(ui64 src, sb::Span<char> & dest);
-template usize decimalToString<ui32>(ui32 src, sb::Span<char> & dest);
-template usize decimalToString<ui16>(ui16 src, sb::Span<char> & dest);
-template usize decimalToString<ui8>(ui8 src, sb::Span<char> & dest);
+template usize decimalToString<ui64>(ui64 src, wstd::span<char> & dest);
+template usize decimalToString<ui32>(ui32 src, wstd::span<char> & dest);
+template usize decimalToString<ui16>(ui16 src, wstd::span<char> & dest);
+template usize decimalToString<ui8>(ui8 src, wstd::span<char> & dest);
 // template usize decimalToString<uiptr>(uiptr const & src,
-// sb::Span<char> & dest);
-// template usize decimalToString<usize>(usize const & src, sb::Span<char> & dest);
+// wstd::span<char> & dest);
+// template usize decimalToString<usize>(usize const & src, wstd::span<char> & dest);
 
 static_assert(sizeof(usize) <= sizeof(ui64), "usize is too big for decimalToString which is casting "
                                               "integral values to sbU64 before conversion");

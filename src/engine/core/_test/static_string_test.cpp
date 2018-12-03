@@ -10,7 +10,7 @@ TEST(STATIC_STRING, DefaultCtor)
     StaticString<10> testStr;
 
     EXPECT_TRUE(testStr.empty());
-    EXPECT_EQ(0U, testStr.length());
+    EXPECT_EQ(testStr.length(), 0U);
     EXPECT_STREQ(testStr.c_str(), "");
 }
 
@@ -19,7 +19,7 @@ TEST(STATIC_STRING, CtorRawStr)
     StaticString<10> testStr("Hello");
 
     EXPECT_FALSE(testStr.empty());
-    EXPECT_EQ(5U, testStr.length());
+    EXPECT_EQ(testStr.length(), 5U);
     EXPECT_STREQ(testStr.c_str(), "Hello");
 }
 
@@ -29,7 +29,7 @@ TEST(STATIC_STRING, CtorStaticString)
     StaticString<10> testStr2(testStr);
 
     EXPECT_FALSE(testStr2.empty());
-    EXPECT_EQ(5U, testStr2.length());
+    EXPECT_EQ(testStr2.length(), 5U);
     EXPECT_STREQ(testStr2.c_str(), "Hello");
 }
 
@@ -40,7 +40,7 @@ TEST(STATIC_STRING, AssignRawStr)
 
     testStr = "Hello";
     EXPECT_FALSE(testStr.empty());
-    EXPECT_EQ(5U, testStr.length());
+    EXPECT_EQ(testStr.length(), 5U);
     EXPECT_STREQ(testStr.c_str(), "Hello");
 }
 

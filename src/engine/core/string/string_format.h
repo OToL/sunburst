@@ -2,7 +2,8 @@
 
 #include <core/platform.h>
 #include <core/compiler.h>
-#include <core/container/span.h>
+
+#include <libc++/span>
 
 /// String formatting facility inspired by fmtlib:
 /// - https://docs.python.org/2/library/string.html
@@ -12,7 +13,7 @@ namespace sb {
 
 /// Returns the number of characters copied without the null terminated character ('\0')
 template <typename... TArgs>
-inline usize stringFormat(Span<char> dest_buffer, char const * const format, TArgs &&... args);
+inline usize stringFormat(wstd::span<char> dest_buffer, char const * const format, TArgs &&... args);
 
 } // namespace sb
 

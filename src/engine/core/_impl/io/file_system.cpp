@@ -222,6 +222,18 @@ public:
         return hdl;
     }
 
+    char const * getLayerPhysicalPath(FS::LayerName name)
+    {
+        auto const layer_desc = wstd::find_if(begin(m_layers), end(m_layers), [name](LayerDesc const & layer) { return layer.m_id == name; });
+
+        if (nullptr != layer_desc)
+        {
+            return layer_desc->m_layer->getPhysicalPath();
+        }
+
+        return "";
+    }
+
     void closeFile(FileHdl hdl)
     {
         sbAssert(0 < m_opened_file_cnt);
@@ -384,6 +396,13 @@ FileHdl FileSystem::createFile(char const * path, FileFormat fmt)
     return gs_file_system->createFile(path, fmt);
 }
 
+char const * FileSystem::getLayerPhysicalPath(LayerName name)
+{
+    sbAssert(nullptr != gs_file_system);
+
+    return gs_file_system->getLayerPhysicalPath(name);
+}
+
 void FileSystem::closeFile(FileHdl hdl)
 {
     sbAssert(nullptr != gs_file_system);
@@ -394,7 +413,7 @@ void FileSystem::closeFile(FileHdl hdl)
     }
 }
 
-FileSize FileSystem::readFile(FileHdl hdl, Span<ui8> buffer, FileSize cnt)
+FileSize FileSystem::readFile(FileHdl hdl, wstd::span<ui8> buffer, FileSize cnt)
 {
     sbAssert((FileSize)buffer.size() >= cnt);
     sbAssert(-1 <= cnt);

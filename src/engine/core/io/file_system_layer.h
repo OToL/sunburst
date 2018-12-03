@@ -1,9 +1,9 @@
 #pragma once
 
 #include <core/platform.h>
-#include <core/container/span.h>
-
 #include "base.h"
+
+#include <libc++/span>
 
 namespace sb {
 
@@ -29,6 +29,8 @@ public:
     virtual FileId createFile(char const * path, FileFormat fmt) = 0;
 
     virtual void closeFile(FileId) = 0;
+
+    virtual char const * getPhysicalPath() const = 0;
 };
 
 }

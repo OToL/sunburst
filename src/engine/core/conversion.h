@@ -1,8 +1,8 @@
 #pragma once
 
-#include <core/container/span.h>
 #include "_impl/conversion.h"
 
+#include <libc++/span>
 #include <libc++/type_traits>
 
 namespace sb {
@@ -14,7 +14,7 @@ constexpr TDst numericCast(TSrc && src)
 }
 
 template <typename TSrc>
-usize stringCast(TSrc && src, sb::Span<char> dest)
+usize stringCast(TSrc && src, wstd::span<char> dest)
 {
     using DecayedType = wstd::decay_t<TSrc>;
 

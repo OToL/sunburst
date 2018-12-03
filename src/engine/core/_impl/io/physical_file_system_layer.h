@@ -29,6 +29,11 @@ public:
 
     void closeFile(FileId file_id) override;
 
+    char const * getPhysicalPath() const override
+    {
+        return m_physical_path.c_str();
+    }
+
 private:
     StaticPhysicalPath m_physical_path;
 };

@@ -89,7 +89,6 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
         "-Wno-implicit-fallthrough" 
         "-Wno-missing-prototypes"
         "-Wno-documentation-unknown-command"
-        "-Wno-zero-as-null-pointer-constant"
         "-Wno-undefined-func-template")
     target_compile_definitions(common_public
         INTERFACE 
@@ -99,7 +98,7 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
             -lstdc++)
     target_compile_options(common_private
         INTERFACE 
-            -std=c++17 -g -fno-exceptions -Wall -Weverything -Werror ${SB_TOOLCHAIN_CLANG_WARNING_IGNORE_LIST} )
+            -std=c++2a -g -fno-exceptions -Wall -Weverything -Werror ${SB_TOOLCHAIN_CLANG_WARNING_IGNORE_LIST} )
 else ()
     message(FATAL_ERROR "Unknown toolchain: ${CMAKE_CXX_COMPILER_ID}")
 endif ()

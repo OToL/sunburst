@@ -5,8 +5,11 @@
 
 # TECH TESTS
 
-- [] imgui
-- [] Vulkan macos
+- [x] imgui basic test
+- [] Vulkan simple triangle macos
+- [] Implement imgui rendrer using Vulkan
+- [] Cloth simulation
+- [] Vehicle/Boat simulation
 
 # TODO
 
@@ -26,6 +29,7 @@
 - [] Try clang sanitizers
 - [] Try static analyzers
 - [] Re-enable clang formatting
+- [] make SB_TOOLCHAIN_CLANG_WARNING_IGNORE_LIST smaller
 
 ## Code environment
 
@@ -39,7 +43,7 @@
 
 ## thirdparty::libc++
 
-- [] Use std::span and replace sb::Span 
+- [] Use std::span and replace wstd::span 
 - [x] Move libc++ forwarding which are meant to be used only internally to a specific namespace (e.g. unique_ptr, etc.)
 - [x] Make a pass on libc++ forward to make sure everything is used
 - [x] Move ext libc++ to thirdparty\ext

@@ -54,7 +54,6 @@ sbAddLibraryTest(core
     _test/null_allocator_test.cpp
     _test/pool_allocator_test.cpp
     _test/ring_buffer_Test.cpp
-    _test/span_test.cpp
     _test/static_string_test.cpp
     _test/static_vector_Test.cpp
     _test/string_format_test.cpp

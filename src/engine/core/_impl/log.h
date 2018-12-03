@@ -12,6 +12,9 @@ namespace sb::detail {
 static inline sb::LogLevel gs_log_min_level = sb::LogLevel::DEBUG;
 static inline sb::b8 gs_log_quiet = false;
 
+template <typename... TArgs>
+inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args);
+
 inline void setLogQuiet(b8 quiet)
 {
     gs_log_quiet = quiet;
@@ -37,7 +40,7 @@ struct LogFilter
         else
         {
             char fmt_msg[255];
-            stringFormat(fmt_msg, msg, wstd::forward<TArgs>(args)...);
+            stringFormat(fmt_msg, sizeof(fmt_msg), msg, wstd::forward<TArgs>(args)...);
 
             detail::logMessage(lvl, file, line, fmt_msg);
         }
@@ -53,15 +56,16 @@ struct LogFilter<false>
 } // namespace sb
 
 #    define sbLogImpl(lvl, file, line, msg, ...) \
-        (!sb::detail::gs_log_quiet && ((ui8)lvl) <= ((ui8)sb::detail::gs_log_min_level)) && (sb::detail::LogFilter<sbCTFIsEnabled(LOG_FACILITY)>::logMessage(lvl, file, line, msg, ##__VA_ARGS__), true)
+        (!sb::detail::gs_log_quiet && ((sb::ui8)lvl) <= ((sb::ui8)sb::detail::gs_log_min_level)) && (sb::detail::LogFilter<sbCTFIsEnabled(LOG_FACILITY)>::logMessage(lvl, file, line, msg, ##__VA_ARGS__), true)
 
 #else
 
 #    define sbLogImpl(type, file, line, msg, ...)
 
+namespace sb::detail {
     inline void setLogQuiet(b8) {}
 
     void setLogMinLevel(LogLevel) {}
-
+}
 
 #endif

@@ -29,7 +29,7 @@ File::~File()
     }
 }
 
-FileSize File::read(Span<ui8> buffer, FileSize cnt)
+FileSize File::read(wstd::span<ui8> buffer, FileSize cnt)
 {
     sbAssert(!m_hdl.isNull());
 

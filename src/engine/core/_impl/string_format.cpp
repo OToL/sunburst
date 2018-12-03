@@ -6,7 +6,7 @@
 
 namespace sb::detail {
 
-usize stringFormat(Span<char> dest_buffer, char const * const format, Span<FmtArg> args)
+usize stringFormat(wstd::span<char> dest_buffer, char const * const format, wstd::span<FmtArg> args)
 {
     usize copied_bytes = 0;
 
@@ -15,7 +15,7 @@ usize stringFormat(Span<char> dest_buffer, char const * const format, Span<FmtAr
         char * dest_iter = dest_buffer.data();
         sbAssert(nullptr != dest_iter);
 
-        usize const dest_capacity = dest_buffer.size();
+        usize const dest_capacity = numericCast<usize>(dest_buffer.size());
 
         char const * format_iter = format;
         si32 lastParamIdx = 0;
@@ -78,7 +78,7 @@ usize stringFormat(Span<char> dest_buffer, char const * const format, Span<FmtAr
                         }
                     }
 
-                    copied_bytes += args[(ui32)arg_idx].m_fmt_cb(args[(ui32)arg_idx].m_value, Span<char>{dest_iter, dest_capacity - copied_bytes});
+                    copied_bytes += args[(ui32)arg_idx].m_fmt_cb(args[(ui32)arg_idx].m_value, wstd::span<char>{dest_iter, numericCast<sptrdiff>(dest_capacity - copied_bytes)});
                     dest_iter = dest_buffer.data() + copied_bytes;
 
                     continue;

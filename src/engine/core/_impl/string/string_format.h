@@ -3,19 +3,19 @@
 #include <core/platform.h>
 #include <core/error.h>
 #include <core/conversion.h>
-#include <core/container/span.h>
 
 #include <libc++/utility>
+#include <libc++/span>
 
 namespace sb {
 
 template <typename T>
-inline usize fmtArgFwCall(void const * value, Span<char> dest_buffer)
+inline usize fmtArgFwCall(void const * value, wstd::span<char> dest_buffer)
 {
     return fmtArg(*reinterpret_cast<T *>(value), dest_buffer);
 }
 
-typedef usize (*FmtFwCallCB)(void const *, Span<char>);
+typedef usize (*FmtFwCallCB)(void const *, wstd::span<char>);
 
 struct FmtArg
 {
@@ -23,7 +23,7 @@ struct FmtArg
     FmtFwCallCB m_fmt_cb;
 };
 
-inline void expandFmtArgs(Span<FmtArg>) {}
+inline void expandFmtArgs(wstd::span<FmtArg>) {}
 
 template <typename T, typename = void>
 struct FmtArgDesc
@@ -64,7 +64,7 @@ struct FmtArgDesc<T, wstd::enable_if_t<wstd::is_arithmetic<T>::value>>
 };
 
 template <typename T, typename... TArgs>
-inline void expandFmtArgs(Span<FmtArg> argList, T const & arg, TArgs &&... args)
+inline void expandFmtArgs(wstd::span<FmtArg> argList, T const & arg, TArgs &&... args)
 {
     sbAssert(!argList.empty());
 
@@ -73,18 +73,19 @@ inline void expandFmtArgs(Span<FmtArg> argList, T const & arg, TArgs &&... args)
     using TypeDesc = FmtArgDesc<T>;
 
     arg_desc.m_value = TypeDesc::storeValue(arg);
-    arg_desc.m_fmt_cb = [](void const * arg_value, Span<char> dest) { return stringCast(TypeDesc::extractValue(arg_value), dest); };
+    arg_desc.m_fmt_cb = [](void const * arg_value, wstd::span<char> dest) { return stringCast(TypeDesc::extractValue(arg_value), dest); };
 
-    expandFmtArgs(argList.sub(1), args...);
+    expandFmtArgs(argList.subspan(1), args...);
 }
 
 namespace detail {
 
-usize stringFormat(Span<char> dest_buffer, char const * const format, Span<FmtArg> agrs);
+usize stringFormat(wstd::span<char> dest_buffer, char const * const format, wstd::span<FmtArg> agrs);
+
 }
 
 template <typename... TArgs>
-inline usize stringFormat(Span<char> dest_buffer, char const * const format, TArgs &&... args)
+inline usize stringFormat(wstd::span<char> dest_buffer, char const * const format, TArgs &&... args)
 {
     sbAssert(nullptr != format);
 
@@ -97,6 +98,16 @@ inline usize stringFormat(Span<char> dest_buffer, char const * const format, TAr
     expandFmtArgs(arg_list, args...);
 
     return detail::stringFormat(dest_buffer, format, {arg_list, arg_cnt});
+}
+
+namespace detail {
+
+template <typename... TArgs>
+inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args)
+{
+    return sb::stringFormat({dest_buffer, numericCast<sptrdiff>(capacity)}, format, wstd::forward<TArgs>(args)...);
+}
+
 }
 
 } // namespace sb

@@ -86,7 +86,7 @@ TEST_F(SMALL_VECTOR, CLEAR)
     vect.clear();
 
     EXPECT_TRUE(vect.empty());
-    EXPECT_EQ(0U, vect.size());
+    EXPECT_EQ(vect.size(), 0U);
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0U);
 
     vect.emplace_back(0U);
@@ -99,11 +99,11 @@ TEST_F(SMALL_VECTOR, CLEAR)
     EXPECT_EQ(5U, vect.size());
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 5U);
 
-    EXPECT_EQ(0U, vect[0].getIdx());
-    EXPECT_EQ(1U, vect[1].getIdx());
-    EXPECT_EQ(2U, vect[2].getIdx());
-    EXPECT_EQ(3U, vect[3].getIdx());
-    EXPECT_EQ(4U, vect[4].getIdx());
+    EXPECT_EQ(vect[0].getIdx(), 0U);
+    EXPECT_EQ(vect[1].getIdx(), 1U);
+    EXPECT_EQ(vect[2].getIdx(), 2U);
+    EXPECT_EQ(vect[3].getIdx(), 3U);
+    EXPECT_EQ(vect[4].getIdx(), 4U);
 }
 
 TEST_F(SMALL_VECTOR, ACCESSOR)

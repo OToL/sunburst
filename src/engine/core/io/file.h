@@ -1,8 +1,9 @@
 #pragma once
 
 #include <core/platform.h>
-#include <core/container/span.h>
 #include "base.h"
+
+#include <libc++/span>
 
 namespace sb {
 
@@ -45,7 +46,7 @@ public:
         return m_hdl.isNull();
     }
 
-    FileSize read(Span<ui8> buffer, FileSize cnt = -1);
+    FileSize read(wstd::span<ui8> buffer, FileSize cnt = -1);
 
     FileSize getLength();
 

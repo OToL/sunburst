@@ -51,5 +51,4 @@ namespace sb {
     {
         platformCloseFile({file_id.m_value});
     }
-
 }
