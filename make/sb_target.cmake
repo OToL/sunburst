@@ -3,6 +3,7 @@ include(TestBigEndian)
 ## Supported Target platforms
 set(SB_TARGET_LINUX FALSE)
 set(SB_TARGET_MACOS FALSE)
+set(SB_TARGET_WINDOWS FALSE)
 
 ## Supported Target toolchains
 set(SB_TOOLCHAIN_CLANG FALSE)
@@ -19,21 +20,20 @@ add_library(sb::common_public ALIAS common_public)
 
 ## Target identification
 if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "i386")
-	set(SB_TARGET_CPU "x86")
+	set(SB_TARGET_CPU "x86_64")
 	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-	   set(SB_TARGET_OS_ARCH "64")
        target_compile_definitions(common_public
             INTERFACE 
-                SB_TARGET_64_BIT)
+                SB_TARGET_CPU_64_BIT)
 	else()
 	    message(FATAL_ERROR "Unsupported operating system architecture: ${CMAKE_SIZEOF_VOID_P} bits")
 	endif()
-elseif(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
-    set(SB_TARGET_CPU "x86")
-    set(SB_TARGET_OS_ARCH "64")
+elseif((${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64") OR 
+        (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "AMD64"))
+    set(SB_TARGET_CPU "x86_64")
     target_compile_definitions(common_public
         INTERFACE 
-            SB_TARGET_64_BIT SB_TARGET_X86)
+            SB_TARGET_CPU_64_BIT SB_TARGET_CPU_X86)
 else()
     message(FATAL_ERROR "Unsupported processor architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 endif()
@@ -52,23 +52,29 @@ if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
     set(SB_TARGET_MACOS TRUE)
     target_compile_definitions(common_public
         INTERFACE 
-            SB_TARGET_MACOS)
+            SB_TARGET_MACOS SB_TARGET_FAMILY_UNIX)
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     set(SB_TARGET_OS "linux")	
     set(SB_TARGET_LINUX TRUE)
     target_compile_definitions(common_public
         INTERFACE 
-            SB_TARGET_LINUX)
+            SB_TARGET_LINUX SB_TARGET_FAMILY_UNIX)
+elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
+    set(SB_TARGET_OS "windows")	
+    set(SB_TARGET_WINDOWS TRUE)
+    target_compile_definitions(common_public
+        INTERFACE 
+            SB_TARGET_WINDOWS)
 else()
     message(FATAL_ERROR "Unknown target: ${CMAKE_SYSTEM_NAME}")
 endif()
 
-set(SB_TARGET_FULL_NAME ${SB_TARGET_OS}_${SB_TARGET_CPU}_${SB_TARGET_OS_ARCH})
-set(SB_3RD_LIB_DIR_PATH "${SB_SRC_3RD_BASE_LIB_DIR_PATH}/${SB_TARGET_FULL_NAME}/release")
-set(SB_3RD_BIN_DIR_PATH "${SB_SRC_3RD_BASE_BIN_DIR_PATH}/${SB_TARGET_FULL_NAME}/release")
+set(SB_TARGET_FULL_NAME ${SB_TARGET_OS}_${SB_TARGET_CPU})
+set(SB_3RD_LIB_DIR_PATH "${SB_SRC_3RD_LIB_DIR_PATH}/${SB_TARGET_FULL_NAME}/debug")
+set(SB_3RD_BIN_DIR_PATH "${SB_SRC_3RD_BIN_DIR_PATH}/${SB_TARGET_FULL_NAME}/debug")
 
 ## Target toolchain options
-if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(SB_TOOLCHAIN_CLANG TRUE)
     set(SB_TOOLCHAIN_NAME "clang")
     set(SB_TOOLCHAIN_CLANG_WARNING_IGNORE_LIST  
@@ -99,7 +105,21 @@ if (${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     target_compile_options(common_private
         INTERFACE 
             -std=c++2a -g -fno-exceptions -Wall -Weverything -Werror ${SB_TOOLCHAIN_CLANG_WARNING_IGNORE_LIST} )
-else ()
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    sbSetRuntimeLibrary(STATIC)
+    set(SB_TOOLCHAIN_MSVC TRUE)
+    set(SB_TOOLCHAIN_NAME "msvc")
+    set(SB_TOOLCHAIN_MSVC_WARNING_IGNORE_LIST 
+        /wd4068 
+        /wd4996
+        /wd4307
+        /wd4521)
+    target_compile_definitions(common_public
+        INTERFACE 
+            SB_COMPILER_MSVC)
+    target_compile_options(common_private
+        INTERFACE 
+            /std:c++latest ${SB_TOOLCHAIN_MSVC_WARNING_IGNORE_LIST})
+else()
     message(FATAL_ERROR "Unknown toolchain: ${CMAKE_CXX_COMPILER_ID}")
-endif ()
-
+endif()

@@ -2,6 +2,8 @@
 
 #if defined(SB_TARGET_MACOS)
 #    include "_pimpl/macos/compiler_macos.h"
+#elif defined(SB_TARGET_WINDOWS)
+#    include "_pimpl/windows/compiler_win.h"
 #else
 #    error "Unsupported compiler"
 #endif
@@ -26,8 +28,6 @@
 #define sbConcatStr(id1, id2) id1 id2
 
 #define sbIdToStr(id) #id
-
-#define sbFwCall(fn, ...) fn(__VA_ARGS__)
 
 #define sbDebugBreak() sbDebugBreakImpl()
 

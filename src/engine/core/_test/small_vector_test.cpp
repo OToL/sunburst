@@ -12,6 +12,37 @@ protected:
 
     ~SmallVectorFixture() override {}
 
+    void initObjSeq(wstd::span<gtestx::ObjectTracker> objs, usize base_idx = 0ULL)
+    {
+        for (auto & obj : objs)
+        {
+            obj.setIdx(base_idx++);
+        }
+    }
+
+    b8 objSeqsEq(wstd::span<gtestx::ObjectTracker> seq1, wstd::span<gtestx::ObjectTracker> seq2)
+    {
+        if (seq1.size() == seq2.size())
+        {
+            usize idx = 0;
+            for (auto const & obj1 : seq1)
+            {
+                if (obj1.getIdx() != seq2[idx].getIdx())
+                {
+                    return false;
+                }
+
+                ++idx;
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     void SetUp() override
     {
         gtestx::ObjectTracker::resetStats();
@@ -34,6 +65,112 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR)
     SmallVectorTest<5> vect;
     EXPECT_TRUE(vect.empty());
     EXPECT_EQ(5U, vect.capacity());
+    EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0U);
+}
+
+TEST_F(SMALL_VECTOR, DEFAULT_CTOR_SIZE)
+{
+    {
+        SmallVectorTest<5> small_vect(5);
+        EXPECT_FALSE(small_vect.empty());
+        EXPECT_EQ(small_vect.size(), 5);
+        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 5U);
+
+        for (auto const & obj : small_vect)
+        {
+            EXPECT_EQ(obj.getIdx(), 0U);
+        }
+    }
+
+    {
+        SmallVectorTest<5> vect(10);
+        EXPECT_FALSE(vect.empty());
+        EXPECT_EQ(vect.size(), 10);
+        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 10U);
+
+        for (auto const & obj : vect)
+        {
+            EXPECT_EQ(obj.getIdx(), 0U);
+        }
+    }
+}
+
+TEST_F(SMALL_VECTOR, DEFAULT_CTOR_SIZE_INIT)
+{
+    gtestx::ObjectTracker init_obj{1};
+
+    EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 1U);
+
+    {
+        SmallVectorTest<5> small_vect(5, init_obj);
+        EXPECT_FALSE(small_vect.empty());
+        EXPECT_EQ(small_vect.size(), 5);
+        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 6U);
+
+        for (auto const & obj : small_vect)
+        {
+            EXPECT_EQ(obj.getIdx(), 1U);
+        }
+    }
+
+    {
+        SmallVectorTest<5> vect(10, init_obj);
+        EXPECT_FALSE(vect.empty());
+        EXPECT_EQ(vect.size(), 10);
+        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 11U);
+
+        for (auto const & obj : vect)
+        {
+            EXPECT_EQ(obj.getIdx(), 1U);
+        }
+    }
+
+    EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 1U);
+}
+
+TEST_F(SMALL_VECTOR, DEFAULT_CTOR_RANGE_INIT)
+{
+    {
+        gtestx::ObjectTracker objs[5];
+        initObjSeq(objs);
+        
+        SmallVectorTest<5> vect(wstd::begin(objs), wstd::end(objs));
+        EXPECT_FALSE(vect.empty());
+        EXPECT_EQ(vect.size(), 5U);
+        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 10U);
+        EXPECT_TRUE(objSeqsEq(objs, vect));
+    }
+
+    EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0U);
+
+    {
+        gtestx::ObjectTracker objs[10];
+        initObjSeq(objs);
+        
+        SmallVectorTest<5> vect(wstd::begin(objs), wstd::end(objs));
+        EXPECT_FALSE(vect.empty());
+        EXPECT_EQ(vect.size(), 10U);
+        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 20U);
+        EXPECT_TRUE(objSeqsEq(objs, vect));
+    }
+}
+
+TEST_F(SMALL_VECTOR, DEFAULT_CTOR_COPY)
+{
+    {
+        SmallVectorTest<4> src_vec(3);
+        initObjSeq(src_vec);
+
+        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 3U);
+
+        SmallVectorTest<5> dst_vec(src_vec);
+
+        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 6U);
+        EXPECT_EQ(dst_vec.size(), 3U);
+        EXPECT_TRUE(objSeqsEq(src_vec, dst_vec));
+    }
+
+    EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0U);
 }
 
 TEST_F(SMALL_VECTOR, EMPLACE_BACK)
@@ -124,9 +261,6 @@ TEST_F(SMALL_VECTOR, ACCESSOR)
     }
 }
 
-// TODO: re-enable
-#if 0
-
 TEST_F(SMALL_VECTOR, TEMP)
 {
     SmallVectorTest<5> vect;
@@ -140,7 +274,5 @@ TEST_F(SMALL_VECTOR, TEMP)
     gtestx::ObjectTracker obj{5};
     vect.push_back(obj);
 }
-
-#endif
 
 }

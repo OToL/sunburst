@@ -4,6 +4,7 @@
 
 #include <libc++/span>
 #include <libc++/type_traits>
+#include <libc++/utility>
 
 namespace sb {
 
@@ -13,8 +14,9 @@ constexpr TDst numericCast(TSrc && src)
     return static_cast<TDst>(src);
 }
 
+// Ensures null termination
 template <typename TSrc>
-usize stringCast(TSrc && src, wstd::span<char> dest)
+usize stringCastT (TSrc && src, wstd::span<char> dest)
 {
     using DecayedType = wstd::decay_t<TSrc>;
 
@@ -22,9 +24,9 @@ usize stringCast(TSrc && src, wstd::span<char> dest)
     {
         return detail::stringToCharBuffer(src, dest);
     }
-    else if constexpr (wstd::is_integral<DecayedType>::value && !wstd::is_same<DecayedType, bool>::value && (sizeof(DecayedType) <= 8))
+    else if constexpr (wstd::is_integral<DecayedType>::value)
     {
-        return detail::decimalToString(src, dest);
+        return detail::decimalToString(wstd::forward<TSrc>(src), dest);
     }
     else
     {

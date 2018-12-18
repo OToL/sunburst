@@ -73,7 +73,7 @@ inline void expandFmtArgs(wstd::span<FmtArg> argList, T const & arg, TArgs &&...
     using TypeDesc = FmtArgDesc<T>;
 
     arg_desc.m_value = TypeDesc::storeValue(arg);
-    arg_desc.m_fmt_cb = [](void const * arg_value, wstd::span<char> dest) { return stringCast(TypeDesc::extractValue(arg_value), dest); };
+    arg_desc.m_fmt_cb = [](void const * arg_value, wstd::span<char> dest) { return stringCastT(TypeDesc::extractValue(arg_value), dest); };
 
     expandFmtArgs(argList.subspan(1), args...);
 }
@@ -81,6 +81,12 @@ inline void expandFmtArgs(wstd::span<FmtArg> argList, T const & arg, TArgs &&...
 namespace detail {
 
 usize stringFormat(wstd::span<char> dest_buffer, char const * const format, wstd::span<FmtArg> agrs);
+
+template <typename... TArgs>
+inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args)
+{
+    return sb::stringFormat({dest_buffer, (sptrdiff)capacity}, format, wstd::forward<TArgs>(args)...);
+}
 
 }
 
@@ -91,23 +97,13 @@ inline usize stringFormat(wstd::span<char> dest_buffer, char const * const forma
 
     constexpr usize MAX_FMT_PARAM = 10;
 
-    constexpr usize arg_cnt = sizeof...(TArgs);
+    constexpr int arg_cnt = sizeof...(TArgs);
     sbExpectTrue(MAX_FMT_PARAM >= arg_cnt);
 
     FmtArg arg_list[MAX_FMT_PARAM];
     expandFmtArgs(arg_list, args...);
 
-    return detail::stringFormat(dest_buffer, format, {arg_list, arg_cnt});
-}
-
-namespace detail {
-
-template <typename... TArgs>
-inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args)
-{
-    return sb::stringFormat({dest_buffer, numericCast<sptrdiff>(capacity)}, format, wstd::forward<TArgs>(args)...);
-}
-
+    return detail::stringFormat(dest_buffer, format, {arg_list, numericCast<sptrdiff>(arg_cnt)});
 }
 
 } // namespace sb

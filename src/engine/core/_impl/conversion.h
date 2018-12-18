@@ -9,8 +9,6 @@ namespace sb { namespace detail {
 
 usize stringToCharBuffer(char const * src, wstd::span<char> & dst);
 
-/// Integral to string conversion
-
 template <typename T>
 usize decimalToString(T src, wstd::span<char> & dest);
 
@@ -23,6 +21,5 @@ extern template usize decimalToString<ui32>(ui32 src, wstd::span<char> & dest);
 extern template usize decimalToString<ui16>(ui16 src, wstd::span<char> & dest);
 extern template usize decimalToString<ui8>(ui8 src, wstd::span<char> & dest);
 extern template usize decimalToString<usize>(usize src, wstd::span<char> & dest);
-// extern template usize decimalToString<uiptr>(uiptr src, wstd::span<char> & dest);
 
 }} // namespace sb::detail

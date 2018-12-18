@@ -5,9 +5,9 @@
 
 namespace sb {
 
-char const * getWorkingDirectory()
+char * getWorkingDirectory(char * buff, usize buff_capacity)
 {
-    return getcwd(nullptr, 0);
+    return getcwd(buff, buff_capacity);
 }
 
 void outputDebugString(char const * msg) 

@@ -5,13 +5,14 @@
 #include <core/memory/allocator/memory_arena_composer.h>
 #include <core/memory/allocator/global_heap_allocator.h>
 #include <core/memory/new.h>
+#include <core/memory/unique_ptr.h>
+#include <core/memory/utility.h>
 #include <core/string/static_string.h>
 #include <core/container/static_vector.h>
-#include <core/utility.h>
-#include <core/unique_ptr.h>
+#include <core/string/utility.h>
 
 #include "file_system_platform.h"
-#include "physical_file_system_layer.h"
+#include "local_file_system_layer.h"
 
 #include <libc++/algorithm>
 #include <libc++/array>
@@ -20,7 +21,7 @@
 
 namespace sb {
 
-using StaticLogicalPath = StaticString<LOGICAL_PATH_MAX_LEN + 1>;
+using StaticLogicalPath = StaticString<LPath::MAX_LEN + 1>;
 
 // Because we tamper 16 last FileHdl bits with a generation ID
 static_assert(FileSystem::MAX_CONCURRENT_OPENED_FILES <= 0xFFFFU);
@@ -40,22 +41,23 @@ public:
         ui32 m_Gen; // Has to be last because the FileDesc allocator is using its first bytes for its internal link list
     };
 
+    // TODO: use a loki like assoc_vector to separate m_id from the rest of the data
     struct LayerDesc
     {
         HashStr m_id;
         StaticLogicalPath m_logical_path;
-        IFileSystemLayer * m_layer; // TODO: Change to an id/hdl system
+        UniquePtr<IFileSystemLayer> m_layer; // TODO: Change to an id/hdl system
     };
 
     using FSLayers = StaticVector<LayerDesc, 15>;
 
-    FileSystemImpl(FS::InitParams const & init)
+    FileSystemImpl(FS::InitParams & init)
         : m_file_desc_gen(0)
         , m_opened_file_cnt(0)
         , m_file_desc_pool{FileSystem::MAX_CONCURRENT_OPENED_FILES}
         , m_physical_layer_pool{50U}
     {
-        for (auto const & layer : init.m_layers)
+        for (auto & layer : init.m_layers)
         {
             sbWarn(!layer.m_name.isNull());
 
@@ -64,17 +66,14 @@ public:
 
             if (sbExpectTrue((layerIter == end(m_layers)) &&
                     (0 != layer_path_len) &&
-                    isLogicalPathValid(layer.m_logical_path) &&
-                    (layer.m_logical_path[layer_path_len - 1] == *LOGICAL_PATH_SEPARATOR))
+                    LPath::isValid(layer.m_logical_path) &&
+                    (layer.m_logical_path[layer_path_len - 1] == *LPath::SEPARATOR))
                 )
             {
-                auto phys_layer = createPhysicalFileSystemLayer(layer.m_physical_path);
-                sbAssert(phys_layer != nullptr);
-
                 auto & new_layer = m_layers.emplace_back();
 
                 new_layer.m_id = layer.m_name;
-                new_layer.m_layer = phys_layer;
+                new_layer.m_layer = wstd::move(layer.m_layer);
                 new_layer.m_logical_path = layer.m_logical_path;
             }
         }
@@ -83,19 +82,6 @@ public:
     ~FileSystemImpl()
     {
         sbWarn(0 == m_opened_file_cnt, "Not all files have been closed before destroying the File System")
-
-        for (auto & layer : m_layers)
-        {
-            usize freed_layer_cnt = 0;
-
-            if (isPhysicalFileSystemLayer(layer.m_layer))
-            {
-                ++freed_layer_cnt;
-                destroyPhysicalFileSystemLayer(layer.m_layer);
-            }
-
-            sbWarn(freed_layer_cnt == m_layers.size());
-        }
     }
 
     FileSize readFile(FileHdl hdl, ui8 * buffer, FileSize cnt)
@@ -138,7 +124,7 @@ public:
 
     FileHdl openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
     {
-        sbWarn(isLogicalPathValid(path));
+        sbWarn(LPath::isValid(path));
 
         return execFileActionOnLayers(path, [fmt, mode] (FileSystemImpl &fs, IFileSystemLayer &layer, char const * layer_path) 
             {
@@ -162,7 +148,7 @@ public:
 
     FileHdl openFileRead(char const * path, FileFormat fmt)
     {
-        sbWarn(isLogicalPathValid(path));
+        sbWarn(LPath::isValid(path));
 
         auto const hdl = execFileActionOnLayers(path, [fmt] (FileSystemImpl &fs, IFileSystemLayer &layer, char const * layer_path) 
             {
@@ -193,7 +179,7 @@ public:
 
     FileHdl createFile(char const * path, FileFormat fmt)
     {
-        sbWarn(isLogicalPathValid(path));
+        sbWarn(LPath::isValid(path));
 
         auto const hdl = execFileActionOnLayers(path, [fmt] (FileSystemImpl &fs, IFileSystemLayer &layer, char const * layer_path) 
             {
@@ -258,26 +244,7 @@ private:
         FileHdl::StorageType m_packed;
     };
 
-    IFileSystemLayer * createPhysicalFileSystemLayer(char const * physical_path)
-    {
-        PhysicalFileSystemLayer * phys_layer = sbNew(PhysicalFileSystemLayer, m_physical_layer_pool)(physical_path);
-
-        if (sbExpectTrue(nullptr != phys_layer))
-        {
-            return phys_layer;
-        }
-
-        return {};
-    }
-
-    void destroyPhysicalFileSystemLayer(IFileSystemLayer * layer)
-    {
-        sbAssert(nullptr != layer);
-
-        sbDelete(layer, m_physical_layer_pool);
-    }
-
-    b8 isPhysicalFileSystemLayer(IFileSystemLayer const * layer)
+    b8 isLocalFileSystemLayer(IFileSystemLayer const * layer)
     {
         return m_physical_layer_pool.owns(layer);
     }
@@ -339,16 +306,16 @@ private:
     usize m_opened_file_cnt;
     FSLayers m_layers;
 
-    using PhysicalFileSystemLayerPool = ObjectPoolAllocatorComposer<PhysicalFileSystemLayer>;
+    using LocalFileSystemLayerPool = ObjectPoolAllocatorComposer<LocalFileSystemLayer>;
     using FileDescPool = ObjectPoolAllocatorComposer<FileDesc>;
 
     FileDescPool m_file_desc_pool;
-    PhysicalFileSystemLayerPool m_physical_layer_pool;
+    LocalFileSystemLayerPool m_physical_layer_pool;
 };
 
 static UniquePtr<FileSystemImpl> gs_file_system;
 
-b8 FileSystem::initialize(InitParams const & init)
+b8 FileSystem::initialize(InitParams & init)
 {
     if (sbExpectTrue(nullptr == gs_file_system, "File System already initialized"))
     {
@@ -375,7 +342,7 @@ b8 FileSystem::terminate()
 FileHdl FileSystem::openFileRead(char const * path, FileFormat fmt)
 {
     sbAssert((nullptr != gs_file_system) && (nullptr != path));
-    sbWarn(isLogicalPathValid(path));
+    sbWarn(LPath::isValid(path));
 
     return gs_file_system->openFileRead(path, fmt);
 }
@@ -383,7 +350,7 @@ FileHdl FileSystem::openFileRead(char const * path, FileFormat fmt)
 FileHdl FileSystem::openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
     sbAssert((nullptr != gs_file_system) && (nullptr != path));
-    sbWarn(isLogicalPathValid(path));
+    sbWarn(LPath::isValid(path));
 
     return gs_file_system->openFileWrite(path, mode, fmt);
 }
@@ -391,7 +358,7 @@ FileHdl FileSystem::openFileWrite(char const * path, FileWriteMode mode, FileFor
 FileHdl FileSystem::createFile(char const * path, FileFormat fmt)
 {
     sbAssert((nullptr != gs_file_system) && (nullptr != path));
-    sbWarn(isLogicalPathValid(path));
+    sbWarn(LPath::isValid(path));
 
     return gs_file_system->createFile(path, fmt);
 }
@@ -434,6 +401,11 @@ FileSize FileSystem::getFileLength(FileHdl hdl)
     }
 
     return 0;
+}
+
+FileSystem::LayerPtr FileSystem::createLocalFileSystemLayer(char const * local_root_path)
+{
+    return wstd::static_pointer_cast<IFileSystemLayer>(makeUnique<LocalFileSystemLayer>(local_root_path));
 }
 
 } // namespace sb

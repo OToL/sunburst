@@ -1,5 +1,5 @@
 #include <core/string/string_format.h>
-#include <core/utility.h>
+#include <core/string/utility.h>
 
 #include <libc++/cctype>
 #include <libc++/type_traits>

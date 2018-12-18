@@ -2,23 +2,27 @@
 
 #include <core/platform.h>
 #include <core/hash/hash_str.h>
+#include <core/memory/unique_ptr.h>
 #include "base.h"
 
 #include <libc++/span>
 
 namespace sb {
 
-// TODO: maybe abstract the filesystem path time i.e. char * vs wchar_t *
+class IFileSystemLayer;
+
+// TODO: abstract the filesystem path time i.e. char * vs wchar_t *
 struct FileSystem
 {
     sbConstructProtect(FileSystem);
 
     using LayerName = HashStr;
+    using LayerPtr = UniquePtr<IFileSystemLayer>;
 
     struct LayerDesc
     {
         char const * m_logical_path;
-        char const * m_physical_path; // TODO: Possibility to specify something else than physical FS layer
+        LayerPtr m_layer;
         LayerName m_name;
     };
 
@@ -29,7 +33,7 @@ struct FileSystem
 
     static usize const MAX_CONCURRENT_OPENED_FILES = 50U;
 
-    static b8 initialize(InitParams const & init = {});
+    static b8 initialize(InitParams & init);
 
     static b8 terminate();
 
@@ -44,6 +48,8 @@ struct FileSystem
     static FileSize readFile(FileHdl hdl, wstd::span<ui8> buffer, FileSize cnt = -1);
 
     static FileSize getFileLength(FileHdl hdl);
+
+    static LayerPtr createLocalFileSystemLayer(char const * local_root_path);
 
     static char const * getLayerPhysicalPath(LayerName name);
 };

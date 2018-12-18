@@ -1,8 +1,18 @@
 #pragma once
 
-#include "../../inc/libc++/iterator"
+#include "prolog.h"
+
+#include SB_SRC_STD_INC(iterator)
 
 SB_STD_NS_BEGIN
+
+	SB_STD_USE(begin);
+	SB_STD_USE(end);
+    SB_STD_USE(extent);
+	SB_STD_USE(iterator_traits);
+	SB_STD_USE(random_access_iterator_tag);
+    SB_STD_USE(back_inserter);
+    SB_STD_USE(size);
 
     namespace ext {
         template <typename T>
@@ -10,5 +20,3 @@ SB_STD_NS_BEGIN
     }
 
 SB_STD_NS_END
-
-#include "epilog.h"

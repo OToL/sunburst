@@ -6,9 +6,9 @@ namespace sb {
 
 enum class ErrorType : ui8
 {
-    CRITICAL,   // The application will crash
-    WARNING,    // The application may misbehave (glitches, bugs, etc.)
-    NOTICE      // The application should run fine
+    CRITICAL,   // Unhandled critical error leading to a crash
+    WARNING,    // Error with side effect(s) affecting progam's behavior (glitches, bugs, etc.)
+    NOTICE      // The error has been properly handled
 };
 
 using ErrorHandler = void (*)(void * user_data, ErrorType type, char const * file, ui32 const line, char const * msg);

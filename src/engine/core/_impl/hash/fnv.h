@@ -31,6 +31,7 @@ constexpr inline FNV32Value computeFNV1a32(char const * const str)
     {
         hval ^= (FNV32Value)*s++;
         hval *= FNV32_PRIME;
+
         // hval += (hval<<1) + (hval<<4) + (hval<<7) + (hval<<8) + (hval<<24);
     }
 

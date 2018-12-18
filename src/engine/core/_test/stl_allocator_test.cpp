@@ -20,7 +20,7 @@ TEST(STL_ALLOCATOR, AllocatorView)
 
         wstd::copy(wstd::begin(array_test), wstd::end(array_test), back_inserter(vector_test));
 
-        EXPECT_EQ(allocator_test.getStats().m_alloc_count, 1U);
+        EXPECT_NE(allocator_test.getStats().m_alloc_count, 0U);
         EXPECT_GE(allocator_test.getStats().m_allocated_byte, sizeof(array_test));
 
         for (ui32 idx = 0 ; idx != wstd::size(array_test) ; ++idx)

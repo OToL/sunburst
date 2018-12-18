@@ -3,6 +3,8 @@
 #include <core/platform.h>
 #include <core/_impl/memory/allocator/allocator_view.h>
 
+#include <libc++/type_traits>
+
 namespace sb {
 
 class AllocatorView
@@ -10,11 +12,7 @@ class AllocatorView
 public:
     struct InitParams
     {
-        InitParams()
-            : m_vtable(nullptr)
-            , m_alloc(nullptr)
-        {
-        }
+        InitParams() = default;
 
         template <typename T>
         InitParams(T & alloc)
@@ -23,8 +21,14 @@ public:
         {
         }
 
-        detail::AllocatorVTable const * m_vtable;
-        void * m_alloc;
+        InitParams(AllocatorView & alloc)
+            : m_vtable(alloc.m_vtable)
+            , m_alloc(alloc.m_alloc)
+        {
+        }
+
+        detail::AllocatorVTable const * m_vtable = nullptr;
+        void * m_alloc = nullptr;
     };
 
     AllocatorView()
@@ -46,13 +50,18 @@ public:
     {
     }
 
-    AllocatorView(AllocatorView & alloc)
-        : m_vtable(alloc.m_vtable)
-        , m_alloc(alloc.m_alloc)
+    AllocatorView(AllocatorView & src)
+        : m_vtable(src.m_vtable)
+        , m_alloc(src.m_alloc)
     {
     }
 
-    AllocatorView(AllocatorView const &) = default;
+    AllocatorView(AllocatorView const & src)
+        : m_vtable(src.m_vtable)
+        , m_alloc(src.m_alloc)
+    {
+    }
+
     AllocatorView(AllocatorView &&) = default;
 
     AllocatorView & operator=(AllocatorView const &) = default;

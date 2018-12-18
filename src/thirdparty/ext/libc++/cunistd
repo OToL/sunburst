@@ -1,0 +1,7 @@
+#pragma once
+
+#include "prolog.h"
+
+#if defined(SB_TARGET_FAMILY_UNIX)
+#   include SB_SRC_STD_INC(unistd.h)
+#endif

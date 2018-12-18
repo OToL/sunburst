@@ -39,7 +39,7 @@ GlobalHeap * getGlobalHeap()
     return &s_global_heap;
 }
 
-AllocatorView & getGlobalHeapView()
+AllocatorView const & getGlobalHeapView()
 {
     static AllocatorView s_global_heap_view{*getGlobalHeap()};
 

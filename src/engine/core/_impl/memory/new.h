@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/math.h>
+#include <core/bitwise.h>
 #include <core/memory/allocator/allocator_view.h>
 
 #include <libc++/type_traits>
@@ -9,7 +9,7 @@
 
 namespace sb {
 
-AllocatorView & getGlobalHeapView();
+AllocatorView const & getGlobalHeapView();
 
 template <typename TType>
 struct MemoryOperatorHelper

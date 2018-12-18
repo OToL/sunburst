@@ -13,7 +13,7 @@ static inline sb::LogLevel gs_log_min_level = sb::LogLevel::DEBUG;
 static inline sb::b8 gs_log_quiet = false;
 
 template <typename... TArgs>
-inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args);
+usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args);
 
 inline void setLogQuiet(b8 quiet)
 {

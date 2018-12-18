@@ -1,5 +1,0 @@
-#pragma once
-
-#include "prolog.h"
-
-#include SB_SRC_STD_INC(unistd.h)

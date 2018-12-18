@@ -36,7 +36,7 @@ private:
     GlobalHeapAllocator m_parent;
 };
 
-AllocatorView & getGlobalHeapView();
+AllocatorView const & getGlobalHeapView();
 
 GlobalHeap * getGlobalHeap();
 

@@ -21,6 +21,8 @@ public:
 
     sb::usize getIdx() const {return m_Idx;}
 
+    void setIdx(sb::usize idx) {m_Idx = idx;}
+
     struct Stats
     {
         sb::usize m_alive_obj_count;

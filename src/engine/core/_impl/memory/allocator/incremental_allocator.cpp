@@ -1,5 +1,5 @@
 #include <core/memory/allocator/incremental_allocator.h>
-#include <core/math.h>
+#include <core/bitwise.h>
 #include <core/error.h>
 
 namespace sb {

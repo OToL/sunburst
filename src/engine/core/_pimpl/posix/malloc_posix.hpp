@@ -1,8 +1,9 @@
 #include <core/_impl/memory/malloc.h>
+#include <core/memory/utility.h>
 #include <core/platform.h>
 #include <core/error.h>
-#include <core/math.h>
-#include <core/utility.h>
+#include <core/bitwise.h>
+#include <core/string/utility.h>
 #include <core/conversion.h>
 
 namespace sb {

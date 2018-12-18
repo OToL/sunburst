@@ -4,7 +4,7 @@
 #include <core/error.h>
 #include <core/memory/memory_arena.h>
 #include <core/conversion.h>
-#include <core/math.h>
+#include <core/bitwise.h>
 
 namespace sb {
 template <usize BLOCK_SIZE, usize BLOCK_ALIGNMENT>

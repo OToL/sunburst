@@ -3,27 +3,28 @@
 #include <core/memory/allocator/allocator_view.h>
 #include <core/memory/allocator/global_heap_allocator.h>
 #include <core/platform.h>
+#include <core/memory/malloc.h>
 
 namespace sb {
 
 void * GlobalHeapAllocator::allocate(usize const size)
 {
-    return sb::malloc(size);
+    return sbMalloc(size);
 }
 
 void * GlobalHeapAllocator::allocate(usize const size, usize const alignment)
 {
-    return sb::malloc(size, alignment);
+    return sbMallocA(size, alignment);
 }
 
 void GlobalHeapAllocator::deallocate(void * ptr)
 {
-    sb::free(ptr);
+    sbFree(ptr);
 }
 
 usize GlobalHeapAllocator::getBlockSize(void * ptr) const
 {
-    return sb::mallocUsableSize(ptr);
+    return sbMallocUsabeSize(ptr);
 }
 
 void GlobalHeapAllocator::deallocateAll()

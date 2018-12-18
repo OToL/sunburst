@@ -1,8 +1,9 @@
 - Visual Studio Code (https://code.visualstudio.com/)  
   Plugins:
-    - CMake Tools (ms-python.python)
+    - CMake Tools (vector-of-bool.cmake-tools)
     - Python (ms-python.python)
-    - C++ (ms-vscode.cpptools)  
+    - C++ (ms-vscode.cpptools)
+    - Bookmarks (alefragnani.bookmarks)
 
   User Settings:
     - Font aliasing: anti-aliased
@@ -15,12 +16,6 @@
   ```
 
 - Python 3 (https://www.python.org/downloads/)
-
-- XCode (App Store)  
-  Install, launch XCode and install command-line tools:
-  ```
-  xcode-select --install
-  ```
 
 - Github desktop (https://desktop.github.com/)
 
@@ -73,4 +68,10 @@
       "externalConsole": false,
       "MIMode": "lldb"
   }
+  ```
+
+- [MACOS] XCode (App Store)  
+  Install, launch XCode and install command-line tools:
+  ```
+  xcode-select --install
   ```

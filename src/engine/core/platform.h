@@ -3,17 +3,10 @@
 #include <libc++/cstddef>
 #include <libc++/cstdint>
 
-#if defined(SB_TARGET_MACOS)
-#    include <TargetConditionals.h>
-#    if TARGET_OS_MAC
-#        include "_pimpl/macos/platform_macos.h"
-#    else
-#        error "Unhandled Apple platform"
-#    endif
-#elif defined(SB_TARGET_LINUX)
-#    include "_pimpl/linux/platform_linux.h"
+#if defined(SB_TARGET_WINDOWS)
+#   include "_pimpl/windows/platform_win.h"
 #else
-#    error "Unhandled target platform"
+#   error "Unhandled target platform"
 #endif
 
 #include "compiler.h"
@@ -37,10 +30,8 @@ using b8 = bool;
 using b32 = ui32;
 
 constexpr usize GLOBAL_HEAP_MIN_ALIGNMENT = 8;
-constexpr char const * PHYSICAL_PATH_SEPARATOR = detail::PHYSICAL_PATH_SEPARATOR;
-constexpr usize PHYSICAL_PATH_MAX_LEN = detail::PHYSICAL_PATH_MAX_LEN;
 
-char const * getWorkingDirectory();
+char * getWorkingDirectory(char * buff, usize buff_capacity);
 void outputDebugString(char const * msg);
 
 } // namespace sb

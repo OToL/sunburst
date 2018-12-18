@@ -17,7 +17,7 @@ void reportError(ErrorType type, char const * const file, ui32 const line, char 
     if constexpr (sizeof...(args))
     {
         char fmt_msg[255];
-        stringFormat(fmt_msg, msg, wstd::forward<TArgs>(args)...);
+        sb::stringFormat(fmt_msg, msg, wstd::forward<TArgs>(args)...);
 
         reportError(type, file, line, fmt_msg);
     }

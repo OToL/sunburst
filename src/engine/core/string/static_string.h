@@ -1,13 +1,14 @@
 #pragma once
 
 #include <core/platform.h>
-#include <core/utility.h>
+#include <core/string/utility.h>
 #include <core/error.h>
 
 #include <libc++/cstring>
 
 namespace sb {
 
+// TODO: Proper character traits
 template <usize CAPACITY, typename TChar = char>
 class StaticString
 {
@@ -24,7 +25,7 @@ public:
     {
         if (nullptr == src)
         {
-            m_data[0] = '\0';
+            m_data[0] = TChar{};
         }
         else
         {
@@ -57,13 +58,13 @@ public:
 
     bool empty() const
     {
-        return (m_data[0] == '\0');
+        return (m_data[0] == TChar{});
     }
 
     void clear()
     {
         m_len = 0;
-        m_data[0] = '\0';
+        m_data[0] = TChar{};
     }
 
     TChar operator[](usize idx) const
@@ -78,7 +79,7 @@ public:
     {
         sbWarn(0 != m_len)
 
-            TChar backChar = '\0';
+            TChar backChar = TChar{};
 
         if (0 != m_len)
         {
@@ -96,7 +97,7 @@ public:
         {
             m_data[m_len] = c;
             ++m_len;
-            m_data[m_len] = '\0';
+            m_data[m_len] = TChar{};
 
             return true;
         }
@@ -106,8 +107,11 @@ public:
 
     StaticString & append(TChar const * str)
     {
-        m_len += (usize)wstd::strncat(m_data, str, CAPACITY - 1);
-        m_data[CAPACITY - 1] = '\0';
+        wstd::strncat(m_data, str, CAPACITY - 1);
+        m_data[CAPACITY - 1] = TChar{};
+
+        // TODO: implement my own strncat which returns the numbers of copied character
+        m_len = wstd::strlen(m_data);
 
         return *this;
     }

@@ -10,7 +10,7 @@ sbAddLibrary(core STATIC
     _impl/io/file.cpp
     _impl/io/file_system.cpp
     _impl/io/path.cpp
-    _impl/io/physical_file_system_layer.cpp
+    _impl/io/local_file_system_layer.cpp
     _impl/string/string_utility.cpp
     _impl/memory/allocator/global_heap_allocator.cpp
     _impl/memory/allocator/incremental_allocator.cpp
@@ -18,22 +18,26 @@ sbAddLibrary(core STATIC
     _impl/memory/memory_utility.cpp
     _impl/memory/new.cpp)
   
-if (SB_TARGET_LINUX)
-
+if(SB_TARGET_LINUX)
     target_sources(core 
         PRIVATE
             _pimpl/linux/file_system_linux.cpp
             _pimpl/linux/malloc_linux.cpp)
-
-elseif (SB_TARGET_MACOS)
-
+elseif(SB_TARGET_MACOS)
     target_sources(core 
         PRIVATE
             _pimpl/macos/platform_macos.cpp
             _pimpl/macos/file_system_macos.cpp
             _pimpl/macos/malloc_macos.cpp)
-
-endif ()
+elseif(SB_TARGET_WINDOWS)
+    target_sources(core 
+        PRIVATE
+            _pimpl/windows/platform_win.cpp
+            _pimpl/windows/file_system_win.cpp
+            _pimpl/windows/malloc_win.cpp)
+else()
+    message(FATAL_ERROR "sb::core sources not configured for ${SB_TARGET_OS}")
+endif()
 
 sbAddLibraryTest(core
     _test/compiler_test.cpp
@@ -48,7 +52,7 @@ sbAddLibraryTest(core
     _test/hash_str_test.cpp
     _test/incremental_allocator_test.cpp
     _test/main.cpp
-    _test/math_test.cpp
+    _test/bitwise_test.cpp
     _test/memory_arena_composer_test.cpp
     _test/new_test.cpp
     _test/null_allocator_test.cpp

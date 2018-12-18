@@ -6,11 +6,25 @@
 
 namespace sb {
 
-constexpr usize LOGICAL_PATH_MAX_LEN = 255;
-constexpr char const * LOGICAL_PATH_SEPARATOR = "/";
+struct LogicPath
+{
+    static constexpr usize MAX_LEN = 255;
+    static constexpr char const * SEPARATOR = "/";
 
-b8 isLogicalPathValid(char const * path);
+    static b8 isValid(char const * path);
 
-char * concatPhysicalPaths(wstd::span<char> base_path, char const * path_cat);
+};
+
+struct PhysicPath
+{
+    static constexpr usize MAX_LEN = 255;
+    static constexpr char const * SEPARATOR = detail::PLATFORM_PATH_SEPARATOR;
+
+    // base_path is modified & base_path.data() is returned
+    char * concat(wstd::span<char> base_path, char const * path_cat);
+};
+
+using LPath = LogicPath;
+using PPath = PhysicPath;
 
 } // namespace sb

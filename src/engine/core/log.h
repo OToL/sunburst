@@ -9,7 +9,7 @@ enum class LogLevel : ui8
     ERROR,      // Important message to read & solve e.g. crash, out of memory, etc.
     WARNING,    // Message about a problem which may impact application behavior e.g. performance hitch, too many alive objects, etc.
     INFO,       // Useful information regarding high level application logic e.g. state transition, saving, etc.
-    DEBUG       // Verbose fine grained logging
+    DEBUG       // Verbose logging for debug purpose
 };
 
 typedef void (*LogHandler)(void * user_data, LogLevel lvl, char const * const file, ui32 const line, char const * const msg);

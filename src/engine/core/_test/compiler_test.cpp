@@ -17,12 +17,6 @@ class ConcatIDTest
 
 #define WORLD_STR "world"
 
-TEST(COMPILER, FwCall)
-{
-    char const * const concat_str = sbFwCall(sbConcatStr, "Hello ", WORLD_STR);
-    EXPECT_STREQ("Hello world", concat_str);
-}
-
 TEST(COMPILER, IdToStr)
 {
     EXPECT_STREQ("world", sbIdToStr(world));

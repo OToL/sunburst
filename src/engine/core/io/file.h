@@ -11,8 +11,6 @@ class File
 {
     sbCopyProtect(File);
 
-    friend class FileSystemImpl;
-
     void reset()
     {
         m_hdl.reset();
