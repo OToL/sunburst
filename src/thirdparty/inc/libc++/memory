@@ -14,6 +14,7 @@ SB_STD_NS_BEGIN
     SB_STD_USE(uninitialized_fill);
     SB_STD_USE(uninitialized_default_construct);
     SB_STD_USE(destroy);
+    SB_STD_USE(destroy_at);
     SB_STD_USE(allocator_traits);
     SB_STD_USE(remove_all_extents);
     SB_STD_USE(remove_all_extents_t);

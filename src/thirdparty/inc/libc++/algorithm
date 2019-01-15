@@ -9,8 +9,10 @@ SB_STD_NS_BEGIN
     SB_STD_USE(find_if);
     SB_STD_USE(distance);
     SB_STD_USE(copy);
+    SB_STD_USE(fill);
     SB_STD_USE(distance);
     SB_STD_USE(swap);
+    SB_STD_USE(swap_ranges);
     SB_STD_USE(min);
     SB_STD_USE(max);
 

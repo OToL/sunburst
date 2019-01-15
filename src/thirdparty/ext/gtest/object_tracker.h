@@ -19,9 +19,9 @@ public:
 
     ObjectTracker & operator=(ObjectTracker && src);
 
-    sb::usize getIdx() const {return m_Idx;}
+    sb::usize getId() const {return m_Id;}
 
-    void setIdx(sb::usize idx) {m_Idx = idx;}
+    void setId(sb::usize id) {m_Id = id;}
 
     struct Stats
     {
@@ -33,7 +33,12 @@ public:
 
 private:
 
-    sb::usize m_Idx;
+    sb::usize m_Id;
 };
+
+inline bool operator == (ObjectTracker const & obj1, ObjectTracker const & obj2)
+{
+    return obj1.getId() == obj2.getId();
+}
 
 }

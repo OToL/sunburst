@@ -3,6 +3,7 @@
 #include "prolog.h"
 
 #include SB_SRC_STD_INC(utility)
+#include SB_SRC_STD_INC(xutility)
 
 SB_STD_NS_BEGIN
 

@@ -145,7 +145,7 @@ TEST_F(STATIC_ARRAY, ERASE_CTOR_BEGIN)
         usize idx = 1;
         for (auto const & iter : test_vector)
         {
-            EXPECT_EQ(idx, iter.getIdx());
+            EXPECT_EQ(idx, iter.getId());
             ++idx;
         }
     }
@@ -169,7 +169,7 @@ TEST_F(STATIC_ARRAY, ERASE_CTOR_LAST)
         usize idx = 0;
         for (auto const & iter : test_vector)
         {
-            EXPECT_EQ(idx, iter.getIdx());
+            EXPECT_EQ(idx, iter.getId());
             ++idx;
         }
     }
@@ -199,7 +199,7 @@ TEST_F(STATIC_ARRAY, ERASE_CTOR_MIDDLE)
                 ++idx;
             }
 
-            EXPECT_EQ(idx, iter.getIdx());
+            EXPECT_EQ(idx, iter.getId());
 
             ++idx;
         }

@@ -134,7 +134,7 @@ template <typename T>
 using AllocatorViewDelete = AllocatorDelete<T, AllocatorView>;
 
 template <typename T, typename TDelete = DefaultDelete<T>>
-using UniquePtr = wstd::priv::unique_ptr<T, TDelete>;
+using UniquePtr = wstd::detail::unique_ptr<T, TDelete>;
 
 template <typename T>
 struct is_reference_wrapper : wstd::false_type {};

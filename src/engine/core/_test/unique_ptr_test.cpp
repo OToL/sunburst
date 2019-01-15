@@ -28,7 +28,7 @@ TEST_F(UNIQUE_PTR, MakeUniqueObject)
         auto test_ptr = makeUnique<gtestx::ObjectTracker>(10U);
 
         EXPECT_NE(nullptr, test_ptr);    
-        EXPECT_EQ(test_ptr->getIdx(), 10U);
+        EXPECT_EQ(test_ptr->getId(), 10U);
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 1U);
     }
 
@@ -55,7 +55,7 @@ TEST_F(UNIQUE_PTR, AllocateUniqueObject)
         auto test_ptr = allocateUnique<gtestx::ObjectTracker, AllocatorView>(alloc, 10U);
 
         EXPECT_NE(nullptr, test_ptr);    
-        EXPECT_EQ(test_ptr->getIdx(), 10U);
+        EXPECT_EQ(test_ptr->getId(), 10U);
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 1U);
         EXPECT_EQ(alloc.getStats().m_alloc_count, 1U);
     }
@@ -88,7 +88,7 @@ TEST_F(UNIQUE_PTR, AllocateRefUniqueObject)
         auto test_ptr = allocateUnique<gtestx::ObjectTracker, gtestx::AllocatorStats>(wstd::reference_wrapper(alloc), 10U);
 
         EXPECT_NE(nullptr, test_ptr);    
-        EXPECT_EQ(test_ptr->getIdx(), 10U);
+        EXPECT_EQ(test_ptr->getId(), 10U);
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 1U);
         EXPECT_EQ(alloc.getStats().m_alloc_count, 1U);
     }

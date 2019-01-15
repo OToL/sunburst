@@ -35,19 +35,19 @@ public:
 
     constexpr STLAllocator(STLAllocator const & src) = default;
 
-    ~STLAllocator() = default;
-
-    constexpr STLAllocator(TAllocator const & src_alloc) :
-        m_alloc(src_alloc)
+    constexpr STLAllocator(TAllocator const & src_alloc) 
+        : m_alloc(src_alloc)
     {
     }
 
     template <typename U>
-    constexpr STLAllocator(STLAllocator<U, TAllocator> const & src) :
-        m_alloc(src.get())
+    constexpr STLAllocator(STLAllocator<U, TAllocator> const & src) 
+        : m_alloc(src.get())
     {
     }
 
+    ~STLAllocator() = default;
+    
     pointer address(reference x) const
     {
         return &x;
