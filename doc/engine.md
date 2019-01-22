@@ -5,11 +5,11 @@
 
 # TECH TESTS
 
-[x] imgui basic test
-[ ] Vulkan simple triangle macos
-[ ] Implement imgui rendrer using Vulkan
-[ ] Cloth simulation
-[ ] Vehicle/Boat simulation
+- [x] imgui basic test
+- [ ] Vulkan simple triangle macos
+- [ ] Implement imgui rendrer using Vulkan
+- [ ] Cloth simulation
+- [ ] Vehicle/Boat simulation
 
 # CODE QUALITY
 
