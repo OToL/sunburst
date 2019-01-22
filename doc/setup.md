@@ -1,3 +1,5 @@
+- git (https://git-scm.com/download/)
+
 - Visual Studio Code (https://code.visualstudio.com/)  
   Plugins:
     - CMake Tools (vector-of-bool.cmake-tools)
