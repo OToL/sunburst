@@ -11,58 +11,41 @@
 - [] Cloth simulation
 - [] Vehicle/Boat simulation
 
-# TODO
+# CODE QUALITY
 
-## Document
-
-- [] Document thirdparty update & build
-- [] Update c++ coding style
-
-## Misc
-
-- [x] Rename sandbox to sunburst
-- [x] Delete sandbox & upload sunburst to github
-- [x] Upload sb_playground to github
-
-## Quality
-
-- [] Try clang sanitizers
-- [] Try static analyzers
+- [] clang sanitizers
+- [] static analyzers
 - [] Re-enable clang formatting
-- [] make SB_TOOLCHAIN_CLANG_WARNING_IGNORE_LIST smaller
-
-## Code environment
-
+- [] Make SB_TOOLCHAIN_CLANG_WARNING_IGNORE_LIST smaller
 - [] Use pre-compile headers
 
-## thirdparty::gtest
+# CMAKE
+
+- [] Investigate modern cmake best practices
+- [] Clean definition of 3rd parties
+
+# 3RD::GTEST
 
 - [] Rename ObjectTracker to ObjectStats
 - [] Move AllocatorStats to sb::core e.g. as a composer
 - [] Check for memory leak before returning from the program
 
-## thirdparty::libc++
+# 3RD::LIBC++
 
-- [] Use std::span and replace wstd::span 
+- [x] Use std::span and replace wstd::span 
 - [x] Move libc++ forwarding which are meant to be used only internally to a specific namespace (e.g. unique_ptr, etc.)
 - [x] Make a pass on libc++ forward to make sure everything is used
 - [x] Move ext libc++ to thirdparty\ext
 - [x] Move libc++ to thirdparty\inc
 
-## sb::core
+# SB::CORE
 
-- [] Check if we can change allocateUnique to rely on Tallocator& instead of reference_wrapper
-- [] Move all platform implementation to a single folder e.g. core\_impl\api|platform
+- [x] Move all platform implementation to a single folder e.g. core\_pimpl\
+- [x] Check if we can change allocateUnique to rely on Tallocator& instead of reference_wrapper
 - [x] Rework file organization
 - [x] Gather platform implemetation in _pimpl special folder
 - [x] Re-enable temporarily deactivated unittests
-
-## sb::core::container
-
-- [] Finish SmallVector and there is one test deactivated
-
-## sb::core::filesystem
-
+- [x] Finish SmallVector and there is one test deactivated
 - [x] FileSystem functions should deal only with FileHdl
 - [x] Layer root must start and end with '/' separator
 - [x] Possibility to specify multiple layers with the same name
