@@ -13,26 +13,26 @@
 
 # CODE QUALITY
 
-- [] clang sanitizers
-- [] static analyzers
-- [] Re-enable clang formatting
-- [] Make SB_TOOLCHAIN_CLANG_WARNING_IGNORE_LIST smaller
-- [] Use pre-compile headers
+- [ ] clang sanitizers
+- [ ] static analyzers
+- [ ] Re-enable clang formatting
+- [ ] Make SB_TOOLCHAIN_CLANG_WARNING_IGNORE_LIST smaller
+- [ ] Use pre-compile headers
 
 # CMAKE
 
-- [] Investigate modern cmake best practices
-- [] Clean definition of 3rd parties
+- [ ] Investigate modern cmake best practices
+- [ ] Clean definition of 3rd parties
 
 # 3RD::GTEST
 
-- [] Rename ObjectTracker to ObjectStats
-- [] Move AllocatorStats to sb::core e.g. as a composer
-- [] Check for memory leak before returning from the program
+- [ ] Rename ObjectTracker to ObjectStats
+- [ ] Move AllocatorStats to sb::core e.g. as a composer
+- [ ] Check for memory leak before returning from the program
 
 # 3RD::LIBC++
 
-- [] Eradicate use of STD lib because of compile times and debug overhead (maybe C++ modules will solve this)
+- [ ] Eradicate use of STD lib because of compile times and debug overhead (maybe C++ modules will solve this)
 - [x] Use std::span and replace wstd::span 
 - [x] Move libc++ forwarding which are meant to be used only internally to a specific namespace (e.g. unique_ptr, etc.)
 - [x] Make a pass on libc++ forward to make sure everything is used
