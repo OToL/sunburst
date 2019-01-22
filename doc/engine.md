@@ -32,6 +32,7 @@
 
 # 3RD::LIBC++
 
+- [] Eradicate use of STD lib because of compile times and debug overhead (maybe C++ modules will solve this)
 - [x] Use std::span and replace wstd::span 
 - [x] Move libc++ forwarding which are meant to be used only internally to a specific namespace (e.g. unique_ptr, etc.)
 - [x] Make a pass on libc++ forward to make sure everything is used
