@@ -665,49 +665,50 @@ private:
     alignas(value_type) ui8 m_buffer[BASE_CAPACITY_BYTES];
 };
 
-} // namespace sb
+}
 
 SB_STD_NS_BEGIN
-    template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-    typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::iterator begin( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect)
-    {
-        return vect.begin();
-    }
 
-    template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-    typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::iterator end( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect)
-    {
-        return vect.end();
-    }
+template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::iterator begin( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect)
+{
+    return vect.begin();
+}
 
-    template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-    typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator begin( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
-    {
-        return vect.begin();
-    }
+template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::iterator end( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect)
+{
+    return vect.end();
+}
 
-    template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-    typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator end( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
-    {
-        return vect.end();
-    }
+template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator begin( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+{
+    return vect.begin();
+}
 
-    template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-    typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator cbegin( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
-    {
-        return vect.cbegin();
-    }
+template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator end( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+{
+    return vect.end();
+}
 
-    template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-    typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator cend( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
-    {
-        return vect.cend();
-    }
+template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator cbegin( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+{
+    return vect.cbegin();
+}
 
-    template <typename TType, sb::usize BASE_CAPACITY, sb::usize BASE_CAPACITY2, typename TAllocator>
-    void swap( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect1, typename sb::SmallVector<TType, BASE_CAPACITY2, TAllocator> & vect2)
-    {
-        vect1.swap(vect2);
-    }
+template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator cend( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+{
+    return vect.cend();
+}
+
+template <typename TType, sb::usize BASE_CAPACITY, sb::usize BASE_CAPACITY2, typename TAllocator>
+void swap( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect1, typename sb::SmallVector<TType, BASE_CAPACITY2, TAllocator> & vect2)
+{
+    vect1.swap(vect2);
+}
 
 SB_STD_NS_END

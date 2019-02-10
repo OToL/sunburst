@@ -13,21 +13,19 @@ namespace sb {
 
 PlatformFileHdl platformOpenFileRead(char const * path, FileFormat fmt)
 {
-    StaticString<10> flags{"r"};
+    StaticString<3> flags{"r"};
 
     if (fmt == FileFormat::Bin)
     {
         flags.push_back('b');
     }
 
-    flags.push_back('x');
-
-    return {(void *)fopen(path, flags.c_str())};
+    return {(void *)fopen(path, flags.data())};
 }
 
 PlatformFileHdl platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
-    StaticString<10> flags;
+    StaticString<5> flags;
 
     if (mode == FileWriteMode::APPEND)
     {
@@ -47,12 +45,14 @@ PlatformFileHdl platformOpenFileWrite(char const * path, FileWriteMode mode, Fil
         flags.push_back('b');
     }
 
+    flags.push_back('x');
+
     return {(void *)fopen(path, flags.c_str())};
 }
 
 PlatformFileHdl platformCreateFile(char const * path, FileFormat fmt)
 {
-    StaticString<10> flags{"w"};
+    StaticString<3> flags{"w"};
 
     if (fmt == FileFormat::Bin)
     {

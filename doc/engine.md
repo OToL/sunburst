@@ -41,6 +41,7 @@
 
 # SB::CORE
 
+- [ ] typedef the character type used for filesystem path i.e. char vs utf16 vs etc.
 - [x] Move all platform implementation to a single folder e.g. core\_pimpl\
 - [x] Check if we can change allocateUnique to rely on Tallocator& instead of reference_wrapper
 - [x] Rework file organization

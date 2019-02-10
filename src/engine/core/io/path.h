@@ -21,7 +21,7 @@ struct PhysicPath
     static constexpr char const * SEPARATOR = detail::PLATFORM_PATH_SEPARATOR;
 
     // base_path is modified & base_path.data() is returned
-    char * concat(wstd::span<char> base_path, char const * path_cat);
+    static char * concat(wstd::span<char> base_path, char const * path_cat);
 };
 
 using LPath = LogicPath;
