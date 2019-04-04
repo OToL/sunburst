@@ -4,9 +4,9 @@
 
 #include SB_SRC_STD_INC(cstdlib)
 
-SB_STD_NS_BEGIN
+namespace SB_STD_NS {
 
       SB_STD_USE(exit);
       SB_STD_USE(atoi);
 
-SB_STD_NS_END
+}

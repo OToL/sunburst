@@ -21,9 +21,9 @@ void setLogMinLevel(LogLevel min_level);
 } // namespace sb
 
 #define sbLog(lvl, msg, ...) sbLogImpl(lvl, __FILE__, __LINE__, msg, ##__VA_ARGS__)
-#define sbLogE(msg, ...) sbLog(sb::LogLevel::ERROR, msg, ##__VA_ARGS__)
-#define sbLogW(msg, ...) sbLog(sb::LogLevel::WARNING, msg, ##__VA_ARGS__)
-#define sbLogI(msg, ...) sbLog(sb::LogLevel::INFO, msg, ##__VA_ARGS__)
-#define sbLogD(msg, ...) sbLog(sb::LogLevel::DEBUG, msg, ##__VA_ARGS__)
+#define sbLogE(msg, ...) sbLog(::sb::LogLevel::ERROR, msg, ##__VA_ARGS__)
+#define sbLogW(msg, ...) sbLog(::sb::LogLevel::WARNING, msg, ##__VA_ARGS__)
+#define sbLogI(msg, ...) sbLog(::sb::LogLevel::INFO, msg, ##__VA_ARGS__)
+#define sbLogD(msg, ...) sbLog(::sb::LogLevel::DEBUG, msg, ##__VA_ARGS__)
 
 #include "_impl/log.h"

@@ -4,7 +4,7 @@
 
 #include SB_SRC_STD_INC(cstring)
 
-SB_STD_NS_BEGIN
+namespace SB_STD_NS {
 
       SB_STD_USE(strrchr);
       SB_STD_USE(strlen);
@@ -16,4 +16,4 @@ SB_STD_NS_BEGIN
       SB_STD_USE(memset);
       SB_STD_USE(memcpy);
 
-SB_STD_NS_END
+}

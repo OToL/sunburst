@@ -3,12 +3,12 @@
 #include "prolog.h"
 
 #if defined(_MSC_VER)
-#   include "../_impl/gsl/span"
+#   include "../inc/_impl/gsl/span"
 #else
 #   include SB_SRC_STD_INC(span)
 #endif
 
-SB_STD_NS_BEGIN
+namespace SB_STD_NS {
 
 #if defined(_MSC_VER)
     template <class ElementType, std::ptrdiff_t Extent = ::gsl::dynamic_extent>
@@ -17,4 +17,4 @@ SB_STD_NS_BEGIN
     SB_STD_USE(span);
 #endif
 
-SB_STD_NS_END
+}

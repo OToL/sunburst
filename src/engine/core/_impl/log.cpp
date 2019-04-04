@@ -1,6 +1,8 @@
 #include <core/log.h>
 #include <core/string/string_format.h>
 
+#include <libc++/iterator>
+
 namespace sb::detail {
 
 static LogHandler gs_log_hdl = nullptr;

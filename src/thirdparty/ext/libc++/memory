@@ -4,7 +4,7 @@
 
 #include SB_SRC_STD_INC(memory)
 
-SB_STD_NS_BEGIN
+namespace SB_STD_NS {
 
     SB_STD_USE(const_pointer_cast);
     SB_STD_USE(static_pointer_cast);
@@ -20,4 +20,4 @@ SB_STD_NS_BEGIN
     SB_STD_USE(remove_all_extents_t);
     SB_STD_PRIVATE_USE(unique_ptr);
 
-SB_STD_NS_END
+}

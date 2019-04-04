@@ -2,40 +2,71 @@
 
 #include "prolog.h"
 
-#include "../../inc/libc++/type_traits"
+#include SB_SRC_STD_INC(type_traits)
 
-SB_STD_NS_BEGIN
+namespace SB_STD_NS {
 
-    SB_STD_EXT_NS_BEGIN
+    SB_STD_USE(is_array_v);
+    SB_STD_USE(is_integral);
+    SB_STD_USE(is_integral_v);
+    SB_STD_USE(is_arithmetic);
+    SB_STD_USE(is_signed);
+    SB_STD_USE(is_trivial);
+    SB_STD_USE(false_type);
+    SB_STD_USE(true_type);
+    SB_STD_USE(underlying_type);
+    SB_STD_USE(underlying_type_t);
+    SB_STD_USE(is_same);
+    SB_STD_USE(is_same_v);
+    SB_STD_USE(integral_constant);
+    SB_STD_USE(remove_cv_t);
+    SB_STD_USE(remove_reference_t);
+    SB_STD_USE(remove_all_extents);
+    SB_STD_USE(remove_all_extents_t);
+    SB_STD_USE(remove_pointer);
+    SB_STD_USE(enable_if_t);
+    SB_STD_USE(decay_t);
+    SB_STD_USE(declval);
+    SB_STD_USE(aligned_storage);
+    SB_STD_USE(void_t);
 
-        template <typename ...>
-        struct unreachable_t
-        {
-            constexpr static bool value = false;
-        };
+    template< class T >
+    struct remove_cvref 
+    {
+        typedef wstd::remove_cv_t<wstd::remove_reference_t<T>> type;
+    };
 
-        template <typename ... TArgs>
-        inline constexpr bool unreachable_v = unreachable_t<TArgs...>::value;
+    template< class T >
+    using remove_cvref_t = typename wstd::remove_cvref<T>::type;
 
-        struct null_t
-        {
-        };
+namespace SB_STD_EXT_NS {
 
-        template <typename T>
-        struct is_string_raw : public wstd::false_type
-        {
-        };
+    template <typename ...>
+    struct unreachable_t
+    {
+        constexpr static bool value = false;
+    };
 
-        template <>
-        struct is_string_raw<char *> : public wstd::true_type
-        {
-        };
+    template <typename ... TArgs>
+    inline constexpr bool unreachable_v = unreachable_t<TArgs...>::value;
 
-        template <>
-        struct is_string_raw<char const *> : public wstd::true_type
-        {
-        };
+    struct null_t
+    {
+    };
+
+    template <typename T>
+    struct is_string_raw : public wstd::false_type
+    {
+    };
+
+    template <>
+    struct is_string_raw<char *> : public wstd::true_type
+    {
+    };
+
+    template <>
+    struct is_string_raw<char const *> : public wstd::true_type
+    {
+    };
     
-    SB_STD_EXT_NS_END
-
-SB_STD_NS_END
+}}

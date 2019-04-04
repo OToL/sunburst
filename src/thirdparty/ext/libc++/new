@@ -4,9 +4,9 @@
 
 #include SB_SRC_STD_INC(new)
 
-SB_STD_NS_BEGIN
+namespace SB_STD_NS {
 
     SB_STD_USE(align_val_t);
     SB_STD_USE(nothrow_t);
 
-SB_STD_NS_END
+}

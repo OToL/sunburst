@@ -2,7 +2,7 @@
 
 #include <core/platform.h>
 
-#include <Windows.h>
+#include <windows/windows.h>
 
 namespace sb::detail {
 

@@ -5,10 +5,10 @@
 #include SB_SRC_STD_INC(utility)
 #include SB_SRC_STD_INC(xutility)
 
-SB_STD_NS_BEGIN
+namespace SB_STD_NS {
 
 	SB_STD_USE(forward);
     SB_STD_USE(move);
     SB_STD_USE(pair);
 
-SB_STD_NS_END
+}

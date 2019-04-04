@@ -56,11 +56,11 @@ struct LogFilter<false>
 } // namespace sb
 
 #    define sbLogImpl(lvl, file, line, msg, ...) \
-        (!sb::detail::gs_log_quiet && ((sb::ui8)lvl) <= ((sb::ui8)sb::detail::gs_log_min_level)) && (sb::detail::LogFilter<sbCTFIsEnabled(LOG_FACILITY)>::logMessage(lvl, file, line, msg, ##__VA_ARGS__), true)
-
+        (!::sb::detail::gs_log_quiet && ((::sb::ui8)lvl) <= ((::sb::ui8)sb::detail::gs_log_min_level)) && (::sb::detail::LogFilter<sbCTFIsEnabled(LOG_FACILITY)>::logMessage(lvl, file, line, msg, ##__VA_ARGS__), true)
+        
 #else
 
-#    define sbLogImpl(type, file, line, msg, ...)
+#    define sbLogImpl(type, file, line, msg, ...)`
 
 namespace sb::detail {
     inline void setLogQuiet(b8) {}

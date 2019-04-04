@@ -3,8 +3,8 @@
 #include "prolog.h"
 #include SB_SRC_STD_INC(array)
 
-SB_STD_NS_BEGIN
+namespace SB_STD_NS {
 
 	SB_STD_USE(array);
 
-SB_STD_NS_END
+}

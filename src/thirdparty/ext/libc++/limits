@@ -4,8 +4,8 @@
 
 #include SB_SRC_STD_INC(limits)
 
-SB_STD_NS_BEGIN
+namespace SB_STD_NS {
 
 	SB_STD_USE(numeric_limits);
 
-SB_STD_NS_END
+}

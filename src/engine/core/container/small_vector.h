@@ -667,7 +667,7 @@ private:
 
 }
 
-SB_STD_NS_BEGIN
+namespace SB_STD_NS {
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
 typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::iterator begin( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect)
@@ -711,4 +711,4 @@ void swap( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect1, typename s
     vect1.swap(vect2);
 }
 
-SB_STD_NS_END
+}
