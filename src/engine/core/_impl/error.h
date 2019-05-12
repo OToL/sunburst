@@ -1,7 +1,13 @@
 #include "build_target_cfg.h"
+
 #include <libc++/utility>
 
 #if sbCTFIsEnabled(ERROR_FACILITY)
+
+namespace sb {
+    template <typename... TArgs>
+    usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args);
+}
 
 namespace sb::detail {
 
@@ -17,7 +23,7 @@ void reportError(ErrorType type, char const * const file, ui32 const line, char 
     if constexpr (sizeof...(args))
     {
         char fmt_msg[255];
-        sb::stringFormat(fmt_msg, msg, wstd::forward<TArgs>(args)...);
+        sb::stringFormat(fmt_msg, sizeof(fmt_msg), msg, wstd::forward<TArgs>(args)...);
 
         reportError(type, file, line, fmt_msg);
     }

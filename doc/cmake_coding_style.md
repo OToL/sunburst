@@ -11,7 +11,6 @@
 - Files name containing commonly used macros/functions start with "sb", are lower case, '_' separated and use "cmake" extension
 ```
 sb_utility.cmake
-sb_environment.cmake
 sb_target.cmake
 ```
 

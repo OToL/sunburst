@@ -48,7 +48,7 @@ void * AllocatorStats::allocate(usize const size)
                     return (val.m_mem <= mem_ptr) && (reinterpret_cast<uintptr_t>(mem_ptr) <= (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
                 } 
             );
-        assert(alloc_desc == wstd::end(m_allocs));
+        assert(alloc_desc == end(m_allocs));
         m_allocs.emplace_back(mem_ptr, size);
     }
 
@@ -70,7 +70,7 @@ void * AllocatorStats::allocate(usize const size, usize const alignment)
                     return (val.m_mem <= mem_ptr) && (reinterpret_cast<uintptr_t>(mem_ptr) <= (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
                 } 
             );
-        assert(alloc_desc == wstd::end(m_allocs));
+        assert(alloc_desc == end(m_allocs));
         m_allocs.emplace_back(mem_ptr, size);
     }
 

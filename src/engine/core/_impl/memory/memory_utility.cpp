@@ -11,7 +11,7 @@ void zeroMemory(void * const memPtr, usize const byteCount)
     wstd::memset(memPtr, 0, byteCount);
 }
 
-void notifyOOM(usize /*requestedSize*/, char const * message)
+[[noreturn]] void notifyOOM([[maybe_unused]] usize  requestedSize, char const * message)
 {
     outputDebugString(message);
 

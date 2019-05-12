@@ -95,7 +95,8 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
         "-Wno-implicit-fallthrough" 
         "-Wno-missing-prototypes"
         "-Wno-documentation-unknown-command"
-        "-Wno-undefined-func-template")
+        "-Wno-undefined-func-template"
+        "-Wno-extra-semi-stmt")
     target_compile_definitions(common_public
         INTERFACE 
             SB_COMPILER_CLANG)

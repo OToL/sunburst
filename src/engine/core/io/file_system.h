@@ -33,7 +33,7 @@ struct FileSystem
 
     static usize const MAX_CONCURRENT_OPENED_FILES = 50U;
 
-    static b8 initialize(InitParams & init);
+    static b8 initialize(InitParams const & init);
 
     static b8 terminate();
 

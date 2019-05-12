@@ -28,7 +28,7 @@ protected:
     {
         if (seq1.size() == seq2.size())
         {
-            usize idx = 0;
+            si32 idx = 0;
             for (auto const & obj1 : seq1)
             {
                 if (obj1.getId() != seq2[idx].getId())
@@ -112,7 +112,7 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_SIZE)
         SmallVectorTest<5> small_vect(5);
 
         EXPECT_FALSE(small_vect.empty());
-        EXPECT_EQ(small_vect.size(), 5);
+        EXPECT_EQ(small_vect.size(), 5U);
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 5U);
         EXPECT_TRUE(small_vect.isSmallStorage());
         EXPECT_TRUE(objSeqEq(small_vect));
@@ -125,7 +125,7 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_SIZE)
         SmallVectorTestA<5> small_vect(5, stl_alloc);
 
         EXPECT_FALSE(small_vect.empty());
-        EXPECT_EQ(small_vect.size(), 5);
+        EXPECT_EQ(small_vect.size(), 5U);
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 5U);
         EXPECT_TRUE(small_vect.isSmallStorage());
         EXPECT_TRUE(objSeqEq(small_vect));
@@ -138,7 +138,7 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_SIZE)
         SmallVectorTest<5> small_vect(10);
 
         EXPECT_FALSE(small_vect.empty());
-        EXPECT_EQ(small_vect.size(), 10);
+        EXPECT_EQ(small_vect.size(), 10U);
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 10U);
         EXPECT_TRUE(objSeqEq(small_vect));
         EXPECT_FALSE(small_vect.isSmallStorage());
@@ -150,7 +150,7 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_SIZE)
         SmallVectorTestA<5> small_vect(10, stl_alloc);
 
         EXPECT_FALSE(small_vect.empty());
-        EXPECT_EQ(small_vect.size(), 10);
+        EXPECT_EQ(small_vect.size(), 10U);
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 10U);
         EXPECT_TRUE(objSeqEq(small_vect));
         EXPECT_FALSE(small_vect.isSmallStorage());
@@ -170,7 +170,7 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_SIZE_INIT)
         SmallVectorTest<5> small_vect(5, init_obj);
 
         EXPECT_FALSE(small_vect.empty());
-        EXPECT_EQ(small_vect.size(), 5);
+        EXPECT_EQ(small_vect.size(), 5U);
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 6U);
         EXPECT_TRUE(objSeqEq(small_vect, init_obj));
     }
@@ -184,7 +184,7 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_SIZE_INIT)
         SmallVectorTestA<5> small_vect(5, init_obj, stl_alloc);
 
         EXPECT_FALSE(small_vect.empty());
-        EXPECT_EQ(small_vect.size(), 5);
+        EXPECT_EQ(small_vect.size(), 5U);
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 6U);
         EXPECT_TRUE(objSeqEq(small_vect, init_obj));
 
@@ -198,7 +198,7 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_SIZE_INIT)
         SmallVectorTest<5> small_vect(10, init_obj);
 
         EXPECT_FALSE(small_vect.empty());
-        EXPECT_EQ(small_vect.size(), 10);
+        EXPECT_EQ(small_vect.size(), 10U);
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 11U);
         EXPECT_TRUE(objSeqEq(small_vect, init_obj));
     }
@@ -210,7 +210,7 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_SIZE_INIT)
         SmallVectorTestA<5> small_vect(10, init_obj, stl_alloc);
 
         EXPECT_FALSE(small_vect.empty());
-        EXPECT_EQ(small_vect.size(), 10);
+        EXPECT_EQ(small_vect.size(), 10U);
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 11U);
         EXPECT_TRUE(objSeqEq(small_vect, init_obj));
 
@@ -319,7 +319,7 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_COPY)
             SmallVectorTestA<4> src_vec(3, src_stl_alloc);
             initObjSeq(src_vec);
             EXPECT_TRUE(src_vec.isSmallStorage());
-            EXPECT_EQ(src_alloc_stats.getStats().m_alloc_count, 0);
+            EXPECT_EQ(src_alloc_stats.getStats().m_alloc_count, 0U);
             EXPECT_FALSE(src_alloc_stats.owns(src_vec.data()));
 
             EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 3U);
@@ -330,12 +330,12 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_COPY)
             EXPECT_EQ(dst_vec.size(), src_vec.size());
             EXPECT_TRUE(objSeqsEq(src_vec, dst_vec));
             EXPECT_TRUE(dst_vec.isSmallStorage());
-            EXPECT_EQ(dst_alloc_stats.getStats().m_alloc_count, 0);
+            EXPECT_EQ(dst_alloc_stats.getStats().m_alloc_count, 0U);
             EXPECT_FALSE(dst_alloc_stats.owns(dst_vec.data()));
         }
 
-        EXPECT_EQ(dst_alloc_stats.getStats().m_alloc_count, 0);
-        EXPECT_EQ(src_alloc_stats.getStats().m_alloc_count, 0);
+        EXPECT_EQ(dst_alloc_stats.getStats().m_alloc_count, 0U);
+        EXPECT_EQ(src_alloc_stats.getStats().m_alloc_count, 0U);
     }
 
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0U);
@@ -368,7 +368,7 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_COPY)
             SmallVectorTestA<10> src_vec(6, src_stl_alloc);
             initObjSeq(src_vec);
             EXPECT_TRUE(src_vec.isSmallStorage());
-            EXPECT_EQ(src_alloc_stats.getStats().m_alloc_count, 0);
+            EXPECT_EQ(src_alloc_stats.getStats().m_alloc_count, 0U);
             EXPECT_FALSE(src_alloc_stats.owns(src_vec.data()));
 
             EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 6U);
@@ -379,12 +379,12 @@ TEST_F(SMALL_VECTOR, DEFAULT_CTOR_COPY)
             EXPECT_EQ(dst_vec.size(), src_vec.size());
             EXPECT_TRUE(objSeqsEq(src_vec, dst_vec));
             EXPECT_FALSE(dst_vec.isSmallStorage());
-            EXPECT_NE(dst_alloc_stats.getStats().m_alloc_count, 0);
+            EXPECT_NE(dst_alloc_stats.getStats().m_alloc_count, 0U);
             EXPECT_TRUE(dst_alloc_stats.owns(dst_vec.data()));
         }
 
-        EXPECT_EQ(dst_alloc_stats.getStats().m_alloc_count, 0);
-        EXPECT_EQ(src_alloc_stats.getStats().m_alloc_count, 0);
+        EXPECT_EQ(dst_alloc_stats.getStats().m_alloc_count, 0U);
+        EXPECT_EQ(src_alloc_stats.getStats().m_alloc_count, 0U);
     }
 }
 
@@ -692,8 +692,8 @@ TEST_F(SMALL_VECTOR, RESERVATION)
     SmallVectorTest<5> vect_test(2);
     initObjSeq(vect_test);
 
-    vect.emplace_back(0);
-    vect.emplace_back(1);
+    vect.emplace_back(0U);
+    vect.emplace_back(1U);
 
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 4U);
     EXPECT_EQ(5U, vect.capacity());
@@ -948,7 +948,7 @@ TEST_F(SMALL_VECTOR, ASSIGN_OP)
 
         vect = vect_src;
         
-        EXPECT_EQ(vect.size(), 3);
+        EXPECT_EQ(vect.size(), 3U);
         EXPECT_TRUE(objSeqEqIdRange(vect));
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 6U);
         EXPECT_TRUE(vect.isSmallStorage());
@@ -971,7 +971,7 @@ TEST_F(SMALL_VECTOR, ASSIGN_OP)
 
         vect = vect_src;
         
-        EXPECT_EQ(vect.size(), 5);
+        EXPECT_EQ(vect.size(), 5U);
         EXPECT_TRUE(objSeqEqIdRange(vect));
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 10U);
         EXPECT_FALSE(vect.isSmallStorage());
@@ -986,7 +986,7 @@ TEST_F(SMALL_VECTOR, ASSIGN_OP)
         EXPECT_TRUE(vect_src.isSmallStorage());
 
         SmallVectorTest<10> vect(3);
-        initObjSeq(vect, 10);
+        initObjSeq(vect, 10U);
 
         EXPECT_TRUE(objSeqEqIdRange(vect, 10));
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 8U);
@@ -994,7 +994,7 @@ TEST_F(SMALL_VECTOR, ASSIGN_OP)
 
         vect = vect_src;
         
-        EXPECT_EQ(vect.size(), 5);
+        EXPECT_EQ(vect.size(), 5U);
         EXPECT_TRUE(objSeqEqIdRange(vect));
         EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 10U);
         EXPECT_TRUE(vect.isSmallStorage());

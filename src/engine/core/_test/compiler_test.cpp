@@ -15,8 +15,6 @@ class ConcatIDTest
 {
 };
 
-#define WORLD_STR "world"
-
 TEST(COMPILER, IdToStr)
 {
     EXPECT_STREQ("world", sbIdToStr(world));

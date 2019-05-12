@@ -21,6 +21,7 @@ sbAddLibrary(core STATIC
 if(SB_TARGET_LINUX)
     target_sources(core 
         PRIVATE
+            _pimpl/linux/platform_linux.cpp
             _pimpl/linux/file_system_linux.cpp
             _pimpl/linux/malloc_linux.cpp)
 elseif(SB_TARGET_MACOS)
@@ -59,7 +60,7 @@ sbAddLibraryTest(core
     _test/pool_allocator_test.cpp
     _test/ring_buffer_Test.cpp
     _test/static_string_test.cpp
-    _test/static_vector_Test.cpp
+    _test/static_vector_test.cpp
     _test/string_format_test.cpp
     _test/unique_ptr_test.cpp
     _test/stl_allocator_test.cpp

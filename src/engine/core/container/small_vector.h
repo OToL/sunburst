@@ -9,6 +9,8 @@
 
 #include <libc++/utility>
 #include <libc++/memory>
+#include <libc++/algorithm>
+#include <libc++/iterator>
 
 namespace sb {
 
@@ -17,12 +19,12 @@ class SmallVector : public detail::SmallVectorBase<TType, TAllocator>
 {
     sbBaseClass(detail::SmallVectorBase<TType, TAllocator>);
 
-    template <typename TType, usize BASE_CAPACITY, typename TAllocator = wstd::allocator<TType>>
+    template <typename, usize, typename>
     friend class SmallVector;
 
     using Impl = typename BaseClass::Impl;
 
-    static constexpr usize BITS_PER_WORD = static_cast<usize>(sizeof(BaseClass::size_type) * CHAR_BIT);
+    static constexpr usize BITS_PER_WORD = static_cast<usize>(sizeof(typename BaseClass::size_type) * 8);
 
 public:
     using typename BaseClass::value_type;
@@ -309,7 +311,7 @@ public:
 
     constexpr size_type max_size() const
     {
-        return ~((difference_type)0);
+        return (size_type)~((difference_type)0);
     }
 
     void reserve(size_type new_cap)
@@ -403,7 +405,7 @@ public:
 
     allocator_type get_allocator() const
     {
-        return (allocator_type &)m_impl;
+        return (allocator_type const &)m_impl;
     }
 
     reference at(size_type idx)

@@ -11,5 +11,3 @@
     void    unformatted_code  ;
 // clang-format on
 ```
-
-

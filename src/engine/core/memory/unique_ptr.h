@@ -195,13 +195,13 @@ namespace SB_STD_NS {
     template< class U ,class T,  class A> 
     auto static_pointer_cast( std::unique_ptr<T, A> && r ) noexcept
     {
-        return std::unique_ptr<U, A::RebindDelete<U>>{static_cast<U *>(r.release()), r.get_deleter()};
+        return std::unique_ptr<U, typename A::template RebindDelete<U>>{static_cast<U *>(r.release()), r.get_deleter()};
     }
 
     template< class U , class T, class A> 
     auto static_pointer_cast( std::unique_ptr<T, A> &  r ) noexcept
     {
-        return std::unique_ptr<U, A::RebindDelete<U>>{static_cast<U *>(r.release()), r.get_deleter()};
+        return std::unique_ptr<U, typename A::template RebindDelete<U>>{static_cast<U *>(r.release()), r.get_deleter()};
     }
 
 }

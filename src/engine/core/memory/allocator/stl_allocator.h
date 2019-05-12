@@ -121,10 +121,6 @@ public:
 
     constexpr STLAllocator() = default;
 
-    constexpr STLAllocator(STLAllocator const & src) = default;
-
-    ~STLAllocator() = default;
-
     template <typename U>
     constexpr STLAllocator(STLAllocator<U> const & )   
     {

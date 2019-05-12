@@ -40,7 +40,7 @@ usize decimalToString(T src, wstd::span<char> & dest)
             dest[0] = 0;
         }
 
-        return len;
+        return numericCast<usize>(len);
     }
 
     return 0;

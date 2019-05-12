@@ -7,10 +7,6 @@
     - C++ (ms-vscode.cpptools)
     - Bookmarks (alefragnani.bookmarks)
 
-  User Settings:
-    - Font aliasing: anti-aliased
-    - Font Size: 11
-
 - CMake (https://cmake.org/)  
   Install command-line tools:
   ```
@@ -18,8 +14,6 @@
   ```
 
 - Python 3 (https://www.python.org/downloads/)
-
-- Github desktop (https://desktop.github.com/)
 
 - Clang (https://clang.llvm.org/get_started.html)  
   Before generating build scripts, do not forget to set the CMAKE_BUILD_TYPE to Release.  
@@ -70,10 +64,4 @@
       "externalConsole": false,
       "MIMode": "lldb"
   }
-  ```
-
-- [MACOS] XCode (App Store)  
-  Install, launch XCode and install command-line tools:
-  ```
-  xcode-select --install
   ```

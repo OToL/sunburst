@@ -9,7 +9,7 @@
 namespace sb {
 
 template <typename TDst, typename TSrc>
-constexpr TDst numericCast(TSrc && src)
+inline constexpr TDst numericCast(TSrc && src)
 {
     return static_cast<TDst>(src);
 }

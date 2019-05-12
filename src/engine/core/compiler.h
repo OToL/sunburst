@@ -4,6 +4,8 @@
 #    include "_pimpl/macos/compiler_macos.h"
 #elif defined(SB_TARGET_WINDOWS)
 #    include "_pimpl/windows/compiler_win.h"
+#elif defined(SB_TARGET_LINUX)
+#    include "_pimpl/linux/compiler_linux.h"
 #else
 #    error "Unsupported compiler"
 #endif

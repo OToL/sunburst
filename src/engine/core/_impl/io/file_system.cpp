@@ -51,7 +51,7 @@ public:
 
     using FSLayers = StaticVector<LayerDesc, 15>;
 
-    FileSystemImpl(FS::InitParams & init)
+    FileSystemImpl(FS::InitParams const & init)
         : m_file_desc_gen(0)
         , m_opened_file_cnt(0)
         , m_file_desc_pool{FileSystem::MAX_CONCURRENT_OPENED_FILES}
@@ -315,7 +315,7 @@ private:
 
 static UniquePtr<FileSystemImpl> gs_file_system;
 
-b8 FileSystem::initialize(InitParams & init)
+b8 FileSystem::initialize(InitParams const & init)
 {
     if (sbExpectTrue(nullptr == gs_file_system, "File System already initialized"))
     {
