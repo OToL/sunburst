@@ -2,7 +2,7 @@
 
 #include "prolog.h"
 
-#include "../inc/_impl/gsl/span"
+#include "../inc/gsl/span"
 
 namespace SB_STD_NS {
 

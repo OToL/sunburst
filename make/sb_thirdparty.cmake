@@ -2,7 +2,7 @@ if(SB_TARGET_LINUX)
     add_library(gtest STATIC IMPORTED)
     set_target_properties(gtest PROPERTIES
         INTERFACE_COMPILE_DEFINITIONS "GTEST_HAS_PTHREAD=0"
-        IMPORTED_LOCATION ${SB_3RD_LIB_DIR_PATH}/libgtest.a)    
+        IMPORTED_LOCATION ${SB_3RD_LIB_DIR_PATH}/libgtestd.a)    
         
     add_library(vulkan SHARED IMPORTED)
     set_target_properties(vulkan PROPERTIES
