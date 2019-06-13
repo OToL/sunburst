@@ -40,31 +40,6 @@ else()
     message(FATAL_ERROR "sb::core sources not configured for ${SB_TARGET_OS}")
 endif()
 
-sbAddLibraryTest(core
-    _test/compiler_test.cpp
-    _test/small_vector_test.cpp
-    _test/conversion_test.cpp
-    _test/crc32_test.cpp
-    _test/crc64_test.cpp
-    _test/string_utility_test.cpp
-    _test/enum_test.cpp
-    _test/fnv32_test.cpp
-    _test/fnv64_test.cpp
-    _test/hash_str_test.cpp
-    _test/incremental_allocator_test.cpp
-    _test/main.cpp
-    _test/bitwise_test.cpp
-    _test/memory_arena_composer_test.cpp
-    _test/new_test.cpp
-    _test/null_allocator_test.cpp
-    _test/pool_allocator_test.cpp
-    _test/ring_buffer_Test.cpp
-    _test/static_string_test.cpp
-    _test/static_vector_test.cpp
-    _test/string_format_test.cpp
-    _test/unique_ptr_test.cpp
-    _test/stl_allocator_test.cpp
-    _test/typed_id_test.cpp)
         
     
     

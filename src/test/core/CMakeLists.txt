@@ -1,0 +1,26 @@
+
+sbAddLibraryTest(core
+    compiler_test.cpp
+    small_vector_test.cpp
+    conversion_test.cpp
+    crc32_test.cpp
+    crc64_test.cpp
+    string_utility_test.cpp
+    enum_test.cpp
+    fnv32_test.cpp
+    fnv64_test.cpp
+    hash_str_test.cpp
+    incremental_allocator_test.cpp
+    main.cpp
+    bitwise_test.cpp
+    memory_arena_composer_test.cpp
+    new_test.cpp
+    null_allocator_test.cpp
+    pool_allocator_test.cpp
+    ring_buffer_Test.cpp
+    static_string_test.cpp
+    static_vector_test.cpp
+    string_format_test.cpp
+    unique_ptr_test.cpp
+    stl_allocator_test.cpp
+    typed_id_test.cpp)

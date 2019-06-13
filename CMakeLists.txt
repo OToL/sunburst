@@ -30,4 +30,5 @@ include(make/sb_target.cmake)
 include(make/sb_thirdparty.cmake)
 
 add_subdirectory("src/engine")
+add_subdirectory("src/test")
 add_subdirectory("src/thirdparty")
