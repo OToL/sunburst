@@ -21,21 +21,21 @@ sbAddLibrary(core STATIC
 if(SB_TARGET_LINUX)
     target_sources(core 
         PRIVATE
-            _pimpl/linux/platform_linux.cpp
-            _pimpl/linux/file_system_linux.cpp
-            _pimpl/linux/malloc_linux.cpp)
+            _impl/linux/platform_linux.cpp
+            _impl/linux/file_system_linux.cpp
+            _impl/linux/malloc_linux.cpp)
 elseif(SB_TARGET_MACOS)
     target_sources(core 
         PRIVATE
-            _pimpl/macos/platform_macos.cpp
-            _pimpl/macos/file_system_macos.cpp
-            _pimpl/macos/malloc_macos.cpp)
+            _impl/macos/platform_macos.cpp
+            _impl/macos/file_system_macos.cpp
+            _impl/macos/malloc_macos.cpp)
 elseif(SB_TARGET_WINDOWS)
     target_sources(core 
         PRIVATE
-            _pimpl/windows/platform_win.cpp
-            _pimpl/windows/file_system_win.cpp
-            _pimpl/windows/malloc_win.cpp)
+            _impl/windows/platform_win.cpp
+            _impl/windows/file_system_win.cpp
+            _impl/windows/malloc_win.cpp)
 else()
     message(FATAL_ERROR "sb::core sources not configured for ${SB_TARGET_OS}")
 endif()

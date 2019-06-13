@@ -3,7 +3,7 @@
 #include "platform.h"
 
 #if defined(SB_TARGET_WINDOWS)
-#   include "_pimpl/windows/timer_decl_win.h"
+#   include "_impl/windows/timer_decl_win.h"
 #else
 #   error "Unhandled target platform"
 #endif
@@ -29,7 +29,7 @@ struct Timer
 } // namespace sb
 
 #if defined(SB_TARGET_WINDOWS)
-#   include "_pimpl/windows/timer_win.h"
+#   include "_impl/windows/timer_win.h"
 #else
 #   error "Unhandled target platform"
 #endif

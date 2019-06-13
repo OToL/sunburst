@@ -1,11 +1,11 @@
 #pragma once
 
 #if defined(SB_TARGET_MACOS)
-#    include "_pimpl/macos/compiler_macos.h"
+#    include "_impl/macos/compiler_macos.h"
 #elif defined(SB_TARGET_WINDOWS)
-#    include "_pimpl/windows/compiler_win.h"
+#    include "_impl/windows/compiler_win.h"
 #elif defined(SB_TARGET_LINUX)
-#    include "_pimpl/linux/compiler_linux.h"
+#    include "_impl/linux/compiler_linux.h"
 #else
 #    error "Unsupported compiler"
 #endif

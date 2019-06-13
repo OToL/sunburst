@@ -4,9 +4,9 @@
 #include <libc++/cstdint>
 
 #if defined(SB_TARGET_WINDOWS)
-#   include "_pimpl/windows/platform_win.h"
+#   include "_impl/windows/platform_win.h"
 #elif defined(SB_TARGET_LINUX)
-#   include "_pimpl/linux/platform_linux.h"
+#   include "_impl/linux/platform_linux.h"
 #else
 #   error "Unhandled target platform"
 #endif

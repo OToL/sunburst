@@ -7,7 +7,7 @@ namespace sb {
 enum class ErrorType : ui8
 {
     CRITICAL,   // Unhandled critical error leading to a crash
-    WARNING,    // Error with side effect(s) affecting progam's behavior (glitches, bugs, etc.)
+    WARNING,    // Error with side effect(s) affecting progam's behavior (graphic glitch, bugs, etc.)
     NOTICE      // The error has been properly handled
 };
 
