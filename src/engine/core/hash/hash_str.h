@@ -1,24 +1,23 @@
 #pragma once
 
 #include <core/platform.h>
-#include <core/_impl/hash/hash_str_cfg.h>
+#include <core/_impl/config/hash_cfg.h>
 
 namespace sb {
 
-template <usize BIT_COUNT>
-struct HashStrBase
+struct HashStr
 {
-    using HashPolicy = HashStrPolicy<BIT_COUNT>;
-    using ValueType = typename HashPolicy::ValueType;
+    using HashPolicy = detail::HashStrPolicy;
+    using Value = typename HashPolicy::Value;
 
-    HashStrBase() = default;
+    HashStr() = default;
 
-    constexpr explicit HashStrBase(ValueType value)
+    constexpr explicit HashStr(Value value)
         : m_value(value)
     {
     }
 
-    constexpr explicit HashStrBase(char const * str)
+    constexpr explicit HashStr(char const * str)
         : m_value(0)
     {
         if (str[0] != '\0')
@@ -27,7 +26,7 @@ struct HashStrBase
         }
     }
 
-    constexpr HashStrBase(char const * str, usize len)
+    constexpr HashStr(char const * str, usize len)
         : m_value(0)
     {
         if ((str[0] != '\0') && (0 != len))
@@ -41,10 +40,8 @@ struct HashStrBase
         return (m_value == 0);
     }
 
-    ValueType m_value = 0;
+    Value m_value = 0;
 };
-
-using HashStr = HashStrBase<64>;
 
 constexpr b8 operator==(HashStr lval, HashStr rval)
 {

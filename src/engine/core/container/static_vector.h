@@ -9,10 +9,10 @@
 
 namespace sb {
 
-/// TODO: do no call dtor for pod
-/// TODO: uninitialized push maybe just for pod
-/// TODO: try_emplace
-/// TODO: try_pushback
+// TODO: do no call dtor for pod
+// TODO: uninitialized push maybe just for pod
+// TODO: try_emplace
+// TODO: try_pushback
 template <typename TType, usize CAPACITY>
 class StaticVector
 {

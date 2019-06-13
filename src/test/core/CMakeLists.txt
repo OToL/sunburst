@@ -7,8 +7,8 @@ sbAddLibraryTest(core
     crc64_test.cpp
     string_utility_test.cpp
     enum_test.cpp
-    fnv32_test.cpp
-    fnv64_test.cpp
+    fnv1a32_test.cpp
+    fnv1a64_test.cpp
     hash_str_test.cpp
     incremental_allocator_test.cpp
     main.cpp

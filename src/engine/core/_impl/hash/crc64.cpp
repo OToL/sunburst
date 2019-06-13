@@ -49,9 +49,9 @@ static ui64 const CRC64_TAB[256] = {
     0x4a6acb477bea5a2aULL, 0x089a2aacd2006cb9ULL, 0x14dea25f3af9026dULL, 0x562e43b4931334feULL, 0x913f6188692d6f4bULL, 0xd3cf8063c0c759d8ULL,
     0x5dedc41a34bbeeb2ULL, 0x1f1d25f19d51d821ULL, 0xd80c07cd676f8394ULL, 0x9afce626ce85b507ULL};
 
-CRC64Value computeCRC64(ui8 const * const buffer, usize const len)
+CRC64::Value CRC64::compute(ui8 const * const buffer, usize const len)
 {
-    CRC64Value crc_value = 0ULL;
+    CRC64::Value crc_value = 0ULL;
 
     ui8 const * const data = buffer;
 
@@ -63,9 +63,9 @@ CRC64Value computeCRC64(ui8 const * const buffer, usize const len)
     return crc_value;
 }
 
-CRC64Value computeCRC64(char const * const str)
+CRC64::Value CRC64::compute(char const * const str)
 {
-    CRC64Value crc_value = 0ULL;
+    CRC64::Value crc_value = 0ULL;
 
     ui8 const * iter = reinterpret_cast<ui8 const *>(str);
 

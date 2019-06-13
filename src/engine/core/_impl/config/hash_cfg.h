@@ -10,20 +10,20 @@
 
 #    include <core/hash/crc.h>
 
-namespace sb {
+namespace sb::detail {
 
-template <usize BIT_COUNT>
-using HashStrPolicy = HashPolicyCRC<BIT_COUNT>;
+using HashStrPolicy = CRC64;
+
 }
 
 #elif sbCTVIsEq(HASHSTR_POLICY, SB_HASHSTR_POLICY_FNV1A)
 
-#    include <core/hash/fnv.h>
+#    include <core/hash/fnv1a.h>
 
-namespace sb {
+namespace sb::detail {
 
-template <usize SIZE>
-using HashStrPolicy = HashPolicyFNV1a<SIZE>;
+using HashStrPolicy = FNV1a64;
+
 }
 
 #endif

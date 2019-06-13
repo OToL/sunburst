@@ -22,7 +22,7 @@ TEST(HASH_STR, SetFromStr)
 
 TEST(HASH_STR, SetFromValue)
 {
-    HashStr::ValueType const HASH_TEST_VALUE = HashStr::HashPolicy::compute(HASH_STR_TEST_STRING);
+    HashStr::Value const HASH_TEST_VALUE = HashStr::HashPolicy::compute(HASH_STR_TEST_STRING);
     HashStr const hash(HASH_STR_TEST_STRING);
 
     EXPECT_EQ(hash.m_value, HASH_TEST_VALUE);

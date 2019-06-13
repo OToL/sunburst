@@ -135,7 +135,7 @@ public:
 
 - TODO: [description]
 ```c++
-/// TODO: Add move assignment & ctor
+// TODO: Add move assignment & ctor
 ```
 
 - TOFIX: [description]
