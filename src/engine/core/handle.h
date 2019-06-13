@@ -5,14 +5,14 @@
 namespace sb {
 
 template <typename TId, typename TStorage>
-struct TypedId
+struct Handle
 {
     using Type = TId;
     using StorageType = TStorage;
 
-    constexpr TypedId() = default;
+    constexpr Handle() = default;
 
-    constexpr explicit TypedId(TStorage val) :
+    constexpr explicit Handle(TStorage val) :
         m_value(val)
     {
     }
@@ -36,13 +36,13 @@ struct TypedId
 };
 
 template <typename TId, typename TStorage>
-constexpr b8 operator == (TypedId<TId, TStorage> lval, TypedId<TId, TStorage> rval)
+constexpr b8 operator == (Handle<TId, TStorage> lval, Handle<TId, TStorage> rval)
 {
     return lval.m_value == rval.m_value;
 }
 
 template <typename TId, typename TStorage>
-constexpr b8 operator != (TypedId<TId, TStorage> lval, TypedId<TId, TStorage> rval)
+constexpr b8 operator != (Handle<TId, TStorage> lval, Handle<TId, TStorage> rval)
 {
     return lval.m_value != rval.m_value;
 }

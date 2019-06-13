@@ -23,4 +23,4 @@ sbAddLibraryTest(core
     string_format_test.cpp
     unique_ptr_test.cpp
     stl_allocator_test.cpp
-    typed_id_test.cpp)
+    handle_test.cpp)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <core/platform.h>
-#include <core/typed_id.h>
+#include <core/handle.h>
 
 namespace sb {
 
@@ -17,9 +17,9 @@ enum class FileFormat : ui8
     Text
 };
 
-struct FileHdlTypedId {};
+struct FileHdlHandle {};
 
-using FileHdl = TypedId<FileHdlTypedId, ui32>;
+using FileHdl = Handle<FileHdlHandle, ui32>;
 using FileSize = si64;
 using FilePos = si64;
 
