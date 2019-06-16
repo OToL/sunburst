@@ -1,5 +1,6 @@
 #pragma once
 
+#include <core/platform.h>
 #include <core/bitwise.h>
 #include <core/memory/allocator/allocator_view.h>
 
@@ -10,6 +11,18 @@
 namespace sb {
 
 AllocatorView const & getGlobalHeapView();
+
+}
+
+namespace sb::detail {
+
+void * malloc(usize size);
+
+void * malloc(usize size, usize alignment);
+
+usize mallocUsableSize(void * memPtr);
+
+void free(void * memPtr);
 
 template <typename TType>
 struct MemoryOperatorHelper
@@ -151,7 +164,9 @@ struct MemoryOperatorHelperDeleteArray : protected MemoryOperatorHelper<TType>
     using BaseClass::DestroyArray;
     using BaseClass::MemoryOperatorHelper;
 };
-} // namespace sb
+
+}
+
 
 void * operator new(sb::usize byte_count);
 
@@ -165,11 +180,11 @@ void * operator new[](sb::usize count, wstd::nothrow_t const & tag) noexcept;
 
 void * operator new[](sb::usize byte_count, wstd::align_val_t alignment);
 
-void operator delete(void * ptr)noexcept;
+void operator delete(void * ptr) noexcept;
 
-void operator delete(void * ptr, wstd::nothrow_t const & tag)noexcept;
+void operator delete(void * ptr, wstd::nothrow_t const & tag) noexcept;
 
-void operator delete(void *, wstd::align_val_t alignment)noexcept;
+void operator delete(void *, wstd::align_val_t alignment) noexcept;
 
 void operator delete[](void * ptr) noexcept;
 

@@ -2,7 +2,7 @@
 
 #include <core/platform.h>
 #include <core/memory/allocator/allocator_view.h>
-#include <core/memory/unique_ptr.h>
+#include <core/unique_ptr.h>
 #include <core/error.h>
 
 namespace sb {

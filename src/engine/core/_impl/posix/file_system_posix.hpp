@@ -2,7 +2,7 @@
 #include <core/error.h>
 #include <core/platform.h>
 #include <core/conversion.h>
-#include <core/io/base.h>
+#include <core/io/io.h>
 #include <core/string/static_string.h>
 #include <core/enum.h>
 #include <core/_impl/io/file_system_platform.h>

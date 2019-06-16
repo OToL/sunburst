@@ -1,5 +1,5 @@
 #include <core/memory/allocator/allocator_view.h>
-#include <core/memory/unique_ptr.h>
+#include <core/unique_ptr.h>
 
 #include <gtest/gtest_common.h>
 #include <gtest/object_tracker.h>

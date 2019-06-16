@@ -17,9 +17,9 @@ enum class FileFormat : ui8
     Text
 };
 
-struct FileHdlHandle {};
+struct FileHdlTag {};
 
-using FileHdl = Handle<FileHdlHandle, ui32>;
+using FileHdl = Handle<FileHdlTag, ui32>;
 using FileSize = si64;
 using FilePos = si64;
 

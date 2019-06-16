@@ -4,9 +4,9 @@
 #include <core/memory/allocator/pool_allocator_composer.h>
 #include <core/memory/allocator/memory_arena_composer.h>
 #include <core/memory/allocator/global_heap_allocator.h>
-#include <core/memory/new.h>
-#include <core/memory/unique_ptr.h>
-#include <core/memory/utility.h>
+#include <core/memory/memory.h>
+#include <core/unique_ptr.h>
+#include <core/memory/memory.h>
 #include <core/string/static_string.h>
 #include <core/container/static_vector.h>
 #include <core/string/utility.h>

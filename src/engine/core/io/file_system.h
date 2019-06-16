@@ -2,8 +2,8 @@
 
 #include <core/platform.h>
 #include <core/hash/hash_str.h>
-#include <core/memory/unique_ptr.h>
-#include "base.h"
+#include <core/unique_ptr.h>
+#include "io.h"
 
 #include <libc++/span>
 
@@ -11,7 +11,6 @@ namespace sb {
 
 class IFileSystemLayer;
 
-// TODO: abstract the filesystem path time i.e. char * vs wchar_t *
 struct FileSystem
 {
     sbConstructProtect(FileSystem);
@@ -49,9 +48,9 @@ struct FileSystem
 
     static FileSize getFileLength(FileHdl hdl);
 
-    static LayerPtr createLocalFileSystemLayer(char const * local_root_path);
-
     static char const * getLayerPhysicalPath(LayerName name);
+
+    static LayerPtr createLocalFileSystemLayer(char const * local_root_path);
 };
 
 using FS = FileSystem;

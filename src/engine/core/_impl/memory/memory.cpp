@@ -1,11 +1,30 @@
+
+#include <core/string/utility.h>
 #include <core/memory/allocator/allocator_view.h>
 #include <core/memory/allocator/global_heap_allocator.h>
-#include <core/memory/new.h>
+#include <core/memory/memory.h>
 #include <core/memory/global_heap.h>
 
-using namespace sb;
+#include <libc++/cstdlib>
+#include <libc++/cstring>
 
-void * operator new(usize byte_count)
+namespace sb {
+
+void zeroMemory(void * const memPtr, usize const byteCount)
+{
+    wstd::memset(memPtr, 0, byteCount);
+}
+
+[[noreturn]] void notifyOOM([[maybe_unused]] usize  requestedSize, char const * message)
+{
+    outputDebugString(message);
+
+    wstd::exit(-1);
+}
+
+} // namespace sb
+
+void * operator new(sb::usize byte_count)
 {
     return sb::getGlobalHeap()->allocate(byte_count);
 }
@@ -17,15 +36,15 @@ void * operator new(sb::usize byte_count, wstd::nothrow_t const &) noexcept
 
 void * operator new(sb::usize byte_count, wstd::align_val_t alignment)
 {
-    return sb::getGlobalHeap()->allocate(byte_count, (usize)alignment);
+    return sb::getGlobalHeap()->allocate(byte_count, (sb::usize)alignment);
 }
 
 void * operator new[](sb::usize byte_count, wstd::align_val_t alignment)
 {
-    return sb::getGlobalHeap()->allocate(byte_count, (usize)alignment);
+    return sb::getGlobalHeap()->allocate(byte_count, (sb::usize)alignment);
 }
 
-void * operator new[](usize byte_count)
+void * operator new[](sb::usize byte_count)
 {
     return sb::getGlobalHeap()->allocate(byte_count);
 }

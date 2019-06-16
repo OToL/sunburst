@@ -1,5 +1,5 @@
 #include <core/memory/allocator/global_heap_allocator.h>
-#include <core/memory/new.h>
+#include <core/memory/memory.h>
 
 #include <gtest/allocator_stats.h>
 #include <gtest/gtest_common.h>

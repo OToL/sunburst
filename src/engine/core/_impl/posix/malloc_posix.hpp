@@ -1,12 +1,12 @@
-#include <core/_impl/memory/malloc.h>
-#include <core/memory/utility.h>
+#include <core/_impl/memory/memory.h>
+#include <core/memory/memory.h>
 #include <core/platform.h>
 #include <core/error.h>
 #include <core/bitwise.h>
 #include <core/string/utility.h>
 #include <core/conversion.h>
 
-namespace sb {
+namespace sb::detail {
 
 usize const SYS_MALLOC_DEFAULT_ALIGNMENT = sizeof(void *);
 
@@ -49,7 +49,7 @@ void * malloc(usize size, usize alignment)
 
 void * malloc(usize size)
 {
-    return sb::malloc(size, GLOBAL_HEAP_MIN_ALIGNMENT);
+    return ::sb::detail::malloc(size, GLOBAL_HEAP_MIN_ALIGNMENT);
 }
 
 void free(void * mem_ptr)

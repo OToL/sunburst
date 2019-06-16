@@ -4,7 +4,7 @@
 #include <core/string/static_string.h>
 
 #include <core/io/file_system_layer.h>
-#include <core/io/base.h>
+#include <core/io/io.h>
 #include <core/io/path.h>
 
 namespace sb {

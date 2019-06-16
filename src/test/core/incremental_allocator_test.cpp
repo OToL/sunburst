@@ -1,6 +1,6 @@
 #include <core/memory/allocator/incremental_allocator.h>
 #include <core/memory/global_heap.h>
-#include <core/memory/new.h>
+#include <core/memory/memory.h>
 
 #include <gtest/gtest_common.h>
 
