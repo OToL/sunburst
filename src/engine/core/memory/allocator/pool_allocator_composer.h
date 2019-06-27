@@ -6,7 +6,7 @@
 
 namespace sb {
 
-template <usize BLOCK_SIZE, usize BLOCK_ALIGNMENT, typename TProvider = GlobalHeapAllocator>
+template <usize BLOCK_SIZE, Alignment BLOCK_ALIGNMENT, typename TProvider = GlobalHeapAllocator>
 class PoolAllocatorComposer : public MemoryArenaComposer<TProvider, PoolAllocator<BLOCK_SIZE, BLOCK_ALIGNMENT>>
 {
     using BaseClass = MemoryArenaComposer<TProvider, PoolAllocator<BLOCK_SIZE, BLOCK_ALIGNMENT>>;
@@ -19,6 +19,6 @@ public:
 };
 
 template <typename TObject, typename TProvider = GlobalHeapAllocator>
-using ObjectPoolAllocatorComposer = PoolAllocatorComposer<sizeof(TObject), alignof(TObject), TProvider>;
+using ObjectPoolAllocatorComposer = PoolAllocatorComposer<sizeof(TObject), alignOf<TObject>(), TProvider>;
 
 } // namespace sb

@@ -15,7 +15,8 @@ sbAddLibrary(core STATIC
     _impl/memory/allocator/global_heap_allocator.cpp
     _impl/memory/allocator/incremental_allocator.cpp
     _impl/memory/global_heap.cpp
-    _impl/memory/memory.cpp)
+    _impl/memory/memory.cpp
+    _impl/memory/alloc.cpp)
   
 if(SB_TARGET_LINUX)
     target_sources(core 

@@ -1,6 +1,7 @@
 #include <core/memory/allocator/incremental_allocator.h>
 #include <core/memory/global_heap.h>
 #include <core/memory/memory.h>
+#include <core/bitwise.h>
 
 #include <gtest/gtest_common.h>
 
@@ -31,7 +32,7 @@ TEST(INCREMENTAL_ALLOCATOR, Allocate)
 TEST(INCREMENTAL_ALLOCATOR, AlignedAllocate)
 {
     usize const alloc_count = 4;
-    usize const test_alignment = 16;
+    Alignment const test_alignment = ALIGN_16B;
     usize const alloc_size = 8;
     usize const arena_size = alloc_count * test_alignment;
 

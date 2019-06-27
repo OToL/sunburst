@@ -14,7 +14,7 @@ sbAddLibraryTest(core
     main.cpp
     bitwise_test.cpp
     memory_arena_composer_test.cpp
-    memory_test.cpp
+    alloc_test.cpp
     null_allocator_test.cpp
     pool_allocator_test.cpp
     ring_buffer_Test.cpp

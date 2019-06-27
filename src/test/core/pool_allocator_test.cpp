@@ -18,11 +18,11 @@ struct TestPoolObj
 constexpr usize OBJECT_COUNT = 10;
 constexpr usize POOL_SIZE = OBJECT_COUNT * sizeof(TestPoolObj);
 
-using PoolTestAllocator = PoolAllocator<sizeof(TestPoolObj), alignof(TestPoolObj)>;
+using PoolTestAllocator = PoolAllocator<sizeof(TestPoolObj), alignOf<TestPoolObj>()>;
 
 TEST(POOL_ALLOCATOR, AllocateAll)
 {
-    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignof(TestPoolObj));
+    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignOf<TestPoolObj>());
     MemoryArena const pool_arena = {pool_base, POOL_SIZE};
 
     {
@@ -46,7 +46,7 @@ TEST(POOL_ALLOCATOR, AllocateAll)
 
 TEST(POOL_ALLOCATOR, AlignAllocateAll)
 {
-    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignof(TestPoolObj));
+    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignOf<TestPoolObj>());
     MemoryArena const pool_arena = {pool_base, POOL_SIZE};
 
     {
@@ -58,7 +58,7 @@ TEST(POOL_ALLOCATOR, AlignAllocateAll)
         while (nullptr != obj_ptr)
         {
             ++alloc_obj_cnt;
-            obj_ptr = alloc.allocate(sizeof(TestPoolObj), alignof(TestPoolObj));
+            obj_ptr = alloc.allocate(sizeof(TestPoolObj), alignOf<TestPoolObj>());
             EXPECT_TRUE((alloc_obj_cnt == OBJECT_COUNT) || ((nullptr != obj_ptr) && alloc.owns(obj_ptr)));
         }
 
@@ -70,7 +70,7 @@ TEST(POOL_ALLOCATOR, AlignAllocateAll)
 
 TEST(POOL_ALLOCATOR, DeallocateAll)
 {
-    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignof(TestPoolObj));
+    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignOf<TestPoolObj>());
     MemoryArena const pool_arena = {pool_base, POOL_SIZE};
 
     usize test_cnt = 1;
@@ -99,7 +99,7 @@ TEST(POOL_ALLOCATOR, DeallocateAll)
 
 TEST(POOL_ALLOCATOR, AllocateDeallocate)
 {
-    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignof(TestPoolObj));
+    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignOf<TestPoolObj>());
     MemoryArena const pool_arena = {pool_base, POOL_SIZE};
     PoolTestAllocator alloc{{pool_arena}};
 

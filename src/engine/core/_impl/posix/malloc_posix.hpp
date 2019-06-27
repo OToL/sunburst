@@ -1,4 +1,3 @@
-#include <core/_impl/memory/memory.h>
 #include <core/memory/memory.h>
 #include <core/platform.h>
 #include <core/error.h>
@@ -16,7 +15,7 @@ struct AllocHeader
     usize m_offset;
 };
 
-static inline usize sizeWithPadding(usize size, usize align)
+static inline usize sizeWithPadding(usize size, Alignment align)
 {
     return (align <= SYS_MALLOC_DEFAULT_ALIGNMENT) ? (size + alignUp(sizeof(AllocHeader), align)) : (size + align + sizeof(AllocHeader));
 }
@@ -26,7 +25,7 @@ static inline AllocHeader * dataToHeader(void * dataPtr)
     return static_cast<AllocHeader *>(dataPtr) - 1;
 }
 
-void * malloc(usize size, usize alignment)
+void * malloc(usize size, Alignment alignment)
 {
     sbAssert((0 != alignment) && sb::isPowerOf2(alignment));
 
@@ -49,7 +48,7 @@ void * malloc(usize size, usize alignment)
 
 void * malloc(usize size)
 {
-    return ::sb::detail::malloc(size, GLOBAL_HEAP_MIN_ALIGNMENT);
+    return ::sb::detail::malloc(size, ALIGN_DEFAULT);
 }
 
 void free(void * mem_ptr)

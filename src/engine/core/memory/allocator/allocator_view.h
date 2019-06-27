@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/platform.h>
+#include <core/memory/memory.h>
 #include <core/_impl/memory/allocator/allocator_view.h>
 
 #include <libc++/type_traits>
@@ -72,7 +73,7 @@ public:
         return m_vtable->m_allocate(m_alloc, size);
     }
 
-    void * allocate(usize const size, usize const alignment)
+    void * allocate(usize const size, Alignment const alignment)
     {
         return m_vtable->m_aligned_allocate(m_alloc, size, alignment);
     }

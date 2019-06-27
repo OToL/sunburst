@@ -34,7 +34,7 @@ void * IncrementalAllocator::allocate(usize const size)
     return mem_ptr;
 }
 
-void * IncrementalAllocator::allocate(usize const size, usize const alignment)
+void * IncrementalAllocator::allocate(usize const size, Alignment const alignment)
 {
     sbWarn(isPowerOf2(alignment));
 

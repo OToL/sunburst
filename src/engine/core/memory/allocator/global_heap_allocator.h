@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/memory/allocator/allocator_view.h>
+#include <core/memory/memory.h>
 #include <core/platform.h>
 
 namespace sb {
@@ -14,7 +15,7 @@ public:
     {
     };
 
-    static constexpr usize ALIGNMENT = GLOBAL_HEAP_MIN_ALIGNMENT;
+    static constexpr Alignment ALIGNMENT = ALIGN_DEFAULT;
 
     GlobalHeapAllocator() {}
 
@@ -24,7 +25,7 @@ public:
 
     void * allocate(usize const size);
 
-    void * allocate(usize const size, usize const alignment);
+    void * allocate(usize const size, Alignment const alignment);
 
     void deallocate(void * ptr);
 

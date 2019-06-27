@@ -1,5 +1,7 @@
 #pragma once
 
+#include <core/memory/memory.h>
+
 #include <libc++/cstddef>
 #include <libc++/vector>
 
@@ -34,7 +36,7 @@ public:
 
     void * allocate(size_t const size);
 
-    void * allocate(size_t const size, size_t alignment);
+    void * allocate(size_t const size, sb::Alignment alignment);
 
     void deallocate(void * ptr);
 

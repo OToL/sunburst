@@ -1,5 +1,6 @@
 #pragma once
 
+#include <core/memory/memory.h>
 #include <core/memory/memory_arena.h>
 #include <core/error.h>
 
@@ -35,7 +36,7 @@ public:
         ParentInit m_adaptee;
     };
 
-    static constexpr usize ALIGNMENT = TParent::ALIGNMENT;
+    static constexpr Alignment ALIGNMENT = TParent::ALIGNMENT;
 
     MemoryArenaComposer(InitParams const & init = InitParams{})
         : TProvider(init.m_provider)

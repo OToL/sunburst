@@ -1,9 +1,9 @@
-#include <core/_impl/memory/memory.h>
 #include <core/error.h>
 #include <core/memory/allocator/allocator_view.h>
 #include <core/memory/allocator/global_heap_allocator.h>
 #include <core/platform.h>
 #include <core/memory/memory.h>
+#include <core/memory/alloc.h>
 
 namespace sb {
 
@@ -12,7 +12,7 @@ void * GlobalHeapAllocator::allocate(usize const size)
     return sbMalloc(size);
 }
 
-void * GlobalHeapAllocator::allocate(usize const size, usize const alignment)
+void * GlobalHeapAllocator::allocate(usize const size, Alignment const alignment)
 {
     return sbMalloc(size, alignment);
 }

@@ -3,11 +3,12 @@
 #include <core/platform.h>
 #include <core/error.h>
 #include <core/memory/memory_arena.h>
+#include <core/memory/memory.h>
 #include <core/conversion.h>
 #include <core/bitwise.h>
 
 namespace sb {
-template <usize BLOCK_SIZE, usize BLOCK_ALIGNMENT>
+template <usize BLOCK_SIZE, Alignment BLOCK_ALIGNMENT>
 class PoolAllocator
 {
     sbCopyProtect(PoolAllocator);
@@ -51,7 +52,7 @@ public:
         MemoryArena m_arena;
     };
 
-    static constexpr usize ALIGNMENT = BLOCK_ALIGNMENT;
+    static constexpr Alignment ALIGNMENT = BLOCK_ALIGNMENT;
 
     PoolAllocator()
         : m_arena()
@@ -89,7 +90,7 @@ public:
         return block_ptr;
     }
 
-    void * allocate(usize const size, [[maybe_unused]] usize const alignment)
+    void * allocate(usize const size, [[maybe_unused]] Alignment const alignment)
     {
         sbWarn(alignment == ALIGNMENT);
 
@@ -144,6 +145,6 @@ private:
 };
 
 template <typename TObject>
-using ObjectPoolAllocator = PoolAllocator<sizeof(TObject), alignof(TObject)>;
+using ObjectPoolAllocator = PoolAllocator<sizeof(TObject), alignOf<TObject>()>;
 
 } // namespace sb

@@ -65,7 +65,7 @@ public:
 
     [[nodiscard]] pointer allocate(size_type nb)
     {
-        return (pointer)m_alloc.allocate(nb * sizeof(T), alignof(T));
+        return (pointer)m_alloc.allocate(nb * sizeof(T), alignOf<T>());
     }
 
     void deallocate(pointer data, size_type /*nb*/)
@@ -149,7 +149,7 @@ public:
         }
         else
         {
-            return (pointer)getGlobalHeap()->allocate(nb * sizeof(T), alignof(T));
+            return (pointer)getGlobalHeap()->allocate(nb * sizeof(T), alignOf<T>());
         }
     }
 

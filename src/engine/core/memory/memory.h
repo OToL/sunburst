@@ -4,6 +4,15 @@
 
 namespace sb {
 
+enum Alignment : usize
+{
+    ALIGN_4B = 4,
+    ALIGN_8B = 8,
+    ALIGN_16B = 16,
+
+    ALIGN_DEFAULT = ALIGN_8B 
+};
+
 void zeroMemory(void * const memPtr, usize const byteCount);
 
 template <typename T>
@@ -26,28 +35,10 @@ void zeroStructArray(T (&objPtr) [COUNT])
 
 [[noreturn]] void notifyOOM(usize requestedSize, char const * message);
 
+template<typename TType>
+constexpr inline Alignment alignOf()
+{
+    return (Alignment)alignof(TType);
 }
 
-#define sbMalloc(size, ...) sb::detail::malloc(size, ##__VA_ARGS__)
-
-#define sbMallocUsabeSize(ptr) sb::detail::mallocUsableSize(ptr)
-
-#define sbFree(ptr) sb::detail::free(ptr)
-
-#define sbNew(type, ...)              \
-    sb::detail::MemoryOperatorHelperNew<type> \
-    {                                 \
-        __VA_ARGS__                   \
-    }
-
-#define sbDelete(ptr, ...) sb::detail::MemoryOperatorHelperDelete<typename wstd::remove_pointer<decltype(ptr)>::type>::Destroy(ptr, ##__VA_ARGS__);
-
-#define sbNewArray(type, ...)              \
-    sb::detail::MemoryOperatorHelperNewArray<type> \
-    {                                      \
-        __VA_ARGS__                        \
-    }
-
-#define sbDeleteArray(ptr, ...) sb::detail::MemoryOperatorHelperDeleteArray<typename wstd::remove_pointer<decltype(ptr)>::type>::DestroyArray(ptr, ##__VA_ARGS__)
-
-#include <core/_impl/memory/memory.h>
+}

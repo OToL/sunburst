@@ -1,6 +1,7 @@
 #include <core/memory/allocator/memory_arena_composer.h>
 #include <core/memory/allocator/incremental_allocator.h>
 #include <core/memory/allocator/global_heap_allocator.h>
+#include <core/memory/memory.h>
 
 #include <gtest/gtest_common.h>
 #include <gtest/allocator_stats.h>
@@ -15,7 +16,7 @@ public:
         MemoryArena m_arena;
     };
 
-    static constexpr usize ALIGNMENT = GLOBAL_HEAP_MIN_ALIGNMENT;
+    static constexpr Alignment ALIGNMENT = ALIGN_DEFAULT;
 
     NullArenaAllocator(InitParams const & init)
         : m_arena(init.m_arena)
@@ -32,7 +33,7 @@ public:
         return nullptr;
     }
 
-    void * allocate(usize const, usize const)
+    void * allocate(usize const, Alignment const)
     {
         return nullptr;
     }

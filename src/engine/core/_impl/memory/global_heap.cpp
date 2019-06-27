@@ -7,7 +7,7 @@ void * GlobalHeap::allocate(usize const size)
     return m_parent.allocate(size);
 }
 
-void * GlobalHeap::allocate(usize const size, usize const alignment)
+void * GlobalHeap::allocate(usize const size, Alignment const alignment)
 {
     return m_parent.allocate(size, alignment);
 }

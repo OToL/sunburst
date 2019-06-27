@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/platform.h>
+#include <core/memory/memory.h>
 #include <core/memory/memory_arena.h>
 
 namespace sb {
@@ -15,7 +16,7 @@ public:
         MemoryArena m_arena;
     };
 
-    static constexpr usize ALIGNMENT = GLOBAL_HEAP_MIN_ALIGNMENT;
+    static constexpr Alignment ALIGNMENT = ALIGN_DEFAULT;
 
     IncrementalAllocator() = default;
 
@@ -30,7 +31,7 @@ public:
 
     void * allocate(usize const size);
 
-    void * allocate(usize const size, usize const alignment);
+    void * allocate(usize const size, Alignment const alignment);
 
     void deallocate(void * ptr);
 

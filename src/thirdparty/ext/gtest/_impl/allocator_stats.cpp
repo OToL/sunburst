@@ -55,7 +55,7 @@ void * AllocatorStats::allocate(usize const size)
     return mem_ptr;
 }
 
-void * AllocatorStats::allocate(usize const size, usize const alignment)
+void * AllocatorStats::allocate(usize const size, Alignment const alignment)
 {
     void * mem_ptr = sb::getGlobalHeap()->allocate(size, alignment);
 

@@ -18,7 +18,7 @@ namespace sb::detail {
 
 void * malloc(usize size);
 
-void * malloc(usize size, usize alignment);
+void * malloc(usize size, Alignment alignment);
 
 usize mallocUsableSize(void * memPtr);
 
@@ -46,7 +46,7 @@ struct MemoryOperatorHelper
     template <typename... TArgs>
     TType * operator()(TArgs... args)
     {
-        void * const mem_ptr = m_allocator.allocate(sizeof(TType), alignof(TType));
+        void * const mem_ptr = m_allocator.allocate(sizeof(TType), alignOf<TType>());
         return new (mem_ptr) TType(wstd::forward<TArgs>(args)...);
     }
 
@@ -57,7 +57,7 @@ struct MemoryOperatorHelper
 
         if (wstd::is_trivial<TType>::value)
         {
-            void * const mem_ptr = m_allocator.allocate(sizeof(TType) * count, alignof(TType));
+            void * const mem_ptr = m_allocator.allocate(sizeof(TType) * count, alignOf<TType>());
             client_obj = reinterpret_cast<TType *>(mem_ptr);
         }
         else

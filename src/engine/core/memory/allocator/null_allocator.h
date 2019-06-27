@@ -2,6 +2,7 @@
 
 #include <core/platform.h>
 #include <core/error.h>
+#include <core/memory/memory.h>
 
 namespace sb {
 
@@ -12,7 +13,7 @@ public:
     {
     };
 
-    static constexpr usize ALIGNMENT = GLOBAL_HEAP_MIN_ALIGNMENT;
+    static constexpr Alignment ALIGNMENT = ALIGN_DEFAULT;
 
     NullAllocator() {}
 

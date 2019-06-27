@@ -13,11 +13,11 @@ class GlobalHeap
     friend GlobalHeap * getGlobalHeap();
 
 public:
-    static constexpr usize ALIGNMENT = GlobalHeapAllocator::ALIGNMENT;
+    static constexpr Alignment ALIGNMENT = GlobalHeapAllocator::ALIGNMENT;
 
     void * allocate(usize const size);
 
-    void * allocate(usize const size, usize const alignment);
+    void * allocate(usize const size, Alignment const alignment);
 
     void deallocate(void * ptr);
 
