@@ -3,51 +3,103 @@
 #include <core/platform.h>
 #include <core/memory/memory.h>
 #include <core/memory/memory_arena.h>
+#include <core/bitwise.h>
+#include <core/error.h>
+#include "allocator.h"
+
+#include <libc++/utility>
 
 namespace sb {
 
-class IncrementalAllocator
+template <typename TMemProvider>
+class IncrementalAllocator final : public IAllocator
 {
     sbCopyProtect(IncrementalAllocator);
+    sbBaseClass(IAllocator);
 
 public:
+
     struct InitParams
     {
-        MemoryArena m_arena;
+        usize m_size;
+        Alignment m_alignment = ALIGN_DEFAULT;
     };
-
-    static constexpr Alignment ALIGNMENT = ALIGN_DEFAULT;
 
     IncrementalAllocator() = default;
 
-    explicit IncrementalAllocator(InitParams const & init);
-
-    IncrementalAllocator(MemoryArena const & init);
-
-    constexpr usize getAlignment() const
+    IncrementalAllocator(InitParams const & init, TMemProvider && mem_provider)
+        : m_mem_provider(wstd::move(mem_provider))
+        , m_alignment(init.m_alignment)
+        , m_arena(m_mem_provider.allocate(init.m_size))
+        , m_top(reinterpret_cast<ui8 *>(m_arena.m_ptr))
     {
-        return ALIGNMENT;
     }
 
-    void * allocate(usize const size);
+    void * allocate(usize const size) override
+    {
+        void * mem_ptr = nullptr;
 
-    void * allocate(usize const size, Alignment const alignment);
+        if (nullptr != m_top)
+        {
+            ui8 * new_top = reinterpret_cast<ui8 *>(alignUp(reinterpret_cast<uiptr>(m_top), m_alignment));
 
-    void deallocate(void * ptr);
+            if (m_arena.isInRange(new_top, size))
+            {
+                mem_ptr = new_top;
+                m_top = new_top + size;
+            }
+        }
 
-    void deallocateAll();
+        return mem_ptr;
+    }
 
-    b8 owns(void const * ptr) const
+    void * allocate(usize const size, Alignment const alignment) override
+    {
+        void * mem_ptr = nullptr;
+
+        if (nullptr != m_top)
+        {
+            ui8 * new_top = reinterpret_cast<ui8 *>(alignUp(reinterpret_cast<uiptr>(m_top), alignment));
+
+            if (m_arena.isInRange(new_top, size))
+            {
+                mem_ptr = new_top;
+                m_top = new_top + size;
+            }
+        }
+
+        return mem_ptr;
+    }
+
+    void deallocate(void * ptr) override
+    {
+        sbWarn(m_arena.isInRange(ptr));
+    }
+
+    void deallocateAll()
+    {
+        m_top = static_cast<ui8 *>(m_arena.m_ptr);
+    }
+
+    b8 owns(void const * ptr) const override
     {
         return m_arena.isInRange(ptr);
     }
 
-    MemoryArena getArena() const
+    TMemProvider const & getProvider() const
     {
-        return m_arena;
+        return m_mem_provider;
+    }
+
+    Alignment getAlignment() const
+    {
+        return m_alignment;
     }
 
 private:
+
+    TMemProvider m_mem_provider;
+    Alignment m_alignment;
     MemoryArena m_arena;
     ui8 * m_top;
 };

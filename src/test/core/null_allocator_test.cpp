@@ -19,7 +19,7 @@ TEST(NULL_ALLOCATOR, AlignedAllocate)
 {
     NullAllocator alloc;
 
-    void * const mem_ptr = alloc.allocate(10, 16);
+    void * const mem_ptr = alloc.allocate(10, ALIGN_16B);
 
     EXPECT_EQ(nullptr, mem_ptr);
 

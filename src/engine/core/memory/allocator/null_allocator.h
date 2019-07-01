@@ -1,49 +1,37 @@
 #pragma once
 
 #include <core/platform.h>
-#include <core/error.h>
 #include <core/memory/memory.h>
+#include "allocator.h"
 
 namespace sb {
 
-class NullAllocator
+class NullAllocator : public IAllocator
 {
+    sbBaseClass(IAllocator);
+
 public:
     struct InitParams
     {
     };
 
-    static constexpr Alignment ALIGNMENT = ALIGN_DEFAULT;
+    NullAllocator() = default;
 
-    NullAllocator() {}
+    NullAllocator(InitParams const &);
 
-    NullAllocator(InitParams const &) {}
+    void * allocate(usize const) override;
 
-    constexpr usize getAlignment() const
+    void * allocate(usize const, Alignment const) override;
+
+    void deallocate(void * ptr) override;
+
+    b8 owns(void const * ptr) const override;
+
+    void deallocateAll();
+
+    constexpr Alignment getAlignment()
     {
-        return ALIGNMENT;
-    }
-
-    void * allocate(usize const)
-    {
-        return nullptr;
-    }
-
-    void * allocate(usize const, usize const)
-    {
-        return nullptr;
-    }
-
-    void deallocate([[maybe_unused]] void * ptr)
-    {
-        sbWarn(nullptr == ptr);
-    }
-
-    void deallocateAll() {}
-
-    b8 owns(void * ptr) const
-    {
-        return (nullptr == ptr);
+        return ALIGN_DEFAULT;
     }
 };
 

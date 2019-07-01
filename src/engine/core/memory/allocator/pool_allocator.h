@@ -1,17 +1,20 @@
 #pragma once
 
 #include <core/platform.h>
-#include <core/error.h>
 #include <core/memory/memory_arena.h>
 #include <core/memory/memory.h>
 #include <core/conversion.h>
+#include <core/error.h>
 #include <core/bitwise.h>
+#include "allocator.h"
 
 namespace sb {
+
 template <usize BLOCK_SIZE, Alignment BLOCK_ALIGNMENT>
-class PoolAllocator
+class PoolAllocator : public IAllocator
 {
     sbCopyProtect(PoolAllocator);
+    sbBaseClass(IAllocator);
 
     static constexpr usize ACTUAL_BLOCK_SIZE = alignUp(BLOCK_SIZE, BLOCK_ALIGNMENT);
     using NodeIdx = si32;
@@ -75,7 +78,7 @@ public:
         return ALIGNMENT;
     }
 
-    void * allocate(usize const size)
+    void * allocate(usize const size) override
     {
         void * block_ptr = nullptr;
 
@@ -90,7 +93,7 @@ public:
         return block_ptr;
     }
 
-    void * allocate(usize const size, [[maybe_unused]] Alignment const alignment)
+    void * allocate(usize const size, [[maybe_unused]] Alignment const alignment) override
     {
         sbWarn(alignment == ALIGNMENT);
 
@@ -102,7 +105,7 @@ public:
         return allocate(ACTUAL_BLOCK_SIZE);
     }
 
-    void deallocate(void * ptr)
+    void deallocate(void * ptr) override
     {
         sbAssert(0U == (static_cast<usize>(static_cast<ui8 *>(ptr) - static_cast<ui8 *>(m_arena.m_ptr)) % ACTUAL_BLOCK_SIZE));
 
@@ -129,14 +132,9 @@ public:
         initFreeList();
     }
 
-    b8 owns(void const * ptr)
+    b8 owns(void const * ptr) const override
     {
         return m_arena.isInRange(ptr);
-    }
-
-    MemoryArena getArena() const
-    {
-        return m_arena;
     }
 
 private:
