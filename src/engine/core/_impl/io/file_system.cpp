@@ -1,9 +1,8 @@
 #include <core/io/file_system.h>
 #include <core/io/file_system_layer.h>
 #include <core/io/path.h>
-#include <core/memory/allocator/pool_allocator_composer.h>
-#include <core/memory/allocator/memory_arena_composer.h>
-#include <core/memory/allocator/global_heap_allocator.h>
+#include <core/memory/allocator/pool_allocator.h>
+#include <core/memory/allocator/global_heap_provider.h>
 #include <core/memory/memory.h>
 #include <core/unique_ptr.h>
 #include <core/memory/memory.h>
@@ -54,8 +53,8 @@ public:
     FileSystemImpl(FS::InitParams const & init)
         : m_file_desc_gen(0)
         , m_opened_file_cnt(0)
-        , m_file_desc_pool{FileSystem::MAX_CONCURRENT_OPENED_FILES}
-        , m_physical_layer_pool{50U}
+        , m_file_desc_pool({FileSystem::MAX_CONCURRENT_OPENED_FILES})
+        , m_physical_layer_pool({50U})
     {
         for (auto & layer : init.m_layers)
         {
@@ -306,8 +305,8 @@ private:
     usize m_opened_file_cnt;
     FSLayers m_layers;
 
-    using LocalFileSystemLayerPool = ObjectPoolAllocatorComposer<LocalFileSystemLayer>;
-    using FileDescPool = ObjectPoolAllocatorComposer<FileDesc>;
+    using LocalFileSystemLayerPool = ObjectPoolAllocator<LocalFileSystemLayer, GlobalHeapProvider>;
+    using FileDescPool = ObjectPoolAllocator<FileDesc, GlobalHeapProvider>;
 
     FileDescPool m_file_desc_pool;
     LocalFileSystemLayerPool m_physical_layer_pool;

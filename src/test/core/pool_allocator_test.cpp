@@ -1,5 +1,5 @@
 #include <core/memory/allocator/pool_allocator.h>
-#include <core/memory/allocator/memory_arena_composer.h>
+#include <core/memory/allocator/memory_arena_provider.h>
 #include <core/memory/global_heap.h>
 #include <core/container/static_vector.h>
 
@@ -18,7 +18,7 @@ struct TestPoolObj
 constexpr usize OBJECT_COUNT = 10;
 constexpr usize POOL_SIZE = OBJECT_COUNT * sizeof(TestPoolObj);
 
-using PoolTestAllocator = PoolAllocator<sizeof(TestPoolObj), alignOf<TestPoolObj>()>;
+using PoolTestAllocator = PoolAllocator<sizeof(TestPoolObj), alignOf<TestPoolObj>(), MemoryArenaProvider>;
 
 TEST(POOL_ALLOCATOR, AllocateAll)
 {
@@ -26,7 +26,7 @@ TEST(POOL_ALLOCATOR, AllocateAll)
     MemoryArena const pool_arena = {pool_base, POOL_SIZE};
 
     {
-        PoolTestAllocator alloc{{pool_arena}};
+        PoolTestAllocator alloc({OBJECT_COUNT}, {pool_arena});
 
         usize alloc_obj_cnt = 0;
         void * obj_ptr = alloc.allocate(sizeof(TestPoolObj));
@@ -50,7 +50,7 @@ TEST(POOL_ALLOCATOR, AlignAllocateAll)
     MemoryArena const pool_arena = {pool_base, POOL_SIZE};
 
     {
-        PoolTestAllocator alloc{{pool_arena}};
+        PoolTestAllocator alloc({OBJECT_COUNT}, {pool_arena});
 
         usize alloc_obj_cnt = 0;
         void * obj_ptr = alloc.allocate(sizeof(TestPoolObj));
@@ -75,7 +75,7 @@ TEST(POOL_ALLOCATOR, DeallocateAll)
 
     usize test_cnt = 1;
 
-    PoolTestAllocator alloc{{pool_arena}};
+    PoolTestAllocator alloc({OBJECT_COUNT}, {pool_arena});
 
     while (OBJECT_COUNT > test_cnt)
     {
@@ -101,7 +101,7 @@ TEST(POOL_ALLOCATOR, AllocateDeallocate)
 {
     void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignOf<TestPoolObj>());
     MemoryArena const pool_arena = {pool_base, POOL_SIZE};
-    PoolTestAllocator alloc{{pool_arena}};
+    PoolTestAllocator alloc({OBJECT_COUNT}, {pool_arena});
 
     struct TestOp
     {

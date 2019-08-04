@@ -1,5 +1,5 @@
 #include <core/memory/allocator/incremental_allocator.h>
-#include <core/memory/allocator/arena_mem_provider.h>
+#include <core/memory/allocator/memory_arena_provider.h>
 #include <core/memory/global_heap.h>
 #include <core/memory/memory.h>
 #include <core/bitwise.h>
@@ -8,7 +8,7 @@
 
 namespace sb::test {
 
-using TestIncrementalAllocator = IncrementalAllocator<ArenaMemProvider>;
+using TestIncrementalAllocator = IncrementalAllocator<MemoryArenaProvider>;
 constexpr Alignment TEST_ALLOC_DEFAULT_ALIGN = ALIGN_8B;
 
 TEST(INCREMENTAL_ALLOCATOR, Allocate)

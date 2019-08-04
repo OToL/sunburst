@@ -10,7 +10,7 @@
 
 namespace sb {
 
-template <usize BLOCK_SIZE, Alignment BLOCK_ALIGNMENT>
+template <usize BLOCK_SIZE, Alignment BLOCK_ALIGNMENT, typename TMemProvider>
 class PoolAllocator : public IAllocator
 {
     sbCopyProtect(PoolAllocator);
@@ -52,30 +52,41 @@ class PoolAllocator : public IAllocator
 public:
     struct InitParams
     {
-        MemoryArena m_arena;
+        usize m_block_count;
     };
 
-    static constexpr Alignment ALIGNMENT = BLOCK_ALIGNMENT;
-
     PoolAllocator()
-        : m_arena()
+        : m_mem_provider()
+        , m_arena()
         , m_free_list(INVALID_NODE)
     {
     }
 
     PoolAllocator(InitParams const & init)
-        : m_arena(init.m_arena)
+        : m_mem_provider()
+        , m_arena(m_mem_provider.allocate(init.m_block_count * BLOCK_SIZE, BLOCK_ALIGNMENT))
         , m_free_list(0)
     {
         sbAssert(!m_arena.isEmpty());
-        sbAssert(isAlignedTo(m_arena.m_ptr, ALIGNMENT));
+        sbAssert(isAlignedTo(m_arena.m_ptr, BLOCK_ALIGNMENT));
 
         initFreeList();
     }
 
-    constexpr usize getAlignment() const
+    PoolAllocator(InitParams const & init, TMemProvider const & mem_provider)
+        : m_mem_provider(mem_provider)
+        , m_arena(m_mem_provider.allocate(init.m_block_count * BLOCK_SIZE, BLOCK_ALIGNMENT))
+        , m_free_list(0)
     {
-        return ALIGNMENT;
+        sbAssert(!m_arena.isEmpty());
+        sbAssert(isAlignedTo(m_arena.m_ptr, BLOCK_ALIGNMENT));
+
+        initFreeList();
+    }
+
+    ~PoolAllocator() override
+    {
+        m_mem_provider.deallocate(m_arena);
     }
 
     void * allocate(usize const size) override
@@ -95,14 +106,9 @@ public:
 
     void * allocate(usize const size, [[maybe_unused]] Alignment const alignment) override
     {
-        sbWarn(alignment == ALIGNMENT);
+        sbAssert(alignment <= BLOCK_ALIGNMENT);
 
         return allocate(size);
-    }
-
-    void * allocate()
-    {
-        return allocate(ACTUAL_BLOCK_SIZE);
     }
 
     void deallocate(void * ptr) override
@@ -127,22 +133,40 @@ public:
         }
     }
 
-    void deallocateAll()
-    {
-        initFreeList();
-    }
-
     b8 owns(void const * ptr) const override
     {
         return m_arena.isInRange(ptr);
     }
 
+    void * allocate()
+    {
+        return allocate(ACTUAL_BLOCK_SIZE);
+    }
+
+    void deallocateAll()
+    {
+        initFreeList();
+    }
+
+    constexpr Alignment getAlignment() const
+    {
+        return BLOCK_ALIGNMENT;
+    }
+
+    MemoryArena getArena() const
+    {
+        return m_arena;
+    }
+
 private:
+
+    TMemProvider m_mem_provider;
     MemoryArena m_arena;
     NodeIdx m_free_list;
 };
 
-template <typename TObject>
-using ObjectPoolAllocator = PoolAllocator<sizeof(TObject), alignOf<TObject>()>;
+// TODO: ctor with number of objects instead of size
+template <typename TObject, typename TMemoryProvider>
+using ObjectPoolAllocator = PoolAllocator<sizeof(TObject), alignOf<TObject>(), TMemoryProvider>;
 
 } // namespace sb

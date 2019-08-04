@@ -3,6 +3,7 @@
 namespace sb
 {
 
+// TODO: return arena
 #define sbMalloc(size, ...) sb::detail::malloc(size, ##__VA_ARGS__)
 
 #define sbMallocUsabeSize(ptr) sb::detail::mallocUsableSize(ptr)

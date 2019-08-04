@@ -13,7 +13,6 @@ sbAddLibraryTest(core
     incremental_allocator_test.cpp
     main.cpp
     bitwise_test.cpp
-    memory_arena_composer_test.cpp
     alloc_test.cpp
     null_allocator_test.cpp
     pool_allocator_test.cpp

@@ -13,8 +13,9 @@ sbAddLibrary(core STATIC
     _impl/io/local_file_system_layer.cpp
     _impl/string/string_utility.cpp
     _impl/memory/allocator/global_heap_allocator.cpp
-    _impl/memory/allocator/arena_mem_provider.cpp
     _impl/memory/allocator/null_allocator.cpp
+    _impl/memory/allocator/memory_arena_provider.cpp
+    _impl/memory/allocator/global_heap_provider.cpp
     _impl/memory/global_heap.cpp
     _impl/memory/memory.cpp
     _impl/memory/alloc.cpp)

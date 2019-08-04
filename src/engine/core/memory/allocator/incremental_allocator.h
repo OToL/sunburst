@@ -7,8 +7,6 @@
 #include <core/error.h>
 #include "allocator.h"
 
-#include <libc++/utility>
-
 namespace sb {
 
 template <typename TMemProvider>
@@ -27,12 +25,25 @@ public:
 
     IncrementalAllocator() = default;
 
-    IncrementalAllocator(InitParams const & init, TMemProvider && mem_provider)
-        : m_mem_provider(wstd::move(mem_provider))
+    IncrementalAllocator(InitParams const & init, TMemProvider const & mem_provider)
+        : m_mem_provider(mem_provider)
         , m_alignment(init.m_alignment)
         , m_arena(m_mem_provider.allocate(init.m_size))
         , m_top(reinterpret_cast<ui8 *>(m_arena.m_ptr))
     {
+    }
+
+    IncrementalAllocator(InitParams const & init)
+        : m_mem_provider()
+        , m_alignment(init.m_alignment)
+        , m_arena(m_mem_provider.allocate(init.m_size))
+        , m_top(reinterpret_cast<ui8 *>(m_arena.m_ptr))
+    {
+    }
+
+    ~IncrementalAllocator() override
+    {
+        m_mem_provider.deallocate(m_arena);
     }
 
     void * allocate(usize const size) override
