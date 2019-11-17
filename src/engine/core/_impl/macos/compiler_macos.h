@@ -9,5 +9,9 @@
 
 #define sb_restrict_impl __restrict
 
-#define sbDebugBreakImpl() __asm__ volatile("int $0x03");
-
+namespace sb {
+    inline void debugBreak()
+    {
+        __asm__ volatile("int $0x03");
+    }
+}

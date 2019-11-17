@@ -1,7 +1,8 @@
 #pragma once
 
-#include "allocator/allocator_view.h"
-#include "allocator/global_heap_allocator.h"
+#include <core/memory/allocator/allocator_view.h>
+#include <core/memory/allocator/global_heap_allocator.h>
+#include <core/memory/memory.h>
 
 namespace sb {
 
@@ -13,7 +14,6 @@ class GlobalHeap
     friend GlobalHeap * getGlobalHeap();
 
 public:
-    static constexpr Alignment ALIGNMENT = GlobalHeapAllocator::ALIGNMENT;
 
     void * allocate(usize const size);
 
@@ -21,14 +21,12 @@ public:
 
     void deallocate(void * ptr);
 
-    void deallocateAll();
+    b8 owns(void const * ptr) const;
 
     constexpr usize getAlignment() const
     {
-        return ALIGNMENT;
+        return ALIGN_DEFAULT;
     }
-
-    b8 owns(void const * ptr) const;
 
     usize getBlockSize(void * ptr) const;
 

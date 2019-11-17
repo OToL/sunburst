@@ -1,5 +1,5 @@
 #include <core/memory/allocator/pool_allocator.h>
-#include <core/memory/allocator/memory_arena_provider.h>
+#include <core/memory/provider/memory_arena_provider.h>
 #include <core/memory/global_heap.h>
 #include <core/container/static_vector.h>
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/platform.h>
+#include "memory.h"
 
 namespace sb {
 

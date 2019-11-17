@@ -27,11 +27,6 @@ usize GlobalHeapAllocator::getBlockSize(void * ptr) const
     return sbMallocUsabeSize(ptr);
 }
 
-void GlobalHeapAllocator::deallocateAll()
-{
-    sbNotImplemented(__FUNCTION__);
-}
-
 b8 GlobalHeapAllocator::owns(void const *) const
 {
     sbNotImplemented(__FUNCTION__);

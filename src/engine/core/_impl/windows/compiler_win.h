@@ -11,5 +11,9 @@
 
 #define sb_restrict_impl __restrict
 
-#define sbDebugBreakImpl() __debugbreak()
-
+namespace sb {
+    inline void debugBreak()
+    {
+        __debugbreak();
+    }
+}

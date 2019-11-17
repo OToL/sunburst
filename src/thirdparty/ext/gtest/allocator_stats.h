@@ -40,8 +40,6 @@ public:
 
     void deallocate(void * ptr);
 
-    void deallocateAll();
-
     bool owns(void const * ptr) const;
 
     Stats getStats() const

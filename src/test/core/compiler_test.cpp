@@ -4,21 +4,9 @@
 
 namespace sb { namespace test {
 
-TEST(COMPILER, ConcatStr)
-{
-    char const * const pConcat = sbConcatStr("Hello ", "world");
-
-    EXPECT_STREQ("Hello world", pConcat);
-}
-
 class ConcatIDTest
 {
 };
-
-TEST(COMPILER, IdToStr)
-{
-    EXPECT_STREQ("world", sbIdToStr(world));
-}
 
 #define SB_CTF_TEST SB_CTF_ENABLED
 

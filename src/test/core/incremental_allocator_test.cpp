@@ -1,5 +1,5 @@
 #include <core/memory/allocator/incremental_allocator.h>
-#include <core/memory/allocator/memory_arena_provider.h>
+#include <core/memory/provider/memory_arena_provider.h>
 #include <core/memory/global_heap.h>
 #include <core/memory/memory.h>
 #include <core/bitwise.h>

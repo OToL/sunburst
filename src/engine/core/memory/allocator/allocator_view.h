@@ -83,11 +83,6 @@ public:
         m_vtable->m_deallocate(m_alloc, ptr);
     }
 
-    void deallocateAll()
-    {
-        m_vtable->m_deallocate_all(m_alloc);
-    }
-
     usize getAlignment() const
     {
         return m_vtable->m_alignment(m_alloc);

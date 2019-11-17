@@ -11,7 +11,7 @@
 namespace sb {
 
 template <usize BLOCK_SIZE, Alignment BLOCK_ALIGNMENT, typename TMemProvider>
-class PoolAllocator : public IAllocator
+class PoolAllocator final : public IAllocator
 {
     sbCopyProtect(PoolAllocator);
     sbBaseClass(IAllocator);

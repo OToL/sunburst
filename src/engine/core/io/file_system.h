@@ -13,7 +13,7 @@ class IFileSystemLayer;
 
 struct FileSystem
 {
-    sbConstructProtect(FileSystem);
+    FileSystem() = delete;
 
     using LayerName = HashStr;
     using LayerPtr = UniquePtr<IFileSystemLayer>;

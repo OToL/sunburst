@@ -2,7 +2,7 @@
 #include <core/io/file_system_layer.h>
 #include <core/io/path.h>
 #include <core/memory/allocator/pool_allocator.h>
-#include <core/memory/allocator/global_heap_provider.h>
+#include <core/memory/provider/global_heap_provider.h>
 #include <core/memory/memory.h>
 #include <core/unique_ptr.h>
 #include <core/memory/memory.h>

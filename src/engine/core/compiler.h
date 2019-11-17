@@ -22,19 +22,14 @@
     classname & operator=(classname const &) = delete; \
     classname(classname const &) = delete
 
-#define sbConstructProtect(classname) \
-    classname() = delete
-
-#define sbConcatId(id1, id2) id1##id2
-
-#define sbConcatStr(id1, id2) id1 id2
-
-#define sbIdToStr(id) #id
-
-#define sbDebugBreak() sbDebugBreakImpl()
-
 #define SB_CTF_DISABLED 1
 #define SB_CTF_ENABLED 2
 
 #define sbCTFIsEnabled(feature) (1 == 2 / SB_CTF_##feature)
 #define sbCTVIsEq(feature, value) ((1 / SB_CTV_##feature + 1) && (SB_CTV_##feature == value))
+
+namespace sb {
+
+void debugBreak();
+
+}

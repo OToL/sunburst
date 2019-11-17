@@ -1,4 +1,4 @@
-#include <core/memory/allocator/global_heap_provider.h>
+#include <core/memory/provider/global_heap_provider.h>
 #include <core/memory/alloc.h>
 
 namespace sb {

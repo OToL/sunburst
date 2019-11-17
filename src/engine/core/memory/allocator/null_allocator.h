@@ -6,7 +6,7 @@
 
 namespace sb {
 
-class NullAllocator : public IAllocator
+class NullAllocator final : public IAllocator
 {
     sbBaseClass(IAllocator);
 

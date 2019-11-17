@@ -53,7 +53,7 @@ void reportError(ErrorType type, char const * const file, ui32 const line, char 
 
     if (ErrorType::CRITICAL == type)
     {
-        sbDebugBreak();
+        sb::debugBreak();
     }
 }
 
@@ -70,7 +70,7 @@ void reportError(ErrorType type, char const * const file, ui32 const line)
 
     if (ErrorType::CRITICAL == type)
     {
-        sbDebugBreak();
+        sb::debugBreak();
     }
 }
 

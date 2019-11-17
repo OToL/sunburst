@@ -1,12 +1,12 @@
 #pragma once
 
-#include <core/memory/allocator/allocator_view.h>
 #include <core/memory/memory.h>
+#include <core/memory/allocator/allocator.h>
 #include <core/platform.h>
 
 namespace sb {
 
-class GlobalHeapAllocator
+class GlobalHeapAllocator final : public IAllocator
 {
     sbCopyProtect(GlobalHeapAllocator);
 
@@ -15,27 +15,21 @@ public:
     {
     };
 
-    static constexpr Alignment ALIGNMENT = ALIGN_DEFAULT;
-
-    GlobalHeapAllocator() {}
+    GlobalHeapAllocator() = default;
 
     explicit GlobalHeapAllocator(InitParams const &) {}
 
-    ~GlobalHeapAllocator() {}
+    void * allocate(usize const size) override;
 
-    void * allocate(usize const size);
+    void * allocate(usize const size, Alignment const alignment) override;
 
-    void * allocate(usize const size, Alignment const alignment);
+    void deallocate(void * ptr) override;
 
-    void deallocate(void * ptr);
-
-    void deallocateAll();
-
-    b8 owns(void const * ptr) const;
+    b8 owns(void const * ptr) const override;
 
     usize getAlignment() const
     {
-        return ALIGNMENT;
+        return ALIGN_DEFAULT;
     }
 
     usize getBlockSize(void * ptr) const;

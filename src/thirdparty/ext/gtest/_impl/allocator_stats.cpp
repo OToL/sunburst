@@ -77,11 +77,6 @@ void * AllocatorStats::allocate(usize const size, Alignment const alignment)
     return mem_ptr;
 }
 
-void AllocatorStats::deallocateAll()
-{
-    sb::getGlobalHeap()->deallocateAll();
-}
-
 b8 AllocatorStats::owns(void const * mem_ptr) const
 {
     auto const alloc_desc = wstd::find_if(begin(m_allocs), end(m_allocs), 

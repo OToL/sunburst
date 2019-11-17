@@ -27,11 +27,6 @@ usize GlobalHeap::getBlockSize(void * ptr) const
     return m_parent.getBlockSize(ptr);
 }
 
-void GlobalHeap::deallocateAll()
-{
-    m_parent.deallocateAll();
-}
-
 GlobalHeap * getGlobalHeap()
 {
     static GlobalHeap s_global_heap;
