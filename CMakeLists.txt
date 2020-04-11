@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.4 FATAL_ERROR)
 
-project(sunburst LANGUAGES CXX)
+project(sunburst VERSION 1.0.0 LANGUAGES C CXX)
 
 if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_LIST_DIR})
     set(SB_IS_CMAKE_SOURCE_DIR TRUE)
@@ -11,24 +11,28 @@ endif()
 # Global options
 OPTION(SB_GENERATE_UNIT_TESTS "Enable unit tests executable projects" ON)
 
-# Common host environment paths
-set(SB_ROOT_DIR_PATH "${CMAKE_CURRENT_LIST_DIR}")
-set(SB_TEST_DIR_NAME "_test")
-set(SB_SRC_ENGINE_DIR_PATH ${SB_ROOT_DIR_PATH}/src/engine)
-set(SB_SRC_3RD_INCLUDE_DIR_PATH ${SB_ROOT_DIR_PATH}/src/thirdparty/inc)
-set(SB_SRC_3RD_EXT_DIR_PATH ${SB_ROOT_DIR_PATH}/src/thirdparty/ext)
-set(SB_SRC_3RD_LIB_DIR_PATH "${SB_ROOT_DIR_PATH}/src/thirdparty/lib")
-set(SB_SRC_3RD_BIN_DIR_PATH "${SB_ROOT_DIR_PATH}/src/thirdparty/bin")
-
-# Mandatory tools
-find_package(PythonInterp 3 REQUIRED)
-set(SB_PYTHON_EXECUTABLE ${PYTHON_EXECUTABLE})
-
-# Helper scripts
 include(make/sb_utility.cmake)
-include(make/sb_target.cmake)
-include(make/sb_thirdparty.cmake)
+
+include(make/sb_host_environment.cmake)
+sb_setup_host_environment()
+
+include(make/sb_target_platform.cmake)
+sb_setup_target_platform()
+
+add_library(cxx_common_private INTERFACE)
+add_library(sb::cxx_common_private ALIAS cxx_common_private)
+
+add_library(cxx_common_public INTERFACE)
+add_library(sb::cxx_common_public ALIAS cxx_common_public)
+target_compile_features(cxx_common_public INTERFACE cxx_std_17)
+target_include_directories(cxx_common_public INTERFACE ${SB_SRC_ENGINE_DIR_PATH} ${SB_SRC_3RD_INCLUDE_DIR_PATH})
+
+string(TOLOWER ${CMAKE_CXX_COMPILER_ID} SB_TOOLCHAIN_ID)
+
+include(make/sb_toolchain_${SB_TARGET_PLATFORM_ID}_${SB_TOOLCHAIN_ID}.cmake)
+sb_set_target_common_public_properties(cxx_common_public)
+sb_set_target_common_private_properties(cxx_common_private)
 
 add_subdirectory("src/engine")
-add_subdirectory("src/test")
-add_subdirectory("src/thirdparty")
+# add_subdirectory("src/test")
+# add_subdirectory("src/thirdparty")

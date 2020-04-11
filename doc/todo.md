@@ -1,8 +1,3 @@
-# PILLARS
-
-- Simple
-- Coherent
-
 # TECH TESTS
 
 - [~] Vulkan simple triangle macos
@@ -13,16 +8,23 @@
 
 # CODE QUALITY
 
-- [ ] clang sanitizers
+- [ ] replace gtest
 - [ ] static analyzers
 - [ ] Re-enable clang formatting
-- [ ] Make SB_TOOLCHAIN_CLANG_WARNING_IGNORE_LIST smaller
-- [ ] Use pre-compile headers
+- [ ] Increase the number of warnings as error (SB_TOOLCHAIN_*_WARNING_IGNORE_LIST)
+- [ ] clang sanitizers
+- [ ] Use fuzzing for unit tests (libfuzeer)
+- [ ] Use clang-tidy
 
-# CMAKE
+# BUILD SYSTEM
 
 - [ ] Investigate modern cmake best practices
+- [ ] Investigate using CMake test command
+- [ ] Use pre-compile headers
 - [ ] Clean definition of 3rd parties
+- [ ] Try writing config.cmake 
+- [ ] Try using conan
+- [ ] Use ninja
 
 # 3RD::GTEST
 

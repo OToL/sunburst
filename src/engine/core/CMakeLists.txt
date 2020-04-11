@@ -1,5 +1,4 @@
-
-sbAddLibrary(core STATIC
+add_library(core STATIC
     _impl/string_format.cpp
     _impl/log.cpp
     _impl/platform.cpp
@@ -18,53 +17,15 @@ sbAddLibrary(core STATIC
     _impl/memory/provider/global_heap_provider.cpp
     _impl/memory/global_heap.cpp
     _impl/memory/memory.cpp
-    _impl/memory/alloc.cpp)
-  
-if(SB_TARGET_LINUX)
-    target_sources(core 
-        PRIVATE
-            _impl/linux/platform_linux.cpp
-            _impl/linux/file_system_linux.cpp
-            _impl/linux/malloc_linux.cpp)
-elseif(SB_TARGET_MACOS)
-    target_sources(core 
-        PRIVATE
-            _impl/macos/platform_macos.cpp
-            _impl/macos/file_system_macos.cpp
-            _impl/macos/malloc_macos.cpp)
-elseif(SB_TARGET_WINDOWS)
-    target_sources(core 
-        PRIVATE
-            _impl/windows/platform_win.cpp
-            _impl/windows/file_system_win.cpp
-            _impl/windows/malloc_win.cpp)
-else()
-    message(FATAL_ERROR "sb::core sources not configured for ${SB_TARGET_OS}")
-endif()
+    _impl/memory/alloc.cpp
+    _impl/${SB_TARGET_PLATFORM_FAMILY_ID}/platform_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
+    _impl/${SB_TARGET_PLATFORM_FAMILY_ID}/file_system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
+    _impl/${SB_TARGET_PLATFORM_FAMILY_ID}/malloc_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp)
+ 
+add_library(sb::core ALIAS core)
 
-        
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-
-
+target_link_libraries(core 
+    PUBLIC
+        sb::cxx_common_public
+    PRIVATE
+        sb::cxx_common_private)
