@@ -1,18 +1,5 @@
 include(CMakeParseArguments)
 
-# http://stackoverflow.com/questions/7172670/best-shortest-way-to-join-a-list-in-cmake
-function(sb_join_list GLUE VALUES _RES)
-	set(TEMP_RESULT "")
-    set(TEMP_GLUE "")
- 
-    foreach(VALUE ${VALUES})
-        set(TEMP_RESULT "${TMP_RESULT}${TMP_GLUE}${VALUE}")
-        set(TEMP_GLUE "${GLUE}")
-    endforeach()
-
-    set(${_RES} "${TEMP_RESULT}" PARENT_SCOPE)
-endfunction()
-
 function(sb_execute_python_scripts SCRIPT_PATH SCRIPT_ARGS WORKING_DIR)
     set(ONE_VALUE_ARGS RES STDOUT)
     cmake_parse_arguments(WORKING_DIR "" "${ONE_VALUE_ARGS}" "" ${ARGN} )

@@ -20,6 +20,7 @@
 
 - [ ] Investigate modern cmake best practices
 - [ ] Investigate using CMake test command
+- [ ] Use cmake format
 - [ ] Use pre-compile headers
 - [ ] Clean definition of 3rd parties
 - [ ] Try writing config.cmake 
