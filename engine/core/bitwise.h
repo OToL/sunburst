@@ -19,9 +19,9 @@ inline constexpr bool isPowerOf2(T val)
 inline ui32 nextPowerOf2(ui32 val)
 {
     val--;
-    val |= val >> 1; 
-    val |= val >> 2; 
-    val |= val >> 4; 
+    val |= val >> 1;
+    val |= val >> 2;
+    val |= val >> 4;
     val |= val >> 8;
     val |= val >> 16;
     val++;
@@ -33,10 +33,10 @@ inline ui64 nextPowerOf2(ui64 val)
 {
     val--;
     val |= val >> 1;
-    val |= val >> 2; 
-    val |= val >> 4; 
+    val |= val >> 2;
+    val |= val >> 4;
     val |= val >> 8;
-    val |= val >> 16; 
+    val |= val >> 16;
     val |= val >> 32;
     val++;
 
@@ -45,9 +45,9 @@ inline ui64 nextPowerOf2(ui64 val)
 
 inline ui32 prevPowerOf2(ui32 val)
 {
-    val |= val >> 1; 
-    val |= val >> 2; 
-    val |= val >> 4; 
+    val |= val >> 1;
+    val |= val >> 2;
+    val |= val >> 4;
     val |= val >> 8;
     val |= val >> 16;
     val = val ^ (val >> 1);
@@ -59,12 +59,12 @@ inline ui64 prevPowerOf2(ui64 val)
 {
     val |= val >> 1;
     val |= val >> 2;
-    val |= val >> 4; 
+    val |= val >> 4;
     val |= val >> 8;
-    val |= val >> 16; 
+    val |= val >> 16;
     val |= val >> 32;
     val = val ^ (val >> 1);
-    
+
     return val;
 }
 
@@ -80,7 +80,7 @@ inline constexpr b8 isAlignedTo(T val, usize alignment)
 {
     return (0 == (((usize)val) & (alignment - 1)));
 }
-}
+} // namespace sb
 
 #if defined(SB_PLATFORM_WINDOWS)
 #    include "_impl/platform/bitwise_win.h"

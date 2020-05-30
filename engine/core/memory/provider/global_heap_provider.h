@@ -10,10 +10,10 @@ struct GlobalHeapProvider
     GlobalHeapProvider();
 
     MemoryArena allocate(usize const size);
-    
+
     MemoryArena allocate(usize const size, Alignment const alignment);
 
-    void deallocate(MemoryArena const &arena);
+    void deallocate(MemoryArena const & arena);
 };
 
-}
+} // namespace sb

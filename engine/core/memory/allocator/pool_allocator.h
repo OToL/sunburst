@@ -113,12 +113,15 @@ public:
 
     void deallocate(void * ptr) override
     {
-        sbAssert(0U == (static_cast<usize>(static_cast<ui8 *>(ptr) - static_cast<ui8 *>(m_arena.m_ptr)) % ACTUAL_BLOCK_SIZE));
+        sbAssert(0U ==
+                 (static_cast<usize>(static_cast<ui8 *>(ptr) - static_cast<ui8 *>(m_arena.m_ptr)) %
+                  ACTUAL_BLOCK_SIZE));
 
         if (sbExpectTrue(m_arena.isInRange(ptr)))
         {
             Node * const dealloc_node = static_cast<Node *>(ptr);
-            NodeIdx const dealloc_node_idx = numericCast<NodeIdx>(dealloc_node - static_cast<Node *>(m_arena.m_ptr));
+            NodeIdx const dealloc_node_idx =
+                numericCast<NodeIdx>(dealloc_node - static_cast<Node *>(m_arena.m_ptr));
 
             if (INVALID_NODE == m_free_list)
             {
@@ -159,7 +162,6 @@ public:
     }
 
 private:
-
     TMemProvider m_mem_provider;
     MemoryArena m_arena;
     NodeIdx m_free_list;

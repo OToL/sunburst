@@ -31,7 +31,8 @@ template <bool IS_ENABLED>
 struct LogFilter
 {
     template <typename... TArgs>
-    static void logMessage(LogLevel lvl, char const * file, ui32 line, char const * msg, TArgs &&... args)
+    static void logMessage(LogLevel lvl, char const * file, ui32 line, char const * msg,
+                           TArgs &&... args)
     {
         if constexpr (0 == sizeof...(args))
         {
@@ -50,22 +51,26 @@ struct LogFilter
 template <>
 struct LogFilter<false>
 {
-    static void logMessage(...) {}
+    static void logMessage(...) { }
 };
 
-} // namespace sb
+} // namespace sb::detail
 
-#    define sbLogImpl(lvl, file, line, msg, ...) \
-        (!::sb::detail::gs_log_quiet && ((::sb::ui8)lvl) <= ((::sb::ui8)sb::detail::gs_log_min_level)) && (::sb::detail::LogFilter<sbCTFIsEnabled(LOG_FACILITY)>::logMessage(lvl, file, line, msg, ##__VA_ARGS__), true)
-        
+#    define sbLogImpl(lvl, file, line, msg, ...)                                                   \
+        (!::sb::detail::gs_log_quiet &&                                                            \
+         ((::sb::ui8)lvl) <= ((::sb::ui8)sb::detail::gs_log_min_level)) &&                         \
+            (::sb::detail::LogFilter<sbCTFIsEnabled(LOG_FACILITY)>::logMessage(                    \
+                 lvl, file, line, msg, ##__VA_ARGS__),                                             \
+             true)
+
 #else
 
 #    define sbLogImpl(type, file, line, msg, ...)`
 
 namespace sb::detail {
-    inline void setLogQuiet(b8) {}
+inline void setLogQuiet(b8) { }
 
-    void setLogMinLevel(LogLevel) {}
-}
+void setLogMinLevel(LogLevel) { }
+} // namespace sb::detail
 
 #endif

@@ -11,7 +11,7 @@ struct CRC32
     static constexpr Value NULL_VALUE = 0U;
 
     static Value compute(ui8 const * const buffer, usize const len);
-    static Value compute(char const * const str);    
+    static Value compute(char const * const str);
 };
 
 struct CRC64
@@ -21,7 +21,7 @@ struct CRC64
     static constexpr Value NULL_VALUE = 0ULL;
 
     static Value compute(ui8 const * const buffer, usize const len);
-    static Value compute(char const * const str);    
+    static Value compute(char const * const str);
 };
 
 } // namespace sb

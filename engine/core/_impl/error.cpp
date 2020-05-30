@@ -6,22 +6,23 @@
 
 #if sbCTFIsEnabled(ERROR_FACILITY)
 
-#include <libc++/cassert>
-#include <libc++/cstdio>
+#    include <libc++/cassert>
+#    include <libc++/cstdio>
 
 namespace sb::detail {
 
 static ErrorHandler gs_error_hdl = nullptr;
 static void * gs_error_user_data = nullptr;
 
-static char const * const ERROR_DEFAULT_MSG[] = {"Critical error detected", "Unhandled error detected", "Non fatal error detected"};
+static char const * const ERROR_DEFAULT_MSG[] = {
+    "Critical error detected", "Unhandled error detected", "Non fatal error detected"};
 
 void logDefaultErrorMsg(ErrorType type, char const * const file, ui32 const line, char const * msg)
 {
     char fmt_msg[255];
     sb::stringFormat(fmt_msg, "{} ({}, {})", msg, file, line);
 
-    switch(type)
+    switch (type)
     {
         case ErrorType::CRITICAL:
         {
@@ -74,7 +75,8 @@ void reportError(ErrorType type, char const * const file, ui32 const line)
     }
 }
 
-void reportNotImplemented(ErrorType type, char const * const file, ui32 const line, char const * msg)
+void reportNotImplemented(ErrorType type, char const * const file, ui32 const line,
+                          char const * msg)
 {
     char msg_fmt[255];
     sb::stringFormat(msg_fmt, "Not implemented: '{}'", msg);

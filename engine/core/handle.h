@@ -12,8 +12,8 @@ struct Handle
 
     constexpr Handle() = default;
 
-    constexpr explicit Handle(TStorage val) :
-        m_value(val)
+    constexpr explicit Handle(TStorage val)
+        : m_value(val)
     {
     }
 
@@ -36,15 +36,15 @@ struct Handle
 };
 
 template <typename TId, typename TStorage>
-constexpr b8 operator == (Handle<TId, TStorage> lval, Handle<TId, TStorage> rval)
+constexpr b8 operator==(Handle<TId, TStorage> lval, Handle<TId, TStorage> rval)
 {
     return lval.m_value == rval.m_value;
 }
 
 template <typename TId, typename TStorage>
-constexpr b8 operator != (Handle<TId, TStorage> lval, Handle<TId, TStorage> rval)
+constexpr b8 operator!=(Handle<TId, TStorage> lval, Handle<TId, TStorage> rval)
 {
     return lval.m_value != rval.m_value;
 }
 
-}
+} // namespace sb

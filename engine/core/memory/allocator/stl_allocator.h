@@ -10,7 +10,7 @@
 
 namespace sb {
 
-template <typename T , typename TAllocator = void>
+template <typename T, typename TAllocator = void>
 class STLAllocator
 {
 public:
@@ -35,19 +35,19 @@ public:
 
     constexpr STLAllocator(STLAllocator const & src) = default;
 
-    constexpr STLAllocator(TAllocator const & src_alloc) 
+    constexpr STLAllocator(TAllocator const & src_alloc)
         : m_alloc(src_alloc)
     {
     }
 
     template <typename U>
-    constexpr STLAllocator(STLAllocator<U, TAllocator> const & src) 
+    constexpr STLAllocator(STLAllocator<U, TAllocator> const & src)
         : m_alloc(src.get())
     {
     }
 
     ~STLAllocator() = default;
-    
+
     pointer address(reference x) const
     {
         return &x;
@@ -78,19 +78,19 @@ public:
         return wstd::numeric_limits<size_type>::max() / sizeof(value_type);
     }
 
-    template< class U, class... TArgs >
-    void construct( U* p, TArgs&&... args )
+    template <class U, class... TArgs>
+    void construct(U * p, TArgs &&... args)
     {
-        new((void*)p)U(wstd::forward<TArgs>(args)...);
+        new ((void *)p) U(wstd::forward<TArgs>(args)...);
     }
 
-    template< class U >
-    void destroy( U* p )
+    template <class U>
+    void destroy(U * p)
     {
         p->~U();
     }
 
-    allocator_type const & get() const  
+    allocator_type const & get() const
     {
         return m_alloc;
     }
@@ -99,7 +99,7 @@ private:
     allocator_type m_alloc;
 };
 
-template <typename T , typename TAllocator>
+template <typename T, typename TAllocator>
 class STLAllocator<T, TAllocator *>
 {
 public:
@@ -122,28 +122,27 @@ public:
 
     constexpr STLAllocator()
         : m_alloc(nullptr)
-    {        
+    {
     }
 
     constexpr STLAllocator(STLAllocator const & src)
         : m_alloc(src.m_alloc)
     {
-        
     }
 
-    constexpr STLAllocator(TAllocator * src_alloc) 
+    constexpr STLAllocator(TAllocator * src_alloc)
         : m_alloc(src_alloc)
     {
     }
 
     template <typename U>
-    constexpr STLAllocator(STLAllocator<U, TAllocator *> const & src) 
+    constexpr STLAllocator(STLAllocator<U, TAllocator *> const & src)
         : m_alloc(src.get())
     {
     }
 
     ~STLAllocator() = default;
-    
+
     pointer address(reference x) const
     {
         return &x;
@@ -174,19 +173,19 @@ public:
         return wstd::numeric_limits<size_type>::max() / sizeof(value_type);
     }
 
-    template< class U, class... TArgs >
-    void construct( U* p, TArgs&&... args )
+    template <class U, class... TArgs>
+    void construct(U * p, TArgs &&... args)
     {
-        new((void*)p)U(wstd::forward<TArgs>(args)...);
+        new ((void *)p) U(wstd::forward<TArgs>(args)...);
     }
 
-    template< class U >
-    void destroy( U* p )
+    template <class U>
+    void destroy(U * p)
     {
         p->~U();
     }
 
-    allocator_type get() const  
+    allocator_type get() const
     {
         return m_alloc;
     }
@@ -218,7 +217,7 @@ public:
     constexpr STLAllocator() = default;
 
     template <typename U>
-    constexpr STLAllocator(STLAllocator<U> const & )   
+    constexpr STLAllocator(STLAllocator<U> const &)
     {
     }
 
@@ -259,14 +258,14 @@ public:
         return wstd::numeric_limits<size_type>::max() / sizeof(value_type);
     }
 
-    template< class U, class... TArgs >
-    void construct( U* p, TArgs&&... args )
+    template <class U, class... TArgs>
+    void construct(U * p, TArgs &&... args)
     {
-        new((void*)p)U(wstd::forward<TArgs>(args)...);
+        new ((void *)p) U(wstd::forward<TArgs>(args)...);
     }
 
-    template< class U >
-    void destroy( U* p )
+    template <class U>
+    void destroy(U * p)
     {
         p->~U();
     }

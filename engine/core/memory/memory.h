@@ -10,7 +10,7 @@ enum Alignment : usize
     ALIGN_8B = 8,
     ALIGN_16B = 16,
 
-    ALIGN_DEFAULT = ALIGN_8B 
+    ALIGN_DEFAULT = ALIGN_8B
 };
 
 void zeroMemory(void * const memPtr, usize const byteCount);
@@ -28,17 +28,17 @@ void zeroStruct(T & obj)
 }
 
 template <typename T, usize COUNT>
-void zeroStructArray(T (&objPtr) [COUNT])
+void zeroStructArray(T (&objPtr)[COUNT])
 {
     zeroMemory(objPtr, sizeof(T) * COUNT);
 }
 
 [[noreturn]] void notifyOOM(usize requestedSize, char const * message);
 
-template<typename TType>
+template <typename TType>
 constexpr inline Alignment alignOf()
 {
     return (Alignment)alignof(TType);
 }
 
-}
+} // namespace sb

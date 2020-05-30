@@ -14,7 +14,7 @@ using StaticPhysicalPath = StaticString<PPath::MAX_LEN + 1>;
 class LocalFileSystemLayer : public IFileSystemLayer
 {
 public:
-    ~LocalFileSystemLayer() override {}
+    ~LocalFileSystemLayer() override { }
 
     LocalFileSystemLayer(char const * physical_path);
 
@@ -39,4 +39,4 @@ private:
     StaticPhysicalPath m_physical_path;
 };
 
-}
+} // namespace sb

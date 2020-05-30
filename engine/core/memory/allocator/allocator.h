@@ -7,9 +7,8 @@ namespace sb {
 
 class IAllocator
 {
-// TODO: Make all function private and force using sbNew, sbMalloc, etc.
+    // TODO: Make all function private and force using sbNew, sbMalloc, etc.
 public:
-
     virtual ~IAllocator() = default;
 
     // TODO: return memory arena
@@ -23,4 +22,4 @@ public:
     virtual b8 owns(void const * ptr) const = 0;
 };
 
-}
+} // namespace sb

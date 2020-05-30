@@ -16,7 +16,7 @@ inline constexpr TDst numericCast(TSrc && src)
 
 // Ensures null termination
 template <typename TSrc>
-inline usize stringCastT (TSrc && src, wstd::span<char> dest)
+inline usize stringCastT(TSrc && src, wstd::span<char> dest)
 {
     using DecayedType = wstd::decay_t<TSrc>;
 

@@ -38,7 +38,7 @@ class Logger:
     def ErrorCode(self):
         return self.m_ErrorCode
 
-    def Success(self):
+    def Success(self):  
         return (0 == self.m_ErrorCode)
     
     m_ErrorCode = 0

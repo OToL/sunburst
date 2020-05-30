@@ -13,7 +13,6 @@ struct LogicPath
     static constexpr char const * SEPARATOR = "/";
 
     static b8 isValid(char const * path);
-
 };
 
 struct PhysicPath

@@ -37,4 +37,4 @@ void MemoryArenaProvider::deallocate(MemoryArena const & arena)
     }
 }
 
-}
+} // namespace sb

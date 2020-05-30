@@ -15,11 +15,10 @@
 
 #define sb_restrict sb_restrict_impl
 
-#define sbBaseClass(...) \
-    using BaseClass = __VA_ARGS__
+#define sbBaseClass(...) using BaseClass = __VA_ARGS__
 
-#define sbCopyProtect(classname)                       \
-    classname & operator=(classname const &) = delete; \
+#define sbCopyProtect(classname)                                                                   \
+    classname & operator=(classname const &) = delete;                                             \
     classname(classname const &) = delete
 
 #define SB_CTF_DISABLED 1

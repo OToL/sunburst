@@ -1,16 +1,15 @@
 #pragma once
 
-#include <core/types.h>
-#include <core/error.h>
 #include <core/conversion.h>
+#include <core/error.h>
 #include <core/memory/allocator/stl_allocator.h>
-
 #include <core/_impl/container/small_vector_base.h>
+#include <core/types.h>
 
-#include <libc++/utility>
-#include <libc++/memory>
 #include <libc++/algorithm>
 #include <libc++/iterator>
+#include <libc++/memory>
+#include <libc++/utility>
 
 namespace sb {
 
@@ -24,18 +23,19 @@ class SmallVector : public detail::SmallVectorBase<TType, TAllocator>
 
     using Impl = typename BaseClass::Impl;
 
-    static constexpr usize BITS_PER_WORD = static_cast<usize>(sizeof(typename BaseClass::size_type) * 8);
+    static constexpr usize BITS_PER_WORD =
+        static_cast<usize>(sizeof(typename BaseClass::size_type) * 8);
 
 public:
-    using typename BaseClass::value_type;
-    using typename BaseClass::reference;
-    using typename BaseClass::const_reference;
-    using typename BaseClass::pointer;
-    using typename BaseClass::const_pointer;
-    using typename BaseClass::iterator;
     using typename BaseClass::const_iterator;
-    using typename BaseClass::size_type;
+    using typename BaseClass::const_pointer;
+    using typename BaseClass::const_reference;
     using typename BaseClass::difference_type;
+    using typename BaseClass::iterator;
+    using typename BaseClass::pointer;
+    using typename BaseClass::reference;
+    using typename BaseClass::size_type;
+    using typename BaseClass::value_type;
     using allocator_type = TAllocator;
 
     SmallVector()
@@ -56,7 +56,8 @@ public:
         wstd::uninitialized_default_construct(m_impl.m_begin, m_impl.m_end);
     }
 
-    SmallVector(size_type count, value_type const & value, allocator_type const & alloc = allocator_type())
+    SmallVector(size_type count, value_type const & value,
+                allocator_type const & alloc = allocator_type())
         : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
     {
         buyMore(count);
@@ -64,8 +65,8 @@ public:
         wstd::uninitialized_fill(m_impl.m_begin, m_impl.m_end, value);
     }
 
-    template< class TIterator >
-    SmallVector(TIterator first, TIterator last, allocator_type const & alloc = allocator_type() )
+    template <class TIterator>
+    SmallVector(TIterator first, TIterator last, allocator_type const & alloc = allocator_type())
         : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
     {
         buyMore(numericCast<size_type>(last - first));
@@ -83,7 +84,8 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
-    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src, allocator_type const & alloc)
+    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src,
+                allocator_type const & alloc)
         : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
     {
         buyMore(src.size());
@@ -103,17 +105,19 @@ public:
         }
         else
         {
-            m_impl.init(reinterpret_cast<pointer>(&m_buffer[0]), reinterpret_cast<pointer>(&m_buffer[0]) + BASE_CAPACITY);
+            m_impl.init(reinterpret_cast<pointer>(&m_buffer[0]),
+                        reinterpret_cast<pointer>(&m_buffer[0]) + BASE_CAPACITY);
 
             buyMore(src.size());
             wstd::uninitialized_move(wstd::begin(src), wstd::end(src), m_impl.m_begin);
 
             src.clear();
-        }        
+        }
     }
 
     template <usize BASE_CAPACITY_SRC>
-    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TAllocator> && src, allocator_type const & alloc)
+    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TAllocator> && src,
+                allocator_type const & alloc)
         : m_impl(alloc)
     {
         if (!src.isSmallStorage() && (src.size() > BASE_CAPACITY))
@@ -124,13 +128,14 @@ public:
         }
         else
         {
-            m_impl.init(reinterpret_cast<pointer>(&m_buffer[0]), reinterpret_cast<pointer>(&m_buffer[0]) + BASE_CAPACITY);
+            m_impl.init(reinterpret_cast<pointer>(&m_buffer[0]),
+                        reinterpret_cast<pointer>(&m_buffer[0]) + BASE_CAPACITY);
 
             buyMore(src.size());
             wstd::uninitialized_move(wstd::begin(src), wstd::end(src), m_impl.m_begin);
 
             src.clear();
-        } 
+        }
     }
 
     ~SmallVector()
@@ -165,19 +170,21 @@ public:
 
                 if (src_size > dst_size)
                 {
-                    wstd::uninitialized_move(src.m_impl.m_begin + common_size, src.m_impl.m_end, m_impl.m_end);
+                    wstd::uninitialized_move(src.m_impl.m_begin + common_size, src.m_impl.m_end,
+                                             m_impl.m_end);
                     wstd::destroy(src.m_impl.m_begin + common_size, src.m_impl.m_end);
                 }
                 else if (dst_size > src_size)
                 {
-                    wstd::uninitialized_move(m_impl.m_begin + common_size, m_impl.m_end, src.m_impl.m_end);
+                    wstd::uninitialized_move(m_impl.m_begin + common_size, m_impl.m_end,
+                                             src.m_impl.m_end);
                     wstd::destroy(m_impl.m_begin + common_size, m_impl.m_end);
                 }
 
                 m_impl.m_end = m_impl.m_begin + src_size;
                 src.m_impl.m_end = src.m_impl.m_begin + dst_size;
 
-                wstd::swap(m_impl.get_allocator(), src.m_impl.get_allocator());   
+                wstd::swap(m_impl.get_allocator(), src.m_impl.get_allocator());
             }
             else if (src_size > capacity())
             {
@@ -191,11 +198,11 @@ public:
                 wstd::destroy(src.m_impl.m_begin + dst_size, src.m_impl.m_end);
 
                 if (!isSmallStorage())
-                {   
+                {
                     m_impl.deallocate(m_impl.m_begin, dst_size);
                 }
 
-                m_impl.m_begin = new_dst_data;  
+                m_impl.m_begin = new_dst_data;
                 m_impl.m_end = m_impl.m_begin + src_size;
                 m_impl.m_storage_end = m_impl.m_begin + new_dst_capacity;
 
@@ -213,11 +220,11 @@ public:
                 wstd::destroy(m_impl.m_begin + src_size, m_impl.m_end);
 
                 if (!src.isSmallStorage())
-                {   
+                {
                     src.m_impl.deallocate(src.m_impl.m_begin, src_size);
                 }
 
-                src.m_impl.m_begin = new_src_data;  
+                src.m_impl.m_begin = new_src_data;
                 src.m_impl.m_end = src.m_impl.m_begin + dst_size;
                 src.m_impl.m_storage_end = src.m_impl.m_begin + new_src_capacity;
 
@@ -311,7 +318,7 @@ public:
 
     constexpr size_type max_size() const
     {
-        return (size_type)~((difference_type)0);
+        return (size_type) ~((difference_type)0);
     }
 
     void reserve(size_type new_cap)
@@ -330,7 +337,6 @@ public:
         {
             wstd::destroy(m_impl.m_begin + count, m_impl.m_end);
             m_impl.m_end = m_impl.m_begin + count;
-            
         }
         else if (curr_size < count)
         {
@@ -341,7 +347,7 @@ public:
         }
     }
 
-    void resize( size_type count, const value_type& value )
+    void resize(size_type count, const value_type & value)
     {
         auto const curr_size = size();
 
@@ -349,7 +355,6 @@ public:
         {
             wstd::destroy(m_impl.m_begin + count, m_impl.m_end);
             m_impl.m_end = m_impl.m_begin + count;
-            
         }
         else if (curr_size < count)
         {
@@ -364,7 +369,7 @@ public:
     {
         buyMore(1);
 
-        new(m_impl.m_end - 1) value_type(value);
+        new (m_impl.m_end - 1) value_type(value);
 
         return;
     }
@@ -392,7 +397,7 @@ public:
     {
         sbAssert(!empty());
 
-        wstd::destroy_at(m_impl.m_end -1);
+        wstd::destroy_at(m_impl.m_end - 1);
         --m_impl.m_end;
     }
 
@@ -422,21 +427,21 @@ public:
         return *(m_impl.m_begin + idx);
     }
 
-    reference operator [] (size_type idx)
+    reference operator[](size_type idx)
     {
         sbAssert(idx < size());
 
         return *(m_impl.m_begin + idx);
     }
 
-    const_reference operator [] (size_type idx) const
+    const_reference operator[](size_type idx) const
     {
         sbAssert(idx < size());
 
         return *(m_impl.m_begin + idx);
     }
 
-    SmallVector & operator = (SmallVector const & src)
+    SmallVector & operator=(SmallVector const & src)
     {
         if (this != &src)
         {
@@ -444,17 +449,17 @@ public:
         }
 
         return *this;
-    }    
+    }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
-    SmallVector & operator = (SmallVector<TType, BASE_CAPACITY_SRC,  TSrcAllocator> const & src)
+    SmallVector & operator=(SmallVector<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src)
     {
         assign(src.begin(), src.end());
-        
+
         return *this;
     }
 
-    SmallVector & operator = (SmallVector && src)
+    SmallVector & operator=(SmallVector && src)
     {
         if (this != &src)
         {
@@ -466,7 +471,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
-    SmallVector & operator = (SmallVector<TType, BASE_CAPACITY_SRC,  TSrcAllocator> && src)
+    SmallVector & operator=(SmallVector<TType, BASE_CAPACITY_SRC, TSrcAllocator> && src)
     {
         clear();
         this->swap(src);
@@ -485,12 +490,12 @@ public:
             {
                 if (new_capacity <= BASE_CAPACITY)
                 {
-                    wstd::uninitialized_move(m_impl.m_begin, m_impl.m_end, reinterpret_cast<pointer>(&m_buffer[0]));
+                    wstd::uninitialized_move(m_impl.m_begin, m_impl.m_end,
+                                             reinterpret_cast<pointer>(&m_buffer[0]));
                     wstd::destroy(m_impl.m_begin, m_impl.m_end);
                     m_impl.deallocate(m_impl.m_begin, curr_capacity);
 
                     m_impl.m_begin = reinterpret_cast<pointer>(&m_buffer[0]);
-                    
                 }
                 else
                 {
@@ -510,7 +515,7 @@ public:
         }
     }
 
-    template<class InputIt>
+    template <class InputIt>
     void assign(InputIt src_begin, InputIt src_end)
     {
         auto const curr_size = size();
@@ -521,7 +526,7 @@ public:
             wstd::copy(src_begin, src_end, m_impl.m_begin);
             wstd::destroy(m_impl.m_begin + src_size, end());
 
-            m_impl.m_end = m_impl.m_begin + src_size; 
+            m_impl.m_end = m_impl.m_begin + src_size;
         }
         else if (src_size > capacity())
         {
@@ -559,7 +564,7 @@ public:
             wstd::fill(m_impl.m_begin, m_impl.m_begin + count, value);
             wstd::destroy(m_impl.m_begin + count, m_impl.m_end);
 
-            m_impl.m_end = m_impl.m_begin + count; 
+            m_impl.m_end = m_impl.m_begin + count;
         }
         else if (count > capacity())
         {
@@ -606,20 +611,19 @@ public:
     }
 
 private:
-
     SmallVector(pointer begin, allocator_type const & alloc)
         : m_impl(begin, begin + BASE_CAPACITY, alloc)
     {
     }
 
     SmallVector(pointer begin)
-        :  m_impl(begin, begin + BASE_CAPACITY)
+        : m_impl(begin, begin + BASE_CAPACITY)
     {
     }
 
-    static constexpr size_type alignSize(size_type new_size) 
+    static constexpr size_type alignSize(size_type new_size)
     {
-        return new_size + (BITS_PER_WORD-1) & ~((size_type)BITS_PER_WORD-1);
+        return new_size + (BITS_PER_WORD - 1) & ~((size_type)BITS_PER_WORD - 1);
     }
 
     size_type computeCapacity(size_type new_size) const
@@ -634,17 +638,17 @@ private:
             return ms;
         }
 
-        return wstd::max(2*curr_cap, alignSize(new_size));
+        return wstd::max(2 * curr_cap, alignSize(new_size));
     }
 
     void extendStorage(size_type new_capacity)
     {
-        size_type const curr_capacity = capacity(); 
+        size_type const curr_capacity = capacity();
         size_type const curr_size = size();
 
         pointer const new_data = m_impl.allocate(new_capacity);
         sbAssert(nullptr != new_data);
-        
+
         wstd::uninitialized_move(m_impl.m_begin, m_impl.m_end, new_data);
         wstd::destroy(m_impl.m_begin, m_impl.m_end);
 
@@ -661,7 +665,7 @@ private:
     void buyMore(size_type cnt)
     {
         size_type const curr_size = size();
-        size_type const curr_capacity = capacity(); 
+        size_type const curr_capacity = capacity();
 
         if ((curr_size + cnt) <= curr_capacity)
         {
@@ -681,45 +685,52 @@ private:
 };
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::iterator begin( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect)
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::iterator
+    begin(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect)
 {
     return vect.begin();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::iterator end( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect)
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::iterator
+    end(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect)
 {
     return vect.end();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator begin( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    begin(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.begin();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator end( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    end(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.end();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator cbegin( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    cbegin(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.cbegin();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator cend( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    cend(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.cend();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, sb::usize BASE_CAPACITY2, typename TAllocator>
-void swap( sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect1, typename sb::SmallVector<TType, BASE_CAPACITY2, TAllocator> & vect2)
+void swap(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect1,
+          typename sb::SmallVector<TType, BASE_CAPACITY2, TAllocator> & vect2)
 {
     vect1.swap(vect2);
 }
 
-}
+} // namespace sb

@@ -5,20 +5,22 @@
 #if sbCTFIsEnabled(ERROR_FACILITY)
 
 namespace sb {
-    template <typename... TArgs>
-    usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args);
+template <typename... TArgs>
+usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args);
 }
 
 namespace sb::detail {
 
-void reportNotImplemented(ErrorType type, char const * const file, ui32 const line, char const * msg);
+void reportNotImplemented(ErrorType type, char const * const file, ui32 const line,
+                          char const * msg);
 
 void reportError(ErrorType type, char const * const file, ui32 const line, char const * msg);
 
 void reportError(ErrorType type, char const * const file, ui32 const line);
 
-template <typename ... TArgs>
-void reportError(ErrorType type, char const * const file, ui32 const line, char const * msg, TArgs ... args)
+template <typename... TArgs>
+void reportError(ErrorType type, char const * const file, ui32 const line, char const * msg,
+                 TArgs... args)
 {
     if constexpr (sizeof...(args))
     {
@@ -31,25 +33,30 @@ void reportError(ErrorType type, char const * const file, ui32 const line, char 
 
 } // namespace sb::detail
 
-#    define sbAssertImpl(cond, ...)                                                              \
-        if (!(cond))                                           \
-        {                                                                                        \
-            sb::detail::reportError(sb::ErrorType::CRITICAL, __FILE__, __LINE__, ##__VA_ARGS__); \
+#    define sbAssertImpl(cond, ...)                                                                \
+        if (!(cond))                                                                               \
+        {                                                                                          \
+            sb::detail::reportError(sb::ErrorType::CRITICAL, __FILE__, __LINE__, ##__VA_ARGS__);   \
         }
 
-#    define sbWarnImpl(cond, ...)                                                               \
-        if (!(cond))                                          \
-        {                                                                                       \
-            sb::detail::reportError(sb::ErrorType::WARNING, __FILE__, __LINE__, ##__VA_ARGS__); \
+#    define sbWarnImpl(cond, ...)                                                                  \
+        if (!(cond))                                                                               \
+        {                                                                                          \
+            sb::detail::reportError(sb::ErrorType::WARNING, __FILE__, __LINE__, ##__VA_ARGS__);    \
         }
 
-#    define sbExpectTrueImpl(cond, ...) \
-        ((cond) || (sb::detail::reportError(sb::ErrorType::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__), false))
+#    define sbExpectTrueImpl(cond, ...)                                                            \
+        ((cond) ||                                                                                 \
+         (sb::detail::reportError(sb::ErrorType::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),       \
+          false))
 
-#    define sbExpectFalseImpl(cond, ...) \
-        ((cond) && (sb::detail::reportError(sb::ErrorType::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__), true))
+#    define sbExpectFalseImpl(cond, ...)                                                           \
+        ((cond) &&                                                                                 \
+         (sb::detail::reportError(sb::ErrorType::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),       \
+          true))
 
-#    define sbNotImplementedImpl(str) sb::detail::reportNotImplemented(sb::ErrorType::WARNING, __FILE__, __LINE__, str)
+#    define sbNotImplementedImpl(str)                                                              \
+        sb::detail::reportNotImplemented(sb::ErrorType::WARNING, __FILE__, __LINE__, str)
 
 #else
 

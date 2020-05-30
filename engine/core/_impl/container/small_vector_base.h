@@ -6,8 +6,8 @@ template <typename TType, typename TAllocator>
 class SmallVectorBase
 {
     sbCopyProtect(SmallVectorBase);
-public: 
 
+public:
     using value_type = TType;
     using reference = TType &;
     using const_reference = TType const &;
@@ -19,7 +19,6 @@ public:
     using difference_type = sptrdiff;
 
 protected:
-
     SmallVectorBase() = default;
 
     struct Impl : public TAllocator
@@ -77,7 +76,7 @@ protected:
             *((BaseClass *)this) = alloc;
         }
 
-        TAllocator & get_allocator() 
+        TAllocator & get_allocator()
         {
             return *this;
         }
@@ -92,4 +91,4 @@ protected:
         pointer m_storage_end = nullptr;
     };
 };
-}
+} // namespace sb::detail

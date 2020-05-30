@@ -2,9 +2,10 @@ import os.path
 import sys
 from optparse import OptionParser
 from subprocess import Popen, PIPE
-
-sys.path.append(os.path.join(os.path.dirname(__file__), "../common"))
-from sb import *
+from sbpy import host
+from sbpy import log
+from sbpy import code
+from sbpy import file_system
 
 def ExecuteClangFormatOnFile(clangFormat, filePath):
     process = Popen([clangFormat, "-i", filePath], stdout=PIPE, stderr=PIPE)

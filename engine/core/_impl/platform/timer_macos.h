@@ -7,7 +7,6 @@ namespace sb::detail {
 class Timer
 {
 public:
-
     using Ctx = mach_timebase_info_data_t;
     using Value = ui64;
 
@@ -32,4 +31,4 @@ public:
     }
 };
 
-}
+} // namespace sb::detail

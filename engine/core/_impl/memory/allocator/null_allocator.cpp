@@ -3,9 +3,7 @@
 
 namespace sb {
 
-NullAllocator::NullAllocator(InitParams const &)
-{
-}
+NullAllocator::NullAllocator(InitParams const &) { }
 
 void * NullAllocator::allocate(usize const)
 {
@@ -22,13 +20,11 @@ void NullAllocator::deallocate([[maybe_unused]] void * ptr)
     sbWarn(nullptr == ptr);
 }
 
-void NullAllocator::deallocateAll() 
-{
-}
+void NullAllocator::deallocateAll() { }
 
 b8 NullAllocator::owns(void const * ptr) const
 {
     return (nullptr == ptr);
 }
 
-}
+} // namespace sb

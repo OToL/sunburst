@@ -30,14 +30,14 @@ class FileSystemImpl
     sbCopyProtect(FileSystemImpl);
 
 public:
-
     using FileGen = ui16;
 
     struct FileDesc
     {
         IFileSystemLayer::FileId m_id;
         IFileSystemLayer * m_layer;
-        ui32 m_Gen; // Has to be last because the FileDesc allocator is using its first bytes for its internal link list
+        ui32 m_Gen; // Has to be last because the FileDesc allocator is using its first
+                    // bytes for its internal link list
     };
 
     // TODO: use a loki like assoc_vector to separate m_id from the rest of the data
@@ -60,14 +60,14 @@ public:
         {
             sbWarn(!layer.m_name.isNull());
 
-            auto const layerIter = wstd::find_if(begin(m_layers), end(m_layers), [&layer](LayerDesc const & layer_desc) { return layer_desc.m_id == layer.m_name; });
+            auto const layerIter = wstd::find_if(
+                begin(m_layers), end(m_layers),
+                [&layer](LayerDesc const & layer_desc) { return layer_desc.m_id == layer.m_name; });
             auto const layer_path_len = strlen(layer.m_logical_path);
 
-            if (sbExpectTrue((layerIter == end(m_layers)) &&
-                    (0 != layer_path_len) &&
-                    LPath::isValid(layer.m_logical_path) &&
-                    (layer.m_logical_path[layer_path_len - 1] == *LPath::SEPARATOR))
-                )
+            if (sbExpectTrue((layerIter == end(m_layers)) && (0 != layer_path_len) &&
+                             LPath::isValid(layer.m_logical_path) &&
+                             (layer.m_logical_path[layer_path_len - 1] == *LPath::SEPARATOR)))
             {
                 auto & new_layer = m_layers.emplace_back();
 
@@ -78,10 +78,8 @@ public:
         }
     }
 
-    ~FileSystemImpl()
-    {
-        sbWarn(0 == m_opened_file_cnt, "Not all files have been closed before destroying the File System")
-    }
+    ~FileSystemImpl(){sbWarn(0 == m_opened_file_cnt,
+                             "Not all files have been closed before destroying the File System")}
 
     FileSize readFile(FileHdl hdl, ui8 * buffer, FileSize cnt)
     {
@@ -102,11 +100,14 @@ public:
 
         do
         {
-            layerIter = wstd::find_if(layerIter, end(m_layers), [path](LayerDesc const & layer) { return strStartWith(path, layer.m_logical_path.c_str()); });
+            layerIter = wstd::find_if(layerIter, end(m_layers), [path](LayerDesc const & layer) {
+                return strStartWith(path, layer.m_logical_path.c_str());
+            });
 
             if (layerIter != end(m_layers))
             {
-                auto file_hdl = func(*this, *layerIter->m_layer, path + layerIter->m_logical_path.length());
+                auto file_hdl =
+                    func(*this, *layerIter->m_layer, path + layerIter->m_logical_path.length());
 
                 if (!file_hdl.isNull())
                 {
@@ -115,8 +116,7 @@ public:
 
                 ++layerIter;
             }
-        }
-        while (layerIter != end(m_layers));
+        } while (layerIter != end(m_layers));
 
         return {};
     }
@@ -125,8 +125,9 @@ public:
     {
         sbWarn(LPath::isValid(path));
 
-        return execFileActionOnLayers(path, [fmt, mode] (FileSystemImpl &fs, IFileSystemLayer &layer, char const * layer_path) 
-            {
+        return execFileActionOnLayers(
+            path,
+            [fmt, mode](FileSystemImpl & fs, IFileSystemLayer & layer, char const * layer_path) {
                 auto layer_file_hdl = layer.openFileWrite(layer_path, mode, fmt);
                 FileHdl file_hdl;
 
@@ -149,8 +150,8 @@ public:
     {
         sbWarn(LPath::isValid(path));
 
-        auto const hdl = execFileActionOnLayers(path, [fmt] (FileSystemImpl &fs, IFileSystemLayer &layer, char const * layer_path) 
-            {
+        auto const hdl = execFileActionOnLayers(
+            path, [fmt](FileSystemImpl & fs, IFileSystemLayer & layer, char const * layer_path) {
                 auto layer_file_hdl = layer.openFileRead(layer_path, fmt);
                 FileHdl file_hdl;
 
@@ -180,8 +181,8 @@ public:
     {
         sbWarn(LPath::isValid(path));
 
-        auto const hdl = execFileActionOnLayers(path, [fmt] (FileSystemImpl &fs, IFileSystemLayer &layer, char const * layer_path) 
-            {
+        auto const hdl = execFileActionOnLayers(
+            path, [fmt](FileSystemImpl & fs, IFileSystemLayer & layer, char const * layer_path) {
                 auto layer_file_hdl = layer.createFile(layer_path, fmt);
                 FileHdl file_hdl;
 
@@ -209,7 +210,9 @@ public:
 
     char const * getLayerPhysicalPath(FS::LayerName name)
     {
-        auto const layer_desc = wstd::find_if(begin(m_layers), end(m_layers), [name](LayerDesc const & layer) { return layer.m_id == name; });
+        auto const layer_desc =
+            wstd::find_if(begin(m_layers), end(m_layers),
+                          [name](LayerDesc const & layer) { return layer.m_id == name; });
 
         if (nullptr != layer_desc)
         {
@@ -228,14 +231,14 @@ public:
 
         deallocateFileDesc(hdl);
 
-        --m_opened_file_cnt;        
+        --m_opened_file_cnt;
     }
 
 private:
-
     union FileHdlHelper
     {
-        struct {
+        struct
+        {
             ui16 m_hdl;
             ui16 m_gen;
         } m_unpacked;
@@ -260,7 +263,8 @@ private:
             FileDesc * const base_obj = static_cast<FileDesc *>(arena.m_ptr);
 
             FileHdlHelper helper_hdl;
-            helper_hdl.m_unpacked = {numericCast<ui16>(wstd::distance(base_obj, file_desc)), numericCast<ui16>(file_desc->m_Gen)};
+            helper_hdl.m_unpacked = {numericCast<ui16>(wstd::distance(base_obj, file_desc)),
+                                     numericCast<ui16>(file_desc->m_Gen)};
 
             return FileHdl{helper_hdl.m_packed};
         }
@@ -276,7 +280,8 @@ private:
         helper_hdl.m_packed = hdl.get();
 
         MemoryArena arena = m_file_desc_pool.getArena();
-        FileDesc * const file_desc = static_cast<FileDesc *>(arena.m_ptr) + helper_hdl.m_unpacked.m_hdl;
+        FileDesc * const file_desc =
+            static_cast<FileDesc *>(arena.m_ptr) + helper_hdl.m_unpacked.m_hdl;
 
         sbAssert(arena.isInRange((void *)file_desc));
         sbAssert(helper_hdl.m_unpacked.m_gen == file_desc->m_Gen);
@@ -293,7 +298,8 @@ private:
         helper_hdl.m_packed = hdl.get();
 
         MemoryArena arena = m_file_desc_pool.getArena();
-        FileDesc * const file_desc = static_cast<FileDesc *>(arena.m_ptr) + helper_hdl.m_unpacked.m_hdl;
+        FileDesc * const file_desc =
+            static_cast<FileDesc *>(arena.m_ptr) + helper_hdl.m_unpacked.m_hdl;
 
         sbAssert(arena.isInRange((void *)file_desc));
         sbAssert(helper_hdl.m_unpacked.m_gen == file_desc->m_Gen);
@@ -386,7 +392,8 @@ FileSize FileSystem::readFile(FileHdl hdl, wstd::span<ui8> buffer, FileSize cnt)
 
     if (sbExpectTrue(!hdl.isNull()))
     {
-        return gs_file_system->readFile(hdl, buffer.data(), (cnt == -1) ? (FileSize)buffer.size():cnt);
+        return gs_file_system->readFile(hdl, buffer.data(),
+                                        (cnt == -1) ? (FileSize)buffer.size() : cnt);
     }
 
     return 0;
@@ -404,7 +411,8 @@ FileSize FileSystem::getFileLength(FileHdl hdl)
 
 FileSystem::LayerPtr FileSystem::createLocalFileSystemLayer(char const * local_root_path)
 {
-    return wstd::static_pointer_cast<IFileSystemLayer>(makeUnique<LocalFileSystemLayer>(local_root_path));
+    return wstd::static_pointer_cast<IFileSystemLayer>(
+        makeUnique<LocalFileSystemLayer>(local_root_path));
 }
 
 } // namespace sb

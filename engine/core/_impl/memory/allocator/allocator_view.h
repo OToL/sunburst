@@ -23,12 +23,16 @@ template <typename TAllocator>
 AllocatorVTable const & getAllocatorVTable()
 {
     static AllocatorVTable vtable = {
-        [](void * alloc, usize const size) { return static_cast<TAllocator *>(alloc)->allocate(size); },
-        [](void * alloc, usize const size, Alignment const alignment) { return static_cast<TAllocator *>(alloc)->allocate(size, alignment); },
+        [](void * alloc, usize const size) {
+            return static_cast<TAllocator *>(alloc)->allocate(size);
+        },
+        [](void * alloc, usize const size, Alignment const alignment) {
+            return static_cast<TAllocator *>(alloc)->allocate(size, alignment);
+        },
         [](void * alloc, void * ptr) { static_cast<TAllocator *>(alloc)->deallocate(ptr); },
         [](void * alloc, void const * ptr) { return static_cast<TAllocator *>(alloc)->owns(ptr); },
         [](void * alloc) -> usize { return static_cast<TAllocator *>(alloc)->getAlignment(); }};
 
     return vtable;
 }
-} // namespace sb::detail`
+} // namespace sb::detail

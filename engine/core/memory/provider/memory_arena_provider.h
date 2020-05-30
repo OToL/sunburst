@@ -11,12 +11,12 @@ struct MemoryArenaProvider
     MemoryArenaProvider(MemoryArena const & arena);
 
     MemoryArena allocate(usize const size);
-    
+
     MemoryArena allocate(usize const size, Alignment const alignment);
 
-    void deallocate(MemoryArena const &arena);
+    void deallocate(MemoryArena const & arena);
 
     MemoryArena m_arena;
 };
 
-}
+} // namespace sb

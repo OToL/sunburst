@@ -6,8 +6,7 @@
 
 namespace sb {
 
-    template <typename T, typename TAllocator = STLAllocator<T>>
-    using Vector = wstd::detail::vector<T, TAllocator>;
+template <typename T, typename TAllocator = STLAllocator<T>>
+using Vector = wstd::detail::vector<T, TAllocator>;
 
 }
-

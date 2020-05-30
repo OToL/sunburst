@@ -3,9 +3,9 @@
 #include "types.h"
 
 #if defined(SB_PLATFORM_WINDOWS)
-#   include "_impl/platform/timer_decl_win.h"
+#    include "_impl/platform/timer_decl_win.h"
 #else
-#   error "Unhandled target platform"
+#    error "Unhandled target platform"
 #endif
 
 namespace sb {
@@ -29,7 +29,7 @@ struct Timer
 } // namespace sb
 
 #if defined(SB_PLATFORM_WINDOWS)
-#   include "_impl/platform/timer_win.h"
+#    include "_impl/platform/timer_win.h"
 #else
-#   error "Unhandled target platform"
+#    error "Unhandled target platform"
 #endif

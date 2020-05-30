@@ -28,4 +28,4 @@ f64 Timer::toSec(Ctx const & ctx, Value val)
     return val / (f64)ctx.QuadPart;
 }
 
-}
+} // namespace sb

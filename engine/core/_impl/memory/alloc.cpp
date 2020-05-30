@@ -33,7 +33,7 @@ void * operator new[](sb::usize byte_count, wstd::nothrow_t const &) noexcept
     return sb::getGlobalHeap()->allocate(byte_count);
 }
 
-void operator delete(void * ptr)noexcept
+void operator delete(void * ptr) noexcept
 {
     if (nullptr != ptr)
     {
@@ -41,7 +41,7 @@ void operator delete(void * ptr)noexcept
     }
 }
 
-void operator delete(void * ptr, wstd::nothrow_t const &)noexcept
+void operator delete(void * ptr, wstd::nothrow_t const &) noexcept
 {
     if (nullptr != ptr)
     {
@@ -65,7 +65,7 @@ void operator delete[](void * ptr, wstd::nothrow_t const &) noexcept
     }
 }
 
-void operator delete(void * ptr, wstd::align_val_t)noexcept
+void operator delete(void * ptr, wstd::align_val_t) noexcept
 {
     if (nullptr != ptr)
     {

@@ -23,7 +23,7 @@ struct FmtArg
     FmtFwCallCB m_fmt_cb;
 };
 
-inline void expandFmtArgs(wstd::span<FmtArg>) {}
+inline void expandFmtArgs(wstd::span<FmtArg>) { }
 
 template <typename T, typename = void>
 struct FmtArgDesc
@@ -73,22 +73,27 @@ inline void expandFmtArgs(wstd::span<FmtArg> argList, T const & arg, TArgs &&...
     using TypeDesc = FmtArgDesc<T>;
 
     arg_desc.m_value = TypeDesc::storeValue(arg);
-    arg_desc.m_fmt_cb = [](void const * arg_value, wstd::span<char> dest) { return stringCastT(TypeDesc::extractValue(arg_value), dest); };
+    arg_desc.m_fmt_cb = [](void const * arg_value, wstd::span<char> dest) {
+        return stringCastT(TypeDesc::extractValue(arg_value), dest);
+    };
 
     expandFmtArgs(argList.subspan(1), args...);
 }
 
 namespace detail {
 
-usize stringFormat(wstd::span<char> dest_buffer, char const * const format, wstd::span<FmtArg> agrs);
+    usize stringFormat(wstd::span<char> dest_buffer, char const * const format,
+                       wstd::span<FmtArg> agrs);
 
-template <typename... TArgs>
-inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args)
-{
-    return sb::stringFormat({dest_buffer, (sptrdiff)capacity}, format, wstd::forward<TArgs>(args)...);
-}
+    template <typename... TArgs>
+    inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format,
+                              TArgs &&... args)
+    {
+        return sb::stringFormat({dest_buffer, (sptrdiff)capacity}, format,
+                                wstd::forward<TArgs>(args)...);
+    }
 
-}
+} // namespace detail
 
 template <typename... TArgs>
 inline usize stringFormat(wstd::span<char> dest_buffer, char const * const format, TArgs &&... args)

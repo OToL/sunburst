@@ -16,9 +16,9 @@ char * getWorkingDirectory(char * buff, usize buff_capacity)
     return _getcwd(buff, numericCast<int>(buff_capacity));
 }
 
-void outputDebugString(char const * msg) 
+void outputDebugString(char const * msg)
 {
     fputs(msg, stdout);
 }
 
-}
+} // namespace sb

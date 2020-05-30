@@ -15,7 +15,7 @@ public:
 
     GlobalHeapAllocator() = default;
 
-    explicit GlobalHeapAllocator(InitParams const &) {}
+    explicit GlobalHeapAllocator(InitParams const &) { }
 
     void * allocate(usize const size) override;
 

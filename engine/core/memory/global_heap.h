@@ -8,13 +8,12 @@ namespace sb {
 
 class GlobalHeap
 {
-    GlobalHeap() {}
-    ~GlobalHeap() {}
+    GlobalHeap() { }
+    ~GlobalHeap() { }
 
     friend GlobalHeap * getGlobalHeap();
 
 public:
-
     void * allocate(usize const size);
 
     void * allocate(usize const size, Alignment const alignment);

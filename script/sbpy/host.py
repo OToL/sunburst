@@ -18,20 +18,16 @@ def GetExeExt():
     curr_system = platform.system().lower()
     exeExt = "unknown"
     
-    if (curr_system == "darwin"):    
+    if (curr_system == "darwin") or (curr_system == "linux"):    
         exeExt = ""
+    elif (curr_system == "windows"):
+        exeExt = ".exe"
 
     return exeExt
 
 def GetExeFileName(name):
-    
-    curr_system = platform.system().lower()
-    exe_name = ""
-    
-    if (curr_system == "darwin") or (curr_system == "linux"):    
-        exe_name = name
 
-    return exe_name
+    return name + GetExeExt()
 
 def GetPlatformDirName():
 
@@ -42,13 +38,15 @@ def GetPlatformDirName():
         host_full_id = "macos_x86_64"
     elif (curr_system == "linux"):
         host_full_id = "linux_x86_64"
+    elif (curr_system == "windows"):
+        host_full_id = "windows_x86_64"
 
     return host_full_id
 
 def GetUtlBinDirPath():
 
-    return os.path.join(os.path.dirname(__file__), "..", "..", "..", "bin", GetPlatformDirName())
+    return os.path.join(os.path.dirname(__file__), "..", "..", "extern", "app", GetPlatformDirName())
 
 def GetEngineSrcDirPath():
 
-    return os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", "src")
+    return os.path.join(os.path.dirname(__file__), "..", "..", "engine")

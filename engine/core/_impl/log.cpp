@@ -34,4 +34,4 @@ void setLogHandler(LogHandler const & hdl, void * user_data)
     gs_log_user_data = user_data;
 }
 
-} // namespace sb
+} // namespace sb::detail

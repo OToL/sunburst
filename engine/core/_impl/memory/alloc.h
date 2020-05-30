@@ -62,15 +62,18 @@ struct MemoryOperatorHelper
         }
         else
         {
-            usize const required_padding =
-                (alignof(TType) <= m_allocator.getAlignment()) ? sb::alignUp(sizeof(ArrayInfo), alignof(TType)) : (alignof(TType) + sizeof(ArrayInfo));
+            usize const required_padding = (alignof(TType) <= m_allocator.getAlignment())
+                                               ? sb::alignUp(sizeof(ArrayInfo), alignof(TType))
+                                               : (alignof(TType) + sizeof(ArrayInfo));
             usize const total_size = required_padding + sizeof(TType) * count;
 
             ui8 * const mem_ptr = reinterpret_cast<ui8 *>(m_allocator.allocate(total_size));
-            ui8 * const client_ptr = reinterpret_cast<ui8 *>(alignUp(reinterpret_cast<uiptr>(mem_ptr + sizeof(ArrayInfo)), alignof(TType)));
+            ui8 * const client_ptr = reinterpret_cast<ui8 *>(
+                alignUp(reinterpret_cast<uiptr>(mem_ptr + sizeof(ArrayInfo)), alignof(TType)));
             client_obj = reinterpret_cast<TType *>(client_ptr);
 
-            ArrayInfo * const array_info = reinterpret_cast<ArrayInfo *>(client_ptr - sizeof(ArrayInfo));
+            ArrayInfo * const array_info =
+                reinterpret_cast<ArrayInfo *>(client_ptr - sizeof(ArrayInfo));
             *array_info = {(usize)(client_ptr - mem_ptr), count};
 
             for (usize obj_idx = 0; obj_idx != count; ++obj_idx)
@@ -107,7 +110,8 @@ struct MemoryOperatorHelper
             else
             {
                 ui8 * const objs_ptr = reinterpret_cast<ui8 *>(ptr);
-                ArrayInfo * const array_info = reinterpret_cast<ArrayInfo *>(objs_ptr - sizeof(ArrayInfo));
+                ArrayInfo * const array_info =
+                    reinterpret_cast<ArrayInfo *>(objs_ptr - sizeof(ArrayInfo));
 
                 ui8 * const base_ptr = objs_ptr - array_info->m_base_offset;
 
@@ -165,8 +169,7 @@ struct MemoryOperatorHelperDeleteArray : protected MemoryOperatorHelper<TType>
     using BaseClass::MemoryOperatorHelper;
 };
 
-}
-
+} // namespace sb::detail
 
 void * operator new(sb::usize byte_count);
 

@@ -1,13 +1,11 @@
 #include <core/types.h>
 #include <core/container/vector.h>
 
-namespace sb
-{
+namespace sb {
 
 class TestAllocator
 {
 public:
-
     struct Stats
     {
         size_t m_alloc_count = 0U;
@@ -34,16 +32,15 @@ public:
     }
 
 private:
-
     struct AllocDesc
     {
         AllocDesc(void * mem_ptr, size_t size)
             : m_mem(mem_ptr)
             , m_size(size)
-        {            
+        {
         }
 
-        void * m_mem = nullptr; 
+        void * m_mem = nullptr;
         size_t m_size = 0ULL;
     };
 
@@ -51,4 +48,4 @@ private:
     Vector<AllocDesc> m_allocs;
 };
 
-}
+} // namespace sb

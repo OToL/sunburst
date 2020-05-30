@@ -13,7 +13,6 @@ class RingBuffer
     sbCopyProtect(RingBuffer);
 
 public:
-    
     RingBuffer(usize capacity, AllocatorView const & alloc)
         : m_begin(0)
         , m_capacity(capacity)
@@ -30,7 +29,8 @@ public:
         , m_size(0)
     {
         sbAssert(0 != capacity);
-        m_data = allocateUnique<ui8[], AllocatorView>(getGlobalHeapView(), capacity * sizeof(TType));
+        m_data =
+            allocateUnique<ui8[], AllocatorView>(getGlobalHeapView(), capacity * sizeof(TType));
     }
 
     ~RingBuffer()
@@ -52,7 +52,8 @@ public:
         }
         else
         {
-            TType & prevItem = reinterpret_cast<TType *>(m_data.get())[(m_begin + m_size) % m_capacity];
+            TType & prevItem =
+                reinterpret_cast<TType *>(m_data.get())[(m_begin + m_size) % m_capacity];
             prevItem.~TType();
             prevItem = val;
 
@@ -98,7 +99,7 @@ public:
     }
 
 private:
-    UniquePtr<ui8[], AllocatorViewDelete<ui8 []>> m_data;
+    UniquePtr<ui8[], AllocatorViewDelete<ui8[]>> m_data;
     usize m_begin;
     usize m_capacity;
     usize m_size;

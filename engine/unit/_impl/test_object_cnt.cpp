@@ -41,16 +41,16 @@ TestObjectCnt::TestObjectCnt(TestObjectCnt const & src)
     ++gs_stats.m_valid_object_count;
 }
 
-TestObjectCnt& TestObjectCnt::operator = (TestObjectCnt const & src)
+TestObjectCnt & TestObjectCnt::operator=(TestObjectCnt const & src)
 {
     sbAssert(m_valid && src.m_valid);
-    
+
     m_id = src.m_id;
 
     return *this;
 }
 
-TestObjectCnt& TestObjectCnt::operator = (TestObjectCnt &&src)
+TestObjectCnt & TestObjectCnt::operator=(TestObjectCnt && src)
 {
     sbAssert(src.m_valid);
 
@@ -65,7 +65,7 @@ TestObjectCnt& TestObjectCnt::operator = (TestObjectCnt &&src)
     {
         m_valid = true;
     }
-    
+
     src.m_valid = false;
 
     return *this;
@@ -83,12 +83,12 @@ TestObjectCnt::~TestObjectCnt()
     }
 }
 
-void TestObjectCnt::restStats() 
+void TestObjectCnt::restStats()
 {
     gs_stats = {};
 }
 
-TestObjectCnt::Stats TestObjectCnt::getStats()  
+TestObjectCnt::Stats TestObjectCnt::getStats()
 {
     return gs_stats;
 }
@@ -97,7 +97,7 @@ void TestObjectCnt::initSequence(wstd::span<TestObjectCnt> objects, usize start_
 {
     usize obj_id = start_id;
 
-    for(auto & obj : objects)
+    for (auto & obj : objects)
     {
         obj.setId(obj_id);
         ++obj_id;
@@ -108,7 +108,7 @@ bool TestObjectCnt::areSequencial(wstd::span<TestObjectCnt> objects, usize start
 {
     usize obj_id = start_id;
 
-    for(auto const & obj : objects)
+    for (auto const & obj : objects)
     {
         if (obj_id != obj.getId())
         {
@@ -121,20 +121,19 @@ bool TestObjectCnt::areSequencial(wstd::span<TestObjectCnt> objects, usize start
     return true;
 }
 
-
-bool operator == (TestObjectCnt::Stats const & stats, usize val)
+bool operator==(TestObjectCnt::Stats const & stats, usize val)
 {
     return (stats.m_object_count == val) && (stats.m_valid_object_count == val);
 }
 
-bool operator == (usize val, TestObjectCnt::Stats const & stats)
+bool operator==(usize val, TestObjectCnt::Stats const & stats)
 {
-    return operator == (stats, val);
+    return operator==(stats, val);
 }
 
-bool operator == (TestObjectCnt const & val1, TestObjectCnt const & val2)
+bool operator==(TestObjectCnt const & val1, TestObjectCnt const & val2)
 {
     return val1.getId() == val2.getId();
 }
 
-}
+} // namespace sb

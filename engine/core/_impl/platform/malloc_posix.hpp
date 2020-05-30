@@ -17,7 +17,8 @@ struct AllocHeader
 
 static inline usize sizeWithPadding(usize size, Alignment align)
 {
-    return (align <= SYS_MALLOC_DEFAULT_ALIGNMENT) ? (size + alignUp(sizeof(AllocHeader), align)) : (size + align + sizeof(AllocHeader));
+    return (align <= SYS_MALLOC_DEFAULT_ALIGNMENT) ? (size + alignUp(sizeof(AllocHeader), align))
+                                                   : (size + align + sizeof(AllocHeader));
 }
 
 static inline AllocHeader * dataToHeader(void * dataPtr)
@@ -37,7 +38,8 @@ void * malloc(usize size, Alignment alignment)
         notifyOOM(size, "malloc OOM");
     }
 
-    void * const aligned_mem_ptr = reinterpret_cast<void *>(alignUp(usize(mem_ptr + sizeof(AllocHeader)), alignment));
+    void * const aligned_mem_ptr =
+        reinterpret_cast<void *>(alignUp(usize(mem_ptr + sizeof(AllocHeader)), alignment));
 
     AllocHeader * const header = dataToHeader(aligned_mem_ptr);
     header->m_size = size;
@@ -68,4 +70,4 @@ usize mallocUsableSize(void * mem_ptr)
     return header->m_size;
 }
 
-} // namespace sb
+} // namespace sb::detail

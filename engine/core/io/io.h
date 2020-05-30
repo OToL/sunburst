@@ -17,10 +17,12 @@ enum class FileFormat : ui8
     Text
 };
 
-struct FileHdlTag {};
+struct FileHdlTag
+{
+};
 
 using FileHdl = Handle<FileHdlTag, ui32>;
 using FileSize = si64;
 using FilePos = si64;
 
-}
+} // namespace sb

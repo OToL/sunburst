@@ -10,13 +10,12 @@ namespace sb {
 class IFileSystemLayer
 {
 public:
-
     struct FileId
     {
         void * m_value;
     };
 
-    virtual ~IFileSystemLayer() {}
+    virtual ~IFileSystemLayer() { }
 
     virtual FileSize readFile(FileId hdl, ui8 * buffer, FileSize cnt) = 0;
 
@@ -33,4 +32,4 @@ public:
     virtual char const * getPhysicalPath() const = 0;
 };
 
-}
+} // namespace sb

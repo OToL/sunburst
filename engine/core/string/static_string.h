@@ -15,7 +15,6 @@ class StaticString
     static_assert(CAPACITY != 0, "StaticString cannot 0 as CAPACITY");
 
 public:
-
     StaticString()
     {
         clear();
@@ -44,7 +43,7 @@ public:
         m_len = strCpyT(m_data, src.c_str());
     }
 
-    ~StaticString() {}
+    ~StaticString() { }
 
     usize capacity() const
     {

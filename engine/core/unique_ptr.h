@@ -9,11 +9,10 @@
 namespace sb {
 
 // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0316r0.html
-template<class T, class TAllocator>
+template <class T, class TAllocator>
 class AllocatorDelete
 {
 public:
-
     using AllocatorType = TAllocator;
     using ValueType = wstd::remove_all_extents_t<T>;
     using PointerType = ValueType *;
@@ -29,15 +28,15 @@ public:
     {
     }
 
-    template<class OtherAllocator>
-    AllocatorDelete(OtherAllocator&& other) :
-        m_allocator(wstd::forward<OtherAllocator>(other))
+    template <class OtherAllocator>
+    AllocatorDelete(OtherAllocator && other)
+        : m_allocator(wstd::forward<OtherAllocator>(other))
     {
     }
 
     void operator()(PointerType p)
     {
-        if constexpr(wstd::is_array_v<T>)
+        if constexpr (wstd::is_array_v<T>)
         {
             sbDeleteArray(p, m_allocator);
         }
@@ -48,15 +47,13 @@ public:
     }
 
 private:
-
     AllocatorType m_allocator;
 };
 
-template<class T, class TAllocator>
+template <class T, class TAllocator>
 class AllocatorDelete<T, TAllocator &>
 {
 public:
-
     using AllocatorType = TAllocator;
     using ValueType = wstd::remove_all_extents_t<T>;
     using PointerType = ValueType *;
@@ -72,14 +69,14 @@ public:
     {
     }
 
-    AllocatorDelete(wstd::reference_wrapper<AllocatorType> other) :
-        m_allocator(other)
+    AllocatorDelete(wstd::reference_wrapper<AllocatorType> other)
+        : m_allocator(other)
     {
     }
 
     void operator()(PointerType p)
     {
-        if constexpr(wstd::is_array_v<T>)
+        if constexpr (wstd::is_array_v<T>)
         {
             sbDeleteArray(p, m_allocator.get());
         }
@@ -90,15 +87,13 @@ public:
     }
 
 private:
-
-    wstd::reference_wrapper<AllocatorType> m_allocator; 
+    wstd::reference_wrapper<AllocatorType> m_allocator;
 };
 
-template<class T>
+template <class T>
 class DefaultDelete
 {
 public:
-
     using PointerType = T *;
 
     template <class U>
@@ -117,11 +112,10 @@ public:
     }
 };
 
-template<class T>
-class DefaultDelete<T []>
+template <class T>
+class DefaultDelete<T[]>
 {
 public:
-
     using PointerType = T *;
 
     void operator()(PointerType p)
@@ -137,29 +131,38 @@ template <typename T, typename TDelete = DefaultDelete<T>>
 using UniquePtr = wstd::detail::unique_ptr<T, TDelete>;
 
 template <typename T>
-struct is_reference_wrapper : wstd::false_type {};
+struct is_reference_wrapper : wstd::false_type
+{
+};
 
 template <typename T>
-struct is_reference_wrapper<wstd::reference_wrapper<T>> : wstd::true_type {};
+struct is_reference_wrapper<wstd::reference_wrapper<T>> : wstd::true_type
+{
+};
 
-template<typename T, typename TAlloc, class... TArgs>
-auto allocateUnique(TAlloc const & alloc, TArgs&&... args) -> wstd::enable_if_t<!wstd::is_array_v<T>, UniquePtr<T, AllocatorDelete<T, TAlloc>>>
+template <typename T, typename TAlloc, class... TArgs>
+auto allocateUnique(TAlloc const & alloc, TArgs &&... args)
+    -> wstd::enable_if_t<!wstd::is_array_v<T>, UniquePtr<T, AllocatorDelete<T, TAlloc>>>
 {
     using DeleteType = AllocatorDelete<T, TAlloc>;
-    
-    return UniquePtr<T, DeleteType>{sbNew(T, alloc)(wstd::forward<TArgs>(args)...), DeleteType{alloc}};
+
+    return UniquePtr<T, DeleteType>{sbNew(T, alloc)(wstd::forward<TArgs>(args)...),
+                                    DeleteType{alloc}};
 }
 
-template<class T, typename TAlloc, class... TArgs>
-auto allocateUnique(wstd::reference_wrapper<TAlloc> alloc, TArgs&&... args) -> wstd::enable_if_t<!wstd::is_array_v<T>, UniquePtr<T, AllocatorDelete<T, TAlloc &>>>
+template <class T, typename TAlloc, class... TArgs>
+auto allocateUnique(wstd::reference_wrapper<TAlloc> alloc, TArgs &&... args)
+    -> wstd::enable_if_t<!wstd::is_array_v<T>, UniquePtr<T, AllocatorDelete<T, TAlloc &>>>
 {
     using DeleteType = AllocatorDelete<T, TAlloc &>;
 
-    return UniquePtr<T, DeleteType>{sbNew(T, alloc.get())(wstd::forward<TArgs>(args)...), DeleteType{alloc}};
+    return UniquePtr<T, DeleteType>{sbNew(T, alloc.get())(wstd::forward<TArgs>(args)...),
+                                    DeleteType{alloc}};
 }
 
-template<typename T, typename TAlloc>
-auto allocateUnique(TAlloc const & alloc, usize cnt) -> wstd::enable_if_t<wstd::is_array_v<T>, UniquePtr<T, AllocatorDelete<T, TAlloc>>>
+template <typename T, typename TAlloc>
+auto allocateUnique(TAlloc const & alloc, usize cnt)
+    -> wstd::enable_if_t<wstd::is_array_v<T>, UniquePtr<T, AllocatorDelete<T, TAlloc>>>
 {
     using DeleteType = AllocatorDelete<T, TAlloc>;
     using ValueType = wstd::remove_all_extents_t<T>;
@@ -167,8 +170,9 @@ auto allocateUnique(TAlloc const & alloc, usize cnt) -> wstd::enable_if_t<wstd::
     return UniquePtr<T, DeleteType>{sbNewArray(ValueType, alloc)[cnt], DeleteType{alloc}};
 }
 
-template<class T, typename TAlloc, class... TArgs>
-auto allocateUnique(wstd::reference_wrapper<TAlloc> alloc, usize cnt) -> wstd::enable_if_t<wstd::is_array_v<T>, UniquePtr<T, AllocatorDelete<T, TAlloc &>>>
+template <class T, typename TAlloc, class... TArgs>
+auto allocateUnique(wstd::reference_wrapper<TAlloc> alloc, usize cnt)
+    -> wstd::enable_if_t<wstd::is_array_v<T>, UniquePtr<T, AllocatorDelete<T, TAlloc &>>>
 {
     using DeleteType = AllocatorDelete<T, TAlloc &>;
     using ValueType = wstd::remove_all_extents_t<T>;
@@ -176,32 +180,34 @@ auto allocateUnique(wstd::reference_wrapper<TAlloc> alloc, usize cnt) -> wstd::e
     return UniquePtr<T, DeleteType>{sbNewArray(ValueType, alloc.get())[cnt], DeleteType{alloc}};
 }
 
-template<class T>
+template <class T>
 auto makeUnique(usize cnt) -> wstd::enable_if_t<wstd::is_array_v<T>, UniquePtr<T>>
 {
     return UniquePtr<T>{sbNewArray(wstd::remove_all_extents_t<T>)[cnt]};
 }
 
-template<class T, class... TArgs>
-auto makeUnique(TArgs&&... args) -> wstd::enable_if_t<!wstd::is_array_v<T>, UniquePtr<T>>
+template <class T, class... TArgs>
+auto makeUnique(TArgs &&... args) -> wstd::enable_if_t<!wstd::is_array_v<T>, UniquePtr<T>>
 {
     return UniquePtr<T>{sbNew(T)(wstd::forward<TArgs>(args)...)};
 }
 
-}
+} // namespace sb
 
 namespace SB_STD_NS {
 
-    template< class U ,class T,  class A> 
-    auto static_pointer_cast( std::unique_ptr<T, A> && r ) noexcept
-    {
-        return std::unique_ptr<U, typename A::template RebindDelete<U>>{static_cast<U *>(r.release()), r.get_deleter()};
-    }
-
-    template< class U , class T, class A> 
-    auto static_pointer_cast( std::unique_ptr<T, A> &  r ) noexcept
-    {
-        return std::unique_ptr<U, typename A::template RebindDelete<U>>{static_cast<U *>(r.release()), r.get_deleter()};
-    }
-
+template <class U, class T, class A>
+auto static_pointer_cast(std::unique_ptr<T, A> && r) noexcept
+{
+    return std::unique_ptr<U, typename A::template RebindDelete<U>>{static_cast<U *>(r.release()),
+                                                                    r.get_deleter()};
 }
+
+template <class U, class T, class A>
+auto static_pointer_cast(std::unique_ptr<T, A> & r) noexcept
+{
+    return std::unique_ptr<U, typename A::template RebindDelete<U>>{static_cast<U *>(r.release()),
+                                                                    r.get_deleter()};
+}
+
+} // namespace SB_STD_NS

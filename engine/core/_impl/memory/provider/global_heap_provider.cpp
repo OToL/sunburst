@@ -3,9 +3,7 @@
 
 namespace sb {
 
-GlobalHeapProvider::GlobalHeapProvider()
-{
-}
+GlobalHeapProvider::GlobalHeapProvider() { }
 
 MemoryArena GlobalHeapProvider::allocate(usize const size)
 {
@@ -17,9 +15,9 @@ MemoryArena GlobalHeapProvider::allocate(usize const size, Alignment const align
     return {sbMalloc(size, alignment), size};
 }
 
-void GlobalHeapProvider::deallocate(MemoryArena const &arena)
+void GlobalHeapProvider::deallocate(MemoryArena const & arena)
 {
     sbFree(arena.m_ptr);
 }
 
-}
+} // namespace sb

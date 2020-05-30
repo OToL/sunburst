@@ -32,7 +32,7 @@ usize decimalToString(T src, wstd::span<char> & dest)
             }
             else
             {
-                dest[len-1] = 0;
+                dest[len - 1] = 0;
             }
         }
         else

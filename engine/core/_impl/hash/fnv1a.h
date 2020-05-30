@@ -48,7 +48,8 @@ constexpr inline FNV1a64::Value FNV1a64::compute(ui8 const * const buffer, usize
     {
         hval ^= (Value)*bp++;
         hval *= PRIME;
-        // hval `+= (hval << 1) + (hval << 4) + (hval << 5) + (hval << 7) + (hval << 8) + (hval << 40);
+        // hval `+= (hval << 1) + (hval << 4) + (hval << 5) + (hval << 7) + (hval << 8) +
+        // (hval << 40);
     }
 
     return hval;
@@ -64,7 +65,8 @@ constexpr inline FNV1a64::Value FNV1a64::compute(char const * const str)
     {
         hval ^= (Value)*s++;
         hval *= PRIME;
-        // hval += (hval << 1) + (hval << 4) + (hval << 5) + (hval << 7) + (hval << 8) + (hval << 40);
+        // hval += (hval << 1) + (hval << 4) + (hval << 5) + (hval << 7) + (hval << 8) +
+        // (hval << 40);
     }
 
     return hval;

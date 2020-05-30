@@ -38,7 +38,8 @@ struct FileSystem
 
     static FileHdl openFileRead(char const * path, FileFormat fmt = FileFormat::Bin);
 
-    static FileHdl openFileWrite(char const * path, FileWriteMode mode = FileWriteMode::APPEND, FileFormat fmt = FileFormat::Bin);
+    static FileHdl openFileWrite(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
+                                 FileFormat fmt = FileFormat::Bin);
 
     static FileHdl createFile(char const * path, FileFormat fmt = FileFormat::Bin);
 
