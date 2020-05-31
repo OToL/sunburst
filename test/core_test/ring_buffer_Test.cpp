@@ -3,7 +3,7 @@
 #include <gtest/allocator_stats.h>
 #include <gtest/gtest_common.h>
 
-namespace sb { namespace test {
+using namespace sb;
 
 struct TestRingItem
 {
@@ -193,5 +193,3 @@ TEST_F(RingBuffertemCDTorFixture, DtorCleanUp)
 
     EXPECT_EQ(TestRingItemCDtor::ms_ctor_count, TestRingItemCDtor::ms_dtor_count);
 }
-
-}} // namespace sb::test

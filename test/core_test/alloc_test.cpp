@@ -5,7 +5,7 @@
 #include <gtest/gtest_common.h>
 #include <gtest/object_tracker.h>
 
-namespace sb::test {
+using namespace std;
 
 class MemoryOperatorFixture : public testing::Test
 {
@@ -196,6 +196,4 @@ TEST_F(MEMORY_OPERATOR, NEW_DELETE_ARRAY_TIVIAL)
 
     EXPECT_EQ(test_allocator.getStats().m_alloc_count, 0U);
     EXPECT_EQ(test_allocator.getStats().m_allocated_byte, 0U);
-}
-
 }

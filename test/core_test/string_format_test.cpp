@@ -4,7 +4,7 @@
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
 
-namespace sb {
+using namespace sb;
 
 TEST_CASE("String format without argument", "[string_format]")
 {
@@ -159,8 +159,6 @@ TEST_CASE("String format numeric arguments", "[string_format]")
         REQUIRE_THAT(test, Catch::Equals("-1099511627775"));
         REQUIRE(byte_cnt == 14U);
     }
-}
-
 }
 
 #include <catch2/test_epilog.h>

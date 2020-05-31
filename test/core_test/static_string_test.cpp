@@ -3,7 +3,7 @@
 #include <gtest/allocator_stats.h>
 #include <gtest/gtest_common.h>
 
-namespace sb { namespace test {
+using namespace sb;
 
 TEST(STATIC_STRING, DefaultCtor)
 {
@@ -138,5 +138,3 @@ TEST(STATIC_STRING, PushBack)
     EXPECT_EQ(testStr.back(), '/');
     EXPECT_EQ(testStr.length(), 7ULL);
 }
-
-}} // namespace sb::test

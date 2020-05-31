@@ -7,7 +7,7 @@
 #include <gtest/gtest_common.h>
 #include <gtest/allocator_stats.h>
 
-namespace sb::test {
+using namespace sb;
 
 TEST(STL_ALLOCATOR, AllocatorView)
 {
@@ -32,6 +32,4 @@ TEST(STL_ALLOCATOR, AllocatorView)
 
     EXPECT_EQ(allocator_test.getStats().m_alloc_count, 0U);
     EXPECT_GE(allocator_test.getStats().m_allocated_byte, 0U);
-}
-
 }

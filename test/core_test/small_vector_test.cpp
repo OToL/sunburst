@@ -12,7 +12,7 @@
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
 
-namespace sb {
+using namespace sb;
 
 class SmallVectorFixture
 {
@@ -1397,8 +1397,6 @@ TEST_CASE_METHOD(SmallVectorFixture, "SmallVector without allocator has not over
 {
     // sizeof(m_begin) + sizeof(m_end) + sizeof(m_storage_end) + sizeof(small storage test = void *)
     STATIC_REQUIRE(sizeof(SmallVector<b8, sizeof(void *)>) == 4 * sizeof(void *));
-}
-
 }
 
 #include <catch2/test_epilog.h>

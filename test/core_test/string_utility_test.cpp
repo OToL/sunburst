@@ -5,7 +5,7 @@
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
 
-namespace sb {
+using namespace sb;
 
 static char STRCPYT_TEST_SRC[] = "Hello World";
 static const usize STRCPYT_TEST_LEN = wstd::size(STRCPYT_TEST_SRC) - 1;
@@ -61,7 +61,5 @@ TEST_CASE("strStartWith", "[string_utility]")
         REQUIRE_FALSE(strStartWith("Hello", "Helli"));
     }
 }
-
-} // namespace sb::test
 
 #include <catch2/test_epilog.h>

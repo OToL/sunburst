@@ -8,7 +8,7 @@
 
 #include <libc++/algorithm>
 
-namespace sb::test {
+namespace sb;
 
 struct TestPoolObj
 {
@@ -146,5 +146,3 @@ TEST(POOL_ALLOCATOR, AllocateDeallocate)
 
     getGlobalHeap()->deallocate(pool_base);
 }
-
-} // namespace sb::test

@@ -2,7 +2,7 @@
 
 #include <gtest/gtest_common.h>
 
-namespace sb::test {
+using namespace sb;
 
 TEST(NULL_ALLOCATOR, Allocate)
 {
@@ -25,5 +25,3 @@ TEST(NULL_ALLOCATOR, AlignedAllocate)
 
     alloc.deallocate(mem_ptr);
 }
-
-} // namespace sb::test

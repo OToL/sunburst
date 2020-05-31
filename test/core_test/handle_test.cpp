@@ -3,7 +3,7 @@
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
 
-namespace sb {
+using namespace sb;
 
 struct TestHdl {};
 
@@ -32,8 +32,6 @@ TEST_CASE("Handle equality", "[handle]")
 
     REQUIRE(test_hdl == test_hdl);
     REQUIRE_FALSE(test_hdl == test_hdl2);
-}
-
 }
 
 #include <catch2/test_epilog.h>

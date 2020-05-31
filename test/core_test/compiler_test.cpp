@@ -3,7 +3,7 @@
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
 
-namespace sb { 
+using namespace sb; 
 
 #define SB_CTF_TEST SB_CTF_ENABLED
 
@@ -18,8 +18,6 @@ TEST_CASE("Feature enabled", "[compiler]")
 TEST_CASE("Compile Time Feature disabled", "[compiler]")
 {
     STATIC_REQUIRE(!sbCTFIsEnabled(TEST));
-}
-
 }
 
 #include <catch2/test_epilog.h>

@@ -5,7 +5,7 @@
 #include <gtest/object_tracker.h>
 #include <gtest/allocator_stats.h>
 
-namespace sb::test {
+using namespace sb;
 
 class UniquePtrFixture : public testing::Test
 {
@@ -111,6 +111,4 @@ TEST_F(UNIQUE_PTR, AllocateRefUniqueArray)
 
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0U);
     EXPECT_EQ(alloc.getStats().m_alloc_count, 0U);
-}
-
 }

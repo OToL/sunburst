@@ -6,7 +6,7 @@
 
 #include <libc++/type_traits>
 
-namespace sb::test {
+using namespace sb;
 
 class StaticVectorTestFixture : public testing::Test
 {
@@ -228,6 +228,4 @@ TEST_F(STATIC_ARRAY, ALIGNED_STORAGE)
     {
         EXPECT_EQ(aligned_array[idx].m_x, idx);
     }
-}
-
 }

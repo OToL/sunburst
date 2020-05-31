@@ -4,7 +4,7 @@
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
 
-namespace sb {
+using namespace sb;
 
 static ui8 const FNV64_ARRAY_TEST[] = {0x64, 0x7C, 0x31, 0xEC, 0xFD};
 static FNV1a64::Value const FNV64_ARRAY_TEST_HASH = 0x23ae0f3c3e4e7adfULL;
@@ -31,8 +31,6 @@ TEST_CASE("String FNV64 hash", "[fnv64]")
     FNV1a64::Value const fnv_val = FNV1a64::compute(FNV64_STR_TEST);
 
     REQUIRE(FNV64_STR_TEST_HASH == fnv_val);
-}
-
 }
 
 #include <catch2/test_epilog.h>

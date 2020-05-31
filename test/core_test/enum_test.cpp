@@ -4,7 +4,7 @@
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
 
-namespace sb {
+using namespace sb;
 
 enum class TestMask : ui8
 {
@@ -26,8 +26,6 @@ TEST_CASE("Constexpr masks", "[enum]")
 {
     STATIC_REQUIRE(getEnumValue(TestMask::VALUE0) == 1);
     STATIC_REQUIRE(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1) == 0b11U);
-}
-
 }
 
 #include <catch2/test_epilog.h>

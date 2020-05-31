@@ -3,7 +3,7 @@
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
 
-namespace sb {
+using namespace sb;
 
 TEST_CASE("String to buffer", "[conversion]")
 {
@@ -79,8 +79,6 @@ TEST_CASE("Unsigned integral to buffer", "[conversion]")
     byte_cnt = stringCastT((ui64)18446744073709551615ULL, test_buffer);
     REQUIRE(0 == strcmp("18446744073709551615", test_buffer));
     REQUIRE(byte_cnt == 20U);
-}
-
 }
 
 #include <catch2/test_epilog.h>

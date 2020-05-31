@@ -3,7 +3,7 @@
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
 
-namespace sb {
+using namespace sb;
 
 static constexpr char const * const HASH_STR_TEST_STRING = "Hello Hash";
 
@@ -45,8 +45,6 @@ TEST_CASE("Hashstr assignment", "[hashstr]")
 TEST_CASE("Constexpr check", "[hashstr]")
 {
     STATIC_REQUIRE((HashStr::HashPolicy::compute(HASH_STR_TEST_STRING) == HashStr(HASH_STR_TEST_STRING).m_value));
-}
-
 }
 
 #include <catch2/test_epilog.h>

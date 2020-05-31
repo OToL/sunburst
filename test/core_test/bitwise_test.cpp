@@ -3,7 +3,7 @@
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
 
-namespace sb {
+using namespace sb;
 
 TEST_CASE("Power of 2 chek", "[bitwise]")
 {
@@ -91,8 +91,6 @@ TEST_CASE("Power of 2 rounding", "[bitwise]")
         REQUIRE(prevPowerOf2(123U) == 64U);
         REQUIRE(prevPowerOf2(129U) == 128U);
     } 
-}
-
 }
 
 #include <catch2/test_epilog.h>

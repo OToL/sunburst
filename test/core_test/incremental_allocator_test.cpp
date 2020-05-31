@@ -6,7 +6,7 @@
 
 #include <gtest/gtest_common.h>
 
-namespace sb::test {
+using namespace sb;
 
 using TestIncrementalAllocator = IncrementalAllocator<MemoryArenaProvider>;
 constexpr Alignment TEST_ALLOC_DEFAULT_ALIGN = ALIGN_8B;
@@ -87,6 +87,3 @@ TEST(INCREMENTAL_ALLOCATOR, DeallocateAll)
         --test_count;
     }
 }
-
-
-} // namespace sb::test
