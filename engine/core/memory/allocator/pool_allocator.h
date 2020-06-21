@@ -5,7 +5,7 @@
 #include <core/memory/memory.h>
 #include <core/conversion.h>
 #include <core/error.h>
-#include <core/bitwise.h>
+#include <core/bit.h>
 #include "allocator.h"
 
 namespace sb {

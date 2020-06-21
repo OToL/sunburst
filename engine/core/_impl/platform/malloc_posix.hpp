@@ -1,7 +1,7 @@
 #include <core/memory/memory.h>
 #include <core/types.h>
 #include <core/error.h>
-#include <core/bitwise.h>
+#include <core/bit.h>
 #include <core/string/utility.h>
 #include <core/conversion.h>
 

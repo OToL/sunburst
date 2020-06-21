@@ -1,4 +1,4 @@
-#include <core/bitwise.h>
+#include <core/bit.h>
 
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>

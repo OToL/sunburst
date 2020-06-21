@@ -3,7 +3,7 @@
 #include <core/types.h>
 #include <core/memory/memory.h>
 #include <core/memory/memory_arena.h>
-#include <core/bitwise.h>
+#include <core/bit.h>
 #include <core/error.h>
 #include "allocator.h"
 

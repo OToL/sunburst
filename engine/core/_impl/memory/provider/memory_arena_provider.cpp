@@ -1,5 +1,5 @@
 #include <core/memory/provider/memory_arena_provider.h>
-#include <core/bitwise.h>
+#include <core/bit.h>
 #include <core/error.h>
 
 namespace sb {

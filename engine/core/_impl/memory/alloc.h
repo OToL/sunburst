@@ -1,7 +1,7 @@
 #pragma once
 
 #include <core/types.h>
-#include <core/bitwise.h>
+#include <core/bit.h>
 #include <core/memory/allocator/allocator_view.h>
 
 #include <libc++/type_traits>

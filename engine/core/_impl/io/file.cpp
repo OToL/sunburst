@@ -1,6 +1,6 @@
 #include <core/io/file.h>
 #include <core/io/file_system.h>
-#include <core/bitwise.h>
+#include <core/bit.h>
 #include <core/error.h>
 
 namespace sb {

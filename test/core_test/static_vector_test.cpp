@@ -1,5 +1,5 @@
 #include <core/container/static_vector.h>
-#include <core/bitwise.h>
+#include <core/bit.h>
 
 #include <gtest/gtest_common.h>
 #include <gtest/object_tracker.h>

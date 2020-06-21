@@ -1,6 +1,6 @@
 #pragma once
 
-#include "build_target_cfg.h"
+#include "config.h"
 #include <core/types.h>
 
 #include <libc++/utility>
