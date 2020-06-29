@@ -17,15 +17,15 @@ struct Handle
     {
     }
 
-    constexpr TStorage get() const
-    {
-        return m_value;
-    }
-
     constexpr void reset()
     {
         m_value = TStorage{};
     }
+
+    constexpr StorageType get() const
+    {
+        return m_value;
+    } 
 
     constexpr b8 isNull() const
     {

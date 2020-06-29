@@ -27,8 +27,6 @@ static_assert(FileSystem::MAX_CONCURRENT_OPENED_FILES <= 0xFFFFU);
 
 class FileSystemImpl
 {
-    sbCopyProtect(FileSystemImpl);
-
 public:
     using FileGen = ui16;
 
@@ -77,6 +75,9 @@ public:
             }
         }
     }
+
+    FileSystemImpl & operator=(FileSystemImpl const &) = delete;
+    FileSystemImpl(FileSystemImpl const &) = delete;
 
     ~FileSystemImpl(){sbWarn(0 == m_opened_file_cnt,
                              "Not all files have been closed before destroying the File System")}

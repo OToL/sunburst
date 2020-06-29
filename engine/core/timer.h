@@ -1,5 +1,7 @@
 #pragma once
 
+#if 0
+
 #include "types.h"
 
 #if defined(SB_PLATFORM_WINDOWS)
@@ -32,4 +34,6 @@ struct Timer
 #    include "_impl/platform/timer_win.h"
 #else
 #    error "Unhandled target platform"
+#endif
+
 #endif

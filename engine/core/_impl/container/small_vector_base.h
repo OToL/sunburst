@@ -5,8 +5,6 @@ namespace sb::detail {
 template <typename TType, typename TAllocator>
 class SmallVectorBase
 {
-    sbCopyProtect(SmallVectorBase);
-
 public:
     using value_type = TType;
     using reference = TType &;
@@ -19,6 +17,9 @@ public:
     using difference_type = sptrdiff;
 
 protected:
+    SmallVectorBase & operator=(SmallVectorBase const &) = delete;
+    SmallVectorBase(SmallVectorBase const &) = delete;
+
     SmallVectorBase() = default;
 
     struct Impl : public TAllocator

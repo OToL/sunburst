@@ -1,9 +1,9 @@
 #pragma once
 
 #if defined(SB_PLATFORM_WINDOWS)
-#    include "_impl/platform/os_win.h"
+#    include "_impl/api/windows/os_win.h"
 #elif defined(SB_PLATFORM_LINUX)
-#    include "_impl/platform/os_linux.h"
+#    include "_impl/api/linux/os_linux.h"
 #else
 #    error "Unhandled platform"
 #endif

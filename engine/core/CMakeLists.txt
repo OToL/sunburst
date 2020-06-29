@@ -18,9 +18,9 @@ add_library(core STATIC
     _impl/memory/global_heap.cpp
     _impl/memory/memory.cpp
     _impl/memory/alloc.cpp
-    _impl/platform/os_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
-    _impl/platform/file_system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
-    _impl/platform/malloc_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp)
+    _impl/api/${SB_TARGET_PLATFORM_ID}/os_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
+    _impl/api/${SB_TARGET_PLATFORM_ID}/file_system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
+    _impl/api/${SB_TARGET_PLATFORM_ID}/malloc_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp)
  
 add_library(sb::core ALIAS core)
 

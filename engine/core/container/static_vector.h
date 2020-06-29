@@ -16,8 +16,6 @@ namespace sb {
 template <typename TType, usize CAPACITY>
 class StaticVector
 {
-    sbCopyProtect(StaticVector);
-
 public:
     using value_type = TType;
     using reference = TType &;
@@ -32,6 +30,9 @@ public:
         : m_size(0)
     {
     }
+
+    StaticVector & operator=(StaticVector const &) = delete;
+    StaticVector(StaticVector const &) = delete;
 
     ~StaticVector()
     {

@@ -4,6 +4,8 @@
 #    error "Unsupported compiler"
 #endif
 
+#define sb_restrict_detail
+
 namespace sb {
 inline void debugBreak()
 {

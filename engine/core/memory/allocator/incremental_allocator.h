@@ -12,7 +12,6 @@ namespace sb {
 template <typename TMemProvider>
 class IncrementalAllocator final : public IAllocator
 {
-    sbCopyProtect(IncrementalAllocator);
     sbBaseClass(IAllocator);
 
 public:
@@ -39,6 +38,9 @@ public:
         , m_top(reinterpret_cast<ui8 *>(m_arena.m_ptr))
     {
     }
+
+    IncrementalAllocator & operator=(IncrementalAllocator const &) = delete;
+    IncrementalAllocator(IncrementalAllocator const &) = delete;
 
     ~IncrementalAllocator() override
     {

@@ -9,8 +9,6 @@ namespace sb {
 
 class File
 {
-    sbCopyProtect(File);
-
     void reset()
     {
         m_hdl.reset();
@@ -29,6 +27,9 @@ public:
     {
         src.m_hdl.reset();
     }
+
+    File & operator=(File const &) = delete;
+    File(File const &) = delete;
 
     ~File();
 

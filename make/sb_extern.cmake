@@ -28,6 +28,6 @@ function(sb_setup_extern)
         set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT}/lib/cmake/Catch2" PARENT_SCOPE)
     endif()
 
-    # set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT}/lib/cmake/Catch2" PARENT_SCOPE)
+    set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT}/lib/cmake/Catch2" PARENT_SCOPE)
 
 endfunction()

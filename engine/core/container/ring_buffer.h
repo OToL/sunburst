@@ -10,8 +10,6 @@ namespace sb {
 template <typename TType>
 class RingBuffer
 {
-    sbCopyProtect(RingBuffer);
-
 public:
     RingBuffer(usize capacity, AllocatorView const & alloc)
         : m_begin(0)
@@ -32,6 +30,9 @@ public:
         m_data =
             allocateUnique<ui8[], AllocatorView>(getGlobalHeapView(), capacity * sizeof(TType));
     }
+
+    RingBuffer & operator=(RingBuffer const &) = delete;
+    RingBuffer(RingBuffer const &) = delete;
 
     ~RingBuffer()
     {

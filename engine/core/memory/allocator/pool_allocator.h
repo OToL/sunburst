@@ -13,7 +13,6 @@ namespace sb {
 template <usize BLOCK_SIZE, Alignment BLOCK_ALIGNMENT, typename TMemProvider>
 class PoolAllocator final : public IAllocator
 {
-    sbCopyProtect(PoolAllocator);
     sbBaseClass(IAllocator);
 
     static constexpr usize ACTUAL_BLOCK_SIZE = alignUp(BLOCK_SIZE, BLOCK_ALIGNMENT);
@@ -83,6 +82,9 @@ public:
 
         initFreeList();
     }
+
+    PoolAllocator & operator=(PoolAllocator const &) = delete;
+    PoolAllocator(PoolAllocator const &) = delete;
 
     ~PoolAllocator() override
     {
