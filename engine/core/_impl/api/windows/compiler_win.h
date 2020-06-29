@@ -6,7 +6,7 @@
 
 #define _ENABLE_EXTENDED_ALIGNED_STORAGE
 
-#define sb_restrict_detail __restrict
+#define sb_restrict_internal __restrict
 
 namespace sb {
 __forceinline void debugBreak()

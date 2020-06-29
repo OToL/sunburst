@@ -10,7 +10,7 @@
 #    error "Unsupported compiler"
 #endif
 
-#define sb_restrict sb_restrict_detail
+#define sb_restrict sb_restrict_internal
 
 #define sbBaseClass(...) using BaseClass = __VA_ARGS__
 
