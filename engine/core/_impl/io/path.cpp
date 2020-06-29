@@ -19,8 +19,8 @@ b8 LogicPath::isValid(char const * path)
 char * PhysicPath::concat(wstd::span<char> base_path, char const * path_cat)
 {
     auto const base_path_capacity = base_path.size();
-    auto base_path_len = numericCast<sptrdiff>(strlen(base_path.data()));
-    auto const cat_len = numericCast<sptrdiff>(strlen(path_cat));
+    auto base_path_len = strlen(base_path.data());
+    auto const cat_len = strlen(path_cat);
     auto expected_len = base_path_len + cat_len;
 
     if (base_path[base_path_len - 1] != *PPath::SEPARATOR)

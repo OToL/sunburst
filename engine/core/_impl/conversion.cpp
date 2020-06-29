@@ -22,7 +22,7 @@ usize decimalToString(T src, wstd::span<char> & dest)
 
     if (res.ec == wstd::errc{})
     {
-        auto const len = wstd::distance(dest.data(), res.ptr);
+        auto const len = numericCast<usize>(wstd::distance(dest.data(), res.ptr));
 
         if (0 != len)
         {

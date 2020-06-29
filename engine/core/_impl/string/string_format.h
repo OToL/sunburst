@@ -108,7 +108,7 @@ inline usize stringFormat(wstd::span<char> dest_buffer, char const * const forma
     FmtArg arg_list[MAX_FMT_PARAM];
     expandFmtArgs(arg_list, args...);
 
-    return detail::stringFormat(dest_buffer, format, {arg_list, numericCast<sptrdiff>(arg_cnt)});
+    return detail::stringFormat(dest_buffer, format, {arg_list, arg_cnt});
 }
 
 } // namespace sb

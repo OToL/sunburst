@@ -89,7 +89,7 @@ usize stringFormat(wstd::span<char> dest_buffer, char const * const format, wstd
                     copied_bytes += args[(ui32)arg_idx].m_fmt_cb(
                         args[(ui32)arg_idx].m_value,
                         wstd::span<char>{dest_iter,
-                                         numericCast<sptrdiff>(dest_capacity - copied_bytes)});
+                                         dest_capacity - copied_bytes});
                     dest_iter = dest_buffer.data() + copied_bytes;
 
                     continue;
