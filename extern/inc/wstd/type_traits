@@ -1,34 +1,34 @@
 #pragma once
 
-#include "prolog.h"
+#include "base.h"
 
 #include SB_SRC_STD_INC(type_traits)
 
-namespace SB_STD_NS {
+namespace SB_WSTD_NS {
 
-    SB_STD_USE(is_array_v);
-    SB_STD_USE(is_integral);
-    SB_STD_USE(is_integral_v);
-    SB_STD_USE(is_arithmetic);
-    SB_STD_USE(is_signed);
-    SB_STD_USE(is_trivial);
-    SB_STD_USE(false_type);
-    SB_STD_USE(true_type);
-    SB_STD_USE(underlying_type);
-    SB_STD_USE(underlying_type_t);
-    SB_STD_USE(is_same);
-    SB_STD_USE(is_same_v);
-    SB_STD_USE(integral_constant);
-    SB_STD_USE(remove_cv_t);
-    SB_STD_USE(remove_reference_t);
-    SB_STD_USE(remove_all_extents);
-    SB_STD_USE(remove_all_extents_t);
-    SB_STD_USE(remove_pointer);
-    SB_STD_USE(enable_if_t);
-    SB_STD_USE(decay_t);
-    SB_STD_USE(declval);
-    SB_STD_USE(aligned_storage);
-    SB_STD_USE(void_t);
+    SB_SRC_STD_USE(is_array_v);
+    SB_SRC_STD_USE(is_integral);
+    SB_SRC_STD_USE(is_integral_v);
+    SB_SRC_STD_USE(is_arithmetic);
+    SB_SRC_STD_USE(is_signed);
+    SB_SRC_STD_USE(is_trivial);
+    SB_SRC_STD_USE(false_type);
+    SB_SRC_STD_USE(true_type);
+    SB_SRC_STD_USE(underlying_type);
+    SB_SRC_STD_USE(underlying_type_t);
+    SB_SRC_STD_USE(is_same);
+    SB_SRC_STD_USE(is_same_v);
+    SB_SRC_STD_USE(integral_constant);
+    SB_SRC_STD_USE(remove_cv_t);
+    SB_SRC_STD_USE(remove_reference_t);
+    SB_SRC_STD_USE(remove_all_extents);
+    SB_SRC_STD_USE(remove_all_extents_t);
+    SB_SRC_STD_USE(remove_pointer);
+    SB_SRC_STD_USE(enable_if_t);
+    SB_SRC_STD_USE(decay_t);
+    SB_SRC_STD_USE(declval);
+    SB_SRC_STD_USE(aligned_storage);
+    SB_SRC_STD_USE(void_t);
 
     template< class T >
     struct remove_cvref 
@@ -39,7 +39,7 @@ namespace SB_STD_NS {
     template< class T >
     using remove_cvref_t = typename wstd::remove_cvref<T>::type;
 
-namespace SB_STD_EXT_NS {
+namespace SB_WSTD_EXT_NS {
 
     template <typename ...>
     struct unreachable_t

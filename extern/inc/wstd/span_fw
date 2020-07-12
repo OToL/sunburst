@@ -2,10 +2,9 @@
 
 #include "base.h"
 
-#include SB_SRC_STD_INC(span)
-
 namespace SB_WSTD_NS {
 
-	SB_SRC_STD_USE(span);
+    template <class _Ty, size_t _Extent>
+    class span;
 
 }

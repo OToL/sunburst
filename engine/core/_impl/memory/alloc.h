@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/types.h>
+#include <core/base.h>
 #include <core/bit.h>
 #include <core/memory/allocator/allocator_view.h>
 

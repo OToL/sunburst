@@ -1,11 +1,11 @@
 #pragma once
 
-#include "prolog.h"
+#include "base.h"
 
 #include SB_SRC_STD_INC(limits)
 
-namespace SB_STD_NS {
+namespace SB_WSTD_NS {
 
-	SB_STD_USE(numeric_limits);
+	SB_SRC_STD_USE(numeric_limits);
 
 }

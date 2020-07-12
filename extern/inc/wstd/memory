@@ -1,23 +1,27 @@
 #pragma once
 
-#include "prolog.h"
+#include "base.h"
 
 #include SB_SRC_STD_INC(memory)
 
-namespace SB_STD_NS {
+namespace SB_WSTD_NS {
 
-    SB_STD_USE(const_pointer_cast);
-    SB_STD_USE(static_pointer_cast);
-    SB_STD_USE(allocator);
-    SB_STD_USE(uninitialized_move);
-    SB_STD_USE(uninitialized_copy);
-    SB_STD_USE(uninitialized_fill);
-    SB_STD_USE(uninitialized_default_construct);
-    SB_STD_USE(destroy);
-    SB_STD_USE(destroy_at);
-    SB_STD_USE(allocator_traits);
-    SB_STD_USE(remove_all_extents);
-    SB_STD_USE(remove_all_extents_t);
-    SB_STD_PRIVATE_USE(unique_ptr);
+    SB_SRC_STD_USE(const_pointer_cast);
+    SB_SRC_STD_USE(static_pointer_cast);
+    SB_SRC_STD_USE(allocator);
+    SB_SRC_STD_USE(uninitialized_move);
+    SB_SRC_STD_USE(uninitialized_copy);
+    SB_SRC_STD_USE(uninitialized_fill);
+    SB_SRC_STD_USE(uninitialized_default_construct);
+    SB_SRC_STD_USE(destroy);
+    SB_SRC_STD_USE(destroy_at);
+    SB_SRC_STD_USE(allocator_traits);
+    SB_SRC_STD_USE(remove_all_extents);
+    SB_SRC_STD_USE(remove_all_extents_t);
+
+namespace internal
+{
+    SB_SRC_STD_USE(unique_ptr);
+}
 
 }

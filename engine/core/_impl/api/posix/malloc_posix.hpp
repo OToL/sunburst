@@ -1,5 +1,5 @@
 #include <core/memory/memory.h>
-#include <core/types.h>
+#include <core/base.h>
 #include <core/error.h>
 #include <core/bit.h>
 #include <core/string/utility.h>

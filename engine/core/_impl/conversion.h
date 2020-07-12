@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/types.h>
+#include <core/base.h>
 
 #include <wstd/cstring>
 #include <wstd/span>

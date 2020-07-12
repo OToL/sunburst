@@ -1,7 +1,7 @@
 #pragma once
 
 #include "config.h"
-#include <core/types.h>
+#include <core/base.h>
 
 #include <wstd/utility>
 

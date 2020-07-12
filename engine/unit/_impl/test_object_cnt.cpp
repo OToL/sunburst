@@ -1,6 +1,6 @@
 #include <unit/test_object_cnt.h>
 
-#include <core/types.h>
+#include <core/base.h>
 #include <core/error.h>
 
 namespace sb {

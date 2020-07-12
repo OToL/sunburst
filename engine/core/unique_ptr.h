@@ -128,7 +128,7 @@ template <typename T>
 using AllocatorViewDelete = AllocatorDelete<T, AllocatorView>;
 
 template <typename T, typename TDelete = DefaultDelete<T>>
-using UniquePtr = wstd::detail::unique_ptr<T, TDelete>;
+using UniquePtr = wstd::internal::unique_ptr<T, TDelete>;
 
 template <typename T>
 struct is_reference_wrapper : wstd::false_type
@@ -194,7 +194,7 @@ auto makeUnique(TArgs &&... args) -> wstd::enable_if_t<!wstd::is_array_v<T>, Uni
 
 } // namespace sb
 
-namespace SB_STD_NS {
+namespace SB_WSTD_NS {
 
 template <class U, class T, class A>
 auto static_pointer_cast(std::unique_ptr<T, A> && r) noexcept
@@ -210,4 +210,4 @@ auto static_pointer_cast(std::unique_ptr<T, A> & r) noexcept
                                                                     r.get_deleter()};
 }
 
-} // namespace SB_STD_NS
+} // namespace SB_WSTD_NS

@@ -1,7 +1,7 @@
 #include <core/error.h>
 #include <core/memory/allocator/allocator_view.h>
 #include <core/memory/allocator/global_heap_allocator.h>
-#include <core/types.h>
+#include <core/base.h>
 #include <core/memory/memory.h>
 #include <core/memory/alloc.h>
 

@@ -1,7 +1,7 @@
 add_library(core STATIC
     _impl/string_format.cpp
     _impl/log.cpp
-    _impl/types.cpp
+    _impl/base.cpp
     _impl/conversion.cpp
     _impl/error.cpp
     _impl/hash/crc32.cpp

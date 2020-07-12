@@ -1,11 +1,11 @@
 #pragma once
 
-#include "prolog.h"
+#include "base.h"
 
 #include SB_SRC_STD_INC(vector)
     
-namespace SB_STD_NS {
+namespace SB_WSTD_NS::internal {
 
-	SB_STD_PRIVATE_USE(vector);
+	SB_SRC_STD_USE(vector);
 
 }

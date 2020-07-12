@@ -1,5 +1,5 @@
 #pragma once
 
-#include "prolog.h"
+#include "base.h"
 
 #include SB_SRC_STD_INC(cstdint)
