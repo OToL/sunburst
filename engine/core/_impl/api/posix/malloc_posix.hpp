@@ -43,7 +43,7 @@ void * malloc(usize size, Alignment alignment)
 
     AllocHeader * const header = dataToHeader(aligned_mem_ptr);
     header->m_size = size;
-    header->m_offset = sb::numericCast<ui16>(uiptr(header) - uiptr(mem_ptr));
+    header->m_offset = sb::numericConv<ui16>(uiptr(header) - uiptr(mem_ptr));
 
     return aligned_mem_ptr;
 }

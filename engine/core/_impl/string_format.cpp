@@ -1,8 +1,8 @@
 #include <core/string/string_format.h>
 #include <core/string/utility.h>
 
-#include <libc++/cctype>
-#include <libc++/type_traits>
+#include <wstd/cctype>
+#include <wstd/type_traits>
 
 namespace sb::detail {
 
@@ -15,7 +15,7 @@ usize stringFormat(wstd::span<char> dest_buffer, char const * const format, wstd
         char * dest_iter = dest_buffer.data();
         sbAssert(nullptr != dest_iter);
 
-        usize const dest_capacity = numericCast<usize>(dest_buffer.size());
+        usize const dest_capacity = numericConv<usize>(dest_buffer.size());
 
         char const * format_iter = format;
         si32 lastParamIdx = 0;

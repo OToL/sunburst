@@ -35,7 +35,7 @@
 
 # 3RD::LIBC++
 
-- [ ] Cleanup libc++ usage
+- [ ] Cleanup wstd usage
 - [ ] Try using eastl
 
 # SB::CORE

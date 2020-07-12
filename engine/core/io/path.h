@@ -3,7 +3,7 @@
 #include <core/types.h>
 #include <core/os.h>
 
-#include <libc++/span>
+#include <wstd/span>
 
 namespace sb {
 

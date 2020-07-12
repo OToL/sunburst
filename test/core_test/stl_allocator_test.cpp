@@ -2,7 +2,7 @@
 #include <core/memory/allocator/stl_allocator.h>
 #include <core/container/vector.h>
 
-#include <libc++/iterator>
+#include <wstd/iterator>
 
 #include <gtest/gtest_common.h>
 #include <gtest/allocator_stats.h>

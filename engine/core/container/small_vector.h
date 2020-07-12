@@ -6,10 +6,10 @@
 #include <core/_impl/container/small_vector_base.h>
 #include <core/types.h>
 
-#include <libc++/algorithm>
-#include <libc++/iterator>
-#include <libc++/memory>
-#include <libc++/utility>
+#include <wstd/algorithm>
+#include <wstd/iterator>
+#include <wstd/memory>
+#include <wstd/utility>
 
 namespace sb {
 
@@ -69,7 +69,7 @@ public:
     SmallVector(TIterator first, TIterator last, allocator_type const & alloc = allocator_type())
         : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
     {
-        buyMore(numericCast<size_type>(last - first));
+        buyMore(numericConv<size_type>(last - first));
 
         wstd::uninitialized_copy(first, last, m_impl.m_begin);
     }

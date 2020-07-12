@@ -1,7 +1,7 @@
 #pragma once
 
-#include <libc++/cstddef>
-#include <libc++/cstdint>
+#include <wstd/cstddef>
+#include <wstd/cstdint>
 
 #include "compiler.h"
 

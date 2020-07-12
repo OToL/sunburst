@@ -2,9 +2,9 @@
 
 #include <core/memory/alloc.h>
 
-#include <libc++/memory>
-#include <libc++/functional>
-#include <libc++/utility>
+#include <wstd/memory>
+#include <wstd/functional>
+#include <wstd/utility>
 
 namespace sb {
 

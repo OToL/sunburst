@@ -661,7 +661,7 @@
 #	define GLM_ALIGN(x) __declspec(align(x))
 #	define GLM_ALIGNED_STRUCT(x) struct __declspec(align(x))
 #	define GLM_ALIGNED_TYPEDEF(type, name, alignment) typedef __declspec(align(alignment)) type name
-#	define GLM_RESTRICT_FUNC __declspec(sb_restrict)
+#	define GLM_RESTRICT_FUNC __declspec(__restrict)
 #	define GLM_RESTRICT __restrict
 #	if GLM_COMPILER >= GLM_COMPILER_VC12
 #		define GLM_VECTOR_CALL __vectorcall

@@ -3,16 +3,16 @@
 #include <core/error.h>
 #include <core/string/utility.h>
 
-#include <libc++/charconv>
-#include <libc++/span>
-#include <libc++/algorithm>
-#include <libc++/utility>
+#include <wstd/charconv>
+#include <wstd/span>
+#include <wstd/algorithm>
+#include <wstd/utility>
 
 namespace sb::detail {
 
 usize stringToCharBuffer(char const * src, wstd::span<char> & dst)
 {
-    return sb::strCpyT(dst.data(), numericCast<usize>(dst.size()), src);
+    return sb::strCpyT(dst.data(), numericConv<usize>(dst.size()), src);
 }
 
 template <typename T>
@@ -22,7 +22,7 @@ usize decimalToString(T src, wstd::span<char> & dest)
 
     if (res.ec == wstd::errc{})
     {
-        auto const len = numericCast<usize>(wstd::distance(dest.data(), res.ptr));
+        auto const len = numericConv<usize>(wstd::distance(dest.data(), res.ptr));
 
         if (0 != len)
         {
@@ -40,7 +40,7 @@ usize decimalToString(T src, wstd::span<char> & dest)
             dest[0] = 0;
         }
 
-        return numericCast<usize>(len);
+        return numericConv<usize>(len);
     }
 
     return 0;

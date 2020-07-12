@@ -1,7 +1,7 @@
 #include <core/os.h>
 
-#include <libc++/cstdio>
-#include <libc++/cunistd>
+#include <wstd/cstdio>
+#include <wstd/cunistd>
 
 namespace sb {
 

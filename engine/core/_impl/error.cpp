@@ -4,10 +4,10 @@
 #include <core/compiler.h>
 #include <core/enum.h>
 
-#if sbCTFIsEnabled(ERROR_FACILITY)
+#if sbIsEnabled(ERROR_FACILITY)
 
-#    include <libc++/cassert>
-#    include <libc++/cstdio>
+#    include <wstd/cassert>
+#    include <wstd/cstdio>
 
 namespace sb::detail {
 

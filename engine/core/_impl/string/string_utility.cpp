@@ -2,7 +2,7 @@
 
 namespace sb {
 
-usize strCpyT(char * sb_restrict output, usize capacity, char const * sb_restrict src)
+usize strCpyT(char * __restrict output, usize capacity, char const * __restrict src)
 {
     if (0 == capacity)
     {
@@ -10,7 +10,7 @@ usize strCpyT(char * sb_restrict output, usize capacity, char const * sb_restric
     }
 
     usize copy_count = 0;
-    char const * sb_restrict srcIter = src;
+    char const * __restrict srcIter = src;
 
     do
     {
@@ -27,10 +27,10 @@ usize strCpyT(char * sb_restrict output, usize capacity, char const * sb_restric
     return copy_count;
 }
 
-bool strStartWith(char const * sb_restrict str, char const * sb_restrict start_str)
+bool strStartWith(char const * __restrict str, char const * __restrict start_str)
 {
-    char const * sb_restrict src_iter = str;
-    char const * sb_restrict start_str_iter = start_str;
+    char const * __restrict src_iter = str;
+    char const * __restrict start_str_iter = start_str;
 
     while ((*src_iter == *start_str_iter) && ('\0' != *src_iter) && ('\0' != *start_str_iter))
     {

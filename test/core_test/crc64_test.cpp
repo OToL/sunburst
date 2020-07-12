@@ -1,6 +1,6 @@
 #include <core/hash/crc.h>
 
-#include <libc++/iterator>
+#include <wstd/iterator>
 
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>

@@ -37,7 +37,7 @@ char * PhysicPath::concat(wstd::span<char> base_path, char const * path_cat)
         }
 
         strCpyT(base_path.data() + base_path_len,
-                numericCast<usize>(base_path_capacity - base_path_len), path_cat);
+                numericConv<usize>(base_path_capacity - base_path_len), path_cat);
     }
 
     return base_path.data();

@@ -13,10 +13,10 @@
 #include "file_system_platform.h"
 #include "local_file_system_layer.h"
 
-#include <libc++/algorithm>
-#include <libc++/array>
-#include <libc++/utility>
-#include <libc++/memory>
+#include <wstd/algorithm>
+#include <wstd/array>
+#include <wstd/utility>
+#include <wstd/memory>
 
 namespace sb {
 
@@ -264,8 +264,8 @@ private:
             FileDesc * const base_obj = static_cast<FileDesc *>(arena.m_ptr);
 
             FileHdlHelper helper_hdl;
-            helper_hdl.m_unpacked = {numericCast<ui16>(wstd::distance(base_obj, file_desc)),
-                                     numericCast<ui16>(file_desc->m_Gen)};
+            helper_hdl.m_unpacked = {numericConv<ui16>(wstd::distance(base_obj, file_desc)),
+                                     numericConv<ui16>(file_desc->m_Gen)};
 
             return FileHdl{helper_hdl.m_packed};
         }

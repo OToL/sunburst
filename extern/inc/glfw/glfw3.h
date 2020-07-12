@@ -3685,7 +3685,7 @@ GLFWAPI int glfwGetInputMode(GLFWwindow* window, int mode);
  *  modes:
  *  - `GLFW_CURSOR_NORMAL` makes the cursor visible and behaving normally.
  *  - `GLFW_CURSOR_HIDDEN` makes the cursor invisible when it is over the client
- *    area of the window but does not sb_restrict the cursor from leaving.
+ *    area of the window but does not __restrict the cursor from leaving.
  *  - `GLFW_CURSOR_DISABLED` hides and grabs the cursor, providing virtual
  *    and unlimited cursor movement.  This is useful for implementing for
  *    example 3D camera controls.

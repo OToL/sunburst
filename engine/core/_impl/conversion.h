@@ -2,8 +2,8 @@
 
 #include <core/types.h>
 
-#include <libc++/cstring>
-#include <libc++/span>
+#include <wstd/cstring>
+#include <wstd/span>
 
 namespace sb { namespace detail {
 

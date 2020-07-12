@@ -4,9 +4,9 @@
 #include <core/bit.h>
 #include <core/memory/allocator/allocator_view.h>
 
-#include <libc++/type_traits>
-#include <libc++/utility>
-#include <libc++/new>
+#include <wstd/type_traits>
+#include <wstd/utility>
+#include <wstd/new>
 
 namespace sb {
 

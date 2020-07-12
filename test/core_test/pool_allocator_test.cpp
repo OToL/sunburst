@@ -6,7 +6,7 @@
 #include <gtest/gtest_common.h>
 #include <gtest/allocator_stats.h>
 
-#include <libc++/algorithm>
+#include <wstd/algorithm>
 
 namespace sb;
 

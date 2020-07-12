@@ -444,7 +444,7 @@ if __name__ == "__main__" :
     parser.Parse(options.srcFilePath.strip(), ['-x',
                                             'c++',
                                             '-std=c++11',
-                                            '-stdlib=libc++',
+                                            '-stdlib=wstd',
                                             '-D__CODE_GENERATOR__'] + includes, filters)
 
 

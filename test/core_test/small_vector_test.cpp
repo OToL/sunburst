@@ -7,7 +7,7 @@
 #include <core/memory/global_heap.h>
 #include <core/error.h>
 
-#include <libc++/limits>
+#include <wstd/limits>
 
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>

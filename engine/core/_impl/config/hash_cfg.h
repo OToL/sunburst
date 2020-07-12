@@ -6,7 +6,7 @@
 #define SB_HASHSTR_POLICY_FNV1A 2
 #define SB_CTV_HASHSTR_POLICY SB_HASHSTR_POLICY_FNV1A
 
-#if sbCTVIsEq(HASHSTR_POLICY, SB_HASHSTR_POLICY_CRC)
+#if sbIsEqual(HASHSTR_POLICY, SB_HASHSTR_POLICY_CRC)
 
 #    include <core/hash/crc.h>
 
@@ -16,7 +16,7 @@ using HashStrPolicy = CRC64;
 
 }
 
-#elif sbCTVIsEq(HASHSTR_POLICY, SB_HASHSTR_POLICY_FNV1A)
+#elif sbIsEqual(HASHSTR_POLICY, SB_HASHSTR_POLICY_FNV1A)
 
 #    include <core/hash/fnv1a.h>
 

@@ -7,7 +7,7 @@
 #include <core/enum.h>
 #include <core/_impl/io/file_system_platform.h>
 
-#include <libc++/cstdio>
+#include <wstd/cstdio>
 
 namespace sb {
 
@@ -73,7 +73,7 @@ FileSize platformReadFile(PlatformFileHdl hdl, ui8 * buffer, FileSize count)
 {
     sbAssert(nullptr != hdl.m_value);
 
-    return numericCast<FileSize>(fread((void *)buffer, 1, (usize)count, (FILE *)hdl.m_value));
+    return numericConv<FileSize>(fread((void *)buffer, 1, (usize)count, (FILE *)hdl.m_value));
 }
 
 FileSize platformFileLength(PlatformFileHdl hdl)

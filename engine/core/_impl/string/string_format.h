@@ -4,8 +4,8 @@
 #include <core/error.h>
 #include <core/conversion.h>
 
-#include <libc++/utility>
-#include <libc++/span>
+#include <wstd/utility>
+#include <wstd/span>
 
 namespace sb {
 
@@ -74,7 +74,7 @@ inline void expandFmtArgs(wstd::span<FmtArg> argList, T const & arg, TArgs &&...
 
     arg_desc.m_value = TypeDesc::storeValue(arg);
     arg_desc.m_fmt_cb = [](void const * arg_value, wstd::span<char> dest) {
-        return stringCastT(TypeDesc::extractValue(arg_value), dest);
+        return stringConvT(TypeDesc::extractValue(arg_value), dest);
     };
 
     expandFmtArgs(argList.subspan(1), args...);

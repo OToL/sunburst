@@ -3,9 +3,9 @@
 #include "config.h"
 #include <core/types.h>
 
-#include <libc++/utility>
+#include <wstd/utility>
 
-#if sbCTFIsEnabled(LOG_FACILITY)
+#if sbIsEnabled(LOG_FACILITY)
 
 namespace sb::detail {
 
@@ -59,7 +59,7 @@ struct LogFilter<false>
 #    define sbLogImpl(lvl, file, line, msg, ...)                                                   \
         (!::sb::detail::gs_log_quiet &&                                                            \
          ((::sb::ui8)lvl) <= ((::sb::ui8)sb::detail::gs_log_min_level)) &&                         \
-            (::sb::detail::LogFilter<sbCTFIsEnabled(LOG_FACILITY)>::logMessage(                    \
+            (::sb::detail::LogFilter<sbIsEnabled(LOG_FACILITY)>::logMessage(                    \
                  lvl, file, line, msg, ##__VA_ARGS__),                                             \
              true)
 

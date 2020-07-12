@@ -3,7 +3,7 @@
 #include <core/types.h>
 #include <core/compiler.h>
 
-#include <libc++/span>
+#include <wstd/span>
 
 /// String formatting facility inspired by fmtlib:
 /// - https://docs.python.org/2/library/string.html

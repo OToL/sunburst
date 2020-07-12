@@ -5,7 +5,7 @@
 #include <core/unique_ptr.h>
 #include "io.h"
 
-#include <libc++/span>
+#include <wstd/span>
 
 namespace sb {
 

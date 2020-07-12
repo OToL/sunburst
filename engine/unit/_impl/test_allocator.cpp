@@ -3,7 +3,7 @@
 #include <core/os.h>
 #include <core/error.h>
 
-#include <libc++/algorithm>
+#include <wstd/algorithm>
 
 namespace sb {
 

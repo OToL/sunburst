@@ -2,8 +2,8 @@
 #include <core/error.h>
 #include <core/conversion.h>
 
-#include <libc++/cstdio>
-#include <libc++/cunistd>
+#include <wstd/cstdio>
+#include <wstd/cunistd>
 
 #include <direct.h>
 
@@ -13,7 +13,7 @@ char * getWorkingDirectory(char * buff, usize buff_capacity)
 {
     sbAssert(nullptr != buff);
 
-    return _getcwd(buff, numericCast<int>(buff_capacity));
+    return _getcwd(buff, numericConv<int>(buff_capacity));
 }
 
 void outputDebugString(char const * msg)

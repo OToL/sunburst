@@ -1555,9 +1555,9 @@ class Type(Structure):
         return conf.lib.clang_isVolatileQualifiedType(self)
 
     def is_restrict_qualified(self):
-        """Determine whether a Type has the "sb_restrict" qualifier set.
+        """Determine whether a Type has the "__restrict" qualifier set.
 
-        This does not look through typedefs that may have added "sb_restrict" at
+        This does not look through typedefs that may have added "__restrict" at
         a different level.
         """
         return conf.lib.clang_isRestrictQualifiedType(self)

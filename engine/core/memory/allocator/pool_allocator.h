@@ -33,7 +33,7 @@ class PoolAllocator final : public IAllocator
 
     void initFreeList()
     {
-        si32 const block_cnt = numericCast<NodeIdx>(m_arena.m_size / ACTUAL_BLOCK_SIZE);
+        si32 const block_cnt = numericConv<NodeIdx>(m_arena.m_size / ACTUAL_BLOCK_SIZE);
         sbAssert(0 != block_cnt);
 
         Node * node_iter = static_cast<Node *>(m_arena.m_ptr);
@@ -123,7 +123,7 @@ public:
         {
             Node * const dealloc_node = static_cast<Node *>(ptr);
             NodeIdx const dealloc_node_idx =
-                numericCast<NodeIdx>(dealloc_node - static_cast<Node *>(m_arena.m_ptr));
+                numericConv<NodeIdx>(dealloc_node - static_cast<Node *>(m_arena.m_ptr));
 
             if (INVALID_NODE == m_free_list)
             {

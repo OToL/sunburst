@@ -2,21 +2,21 @@
 
 #include "_impl/conversion.h"
 
-#include <libc++/span>
-#include <libc++/type_traits>
-#include <libc++/utility>
+#include <wstd/span>
+#include <wstd/type_traits>
+#include <wstd/utility>
 
 namespace sb {
 
 template <typename TDst, typename TSrc>
-inline constexpr TDst numericCast(TSrc && src)
+inline constexpr TDst numericConv(TSrc && src)
 {
     return static_cast<TDst>(src);
 }
 
 // Ensures null termination
 template <typename TSrc>
-inline usize stringCastT(TSrc && src, wstd::span<char> dest)
+inline usize stringConvT(TSrc && src, wstd::span<char> dest)
 {
     using DecayedType = wstd::decay_t<TSrc>;
 

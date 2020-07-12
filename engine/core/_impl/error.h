@@ -1,8 +1,8 @@
 #include "config.h"
 
-#include <libc++/utility>
+#include <wstd/utility>
 
-#if sbCTFIsEnabled(ERROR_FACILITY)
+#if sbIsEnabled(ERROR_FACILITY)
 
 namespace sb {
 template <typename... TArgs>

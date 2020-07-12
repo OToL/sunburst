@@ -1,6 +1,6 @@
 #include <core/types.h>
 
-#include <libc++/span>
+#include <wstd/span>
 
 namespace sb {
 
