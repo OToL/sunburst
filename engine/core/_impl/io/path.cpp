@@ -28,7 +28,7 @@ char * PhysicPath::concat(wstd::span<char> base_path, char const * path_cat)
         ++expected_len;
     }
 
-    if (sbExpectTrue(base_path_capacity > expected_len))
+    if (sbExpect(base_path_capacity > expected_len))
     {
         if (base_path[base_path_len - 1] != *PPath::SEPARATOR)
         {

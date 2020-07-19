@@ -20,14 +20,14 @@ void setErrorHandler(ErrorHandler const & hdl, void * user_data = nullptr);
 } // namespace sb
 
 // ErrorType::CRITICAL
-#define sbAssert(cond, ...) sbAssertImpl(cond, ##__VA_ARGS__)
+#define sbAssert(cond, ...) sbAssertInternal(cond, ##__VA_ARGS__)
 
 // ErrorType::WARNING
-#define sbWarn(cond, ...) sbWarnImpl(cond, ##__VA_ARGS__)
-#define sbNotImplemented(str) sbNotImplementedImpl(str)
+#define sbWarn(cond, ...) sbWarnInternal(cond, ##__VA_ARGS__)
+#define sbNotImplemented(str) sbNotImplementedInternal(str)
 
 // ErrorType::NOTICE
-#define sbExpectTrue(cond, ...) sbExpectTrueImpl(cond, ##__VA_ARGS__)
-#define sbExpectFalse(cond, ...) sbExpectFalseImpl(cond, ##__VA_ARGS__)
+#define sbExpect(cond, ...) sbExpectInternal(cond, ##__VA_ARGS__)
+#define sbExpectFalse(cond, ...) sbExpectFalseInternal(cond, ##__VA_ARGS__)
 
 #include "_impl/error.h"

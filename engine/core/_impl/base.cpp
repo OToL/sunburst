@@ -15,6 +15,6 @@ static_assert(8 == sizeof(si64), "8 != sizeof(si64)");
 static_assert(8 == sizeof(f64), "8 != sizeof(f64)");
 static_assert(4 == sizeof(f32), "4 != sizeof(f32)");
 static_assert(8 == sizeof(usize), "8 != sizeof(usize)");
-static_assert(8 == sizeof(uiptr), "8 != sizeof(uiptr)");
+static_assert(8 == sizeof(uptr), "8 != sizeof(uptr)");
 
 } // namespace sb

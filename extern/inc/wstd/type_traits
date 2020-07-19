@@ -41,15 +41,6 @@ namespace SB_WSTD_NS {
 
 namespace SB_WSTD_EXT_NS {
 
-    template <typename ...>
-    struct unreachable_t
-    {
-        constexpr static bool value = false;
-    };
-
-    template <typename ... TArgs>
-    inline constexpr bool unreachable_v = unreachable_t<TArgs...>::value;
-
     struct null_t
     {
     };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "_impl/conversion.h"
+#include "base.h" 
 
 #include <wstd/span>
 #include <wstd/type_traits>
@@ -22,16 +22,18 @@ inline usize stringConvT(TSrc && src, wstd::span<char> dest)
 
     if constexpr (wstdx::is_string_raw<DecayedType>::value)
     {
-        return detail::stringToCharBuffer(src, dest);
+        return internal::stringToCharBuffer(src, dest);
     }
     else if constexpr (wstd::is_integral<DecayedType>::value)
     {
-        return detail::decimalToString(wstd::forward<TSrc>(src), dest);
+        return internal::decimalToString(wstd::forward<TSrc>(src), dest);
     }
     else
     {
-        static_assert(wstdx::unreachable_v<TSrc>, "Unhandled string conversion");
+        static_assert(false, "Unhandled string conversion");
     }
 }
 
 } // namespace sb
+
+#include "_impl/conversion.h"

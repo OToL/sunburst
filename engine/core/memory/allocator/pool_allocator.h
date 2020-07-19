@@ -95,7 +95,7 @@ public:
     {
         void * block_ptr = nullptr;
 
-        if ((INVALID_NODE != m_free_list) && sbExpectTrue(size <= BLOCK_SIZE))
+        if ((INVALID_NODE != m_free_list) && sbExpect(size <= BLOCK_SIZE))
         {
             Node * const free_node = static_cast<Node *>(m_arena.m_ptr) + m_free_list;
             block_ptr = free_node;
@@ -119,7 +119,7 @@ public:
                  (static_cast<usize>(static_cast<ui8 *>(ptr) - static_cast<ui8 *>(m_arena.m_ptr)) %
                   ACTUAL_BLOCK_SIZE));
 
-        if (sbExpectTrue(m_arena.isInRange(ptr)))
+        if (sbExpect(m_arena.isInRange(ptr)))
         {
             Node * const dealloc_node = static_cast<Node *>(ptr);
             NodeIdx const dealloc_node_idx =

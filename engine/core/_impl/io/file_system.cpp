@@ -63,7 +63,7 @@ public:
                 [&layer](LayerDesc const & layer_desc) { return layer_desc.m_id == layer.m_name; });
             auto const layer_path_len = strlen(layer.m_logical_path);
 
-            if (sbExpectTrue((layerIter == end(m_layers)) && (0 != layer_path_len) &&
+            if (sbExpect((layerIter == end(m_layers)) && (0 != layer_path_len) &&
                              LPath::isValid(layer.m_logical_path) &&
                              (layer.m_logical_path[layer_path_len - 1] == *LPath::SEPARATOR)))
             {
@@ -256,7 +256,7 @@ private:
     {
         FileDesc * const file_desc = static_cast<FileDesc *>(m_file_desc_pool.allocate());
 
-        if (sbExpectTrue(nullptr != file_desc))
+        if (sbExpect(nullptr != file_desc))
         {
             *file_desc = {hdl, layer, ++m_file_desc_gen};
 
@@ -323,7 +323,7 @@ static UniquePtr<FileSystemImpl> gs_file_system;
 
 b8 FileSystem::initialize(InitParams const & init)
 {
-    if (sbExpectTrue(nullptr == gs_file_system, "File System already initialized"))
+    if (sbExpect(nullptr == gs_file_system, "File System already initialized"))
     {
         gs_file_system = makeUnique<FileSystemImpl>(init);
 
@@ -335,7 +335,7 @@ b8 FileSystem::initialize(InitParams const & init)
 
 b8 FileSystem::terminate()
 {
-    if (sbExpectTrue(nullptr != gs_file_system, "File System not initialized"))
+    if (sbExpect(nullptr != gs_file_system, "File System not initialized"))
     {
         gs_file_system = nullptr;
 
@@ -380,7 +380,7 @@ void FileSystem::closeFile(FileHdl hdl)
 {
     sbAssert(nullptr != gs_file_system);
 
-    if (sbExpectTrue(!hdl.isNull()))
+    if (sbExpect(!hdl.isNull()))
     {
         gs_file_system->closeFile(hdl);
     }
@@ -391,7 +391,7 @@ FileSize FileSystem::readFile(FileHdl hdl, wstd::span<ui8> buffer, FileSize cnt)
     sbAssert((FileSize)buffer.size() >= cnt);
     sbAssert(-1 <= cnt);
 
-    if (sbExpectTrue(!hdl.isNull()))
+    if (sbExpect(!hdl.isNull()))
     {
         return gs_file_system->readFile(hdl, buffer.data(),
                                         (cnt == -1) ? (FileSize)buffer.size() : cnt);
@@ -402,7 +402,7 @@ FileSize FileSystem::readFile(FileHdl hdl, wstd::span<ui8> buffer, FileSize cnt)
 
 FileSize FileSystem::getFileLength(FileHdl hdl)
 {
-    if (sbExpectTrue(!hdl.isNull()))
+    if (sbExpect(!hdl.isNull()))
     {
         return gs_file_system->getFileLength(hdl);
     }

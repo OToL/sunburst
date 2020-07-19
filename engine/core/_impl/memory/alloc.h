@@ -69,7 +69,7 @@ struct MemoryOperatorHelper
 
             ui8 * const mem_ptr = reinterpret_cast<ui8 *>(m_allocator.allocate(total_size));
             ui8 * const client_ptr = reinterpret_cast<ui8 *>(
-                alignUp(reinterpret_cast<uiptr>(mem_ptr + sizeof(ArrayInfo)), alignof(TType)));
+                alignUp(reinterpret_cast<uptr>(mem_ptr + sizeof(ArrayInfo)), alignof(TType)));
             client_obj = reinterpret_cast<TType *>(client_ptr);
 
             ArrayInfo * const array_info =

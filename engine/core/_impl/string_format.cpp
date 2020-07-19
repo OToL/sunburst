@@ -45,7 +45,7 @@ usize stringFormat(wstd::span<char> dest_buffer, char const * const format, wstd
                     {
                         format_iter += 2;
 
-                        if (sbExpectTrue(-1 != lastParamIdx,
+                        if (sbExpect(-1 != lastParamIdx,
                                          "You cannot mix indexed and auto-increment arguments"))
                         {
                             arg_idx = lastParamIdx++;
@@ -56,12 +56,12 @@ usize stringFormat(wstd::span<char> dest_buffer, char const * const format, wstd
                         }
                     }
                     // Argument specification
-                    else if (sbExpectTrue(wstd::isdigit(next_token),
+                    else if (sbExpect(wstd::isdigit(next_token),
                                           "Only digit is allowed in argument specification") &&
-                             sbExpectTrue(0 >= lastParamIdx,
+                             sbExpect(0 >= lastParamIdx,
                                           "You cannot mix indexed and auto-increment "
                                           "argument specification") &&
-                             sbExpectTrue('}' == format_iter[2],
+                             sbExpect('}' == format_iter[2],
                                           "Format argument index must be within [0-9] range"))
                     {
                         arg_idx = next_token - '0';
@@ -74,7 +74,7 @@ usize stringFormat(wstd::span<char> dest_buffer, char const * const format, wstd
                     {
                         char const * const closing_arg = strchr(format_iter + 1, '}');
 
-                        if (sbExpectTrue(nullptr != closing_arg,
+                        if (sbExpect(nullptr != closing_arg,
                                          "Cannot find closing argument '}'"))
                         {
                             format_iter = closing_arg + 1;

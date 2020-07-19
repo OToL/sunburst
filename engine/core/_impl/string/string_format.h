@@ -103,7 +103,7 @@ inline usize stringFormat(wstd::span<char> dest_buffer, char const * const forma
     constexpr usize MAX_FMT_PARAM = 10;
 
     constexpr int arg_cnt = sizeof...(TArgs);
-    sbExpectTrue(MAX_FMT_PARAM >= arg_cnt);
+    sbExpect(MAX_FMT_PARAM >= arg_cnt);
 
     FmtArg arg_list[MAX_FMT_PARAM];
     expandFmtArgs(arg_list, args...);

@@ -49,7 +49,7 @@ TEST(INCREMENTAL_ALLOCATOR, AlignedAllocate)
     {
         void * mem_ptr = alloc.allocate(alloc_size, test_alignment);
         EXPECT_NE(nullptr, mem_ptr);
-        EXPECT_TRUE(isAlignedTo(reinterpret_cast<uiptr>(mem_ptr), test_alignment));
+        EXPECT_TRUE(isAlignedTo(reinterpret_cast<uptr>(mem_ptr), test_alignment));
         EXPECT_TRUE(alloc.owns(mem_ptr));
     }
 

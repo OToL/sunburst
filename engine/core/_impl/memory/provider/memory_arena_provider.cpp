@@ -24,14 +24,14 @@ MemoryArena MemoryArenaProvider::allocate(usize const size)
 
 MemoryArena MemoryArenaProvider::allocate(usize const size, Alignment const alignment)
 {
-    sbAssert(isAlignedTo((uiptr)m_arena.m_ptr, alignment));
+    sbAssert(isAlignedTo((uptr)m_arena.m_ptr, alignment));
 
     return allocate(size);
 }
 
 void MemoryArenaProvider::deallocate(MemoryArena const & arena)
 {
-    if (sbExpectTrue(m_arena.isEmpty()))
+    if (sbExpect(m_arena.isEmpty()))
     {
         m_arena = arena;
     }

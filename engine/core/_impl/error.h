@@ -33,37 +33,37 @@ void reportError(ErrorType type, char const * const file, ui32 const line, char 
 
 } // namespace sb::detail
 
-#    define sbAssertImpl(cond, ...)                                                                \
+#    define sbAssertInternal(cond, ...)                                                                \
         if (!(cond))                                                                               \
         {                                                                                          \
             sb::detail::reportError(sb::ErrorType::CRITICAL, __FILE__, __LINE__, ##__VA_ARGS__);   \
         }
 
-#    define sbWarnImpl(cond, ...)                                                                  \
+#    define sbWarnInternal(cond, ...)                                                                  \
         if (!(cond))                                                                               \
         {                                                                                          \
             sb::detail::reportError(sb::ErrorType::WARNING, __FILE__, __LINE__, ##__VA_ARGS__);    \
         }
 
-#    define sbExpectTrueImpl(cond, ...)                                                            \
+#    define sbExpectInternal(cond, ...)                                                            \
         ((cond) ||                                                                                 \
          (sb::detail::reportError(sb::ErrorType::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),       \
           false))
 
-#    define sbExpectFalseImpl(cond, ...)                                                           \
+#    define sbExpectFalseInternal(cond, ...)                                                           \
         ((cond) &&                                                                                 \
          (sb::detail::reportError(sb::ErrorType::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),       \
           true))
 
-#    define sbNotImplementedImpl(str)                                                              \
+#    define sbNotImplementedInternal(str)                                                              \
         sb::detail::reportNotImplemented(sb::ErrorType::WARNING, __FILE__, __LINE__, str)
 
 #else
 
-#    define sbAssertImpl(cond, ...)
-#    define sbWarnImpl(cond, ...)
-#    define sbExpectTrueImpl(cond, ...) (cond)
-#    define sbExpectFalseImpl(cond, ...) !(cond)
-#    define sbNotImplementedImpl(str)
+#    define sbAssertInternal(cond, ...)
+#    define sbWarnInternal(cond, ...)
+#    define sbExpectInternal(cond, ...) (cond)
+#    define sbExpectFalseInternal(cond, ...) !(cond)
+#    define sbNotImplementedInternal(str)
 
 #endif
