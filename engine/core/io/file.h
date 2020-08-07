@@ -42,7 +42,7 @@ public:
 
     b8 isNull() const
     {
-        return m_hdl.isNull();
+        return !m_hdl.isValid();
     }
 
     FileSize read(wstd::span<ui8> buffer, FileSize cnt = -1);

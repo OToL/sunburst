@@ -11,18 +11,18 @@ using TestHandle = Handle<TestHdl, ui32>;
 
 TEST_CASE("Handle default ctor", "[handle]")
 {
-    REQUIRE(TestHandle{}.isNull());
+    REQUIRE_FALSE(TestHandle{}.isValid());
 }
 
 TEST_CASE("Handle reset", "[handle]")
 {
     TestHandle test_hdl(2);
 
-    REQUIRE_FALSE(test_hdl.isNull()); 
+    REQUIRE(test_hdl.isValid()); 
 
     test_hdl.reset();
 
-    REQUIRE(TestHandle{}.isNull());
+    REQUIRE_FALSE(TestHandle{}.isValid());
 }
 
 TEST_CASE("Handle equality", "[handle]")

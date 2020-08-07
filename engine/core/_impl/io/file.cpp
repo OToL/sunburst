@@ -9,7 +9,7 @@ File & File::operator=(File && src)
 {
     if (this != &src)
     {
-        if (!m_hdl.isNull())
+        if (m_hdl.isValid())
         {
             FS::closeFile(m_hdl);
         }
@@ -22,7 +22,7 @@ File & File::operator=(File && src)
 
 File::~File()
 {
-    if (!m_hdl.isNull())
+    if (m_hdl.isValid())
     {
         FS::closeFile(m_hdl);
         m_hdl.reset();
@@ -31,14 +31,14 @@ File::~File()
 
 FileSize File::read(wstd::span<ui8> buffer, FileSize cnt)
 {
-    sbAssert(!m_hdl.isNull());
+    sbAssert(m_hdl.isValid());
 
     return FS::readFile(m_hdl, buffer, cnt);
 }
 
 FileSize File::getLength()
 {
-    sbAssert(!m_hdl.isNull());
+    sbAssert(m_hdl.isValid());
 
     return FS::getFileLength(m_hdl);
 }

@@ -4,7 +4,7 @@
 
 namespace sb {
 
-template <typename TId, typename TStorage>
+template <typename TId, typename TStorage = ui32>
 struct Handle
 {
     using Type = TId;
@@ -13,38 +13,33 @@ struct Handle
     constexpr Handle() = default;
 
     constexpr explicit Handle(TStorage val)
-        : m_value(val)
+        : value(val)
     {
     }
 
     constexpr void reset()
     {
-        m_value = TStorage{};
+        value = TStorage{};
     }
 
-    constexpr StorageType get() const
+    constexpr b8 isValid() const
     {
-        return m_value;
-    } 
-
-    constexpr b8 isNull() const
-    {
-        return TStorage{} == m_value;
+        return TStorage{} != value;
     }
 
-    TStorage m_value = TStorage{};
+    TStorage value = TStorage{};
 };
 
 template <typename TId, typename TStorage>
 constexpr b8 operator==(Handle<TId, TStorage> lval, Handle<TId, TStorage> rval)
 {
-    return lval.m_value == rval.m_value;
+    return lval.value == rval.value;
 }
 
 template <typename TId, typename TStorage>
 constexpr b8 operator!=(Handle<TId, TStorage> lval, Handle<TId, TStorage> rval)
 {
-    return lval.m_value != rval.m_value;
+    return lval.value != rval.value;
 }
 
 } // namespace sb

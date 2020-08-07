@@ -110,7 +110,7 @@ public:
                 auto file_hdl =
                     func(*this, *layerIter->m_layer, path + layerIter->m_logical_path.length());
 
-                if (!file_hdl.isNull())
+                if (file_hdl.isValid())
                 {
                     return file_hdl;
                 }
@@ -136,7 +136,7 @@ public:
                 {
                     file_hdl = fs.allocateFileDesc(layer_file_hdl, &layer);
 
-                    if (sbExpectFalse(file_hdl.isNull(), "Not enough file descriptor"))
+                    if (sbExpect(file_hdl.isValid(), "Not enough file descriptor"))
                     {
                         layer.closeFile(layer_file_hdl);
                         file_hdl.reset();
@@ -160,7 +160,7 @@ public:
                 {
                     file_hdl = fs.allocateFileDesc(layer_file_hdl, &layer);
 
-                    if (sbExpectFalse(file_hdl.isNull(), "Not enough file descriptor"))
+                    if (sbExpect(file_hdl.isValid(), "Not enough file descriptor"))
                     {
                         layer.closeFile(layer_file_hdl);
                         file_hdl.reset();
@@ -170,7 +170,7 @@ public:
                 return file_hdl;
             });
 
-        if (!hdl.isNull())
+        if (hdl.isValid())
         {
             ++m_opened_file_cnt;
         }
@@ -191,7 +191,7 @@ public:
                 {
                     file_hdl = fs.allocateFileDesc(layer_file_hdl, &layer);
 
-                    if (sbExpectFalse(file_hdl.isNull(), "Not enough file descriptor"))
+                    if (sbExpect(file_hdl.isValid(), "Not enough file descriptor"))
                     {
                         layer.closeFile(layer_file_hdl);
                         file_hdl.reset();
@@ -201,7 +201,7 @@ public:
                 return file_hdl;
             });
 
-        if (!hdl.isNull())
+        if (hdl.isValid())
         {
             ++m_opened_file_cnt;
         }
@@ -275,10 +275,10 @@ private:
 
     void deallocateFileDesc(FileHdl hdl)
     {
-        sbAssert(!hdl.isNull());
+        sbAssert(hdl.isValid());
 
         FileHdlHelper helper_hdl;
-        helper_hdl.m_packed = hdl.get();
+        helper_hdl.m_packed = hdl.value;
 
         MemoryArena arena = m_file_desc_pool.getArena();
         FileDesc * const file_desc =
@@ -293,10 +293,10 @@ private:
 
     FileDesc & getFileDescItem(FileHdl hdl)
     {
-        sbAssert(!hdl.isNull());
+        sbAssert(hdl.isValid());
 
         FileHdlHelper helper_hdl;
-        helper_hdl.m_packed = hdl.get();
+        helper_hdl.m_packed = hdl.value;
 
         MemoryArena arena = m_file_desc_pool.getArena();
         FileDesc * const file_desc =
@@ -380,7 +380,7 @@ void FileSystem::closeFile(FileHdl hdl)
 {
     sbAssert(nullptr != gs_file_system);
 
-    if (sbExpect(!hdl.isNull()))
+    if (sbExpect(hdl.isValid()))
     {
         gs_file_system->closeFile(hdl);
     }
@@ -391,7 +391,7 @@ FileSize FileSystem::readFile(FileHdl hdl, wstd::span<ui8> buffer, FileSize cnt)
     sbAssert((FileSize)buffer.size() >= cnt);
     sbAssert(-1 <= cnt);
 
-    if (sbExpect(!hdl.isNull()))
+    if (sbExpect(hdl.isValid()))
     {
         return gs_file_system->readFile(hdl, buffer.data(),
                                         (cnt == -1) ? (FileSize)buffer.size() : cnt);
@@ -402,7 +402,7 @@ FileSize FileSystem::readFile(FileHdl hdl, wstd::span<ui8> buffer, FileSize cnt)
 
 FileSize FileSystem::getFileLength(FileHdl hdl)
 {
-    if (sbExpect(!hdl.isNull()))
+    if (sbExpect(hdl.isValid()))
     {
         return gs_file_system->getFileLength(hdl);
     }
