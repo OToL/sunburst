@@ -1,5 +1,5 @@
 /// @ref core
-/// @file glm/core/type_tvec2.inl
+/// @file glm/sb_core/type_tvec2.inl
 
 namespace glm
 {

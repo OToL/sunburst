@@ -55,24 +55,24 @@ hash_name_test.cpp
 
 - Directories name is lower case and does not exceed one word
 ```
-core/memory/debug/
+sb_core/memory/debug/
 ```
 
 - Files not meant to be included by other projects are located in a directory named "_impl" at project's root
 ```
-core/_impl/my_file.cpp
-core/_impl/my_file.h
+sb_core/_impl/my_file.cpp
+sb_core/_impl/my_file.h
 ```
 
 - When an implementation file has a public counterpart, it must follow the same directory structure
 ```
-core/aa/bb/cc.h
-core/_impl/aa/bb/cc.cpp
+sb_core/aa/bb/cc.h
+sb_core/_impl/aa/bb/cc.cpp
 ```
 
 - Unit tests are located in a directory named "_test" at project's root
 ```
-core/_test/
+sb_core/_test/
 ```
 
 ## Platform specific code
@@ -152,8 +152,8 @@ namespace sb {}
 
 - Projects wrapping middlewares shall only declare one namespace using their name
 ```c++
-// [project root]/src/wstd
-namespace wstd  {}
+// [project root]/src/sbstd
+namespace sbstd  {}
 
 // [project root]/src/wgtest
 namespace wgtest  {}
@@ -244,7 +244,7 @@ Customized LLVM style
 #define sb_forceinline
 ```
 
-- Types defined in "core/stdex" use STL coding style when necessary.
+- Types defined in "sb_core/stdex" use STL coding style when necessary.
 
 - "detail" namespace can be used to hide implementation in files included from public headers (i.e. headers not located in _impl project folder)
 ```c++

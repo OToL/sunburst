@@ -16,10 +16,10 @@ OPTION(SB_WARNINGS_AS_ERRORS "Treat compilation warnings as errors" ON)
 include(make/sb_utility.cmake)
 
 # Utility target providing common settings such as c++ standard version, inclusion paths, compilation warnings, etc. 
-add_library(cxx_properties_public INTERFACE)
-add_library(cxx_properties_private INTERFACE)
-add_library(sb::cxx_properties_public ALIAS cxx_properties_public)
-add_library(sb::cxx_properties_private ALIAS cxx_properties_private)
+add_library(sb_cxx_properties_public INTERFACE)
+add_library(sb_cxx_properties_private INTERFACE)
+add_library(sb::cxx_properties_public ALIAS sb_cxx_properties_public)
+add_library(sb::cxx_properties_private ALIAS sb_cxx_properties_private)
 
 include(make/sb_environment.cmake)
 
@@ -28,8 +28,8 @@ sb_setup_target_platform()
 
 include(make/sb_toolchain.cmake)
 
-sb_set_target_properties(cxx_properties)
-sb_set_target_warnings(cxx_properties)
+sb_set_target_properties(sb_cxx_properties)
+sb_set_target_warnings(sb_cxx_properties)
 
 include(make/sb_extern.cmake)
 sb_setup_extern()

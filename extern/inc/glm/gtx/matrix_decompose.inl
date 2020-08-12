@@ -26,7 +26,7 @@ namespace detail
 }//namespace detail
 
 	// Matrix decompose
-	// http://www.opensource.apple.com/source/WebCore/WebCore-514/platform/graphics/transforms/TransformationMatrix.cpp
+	// http://www.opensource.apple.com/source/Websb_core/WebCore-514/platform/graphics/transforms/TransformationMatrix.cpp
 	// Decomposes the mode matrix to translations,rotation scale components
 
 	template<typename T, qualifier Q>

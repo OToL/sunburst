@@ -457,7 +457,7 @@ typedef struct _RTL_CRITICAL_SECTION GTEST_CRITICAL_SECTION;
 // The user didn't tell us whether ::std::wstring is available, so we need
 // to figure it out.
 // Cygwin 1.7 and below doesn't support ::std::wstring.
-// Solaris' wstd doesn't support it either.  Android has
+// Solaris' sbstd doesn't support it either.  Android has
 // no support for it at least as recent as Froyo (2.2).
 #define GTEST_HAS_STD_WSTRING                                         \
   (!(GTEST_OS_LINUX_ANDROID || GTEST_OS_CYGWIN || GTEST_OS_SOLARIS || \
@@ -770,7 +770,7 @@ typedef struct _RTL_CRITICAL_SECTION GTEST_CRITICAL_SECTION;
 # define GTEST_NO_INLINE_
 #endif
 
-// _LIBCPP_VERSION is defined by the wstd library from the LLVM project.
+// _LIBCPP_VERSION is defined by the sbstd library from the LLVM project.
 #if !defined(GTEST_HAS_CXXABI_H_)
 # if defined(__GLIBCXX__) || (defined(_LIBCPP_VERSION) && !defined(_MSC_VER))
 #  define GTEST_HAS_CXXABI_H_ 1
@@ -2193,7 +2193,7 @@ class TypeWithSize<4> {
  public:
   // unsigned int has size 4 in both gcc and MSVC.
   //
-  // As base/basictypes.h doesn't compile on Windows, we cannot use
+  // As sb_base/basictypes.h doesn't compile on Windows, we cannot use
   // uint32, uint64, and etc here.
   typedef int Int;
   typedef unsigned int UInt;
