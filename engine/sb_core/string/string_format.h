@@ -1,7 +1,6 @@
 #pragma once
 
 #include <sb_base/base.h>
-#include <sb_base/platform.h>
 
 #include <sb_std/span>
 

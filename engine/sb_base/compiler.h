@@ -1,11 +1,11 @@
 #pragma once
 
 #if defined(SB_PLATFORM_MACOS)
-#    include "_impl/api/macos/platform_macos.h"
+#    include "_impl/api/macos/compiler_macos.h"
 #elif defined(SB_PLATFORM_WINDOWS)
-#    include "_impl/api/windows/platform_win.h"
+#    include "_impl/api/windows/compiler_win.h"
 #elif defined(SB_PLATFORM_LINUX)
-#    include "_impl/api/windows/platform_linux.h"
+#    include "_impl/api/windows/compiler_linux.h"
 #else
 #    error "Unsupported platform"
 #endif
