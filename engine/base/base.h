@@ -3,8 +3,6 @@
 #include <wstd/cstddef>
 #include <wstd/cstdint>
 
-#include "compiler.h"
-
 namespace sb {
 
 using ui8 = uint8_t;
@@ -23,6 +21,12 @@ using f64 = double;
 using b8 = bool;
 using b32 = ui32;
 
-using TimerValue = si64;
-
 } // namespace sb
+
+#define sbBaseClass(...) using BaseClass = __VA_ARGS__
+
+#define SB_DISABLED 1
+#define SB_ENABLED 2
+
+#define sbIsEnabled(feature) (1 == 2 / SB_CTF_##feature)
+#define sbIsEqual(feature, value) ((1 / SB_CTV_##feature + 1) && (SB_CTV_##feature == value))

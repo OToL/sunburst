@@ -12,14 +12,6 @@
 
 #define __restrict __restrict_internal
 
-#define sbBaseClass(...) using BaseClass = __VA_ARGS__
-
-#define SB_DISABLED 1
-#define SB_ENABLED 2
-
-#define sbIsEnabled(feature) (1 == 2 / SB_CTF_##feature)
-#define sbIsEqual(feature, value) ((1 / SB_CTV_##feature + 1) && (SB_CTV_##feature == value))
-
 namespace sb {
 
 void debugBreak();

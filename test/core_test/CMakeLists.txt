@@ -2,7 +2,6 @@ include(${SB_CATCH_CMAKE_DIR_PATH}/catch.cmake)
 
 add_executable(core_test
     bit_test.cpp
-    compiler_test.cpp
     conversion_test.cpp
     crc32_test.cpp
     crc64_test.cpp
@@ -27,8 +26,7 @@ add_executable(core_test
 
 target_link_libraries(core_test
     PRIVATE    
-        sbext::catch 
-        sb::cxx_properties
+        sb::cxx_properties_private
         sb::core
         sb::unit)
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <core/base.h>
+#include <base/base.h>
 
 #define SB_HASHSTR_POLICY_CRC 1
 #define SB_HASHSTR_POLICY_FNV1A 2

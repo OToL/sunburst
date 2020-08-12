@@ -1,7 +1,7 @@
 add_library(core STATIC
     _impl/string_format.cpp
     _impl/log.cpp
-    _impl/base.cpp
+    
     _impl/conversion.cpp
     _impl/error.cpp
     _impl/hash/crc32.cpp
@@ -26,4 +26,7 @@ add_library(sb::core ALIAS core)
 
 target_link_libraries(core 
     PRIVATE
-        sb::cxx_properties)
+        sb::cxx_properties_private
+    PUBLIC
+        sb::cxx_properties_public
+        sb::base)
