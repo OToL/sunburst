@@ -41,7 +41,7 @@ public:
     // TODO: use a loki like assoc_vector to separate m_id from the rest of the data
     struct LayerDesc
     {
-        HashStr m_id;
+        HashStr<> m_id;
         StaticLogicalPath m_logical_path;
         UniquePtr<IFileSystemLayer> m_layer; // TODO: Change to an id/hdl system
     };
@@ -56,7 +56,7 @@ public:
     {
         for (auto & layer : init.m_layers)
         {
-            sbWarn(!layer.m_name.isNull());
+            sbWarn(layer.m_name.isValid());
 
             auto const layerIter = sbstd::find_if(
                 begin(m_layers), end(m_layers),

@@ -32,7 +32,7 @@ struct FmtArgDesc
 };
 
 template <typename T>
-struct FmtArgDesc<T, sbstd::enable_if_t<sbstd::is_string_raw<sbstd::decay_t<T>>::value>>
+struct FmtArgDesc<T, sbstd::enable_if_t<sbstdx::is_string_raw<sbstd::decay_t<T>>::value>>
 {
     using ValueType = char const *;
 

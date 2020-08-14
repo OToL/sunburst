@@ -5,9 +5,11 @@
 
 namespace sb {
 
-char * getWorkingDirectory(char * buff, usize buff_capacity)
+char * getWorkingDirectory(sbstd::span<char> buffer)
 {
-    return getcwd(buff, buff_capacity);
+    sbAssert(!buffer.empty());
+
+    return getcwd(buffer.data(), numericConv<int>(buffer.size_bytes()));
 }
 
 void outputDebugString(char const * msg)

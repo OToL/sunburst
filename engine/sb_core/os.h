@@ -10,12 +10,14 @@
 
 #include <sb_base/base.h>
 
+#include <sb_std/span>
+
 namespace sb {
 
-constexpr usize GLOBAL_HEAP_ALIGNMENT = 8;
-constexpr char const * FILE_PATH_SEPARATOR = detail::FILE_PATH_SEPARATOR;
+inline constexpr usize GLOBAL_HEAP_ALIGNMENT = 8;
+inline constexpr char const * FILE_PATH_SEPARATOR = internal::FILE_PATH_SEPARATOR;
 
-char * getWorkingDirectory(char * buff, usize buff_capacity);
+char * getWorkingDirectory(sbstd::span<char> buffer);
 void outputDebugString(char const * msg);
 
 } // namespace sb

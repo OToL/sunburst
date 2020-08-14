@@ -3,7 +3,7 @@
 #include "std.h"
 #include SB_SRC_STD_INC(charconv)
 
-namespace SB_WSTD_NS {
+namespace SB_STD_NS {
 
     SB_SRC_STD_USE(to_chars);
     SB_SRC_STD_USE(from_chars);

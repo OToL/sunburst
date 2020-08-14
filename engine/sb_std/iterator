@@ -4,7 +4,7 @@
 
 #include SB_SRC_STD_INC(iterator)
 
-namespace SB_WSTD_NS {
+namespace SB_STD_NS {
 
     SB_SRC_STD_USE(begin);
 	SB_SRC_STD_USE(end);

@@ -2,6 +2,8 @@
 
 #include <sb_base/base.h>
 
+#include <sb_std/inplace_function>
+
 namespace sb {
 
 enum class LogLevel : ui8
@@ -14,10 +16,9 @@ enum class LogLevel : ui8
     DEBUG // Verbose logging for debug purpose
 };
 
-typedef void (*LogHandler)(void * user_data, LogLevel lvl, char const * const file, ui32 const line,
-                           char const * const msg);
+using LogHandler = sbstdx::inplace_function<void (LogLevel lvl, char const * const file, ui32 const line, char const * const msg)>;
 
-void setLogHandler(LogHandler const & hdl, void * user_data = nullptr);
+void setLogHandler(LogHandler const & hdl);
 void setLogQuiet(b8 quiet);
 void setLogMinLevel(LogLevel min_level);
 

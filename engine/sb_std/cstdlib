@@ -4,7 +4,7 @@
 
 #include SB_SRC_STD_INC(cstdlib)
 
-namespace SB_WSTD_NS {
+namespace SB_STD_NS {
 
       SB_SRC_STD_USE(exit);
       SB_SRC_STD_USE(atoi);

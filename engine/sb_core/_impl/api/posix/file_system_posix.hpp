@@ -84,7 +84,7 @@ FileSize platformFileLength(PlatformFileHdl hdl)
 
     auto const curr_pos = ftell(actual_hdl);
 
-    if (sbExpectFalse(0 != fseek(actual_hdl, 0, SEEK_END)))
+    if (sbDontExpect(0 != fseek(actual_hdl, 0, SEEK_END)))
     {
         return 0;
     }

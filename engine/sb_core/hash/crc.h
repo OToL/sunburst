@@ -4,24 +4,10 @@
 
 namespace sb {
 
-struct CRC32
-{
-    using Value = ui32;
+ui32 computeCRC32(ui8 const * const buffer, usize const len);
+ui32 computeCRC32(char const * const str);
 
-    static constexpr Value NULL_VALUE = 0U;
-
-    static Value compute(ui8 const * const buffer, usize const len);
-    static Value compute(char const * const str);
-};
-
-struct CRC64
-{
-    using Value = ui64;
-
-    static constexpr Value NULL_VALUE = 0ULL;
-
-    static Value compute(ui8 const * const buffer, usize const len);
-    static Value compute(char const * const str);
-};
+ui64 computeCRC64(ui8 const * const buffer, usize const len);
+ui64 computeCRC64(char const * const str);
 
 } // namespace sb

@@ -4,7 +4,7 @@
 
 #include SB_SRC_STD_INC(type_traits)
 
-namespace SB_WSTD_NS {
+namespace SB_STD_NS {
 
     SB_SRC_STD_USE(is_array_v);
     SB_SRC_STD_USE(is_integral);
@@ -30,6 +30,8 @@ namespace SB_WSTD_NS {
     SB_SRC_STD_USE(aligned_storage);
     SB_SRC_STD_USE(void_t);
 
+namespace SB_STD_NS_EXT {
+
     template< class T >
     struct remove_cvref 
     {
@@ -37,7 +39,7 @@ namespace SB_WSTD_NS {
     };
 
     template< class T >
-    using remove_cvref_t = typename sbstd::remove_cvref<T>::type;
+    using remove_cvref_t = typename remove_cvref<T>::type;
 
     struct null_t
     {
@@ -57,5 +59,6 @@ namespace SB_WSTD_NS {
     struct is_string_raw<char const *> : public sbstd::true_type
     {
     };
-    
+
+}
 }

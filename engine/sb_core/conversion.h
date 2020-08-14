@@ -20,7 +20,7 @@ inline usize stringConvT(TSrc && src, sbstd::span<char> dest)
 {
     using DecayedType = sbstd::decay_t<TSrc>;
 
-    if constexpr (sbstd::is_string_raw<DecayedType>::value)
+    if constexpr (sbstdx::is_string_raw<DecayedType>::value)
     {
         return internal::stringToCharBuffer(src, dest);
     }

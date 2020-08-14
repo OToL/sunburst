@@ -4,7 +4,7 @@
 
 #include SB_SRC_STD_INC(new)
 
-namespace SB_WSTD_NS {
+namespace SB_STD_NS {
 
     SB_SRC_STD_USE(align_val_t);
     SB_SRC_STD_USE(nothrow_t);

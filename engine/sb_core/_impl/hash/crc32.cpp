@@ -43,9 +43,9 @@ static ui32 const CRC32_TAB[] = {
     0xcdd70693L, 0x54de5729L, 0x23d967bfL, 0xb3667a2eL, 0xc4614ab8L, 0x5d681b02L, 0x2a6f2b94L,
     0xb40bbe37L, 0xc30c8ea1L, 0x5a05df1bL, 0x2d02ef8dL};
 
-CRC32::Value CRC32::compute(ui8 const * const buffer, usize const len)
+ui32 computeCRC32(ui8 const * const buffer, usize const len)
 {
-    Value crc_value = 0U;
+    ui32 crc_value = 0U;
 
     ui8 const * const data = buffer;
 
@@ -54,12 +54,12 @@ CRC32::Value CRC32::compute(ui8 const * const buffer, usize const len)
         crc_value = CRC32_TAB[(crc_value ^ data[iter]) & 0xff] ^ (crc_value >> 8);
     }
 
-    return (crc_value);
+    return crc_value;
 }
 
-CRC32::Value CRC32::compute(char const * const str)
+ui32 computeCRC32(char const * const str)
 {
-    Value crc_value = 0U;
+    ui32 crc_value = 0U;
 
     ui8 const * iter = reinterpret_cast<ui8 const *>(str);
 
@@ -69,7 +69,7 @@ CRC32::Value CRC32::compute(char const * const str)
         ++iter;
     }
 
-    return (crc_value);
+    return crc_value;
 }
 
 } // namespace sb

@@ -11,30 +11,29 @@
 #    include <sb_std/cassert>
 #    include <sb_std/cstdio>
 
-namespace sb::detail {
+namespace sb::internal {
 
-static ErrorHandler gs_error_hdl = nullptr;
-static void * gs_error_user_data = nullptr;
+static ErrorHandler g_error_hdl;
 
 static char const * const ERROR_DEFAULT_MSG[] = {
     "Critical error detected", "Unhandled error detected", "Non fatal error detected"};
 
-void logDefaultErrorMsg(ErrorType type, char const * const file, ui32 const line, char const * msg)
+void logDefaultErrorMsg(ErrorLevel type, char const * const file, ui32 const line, char const * msg)
 {
     char fmt_msg[255];
     sb::stringFormat(fmt_msg, "{} ({}, {})", msg, file, line);
 
     switch (type)
     {
-        case ErrorType::CRITICAL:
+        case ErrorLevel::CRITICAL:
         {
             sbLogE(fmt_msg);
 
             break;
         }
 
-        case ErrorType::WARNING:
-        case ErrorType::NOTICE:
+        case ErrorLevel::WARNING:
+        case ErrorLevel::NOTICE:
         {
             sbLogW(fmt_msg);
 
@@ -43,41 +42,41 @@ void logDefaultErrorMsg(ErrorType type, char const * const file, ui32 const line
     }
 }
 
-void reportError(ErrorType type, char const * const file, ui32 const line, char const * msg)
+void reportError(ErrorLevel type, char const * const file, ui32 const line, char const * msg)
 {
-    if (nullptr != gs_error_hdl)
+    if (nullptr != g_error_hdl)
     {
-        gs_error_hdl(gs_error_user_data, type, file, line, msg);
+        g_error_hdl(type, file, line, msg);
     }
     else
     {
         logDefaultErrorMsg(type, file, line, msg);
     }
 
-    if (ErrorType::CRITICAL == type)
+    if (ErrorLevel::CRITICAL == type)
     {
         sb::debugBreak();
     }
 }
 
-void reportError(ErrorType type, char const * const file, ui32 const line)
+void reportError(ErrorLevel type, char const * const file, ui32 const line)
 {
-    if (nullptr != gs_error_hdl)
+    if (nullptr != g_error_hdl)
     {
-        gs_error_hdl(gs_error_user_data, type, file, line, "");
+        g_error_hdl(type, file, line, "");
     }
     else
     {
         logDefaultErrorMsg(type, file, line, ERROR_DEFAULT_MSG[getEnumValue(type)]);
     }
 
-    if (ErrorType::CRITICAL == type)
+    if (ErrorLevel::CRITICAL == type)
     {
         sb::debugBreak();
     }
 }
 
-void reportNotImplemented(ErrorType type, char const * const file, ui32 const line,
+void reportNotImplemented(ErrorLevel type, char const * const file, ui32 const line,
                           char const * msg)
 {
     char msg_fmt[255];
@@ -85,10 +84,9 @@ void reportNotImplemented(ErrorType type, char const * const file, ui32 const li
     reportError(type, file, line, msg_fmt);
 }
 
-void setErrorHandler(ErrorHandler const & hdl, void * user_data)
+void setErrorHandler(ErrorHandler const & hdl)
 {
-    gs_error_hdl = hdl;
-    gs_error_user_data = user_data;
+    g_error_hdl = hdl;
 }
 
 } // namespace sb::detail

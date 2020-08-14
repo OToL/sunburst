@@ -1,56 +1,57 @@
 #pragma once
 
 #include <sb_base/base.h>
-#include <sb_core/_impl/config/hash_cfg.h>
+
+#include <sb_core/_impl/hash/hashstr_policy.h>
 
 namespace sb {
 
+// use span in low level
+// use string_view instead of char + len
+template<typename ValueType = ui64>
 struct HashStr
 {
-    using HashPolicy = detail::HashStrPolicy;
-    using Value = typename HashPolicy::Value;
+    using HashPolicy = internal::HashStrPolicy<ValueType>;
+    using Value = typename ValueType;
 
     HashStr() = default;
 
     constexpr explicit HashStr(Value value)
-        : m_value(value)
+        : value(value)
     {
     }
 
     constexpr explicit HashStr(char const * str)
-        : m_value(0)
+        : value(HashPolicy::compute(str))
     {
-        if (str[0] != '\0')
-        {
-            m_value = HashPolicy::compute(str);
-        }
     }
 
     constexpr HashStr(char const * str, usize len)
-        : m_value(0)
+        : value(HashPolicy::compute((ui8 const *)str, len))
     {
-        if ((str[0] != '\0') && (0 != len))
-        {
-            m_value = HashPolicy::compute((ui8 const *)str, len);
-        }
     }
 
-    constexpr b32 isNull() const
+    constexpr b32 isValid() const
     {
-        return (m_value == 0);
+        return (value != 0);
     }
 
-    Value m_value = 0;
+    Value value = 0;
 };
 
-constexpr b8 operator==(HashStr lval, HashStr rval)
+template<typename ValueType> 
+constexpr b8 operator==(HashStr<ValueType> lval, HashStr<ValueType> rval)
 {
-    return (lval.m_value == rval.m_value);
+    return (lval.value == rval.value);
 }
 
-constexpr b8 operator!=(HashStr lval, HashStr rval)
+template<typename ValueType> 
+constexpr b8 operator!=(HashStr<ValueType> lval, HashStr<ValueType> rval)
 {
-    return (lval.m_value != rval.m_value);
+    return (lval.value != rval.value);
 }
+
+using HashStr64 = HashStr<>;
+using HashStr32 = HashStr<ui32>;
 
 } // namespace sb

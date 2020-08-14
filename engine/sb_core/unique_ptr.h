@@ -194,7 +194,7 @@ auto makeUnique(TArgs &&... args) -> sbstd::enable_if_t<!sbstd::is_array_v<T>, U
 
 } // namespace sb
 
-namespace SB_WSTD_NS {
+namespace SB_STD_NS {
 
 template <class U, class T, class A>
 auto static_pointer_cast(std::unique_ptr<T, A> && r) noexcept
@@ -210,4 +210,4 @@ auto static_pointer_cast(std::unique_ptr<T, A> & r) noexcept
                                                                     r.get_deleter()};
 }
 
-} // namespace SB_WSTD_NS
+} // namespace SB_STD_NS

@@ -4,7 +4,7 @@
 
 #include SB_SRC_STD_INC(cstring)
 
-namespace SB_WSTD_NS {
+namespace SB_STD_NS {
 
       SB_SRC_STD_USE(strrchr);
       SB_SRC_STD_USE(strlen);

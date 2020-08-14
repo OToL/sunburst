@@ -1,7 +1,7 @@
 #pragma once
 
-namespace sb::detail {
+namespace sb::internal {
 
-constexpr char const * FILE_PATH_SEPARATOR = "\\";
+inline constexpr char const * FILE_PATH_SEPARATOR = "\\";
 
 }

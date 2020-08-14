@@ -4,10 +4,9 @@
 
 #include <sb_std/iterator>
 
-namespace sb::detail {
+namespace sb::internal {
 
-static LogHandler gs_log_hdl = nullptr;
-static void * gs_log_user_data = nullptr;
+static LogHandler g_log_hdl;
 
 static char const * const LOG_TYPE_TO_STR[] = {"ERROR", "WARNING", "INFO", "DEBUG"};
 
@@ -15,9 +14,9 @@ void logMessage(LogLevel type, char const * file, ui32 line, char const * msg)
 {
     sbAssert((ui8)type < sbstd::size(LOG_TYPE_TO_STR));
 
-    if (nullptr != gs_log_hdl)
+    if (nullptr != g_log_hdl)
     {
-        gs_log_hdl(gs_log_user_data, type, file, line, msg);
+        g_log_hdl(type, file, line, msg);
     }
     else
     {
@@ -28,10 +27,9 @@ void logMessage(LogLevel type, char const * file, ui32 line, char const * msg)
     }
 }
 
-void setLogHandler(LogHandler const & hdl, void * user_data)
+void setLogHandler(LogHandler const & hdl)
 {
-    gs_log_hdl = hdl;
-    gs_log_user_data = user_data;
+    g_log_hdl = hdl;
 }
 
-} // namespace sb::detail
+} // namespace sb::internal

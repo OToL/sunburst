@@ -9,17 +9,17 @@ template <typename... TArgs>
 usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args);
 }
 
-namespace sb::detail {
+namespace sb::internal {
 
-void reportNotImplemented(ErrorType type, char const * const file, ui32 const line,
+void reportNotImplemented(ErrorLevel type, char const * const file, ui32 const line,
                           char const * msg);
 
-void reportError(ErrorType type, char const * const file, ui32 const line, char const * msg);
+void reportError(ErrorLevel type, char const * const file, ui32 const line, char const * msg);
 
-void reportError(ErrorType type, char const * const file, ui32 const line);
+void reportError(ErrorLevel type, char const * const file, ui32 const line);
 
 template <typename... TArgs>
-void reportError(ErrorType type, char const * const file, ui32 const line, char const * msg,
+void reportError(ErrorLevel type, char const * const file, ui32 const line, char const * msg,
                  TArgs... args)
 {
     if constexpr (sizeof...(args))
@@ -31,39 +31,39 @@ void reportError(ErrorType type, char const * const file, ui32 const line, char 
     }
 }
 
-} // namespace sb::detail
+} // namespace sb::internal
 
 #    define sbAssertInternal(cond, ...)                                                                \
         if (!(cond))                                                                               \
         {                                                                                          \
-            sb::detail::reportError(sb::ErrorType::CRITICAL, __FILE__, __LINE__, ##__VA_ARGS__);   \
+            sb::internal::reportError(sb::ErrorLevel::CRITICAL, __FILE__, __LINE__, ##__VA_ARGS__);   \
         }
 
 #    define sbWarnInternal(cond, ...)                                                                  \
         if (!(cond))                                                                               \
         {                                                                                          \
-            sb::detail::reportError(sb::ErrorType::WARNING, __FILE__, __LINE__, ##__VA_ARGS__);    \
+            sb::internal::reportError(sb::ErrorLevel::WARNING, __FILE__, __LINE__, ##__VA_ARGS__);    \
         }
 
 #    define sbExpectInternal(cond, ...)                                                            \
         ((cond) ||                                                                                 \
-         (sb::detail::reportError(sb::ErrorType::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),       \
+         (sb::internal::reportError(sb::ErrorLevel::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),       \
           false))
 
-#    define sbExpectFalseInternal(cond, ...)                                                           \
+#    define sbDontExpectInternal(cond, ...)                                                           \
         ((cond) &&                                                                                 \
-         (sb::detail::reportError(sb::ErrorType::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),       \
+         (sb::internal::reportError(sb::ErrorLevel::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),       \
           true))
 
 #    define sbNotImplementedInternal(str)                                                              \
-        sb::detail::reportNotImplemented(sb::ErrorType::WARNING, __FILE__, __LINE__, str)
+        sb::internal::reportNotImplemented(sb::ErrorLevel::WARNING, __FILE__, __LINE__, str)
 
 #else
 
 #    define sbAssertInternal(cond, ...)
 #    define sbWarnInternal(cond, ...)
 #    define sbExpectInternal(cond, ...) (cond)
-#    define sbExpectFalseInternal(cond, ...) !(cond)
+#    define sbDontExpectInternal(cond, ...) !(cond)
 #    define sbNotImplementedInternal(str)
 
 #endif

@@ -30,7 +30,7 @@ usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbs
                 {
                     ++format_iter;
                 }
-                else if (sbExpectFalse(0 == next_token,
+                else if (sbDontExpect(0 == next_token,
                                        "Reached end of format string without finding "
                                        "argument closing '}'"))
                 {
@@ -99,7 +99,7 @@ usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbs
             {
                 ++format_iter;
 
-                if (sbExpectFalse('}' != *format_iter, "'}' found without former '{'"))
+                if (sbDontExpect('}' != *format_iter, "'}' found without former '{'"))
                 {
                     continue;
                 }

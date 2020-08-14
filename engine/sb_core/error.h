@@ -2,32 +2,33 @@
 
 #include <sb_base/base.h>
 
+#include <sb_std/inplace_function>
+
 namespace sb {
 
-enum class ErrorType : ui8
+enum class ErrorLevel : ui8
 {
     CRITICAL, // Unhandled critical error leading to a crash
-    WARNING, // Error with side effect(s) affecting progam's behavior (graphic glitch,
+    WARNING, // ErrorLevel with side effect(s) affecting progam's behavior (graphic glitch,
              // bugs, etc.)
     NOTICE // The error has been properly handled
 };
 
-using ErrorHandler = void (*)(void * user_data, ErrorType type, char const * file, ui32 const line,
-                              char const * msg);
+using ErrorHandler = sbstdx::inplace_function<void (ErrorLevel type, char const * file, ui32 const line, char const * msg)>;
 
-void setErrorHandler(ErrorHandler const & hdl, void * user_data = nullptr);
+void setErrorHandler(ErrorHandler const & hdl);
 
 } // namespace sb
 
-// ErrorType::CRITICAL
+// ErrorLevel::CRITICAL
 #define sbAssert(cond, ...) sbAssertInternal(cond, ##__VA_ARGS__)
 
-// ErrorType::WARNING
+// ErrorLevel::WARNING
 #define sbWarn(cond, ...) sbWarnInternal(cond, ##__VA_ARGS__)
 #define sbNotImplemented(str) sbNotImplementedInternal(str)
 
-// ErrorType::NOTICE
+// ErrorLevel::NOTICE
 #define sbExpect(cond, ...) sbExpectInternal(cond, ##__VA_ARGS__)
-#define sbExpectFalse(cond, ...) sbExpectFalseInternal(cond, ##__VA_ARGS__)
+#define sbDontExpect(cond, ...) sbDontExpectInternal(cond, ##__VA_ARGS__)
 
 #include "_impl/error.h"

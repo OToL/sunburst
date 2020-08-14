@@ -4,50 +4,65 @@
 
 namespace sb {
 
-constexpr inline FNV1a32::Value FNV1a32::compute(ui8 const * const buffer, usize const len)
+constexpr inline ui32 computeFNV1a32(ui8 const * const buffer, usize const len)
 {
-    Value hval = OFFSET;
+    if (0 == len)
+    {
+        return 0U;
+    }
+
+    ui32 hval = 0x811C9DC5U;
 
     ui8 const * bp = buffer;
     ui8 const * const be = bp + len;
 
     while (bp < be)
     {
-        hval ^= (FNV1a32::Value)*bp++;
-        hval *= PRIME;
+        hval ^= (ui32)*bp++;
+        hval *= 0x01000193U;
         // hval += (hval<<1) + (hval<<4) + (hval<<7) + (hval<<8) + (hval<<24);
     }
 
     return hval;
 }
 
-constexpr inline FNV1a32::Value FNV1a32::compute(char const * const str)
+constexpr inline ui32 computeFNV1a32(char const * const str)
 {
-    Value hval = OFFSET;
+    if (0 == *str)
+    {
+        return 0U;
+    }
+
+    ui32 hval = 0x811C9DC5U;
 
     char const * s = str;
 
     while (*s)
     {
-        hval ^= (Value)*s++;
-        hval *= PRIME;
+        hval ^= (ui32)*s++;
+        hval *= 0x01000193U;
         // hval += (hval<<1) + (hval<<4) + (hval<<7) + (hval<<8) + (hval<<24);
     }
 
     return hval;
 }
 
-constexpr inline FNV1a64::Value FNV1a64::compute(ui8 const * const buffer, usize const len)
+constexpr inline ui64 computeFNV1a64(ui8 const * const buffer, usize const len)
 {
-    FNV1a64::Value hval = OFFSET;
+    if (0 == len)
+    {
+        return 0ULL;
+    }
+
+    ui64 hval = 0xCBF29CE484222325ULL;
 
     ui8 const * bp = buffer;
     ui8 const * be = bp + len;
 
     while (bp < be)
     {
-        hval ^= (Value)*bp++;
-        hval *= PRIME;
+        hval ^= (ui64)*bp++;
+        hval *= 0x100000001b3ULL;
         // hval `+= (hval << 1) + (hval << 4) + (hval << 5) + (hval << 7) + (hval << 8) +
         // (hval << 40);
     }
@@ -55,16 +70,21 @@ constexpr inline FNV1a64::Value FNV1a64::compute(ui8 const * const buffer, usize
     return hval;
 }
 
-constexpr inline FNV1a64::Value FNV1a64::compute(char const * const str)
+constexpr inline ui64 computeFNV1a64(char const * const str)
 {
-    FNV1a64::Value hval = OFFSET;
+    if (0 == *str)
+    {
+        return 0ULL;
+    }
+
+    ui64 hval = 0xCBF29CE484222325ULL;
 
     char const * s = str;
 
     while (*s)
     {
-        hval ^= (Value)*s++;
-        hval *= PRIME;
+        hval ^= (ui64)*s++;
+        hval *= 0x100000001b3ULL;
         // hval += (hval << 1) + (hval << 4) + (hval << 5) + (hval << 7) + (hval << 8) +
         // (hval << 40);
     }
@@ -72,37 +92,4 @@ constexpr inline FNV1a64::Value FNV1a64::compute(char const * const str)
     return hval;
 }
 
-template <>
-struct HashPolicyFNV1a<32>
-{
-public:
-    using ValueType = FNV1a32::Value;
-
-    static constexpr ValueType compute(ui8 const * const buffer, usize const len)
-    {
-        return FNV1a32::compute(buffer, len);
-    }
-
-    static constexpr ValueType compute(char const * const str)
-    {
-        return FNV1a32::compute(str);
-    }
-};
-
-template <>
-struct HashPolicyFNV1a<64>
-{
-public:
-    using ValueType = FNV1a64::Value;
-
-    static constexpr ValueType compute(ui8 const * const buffer, usize const len)
-    {
-        return FNV1a64::compute(buffer, len);
-    }
-
-    static constexpr ValueType compute(char const * const str)
-    {
-        return FNV1a64::compute(str);
-    }
-};
 } // namespace sb
