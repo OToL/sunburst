@@ -15,14 +15,14 @@ static ui32 const CRC32_STR_TEST_HASH = 0xc7c7535eU;
 
 TEST_CASE("Null CRC32", "[crc32]")
 {
-    REQUIRE(0U == computeCRC32(nullptr, 0));
-    REQUIRE(0U == computeCRC32((ui8 const * const) "Hello", 0));
+    REQUIRE(0U == computeCRC32(sbstd::span<ui8>{}));
+    REQUIRE(0U == computeCRC32({(ui8 const *) "Hello", 0}));
     REQUIRE(0U == computeCRC32(""));
 }
 
 TEST_CASE("Raw buffer CRC32 hash", "[crc32]")
 {
-    ui32 const test_crc = computeCRC32(CRC32_ARRAY_TEST, sbstd::size(CRC32_ARRAY_TEST));
+    ui32 const test_crc = computeCRC32(CRC32_ARRAY_TEST);
 
     REQUIRE(CRC32_ARRAY_TEST_HASH == test_crc);
 }

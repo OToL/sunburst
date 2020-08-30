@@ -6,7 +6,8 @@
 
 namespace sb::detail {
 
-usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbstd::span<FmtArg> args)
+usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
+                   sbstd::span<FmtArg> args)
 {
     usize copied_bytes = 0;
 
@@ -31,8 +32,8 @@ usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbs
                     ++format_iter;
                 }
                 else if (sbDontExpect(0 == next_token,
-                                       "Reached end of format string without finding "
-                                       "argument closing '}'"))
+                                      "Reached end of format string without finding "
+                                      "argument closing '}'"))
                 {
                     break;
                 }
@@ -46,7 +47,7 @@ usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbs
                         format_iter += 2;
 
                         if (sbExpect(-1 != lastParamIdx,
-                                         "You cannot mix indexed and auto-increment arguments"))
+                                     "You cannot mix indexed and auto-increment arguments"))
                         {
                             arg_idx = lastParamIdx++;
                         }
@@ -57,12 +58,12 @@ usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbs
                     }
                     // Argument specification
                     else if (sbExpect(sbstd::isdigit(next_token),
-                                          "Only digit is allowed in argument specification") &&
+                                      "Only digit is allowed in argument specification") &&
                              sbExpect(0 >= lastParamIdx,
-                                          "You cannot mix indexed and auto-increment "
-                                          "argument specification") &&
+                                      "You cannot mix indexed and auto-increment "
+                                      "argument specification") &&
                              sbExpect('}' == format_iter[2],
-                                          "Format argument index must be within [0-9] range"))
+                                      "Format argument index must be within [0-9] range"))
                     {
                         arg_idx = next_token - '0';
                         lastParamIdx = -1;
@@ -74,8 +75,7 @@ usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbs
                     {
                         char const * const closing_arg = strchr(format_iter + 1, '}');
 
-                        if (sbExpect(nullptr != closing_arg,
-                                         "Cannot find closing argument '}'"))
+                        if (sbExpect(nullptr != closing_arg, "Cannot find closing argument '}'"))
                         {
                             format_iter = closing_arg + 1;
                             continue;
@@ -88,8 +88,7 @@ usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbs
 
                     copied_bytes += args[(ui32)arg_idx].m_fmt_cb(
                         args[(ui32)arg_idx].m_value,
-                        sbstd::span<char>{dest_iter,
-                                         dest_capacity - copied_bytes});
+                        sbstd::span<char>{dest_iter, dest_capacity - copied_bytes});
                     dest_iter = dest_buffer.data() + copied_bytes;
 
                     continue;

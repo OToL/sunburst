@@ -16,7 +16,8 @@ enum class LogLevel : ui8
     DEBUG // Verbose logging for debug purpose
 };
 
-using LogHandler = sbstdx::inplace_function<void (LogLevel lvl, char const * const file, ui32 const line, char const * const msg)>;
+using LogHandler = sbstdx::inplace_function<void(LogLevel lvl, char const * const file,
+                                                 ui32 const line, char const * const msg)>;
 
 void setLogHandler(LogHandler const & hdl);
 void setLogQuiet(b8 quiet);

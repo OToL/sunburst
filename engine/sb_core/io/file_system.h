@@ -15,7 +15,7 @@ struct FileSystem
 {
     FileSystem() = delete;
 
-    using LayerName = HashStr<>;
+    using LayerName = HashStr;
     using LayerPtr = UniquePtr<IFileSystemLayer>;
 
     struct LayerDesc

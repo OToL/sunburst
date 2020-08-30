@@ -70,11 +70,27 @@ static ui64 const CRC64_TAB[256] = {
     0x14dea25f3af9026dULL, 0x562e43b4931334feULL, 0x913f6188692d6f4bULL, 0xd3cf8063c0c759d8ULL,
     0x5dedc41a34bbeeb2ULL, 0x1f1d25f19d51d821ULL, 0xd80c07cd676f8394ULL, 0x9afce626ce85b507ULL};
 
-ui64 computeCRC64(ui8 const * const buffer, usize const len)
+ui64 computeCRC64(sbstd::span<ui8 const> buffer)
 {
     ui64 crc_value = 0ULL;
 
-    ui8 const * const data = buffer;
+    ui8 const * const data = buffer.data();
+    auto const len = buffer.size();
+
+    for (usize iter = 0; iter < len; iter++)
+    {
+        crc_value = CRC64_TAB[(unsigned char)(crc_value >> 56) ^ data[iter]] ^ (crc_value << 8);
+    }
+
+    return crc_value;
+}
+
+ui64 computeCRC64(sbstd::string_view buffer)
+{
+    ui64 crc_value = 0ULL;
+
+    char const * const data = buffer.data();
+    auto const len = buffer.size();
 
     for (usize iter = 0; iter < len; iter++)
     {

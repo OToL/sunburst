@@ -89,6 +89,6 @@ void setErrorHandler(ErrorHandler const & hdl)
     g_error_hdl = hdl;
 }
 
-} // namespace sb::detail
+} // namespace sb::internal
 
 #endif

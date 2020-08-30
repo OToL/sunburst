@@ -1,6 +1,7 @@
 #include <sb_core/hash/fnv1a.h>
 
 #include <sb_std/iterator>
+#include <sb_std/xutility>
 
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
@@ -15,14 +16,14 @@ static ui32 const FNV32_STR_TEST_HASH = 0xcad2b6acU;
 
 TEST_CASE("Null FNV32", "[fnv1a32]")
 {
-    REQUIRE(0U == computeFNV1a32(nullptr, 0));
-    REQUIRE(0U == computeFNV1a32((ui8 const * const) "Hello", 0));
+    REQUIRE(0U == computeFNV1a32(sbstd::span<ui8>{}));
+    REQUIRE(0U == computeFNV1a32({sbstd::data(FNV32_ARRAY_TEST), 0}));
     REQUIRE(0U == computeFNV1a32(""));
 }
 
 TEST_CASE("Raw buffer FNV32 hash", "[fnv1a32]")
 {
-    ui32 const fnv_val = computeFNV1a32(FNV32_ARRAY_TEST, sbstd::size(FNV32_ARRAY_TEST));
+    ui32 const fnv_val = computeFNV1a32(FNV32_ARRAY_TEST);
 
     REQUIRE(FNV32_ARRAY_TEST_HASH == fnv_val);
 }

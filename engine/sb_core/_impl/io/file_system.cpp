@@ -41,7 +41,7 @@ public:
     // TODO: use a loki like assoc_vector to separate m_id from the rest of the data
     struct LayerDesc
     {
-        HashStr<> m_id;
+        HashStr m_id;
         StaticLogicalPath m_logical_path;
         UniquePtr<IFileSystemLayer> m_layer; // TODO: Change to an id/hdl system
     };
@@ -64,8 +64,8 @@ public:
             auto const layer_path_len = strlen(layer.m_logical_path);
 
             if (sbExpect((layerIter == end(m_layers)) && (0 != layer_path_len) &&
-                             LPath::isValid(layer.m_logical_path) &&
-                             (layer.m_logical_path[layer_path_len - 1] == *LPath::SEPARATOR)))
+                         LPath::isValid(layer.m_logical_path) &&
+                         (layer.m_logical_path[layer_path_len - 1] == *LPath::SEPARATOR)))
             {
                 auto & new_layer = m_layers.emplace_back();
 
@@ -213,7 +213,7 @@ public:
     {
         auto const layer_desc =
             sbstd::find_if(begin(m_layers), end(m_layers),
-                          [name](LayerDesc const & layer) { return layer.m_id == name; });
+                           [name](LayerDesc const & layer) { return layer.m_id == name; });
 
         if (nullptr != layer_desc)
         {

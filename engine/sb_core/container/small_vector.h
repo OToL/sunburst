@@ -166,18 +166,19 @@ public:
 
             if ((src_size <= capacity()) && (dst_size <= src.capacity()))
             {
-                sbstd::swap_ranges(m_impl.m_begin, m_impl.m_begin + common_size, src.m_impl.m_begin);
+                sbstd::swap_ranges(m_impl.m_begin, m_impl.m_begin + common_size,
+                                   src.m_impl.m_begin);
 
                 if (src_size > dst_size)
                 {
                     sbstd::uninitialized_move(src.m_impl.m_begin + common_size, src.m_impl.m_end,
-                                             m_impl.m_end);
+                                              m_impl.m_end);
                     sbstd::destroy(src.m_impl.m_begin + common_size, src.m_impl.m_end);
                 }
                 else if (dst_size > src_size)
                 {
                     sbstd::uninitialized_move(m_impl.m_begin + common_size, m_impl.m_end,
-                                             src.m_impl.m_end);
+                                              src.m_impl.m_end);
                     sbstd::destroy(m_impl.m_begin + common_size, m_impl.m_end);
                 }
 
@@ -491,7 +492,7 @@ public:
                 if (new_capacity <= BASE_CAPACITY)
                 {
                     sbstd::uninitialized_move(m_impl.m_begin, m_impl.m_end,
-                                             reinterpret_cast<pointer>(&m_buffer[0]));
+                                              reinterpret_cast<pointer>(&m_buffer[0]));
                     sbstd::destroy(m_impl.m_begin, m_impl.m_end);
                     m_impl.deallocate(m_impl.m_begin, curr_capacity);
 

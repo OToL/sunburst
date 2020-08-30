@@ -14,7 +14,8 @@ enum class ErrorLevel : ui8
     NOTICE // The error has been properly handled
 };
 
-using ErrorHandler = sbstdx::inplace_function<void (ErrorLevel type, char const * file, ui32 const line, char const * msg)>;
+using ErrorHandler = sbstdx::inplace_function<void(ErrorLevel type, char const * file,
+                                                   ui32 const line, char const * msg)>;
 
 void setErrorHandler(ErrorHandler const & hdl);
 

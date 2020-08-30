@@ -43,11 +43,27 @@ static ui32 const CRC32_TAB[] = {
     0xcdd70693L, 0x54de5729L, 0x23d967bfL, 0xb3667a2eL, 0xc4614ab8L, 0x5d681b02L, 0x2a6f2b94L,
     0xb40bbe37L, 0xc30c8ea1L, 0x5a05df1bL, 0x2d02ef8dL};
 
-ui32 computeCRC32(ui8 const * const buffer, usize const len)
+ui32 computeCRC32(sbstd::span<ui8 const> buffer)
 {
     ui32 crc_value = 0U;
 
-    ui8 const * const data = buffer;
+    ui8 const * const data = buffer.data();
+    auto const len = buffer.size();
+
+    for (usize iter = 0; iter < len; ++iter)
+    {
+        crc_value = CRC32_TAB[(crc_value ^ data[iter]) & 0xff] ^ (crc_value >> 8);
+    }
+
+    return crc_value;
+}
+
+ui32 computeCRC32(sbstd::string_view buffer)
+{
+    ui32 crc_value = 0U;
+
+    char const * const data = buffer.data();
+    auto const len = buffer.size();
 
     for (usize iter = 0; iter < len; ++iter)
     {

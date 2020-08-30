@@ -8,7 +8,7 @@ namespace sb {
 char * getWorkingDirectory(sbstd::span<char> buffer)
 {
     sbAssert(!buffer.empty());
- 
+
     return getcwd(buffer.data(), numericConv<int>(buffer.size_bytes()));
 }
 

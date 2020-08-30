@@ -96,7 +96,8 @@ namespace detail {
 } // namespace detail
 
 template <typename... TArgs>
-inline usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args)
+inline usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
+                          TArgs &&... args)
 {
     sbAssert(nullptr != format);
 

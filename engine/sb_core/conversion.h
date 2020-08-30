@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sb_base/base.h> 
+#include <sb_base/base.h>
 
 #include <sb_std/span>
 #include <sb_std/type_traits>

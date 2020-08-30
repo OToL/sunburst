@@ -15,14 +15,14 @@ static ui64 const CRC64_STR_TEST_HASH = 0x69172790b5f8880fULL;
 
 TEST_CASE("Null CRC64", "[crc64]")
 {
-    REQUIRE(0ULL == computeCRC64(nullptr, 0));
-    REQUIRE(0ULL == computeCRC64((ui8 const * const) "Hello", 0));
+    REQUIRE(0ULL == computeCRC64(sbstd::span<ui8>{}));
+    REQUIRE(0ULL == computeCRC64({(ui8 const *) "Hello", 0}));
     REQUIRE(0ULL == computeCRC64(""));
 }
 
 TEST_CASE("Raw buffer CRC64 hash", "[crc64]")
 {
-    ui64 const test_crc = computeCRC64(CRC64_ARRAY_TEST, sbstd::size(CRC64_ARRAY_TEST));
+    ui64 const test_crc = computeCRC64(CRC64_ARRAY_TEST);
 
     REQUIRE(CRC64_ARRAY_TEST_HASH == test_crc);
 }

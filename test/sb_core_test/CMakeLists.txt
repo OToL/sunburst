@@ -9,7 +9,8 @@ add_executable(sb_core_test
     fnv1a32_test.cpp
     fnv1a64_test.cpp
     handle_test.cpp
-    hash_str_test.cpp
+    hash64_str_test.cpp
+    hash32_str_test.cpp
     small_vector_test.cpp
     string_utility_test.cpp
     string_format_test.cpp

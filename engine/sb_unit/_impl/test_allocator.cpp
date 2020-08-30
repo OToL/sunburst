@@ -72,7 +72,7 @@ void TestAllocator::deallocate(void * ptr)
 
         auto const alloc_desc =
             sbstd::find_if(begin(m_allocs), end(m_allocs),
-                          [ptr](AllocDesc const & val) { return val.m_mem == ptr; });
+                           [ptr](AllocDesc const & val) { return val.m_mem == ptr; });
         sbAssert(alloc_desc != end(m_allocs));
         m_allocs.erase(alloc_desc);
     }

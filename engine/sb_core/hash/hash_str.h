@@ -2,56 +2,30 @@
 
 #include <sb_base/base.h>
 
-#include <sb_core/_impl/hash/hashstr_policy.h>
+#include <sb_core/_impl/config.h>
+
+#if sbIsEqual(HASH_SIZE, SB_HASH_SIZE_32BIT)
+
+#    include "hash32_str.h"
 
 namespace sb {
 
-// use span in low level
-// use string_view instead of char + len
-template<typename ValueType = ui64>
-struct HashStr
-{
-    using HashPolicy = internal::HashStrPolicy<ValueType>;
-    using Value = typename ValueType;
-
-    HashStr() = default;
-
-    constexpr explicit HashStr(Value value)
-        : value(value)
-    {
-    }
-
-    constexpr explicit HashStr(char const * str)
-        : value(HashPolicy::compute(str))
-    {
-    }
-
-    constexpr HashStr(char const * str, usize len)
-        : value(HashPolicy::compute((ui8 const *)str, len))
-    {
-    }
-
-    constexpr b32 isValid() const
-    {
-        return (value != 0);
-    }
-
-    Value value = 0;
-};
-
-template<typename ValueType> 
-constexpr b8 operator==(HashStr<ValueType> lval, HashStr<ValueType> rval)
-{
-    return (lval.value == rval.value);
-}
-
-template<typename ValueType> 
-constexpr b8 operator!=(HashStr<ValueType> lval, HashStr<ValueType> rval)
-{
-    return (lval.value != rval.value);
-}
-
-using HashStr64 = HashStr<>;
-using HashStr32 = HashStr<ui32>;
-
+using HashStr = Hash32Str;
+using HashStrValue = ui32;
 } // namespace sb
+
+#elif sbIsEqual(HASH_SIZE, SB_HASH_SIZE_64BIT)
+
+#    include "hash64_str.h"
+
+namespace sb {
+
+using HashStr = Hash64Str;
+using HashStrValue = ui64;
+} // namespace sb
+
+#else
+
+#    error "Unsupported hash size"
+
+#endif

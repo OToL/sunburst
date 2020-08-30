@@ -33,29 +33,30 @@ void reportError(ErrorLevel type, char const * const file, ui32 const line, char
 
 } // namespace sb::internal
 
-#    define sbAssertInternal(cond, ...)                                                                \
+#    define sbAssertInternal(cond, ...)                                                            \
         if (!(cond))                                                                               \
         {                                                                                          \
-            sb::internal::reportError(sb::ErrorLevel::CRITICAL, __FILE__, __LINE__, ##__VA_ARGS__);   \
+            sb::internal::reportError(sb::ErrorLevel::CRITICAL, __FILE__, __LINE__,                \
+                                      ##__VA_ARGS__);                                              \
         }
 
-#    define sbWarnInternal(cond, ...)                                                                  \
+#    define sbWarnInternal(cond, ...)                                                              \
         if (!(cond))                                                                               \
         {                                                                                          \
-            sb::internal::reportError(sb::ErrorLevel::WARNING, __FILE__, __LINE__, ##__VA_ARGS__);    \
+            sb::internal::reportError(sb::ErrorLevel::WARNING, __FILE__, __LINE__, ##__VA_ARGS__); \
         }
 
 #    define sbExpectInternal(cond, ...)                                                            \
         ((cond) ||                                                                                 \
-         (sb::internal::reportError(sb::ErrorLevel::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),       \
+         (sb::internal::reportError(sb::ErrorLevel::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),    \
           false))
 
-#    define sbDontExpectInternal(cond, ...)                                                           \
+#    define sbDontExpectInternal(cond, ...)                                                        \
         ((cond) &&                                                                                 \
-         (sb::internal::reportError(sb::ErrorLevel::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),       \
+         (sb::internal::reportError(sb::ErrorLevel::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__),    \
           true))
 
-#    define sbNotImplementedInternal(str)                                                              \
+#    define sbNotImplementedInternal(str)                                                          \
         sb::internal::reportNotImplemented(sb::ErrorLevel::WARNING, __FILE__, __LINE__, str)
 
 #else
