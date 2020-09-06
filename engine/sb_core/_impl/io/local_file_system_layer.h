@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sb_base/base.h>
+#include <sb_core/core.h>
 #include <sb_core/string/static_string.h>
 
 #include <sb_core/io/file_system_layer.h>

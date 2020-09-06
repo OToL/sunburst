@@ -244,7 +244,7 @@ private:
             ui16 m_gen;
         } m_unpacked;
 
-        FileHdl::StorageType m_packed;
+        FileHdl::ValueType m_packed;
     };
 
     b8 isLocalFileSystemLayer(IFileSystemLayer const * layer)

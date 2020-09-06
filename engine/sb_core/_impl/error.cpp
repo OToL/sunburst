@@ -1,5 +1,5 @@
-#include <sb_base/base.h>
-#include <sb_base/compiler.h>
+#include <sb_core/core.h>
+#include <sb_core/compiler.h>
 
 #include <sb_core/error.h>
 #include <sb_core/log.h>

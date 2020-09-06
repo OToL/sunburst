@@ -1,9 +1,11 @@
 #pragma once
 
-#include <sb_base/base.h>
 #include <sb_core/hash/hash_str.h>
 #include <sb_core/unique_ptr.h>
 #include "io.h"
+#include "file_hdl.h"
+
+#include <sb_core/core.h>
 
 #include <sb_std/span>
 

@@ -4,7 +4,7 @@
 #include <sb_core/error.h>
 #include <sb_core/memory/allocator/stl_allocator.h>
 #include <sb_core/_impl/container/small_vector_base.h>
-#include <sb_base/base.h>
+#include <sb_core/core.h>
 
 #include <sb_std/algorithm>
 #include <sb_std/iterator>

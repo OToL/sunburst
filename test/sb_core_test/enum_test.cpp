@@ -1,5 +1,5 @@
 #include <sb_core/enum.h>
-#include <sb_base/base.h>
+#include <sb_core/core.h>
 
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>

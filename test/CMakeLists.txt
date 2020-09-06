@@ -1,2 +1,1 @@
-add_subdirectory(sb_base_test)
 add_subdirectory(sb_core_test)

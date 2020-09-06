@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sb_base/base.h>
+#include <sb_core/core.h>
 #include <sb_core/memory/memory_arena.h>
 #include <sb_core/memory/memory.h>
 

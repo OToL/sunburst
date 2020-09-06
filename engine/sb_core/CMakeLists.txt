@@ -28,5 +28,4 @@ target_link_libraries(sb_core
     PRIVATE
         sb::cxx_properties_private
     PUBLIC
-        sb::cxx_properties_public
-        sb::base)
+        sb::cxx_properties_public)

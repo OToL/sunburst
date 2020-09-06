@@ -2,7 +2,7 @@
 
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/allocator/allocator.h>
-#include <sb_base/base.h>
+#include <sb_core/core.h>
 
 namespace sb {
 

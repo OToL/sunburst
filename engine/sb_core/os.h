@@ -8,7 +8,7 @@
 #    error "Unhandled platform"
 #endif
 
-#include <sb_base/base.h>
+#include <sb_core/core.h>
 
 #include <sb_std/span>
 

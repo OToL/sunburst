@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sb_base/base.h>
+#include <sb_core/core.h>
 #include <sb_core/handle.h>
 
 namespace sb {
@@ -17,11 +17,7 @@ enum class FileFormat : ui8
     Text
 };
 
-struct FileHdlTag
-{
-};
 
-using FileHdl = Handle<FileHdlTag, ui32>;
 using FileSize = si64;
 using FilePos = si64;
 
