@@ -35,6 +35,7 @@ include(make/sb_extern.cmake)
 sb_setup_extern()
 
 add_subdirectory("engine")
+add_subdirectory("sample")
 
 if(SB_ENABLE_TESTS)
     enable_testing()
