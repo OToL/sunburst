@@ -9,8 +9,8 @@ static constexpr char const * const HASH_STR_TEST_STRING = "Hello Hash";
 
 TEST_CASE("Hash64Str default ctor", "[hash64_str]")
 {
-    Hash64Str const hash{};
-    REQUIRE_FALSE(hash.isValid());
+    Hash64Str const hash = {};
+    REQUIRE_FALSE(isValid(hash));
 }
 
 TEST_CASE("Set Hash64Str from string", "[hash64_str]")
@@ -18,7 +18,7 @@ TEST_CASE("Set Hash64Str from string", "[hash64_str]")
     Hash64Str const hash(HASH_STR_TEST_STRING);
 
     REQUIRE(hash.value == computeHash64(HASH_STR_TEST_STRING));
-    REQUIRE(hash.isValid());
+    REQUIRE(isValid(hash));
 }
 
 TEST_CASE("Set Hash64Str from value", "[hash64_str]")
@@ -27,7 +27,7 @@ TEST_CASE("Set Hash64Str from value", "[hash64_str]")
     Hash64Str const hash(HASH_STR_TEST_STRING);
 
     REQUIRE(hash.value == HASH_TEST_VALUE);
-    REQUIRE(hash.isValid());
+    REQUIRE(isValid(hash));
 }
 
 TEST_CASE("Hash64Str assignment", "[hash64_str]")

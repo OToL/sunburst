@@ -44,13 +44,14 @@ struct Hash32Str
         // TODO: register hash/string
     }
 
-    constexpr b32 isValid() const
-    {
-        return (value != 0);
-    }
 
-    ui32 value = 0;
+    ui32 value;
 };
+
+constexpr b8 isValid(Hash32Str hash_val)
+{
+    return (hash_val.value != 0);
+}
 
 constexpr b8 operator==(Hash32Str lval, Hash32Str rval)
 {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/handle.h>
 
 namespace sb {
 
@@ -16,7 +15,6 @@ enum class FileFormat : ui8
     Bin,
     Text
 };
-
 
 using FileSize = si64;
 using FilePos = si64;

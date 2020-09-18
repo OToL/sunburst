@@ -44,13 +44,13 @@ struct Hash64Str
         // TODO: register hash/string
     }
 
-    constexpr b32 isValid() const
-    {
-        return (value != 0);
-    }
-
-    ui64 value = 0;
+    ui64 value;
 };
+
+constexpr b32 isValid(Hash64Str hash_val)
+{
+    return (hash_val.value != 0);
+}
 
 constexpr b8 operator==(Hash64Str lval, Hash64Str rval)
 {

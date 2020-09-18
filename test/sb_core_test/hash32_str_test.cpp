@@ -9,8 +9,8 @@ static constexpr char const * const HASH_STR_TEST_STRING = "Hello Hash";
 
 TEST_CASE("Hash32Str default ctor", "[hash32_str]")
 {
-    Hash32Str const hash{};
-    REQUIRE_FALSE(hash.isValid());
+    Hash32Str const hash = {};
+    REQUIRE_FALSE(isValid(hash));
 }
 
 TEST_CASE("Set Hash32Str from string", "[hash32_str]")
@@ -18,7 +18,7 @@ TEST_CASE("Set Hash32Str from string", "[hash32_str]")
     Hash32Str const hash(HASH_STR_TEST_STRING);
 
     REQUIRE(hash.value == computeHash32(HASH_STR_TEST_STRING));
-    REQUIRE(hash.isValid());
+    REQUIRE(isValid(hash));
 }
 
 TEST_CASE("Set Hash32Str from value", "[hash32_str]")
@@ -27,7 +27,7 @@ TEST_CASE("Set Hash32Str from value", "[hash32_str]")
     Hash32Str const hash(HASH_STR_TEST_STRING);
 
     REQUIRE(hash.value == HASH_TEST_VALUE);
-    REQUIRE(hash.isValid());
+    REQUIRE(isValid(hash));
 }
 
 TEST_CASE("Hash32Str assignment", "[hash32_str]")

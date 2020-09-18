@@ -56,7 +56,7 @@ public:
     {
         for (auto & layer : init.m_layers)
         {
-            sbWarn(layer.m_name.isValid());
+            sbWarn(isValid(layer.m_name));
 
             auto const layerIter = sbstd::find_if(
                 begin(m_layers), end(m_layers),
@@ -67,11 +67,8 @@ public:
                          LPath::isValid(layer.m_logical_path) &&
                          (layer.m_logical_path[layer_path_len - 1] == *LPath::SEPARATOR)))
             {
-                auto & new_layer = m_layers.emplace_back();
+                m_layers.push_back({.m_id = layer.m_name, .m_logical_path = layer.m_logical_path, .m_layer = sbstd::move(layer.m_layer)});
 
-                new_layer.m_id = layer.m_name;
-                new_layer.m_layer = sbstd::move(layer.m_layer);
-                new_layer.m_logical_path = layer.m_logical_path;
             }
         }
     }
@@ -110,7 +107,7 @@ public:
                 auto file_hdl =
                     func(*this, *layerIter->m_layer, path + layerIter->m_logical_path.length());
 
-                if (file_hdl.isValid())
+                if (isValid(file_hdl))
                 {
                     return file_hdl;
                 }
@@ -136,10 +133,10 @@ public:
                 {
                     file_hdl = fs.allocateFileDesc(layer_file_hdl, &layer);
 
-                    if (sbExpect(file_hdl.isValid(), "Not enough file descriptor"))
+                    if (sbExpect(isValid(file_hdl), "Not enough file descriptor"))
                     {
                         layer.closeFile(layer_file_hdl);
-                        file_hdl.reset();
+                        file_hdl = {};
                     }
                 }
 
@@ -160,17 +157,17 @@ public:
                 {
                     file_hdl = fs.allocateFileDesc(layer_file_hdl, &layer);
 
-                    if (sbExpect(file_hdl.isValid(), "Not enough file descriptor"))
+                    if (sbExpect(isValid(file_hdl), "Not enough file descriptor"))
                     {
                         layer.closeFile(layer_file_hdl);
-                        file_hdl.reset();
+                        file_hdl = {};
                     }
                 }
 
                 return file_hdl;
             });
 
-        if (hdl.isValid())
+        if (isValid(hdl))
         {
             ++m_opened_file_cnt;
         }
@@ -191,17 +188,17 @@ public:
                 {
                     file_hdl = fs.allocateFileDesc(layer_file_hdl, &layer);
 
-                    if (sbExpect(file_hdl.isValid(), "Not enough file descriptor"))
+                    if (sbExpect(isValid(file_hdl), "Not enough file descriptor"))
                     {
                         layer.closeFile(layer_file_hdl);
-                        file_hdl.reset();
+                        file_hdl = {};
                     }
                 }
 
                 return file_hdl;
             });
 
-        if (hdl.isValid())
+        if (isValid(hdl))
         {
             ++m_opened_file_cnt;
         }
@@ -275,7 +272,7 @@ private:
 
     void deallocateFileDesc(FileHdl hdl)
     {
-        sbAssert(hdl.isValid());
+        sbAssert(isValid(hdl));
 
         FileHdlHelper helper_hdl;
         helper_hdl.m_packed = hdl.value;
@@ -293,7 +290,7 @@ private:
 
     FileDesc & getFileDescItem(FileHdl hdl)
     {
-        sbAssert(hdl.isValid());
+        sbAssert(isValid(hdl));
 
         FileHdlHelper helper_hdl;
         helper_hdl.m_packed = hdl.value;
@@ -380,7 +377,7 @@ void FileSystem::closeFile(FileHdl hdl)
 {
     sbAssert(nullptr != gs_file_system);
 
-    if (sbExpect(hdl.isValid()))
+    if (sbExpect(isValid(hdl)))
     {
         gs_file_system->closeFile(hdl);
     }
@@ -391,7 +388,7 @@ FileSize FileSystem::readFile(FileHdl hdl, sbstd::span<ui8> buffer, FileSize cnt
     sbAssert((FileSize)buffer.size() >= cnt);
     sbAssert(-1 <= cnt);
 
-    if (sbExpect(hdl.isValid()))
+    if (sbExpect(isValid(hdl)))
     {
         return gs_file_system->readFile(hdl, buffer.data(),
                                         (cnt == -1) ? (FileSize)buffer.size() : cnt);
@@ -402,7 +399,7 @@ FileSize FileSystem::readFile(FileHdl hdl, sbstd::span<ui8> buffer, FileSize cnt
 
 FileSize FileSystem::getFileLength(FileHdl hdl)
 {
-    if (sbExpect(hdl.isValid()))
+    if (sbExpect(isValid(hdl)))
     {
         return gs_file_system->getFileLength(hdl);
     }

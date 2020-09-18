@@ -12,7 +12,7 @@ class File
 {
     void reset()
     {
-        m_hdl.reset();
+        m_hdl = {};
     }
 
 public:
@@ -26,7 +26,7 @@ public:
     File(File && src)
         : m_hdl(src.m_hdl)
     {
-        src.m_hdl.reset();
+        src.m_hdl = {};
     }
 
     File & operator=(File const &) = delete;
@@ -43,7 +43,7 @@ public:
 
     b8 isNull() const
     {
-        return !m_hdl.isValid();
+        return !isValid(m_hdl);
     }
 
     FileSize read(sbstd::span<ui8> buffer, FileSize cnt = -1);
