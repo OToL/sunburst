@@ -1,6 +1,6 @@
 #include <sb_core/string/utility.h>
 
-sb::usize sb::strCpyT(char * __restrict output, usize capacity, char const * __restrict src)
+sb::usize sb::strCpyT(char * __sb_restrict output, usize capacity, char const * __sb_restrict src)
 {
     if (0 == capacity)
     {
@@ -8,7 +8,7 @@ sb::usize sb::strCpyT(char * __restrict output, usize capacity, char const * __r
     }
 
     usize copy_count = 0;
-    char const * __restrict srcIter = src;
+    char const * __sb_restrict srcIter = src;
 
     do
     {
@@ -25,10 +25,10 @@ sb::usize sb::strCpyT(char * __restrict output, usize capacity, char const * __r
     return copy_count;
 }
 
-sb::b8 sb::strStartWith(char const * __restrict str, char const * __restrict start_str)
+sb::b8 sb::strStartWith(char const * __sb_restrict str, char const * __sb_restrict start_str)
 {
-    char const * __restrict src_iter = str;
-    char const * __restrict start_str_iter = start_str;
+    char const * __sb_restrict src_iter = str;
+    char const * __sb_restrict start_str_iter = start_str;
 
     while ((*src_iter == *start_str_iter) && ('\0' != *src_iter) && ('\0' != *start_str_iter))
     {

@@ -4,7 +4,7 @@
 #    error "Unsupported compiler"
 #endif
 
-#define __restrict_internal
+#define __sb_restrict_internal
 
 namespace sb {
 inline void debugBreak()
