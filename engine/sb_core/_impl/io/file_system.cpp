@@ -18,12 +18,12 @@
 #include <sb_std/utility>
 #include <sb_std/memory>
 
-namespace sb {
-
-using StaticLogicalPath = StaticString<LPath::MAX_LEN + 1>;
+using StaticLogicalPath = sb::StaticString<sb::VFS_PATH_MAX_LEN + 1>;
 
 // Because we tamper 16 last FileHdl bits with a generation ID
-static_assert(FileSystem::MAX_CONCURRENT_OPENED_FILES <= 0xFFFFU);
+static_assert(sb::FileSystem::MAX_CONCURRENT_OPENED_FILES <= 0xFFFFU);
+
+namespace sb::internal {
 
 class FileSystemImpl
 {
@@ -64,8 +64,8 @@ public:
             auto const layer_path_len = strlen(layer.m_logical_path);
 
             if (sbExpect((layerIter == end(m_layers)) && (0 != layer_path_len) &&
-                         LPath::isValid(layer.m_logical_path) &&
-                         (layer.m_logical_path[layer_path_len - 1] == *LPath::SEPARATOR)))
+                         isVfsPathValid(layer.m_logical_path) &&
+                         (layer.m_logical_path[layer_path_len - 1] == VFS_PATH_SEPARATOR)))
             {
                 m_layers.push_back({.m_id = layer.m_name,
                                     .m_logical_path = layer.m_logical_path,
@@ -122,13 +122,13 @@ public:
 
     FileHdl openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
     {
-        sbWarn(LPath::isValid(path));
+        sbWarn(isVfsPathValid(path));
 
         return execFileActionOnLayers(
             path,
             [fmt, mode](FileSystemImpl & fs, IFileSystemLayer & layer, char const * layer_path) {
                 auto layer_file_hdl = layer.openFileWrite(layer_path, mode, fmt);
-                FileHdl file_hdl;
+                FileHdl file_hdl = {};
 
                 if (nullptr != layer_file_hdl.m_value)
                 {
@@ -147,12 +147,12 @@ public:
 
     FileHdl openFileRead(char const * path, FileFormat fmt)
     {
-        sbWarn(LPath::isValid(path));
+        sbWarn(isVfsPathValid(path));
 
         auto const hdl = execFileActionOnLayers(
             path, [fmt](FileSystemImpl & fs, IFileSystemLayer & layer, char const * layer_path) {
                 auto layer_file_hdl = layer.openFileRead(layer_path, fmt);
-                FileHdl file_hdl;
+                FileHdl file_hdl = {};
 
                 if (nullptr != layer_file_hdl.m_value)
                 {
@@ -178,12 +178,12 @@ public:
 
     FileHdl createFile(char const * path, FileFormat fmt)
     {
-        sbWarn(LPath::isValid(path));
+        sbWarn(isVfsPathValid(path));
 
         auto const hdl = execFileActionOnLayers(
             path, [fmt](FileSystemImpl & fs, IFileSystemLayer & layer, char const * layer_path) {
                 auto layer_file_hdl = layer.createFile(layer_path, fmt);
-                FileHdl file_hdl;
+                FileHdl file_hdl = {};
 
                 if (nullptr != layer_file_hdl.m_value)
                 {
@@ -317,13 +317,15 @@ private:
     LocalFileSystemLayerPool m_physical_layer_pool;
 };
 
-static UniquePtr<FileSystemImpl> gs_file_system;
+} // namespace sb::internal
 
-b8 FileSystem::initialize(InitParams const & init)
+static sb::UniquePtr<sb::internal::FileSystemImpl> gs_file_system;
+
+sb::b8 sb::FileSystem::initialize(InitParams const & init)
 {
     if (sbExpect(nullptr == gs_file_system, "File System already initialized"))
     {
-        gs_file_system = makeUnique<FileSystemImpl>(init);
+        gs_file_system = makeUnique<sb::internal::FileSystemImpl>(init);
 
         return true;
     }
@@ -331,7 +333,7 @@ b8 FileSystem::initialize(InitParams const & init)
     return false;
 }
 
-b8 FileSystem::terminate()
+sb::b8 sb::FileSystem::terminate()
 {
     if (sbExpect(nullptr != gs_file_system, "File System not initialized"))
     {
@@ -343,38 +345,38 @@ b8 FileSystem::terminate()
     return false;
 }
 
-FileHdl FileSystem::openFileRead(char const * path, FileFormat fmt)
+sb::FileHdl sb::FileSystem::openFileRead(char const * path, FileFormat fmt)
 {
     sbAssert((nullptr != gs_file_system) && (nullptr != path));
-    sbWarn(LPath::isValid(path));
+    sbWarn(isVfsPathValid(path));
 
     return gs_file_system->openFileRead(path, fmt);
 }
 
-FileHdl FileSystem::openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
+sb::FileHdl sb::FileSystem::openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
     sbAssert((nullptr != gs_file_system) && (nullptr != path));
-    sbWarn(LPath::isValid(path));
+    sbWarn(isVfsPathValid(path));
 
     return gs_file_system->openFileWrite(path, mode, fmt);
 }
 
-FileHdl FileSystem::createFile(char const * path, FileFormat fmt)
+sb::FileHdl sb::FileSystem::createFile(char const * path, FileFormat fmt)
 {
     sbAssert((nullptr != gs_file_system) && (nullptr != path));
-    sbWarn(LPath::isValid(path));
+    sbWarn(isVfsPathValid(path));
 
     return gs_file_system->createFile(path, fmt);
 }
 
-char const * FileSystem::getLayerPhysicalPath(LayerName name)
+char const * sb::FileSystem::getLayerPhysicalPath(LayerName name)
 {
     sbAssert(nullptr != gs_file_system);
 
     return gs_file_system->getLayerPhysicalPath(name);
 }
 
-void FileSystem::closeFile(FileHdl hdl)
+void sb::FileSystem::closeFile(FileHdl hdl)
 {
     sbAssert(nullptr != gs_file_system);
 
@@ -384,7 +386,7 @@ void FileSystem::closeFile(FileHdl hdl)
     }
 }
 
-FileSize FileSystem::readFile(FileHdl hdl, sbstd::span<ui8> buffer, FileSize cnt)
+sb::FileSize sb::FileSystem::readFile(FileHdl hdl, sbstd::span<ui8> buffer, FileSize cnt)
 {
     sbAssert((FileSize)buffer.size() >= cnt);
     sbAssert(-1 <= cnt);
@@ -398,7 +400,7 @@ FileSize FileSystem::readFile(FileHdl hdl, sbstd::span<ui8> buffer, FileSize cnt
     return 0;
 }
 
-FileSize FileSystem::getFileLength(FileHdl hdl)
+sb::FileSize sb::FileSystem::getFileLength(FileHdl hdl)
 {
     if (sbExpect(isValid(hdl)))
     {
@@ -408,10 +410,8 @@ FileSize FileSystem::getFileLength(FileHdl hdl)
     return 0;
 }
 
-FileSystem::LayerPtr FileSystem::createLocalFileSystemLayer(char const * local_root_path)
+sb::FileSystem::LayerPtr sb::FileSystem::createLocalFileSystemLayer(char const * local_root_path)
 {
     return sbstd::static_pointer_cast<IFileSystemLayer>(
         makeUnique<LocalFileSystemLayer>(local_root_path));
 }
-
-} // namespace sb

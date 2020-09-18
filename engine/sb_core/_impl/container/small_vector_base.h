@@ -1,6 +1,6 @@
 #pragma once
 
-namespace sb::detail {
+namespace sb::internal {
 
 template <typename TType, typename TAllocator>
 class SmallVectorBase
@@ -92,4 +92,4 @@ protected:
         pointer m_storage_end = nullptr;
     };
 };
-} // namespace sb::detail
+} // namespace sb::internal

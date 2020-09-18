@@ -7,18 +7,14 @@
 
 #include <direct.h>
 
-namespace sb {
-
-char * getWorkingDirectory(sbstd::span<char> buffer)
+char * sb::getWorkingDirectory(sbstd::span<char> buffer)
 {
     sbAssert(!buffer.empty());
 
     return _getcwd(buffer.data(), numericConv<int>(buffer.size_bytes()));
 }
 
-void outputDebugString(char const * msg)
+void sb::outputDebugString(char const * msg)
 {
     fputs(msg, stdout);
 }
-
-} // namespace sb

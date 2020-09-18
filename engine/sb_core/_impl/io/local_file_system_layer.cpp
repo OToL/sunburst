@@ -2,55 +2,53 @@
 #include "file_system_platform.h"
 #include <sb_core/io/path.h>
 
-namespace sb {
-
-LocalFileSystemLayer::LocalFileSystemLayer(char const * physical_path)
+sb::LocalFileSystemLayer::LocalFileSystemLayer(char const * physical_path)
 {
     m_physical_path = physical_path;
 
-    if (m_physical_path.back() != *PPath::SEPARATOR)
+    if (m_physical_path.back() != PHYS_PATH_SEPARATOR)
     {
-        m_physical_path.push_back(*PPath::SEPARATOR);
+        m_physical_path.push_back(PHYS_PATH_SEPARATOR);
     }
 }
 
-FileSize LocalFileSystemLayer::readFile(FileId file_id, ui8 * buffer, FileSize cnt)
+sb::FileSize sb::LocalFileSystemLayer::readFile(FileId file_id, ui8 * buffer, FileSize cnt)
 {
-    return platformReadFile({file_id.m_value}, buffer, cnt);
+    return internal::platformReadFile({file_id.m_value}, buffer, cnt);
 }
 
-FileSize LocalFileSystemLayer::getFileLength(FileId file_id)
+sb::FileSize sb::LocalFileSystemLayer::getFileLength(FileId file_id)
 {
-    return platformFileLength({file_id.m_value});
+    return internal::platformFileLength({file_id.m_value});
 }
 
-IFileSystemLayer::FileId LocalFileSystemLayer::openFileRead(char const * path, FileFormat fmt)
-{
-    StaticPhysicalPath file_path(m_physical_path);
-    file_path += path;
-
-    return {platformOpenFileRead(file_path.c_str(), fmt).m_value};
-}
-
-IFileSystemLayer::FileId LocalFileSystemLayer::openFileWrite(char const * path, FileWriteMode mode,
-                                                             FileFormat fmt)
+sb::IFileSystemLayer::FileId sb::LocalFileSystemLayer::openFileRead(char const * path,
+                                                                    FileFormat fmt)
 {
     StaticPhysicalPath file_path(m_physical_path);
     file_path += path;
 
-    return {platformOpenFileWrite(file_path.c_str(), mode, fmt).m_value};
+    return {internal::platformOpenFileRead(file_path.c_str(), fmt).m_value};
 }
 
-IFileSystemLayer::FileId LocalFileSystemLayer::createFile(char const * path, FileFormat fmt)
+sb::IFileSystemLayer::FileId
+    sb::LocalFileSystemLayer::openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
     StaticPhysicalPath file_path(m_physical_path);
     file_path += path;
 
-    return {platformCreateFile(file_path.c_str(), fmt).m_value};
+    return {internal::platformOpenFileWrite(file_path.c_str(), mode, fmt).m_value};
 }
 
-void LocalFileSystemLayer::closeFile(FileId file_id)
+sb::IFileSystemLayer::FileId sb::LocalFileSystemLayer::createFile(char const * path, FileFormat fmt)
 {
-    platformCloseFile({file_id.m_value});
+    StaticPhysicalPath file_path(m_physical_path);
+    file_path += path;
+
+    return {internal::platformCreateFile(file_path.c_str(), fmt).m_value};
 }
-} // namespace sb
+
+void sb::LocalFileSystemLayer::closeFile(FileId file_id)
+{
+    internal::platformCloseFile({file_id.m_value});
+}

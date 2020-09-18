@@ -4,10 +4,8 @@
 #include <sb_std/cctype>
 #include <sb_std/type_traits>
 
-namespace sb::detail {
-
-usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
-                   sbstd::span<FmtArg> args)
+sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const * const format,
+                                     sbstd::span<FmtArg> args)
 {
     usize copied_bytes = 0;
 
@@ -116,5 +114,3 @@ usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
 
     return copied_bytes;
 }
-
-} // namespace sb::detail

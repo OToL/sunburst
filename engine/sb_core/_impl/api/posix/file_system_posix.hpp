@@ -9,9 +9,7 @@
 
 #include <sb_std/cstdio>
 
-namespace sb {
-
-PlatformFileHdl platformOpenFileRead(char const * path, FileFormat fmt)
+sb::internal::PlatformFileHdl sb::internal::platformOpenFileRead(char const * path, FileFormat fmt)
 {
     StaticString<3> flags{"r"};
 
@@ -23,7 +21,8 @@ PlatformFileHdl platformOpenFileRead(char const * path, FileFormat fmt)
     return {(void *)fopen(path, flags.data())};
 }
 
-PlatformFileHdl platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
+sb::internal::PlatformFileHdl
+    sb::internal::platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
     StaticString<5> flags;
 
@@ -50,7 +49,7 @@ PlatformFileHdl platformOpenFileWrite(char const * path, FileWriteMode mode, Fil
     return {(void *)fopen(path, flags.c_str())};
 }
 
-PlatformFileHdl platformCreateFile(char const * path, FileFormat fmt)
+sb::internal::PlatformFileHdl sb::internal::platformCreateFile(char const * path, FileFormat fmt)
 {
     StaticString<3> flags{"w"};
 
@@ -62,21 +61,21 @@ PlatformFileHdl platformCreateFile(char const * path, FileFormat fmt)
     return {(void *)fopen(path, flags.c_str())};
 }
 
-void platformCloseFile(PlatformFileHdl hdl)
+void sb::internal::platformCloseFile(PlatformFileHdl hdl)
 {
     sbAssert(nullptr != hdl.m_value);
 
     fclose((FILE *)hdl.m_value);
 }
 
-FileSize platformReadFile(PlatformFileHdl hdl, ui8 * buffer, FileSize count)
+sb::FileSize sb::internal::platformReadFile(PlatformFileHdl hdl, ui8 * buffer, FileSize count)
 {
     sbAssert(nullptr != hdl.m_value);
 
     return numericConv<FileSize>(fread((void *)buffer, 1, (usize)count, (FILE *)hdl.m_value));
 }
 
-FileSize platformFileLength(PlatformFileHdl hdl)
+sb::FileSize sb::internal::platformFileLength(PlatformFileHdl hdl)
 {
     sbAssert(nullptr != hdl.m_value);
 
@@ -96,5 +95,3 @@ FileSize platformFileLength(PlatformFileHdl hdl)
 
     return file_len;
 }
-
-} // namespace sb

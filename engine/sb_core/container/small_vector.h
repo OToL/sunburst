@@ -14,9 +14,9 @@
 namespace sb {
 
 template <typename TType, usize BASE_CAPACITY, typename TAllocator = STLAllocator<TType>>
-class SmallVector : public detail::SmallVectorBase<TType, TAllocator>
+class SmallVector : public internal::SmallVectorBase<TType, TAllocator>
 {
-    sbBaseClass(detail::SmallVectorBase<TType, TAllocator>);
+    sbBaseClass(internal::SmallVectorBase<TType, TAllocator>);
 
     template <typename, usize, typename>
     friend class SmallVector;

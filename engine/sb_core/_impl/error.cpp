@@ -11,29 +11,28 @@
 #    include <sb_std/cassert>
 #    include <sb_std/cstdio>
 
-namespace sb::internal {
+static sb::ErrorHandler g_error_hdl;
 
-static ErrorHandler g_error_hdl;
-
-static char const * const ERROR_DEFAULT_MSG[] = {
+static constexpr char const * ERROR_DEFAULT_MSG[] = {
     "Critical error detected", "Unhandled error detected", "Non fatal error detected"};
 
-void logDefaultErrorMsg(ErrorLevel type, char const * const file, ui32 const line, char const * msg)
+void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::ui32 const line,
+                        char const * msg)
 {
     char fmt_msg[255];
     sb::stringFormat(fmt_msg, "{} ({}, {})", msg, file, line);
 
     switch (type)
     {
-        case ErrorLevel::CRITICAL:
+        case sb::ErrorLevel::CRITICAL:
         {
             sbLogE(fmt_msg);
 
             break;
         }
 
-        case ErrorLevel::WARNING:
-        case ErrorLevel::NOTICE:
+        case sb::ErrorLevel::WARNING:
+        case sb::ErrorLevel::NOTICE:
         {
             sbLogW(fmt_msg);
 
@@ -42,7 +41,8 @@ void logDefaultErrorMsg(ErrorLevel type, char const * const file, ui32 const lin
     }
 }
 
-void reportError(ErrorLevel type, char const * const file, ui32 const line, char const * msg)
+void sb::internal::reportError(ErrorLevel type, char const * const file, ui32 const line,
+                               char const * msg)
 {
     if (nullptr != g_error_hdl)
     {
@@ -59,7 +59,7 @@ void reportError(ErrorLevel type, char const * const file, ui32 const line, char
     }
 }
 
-void reportError(ErrorLevel type, char const * const file, ui32 const line)
+void sb::internal::reportError(ErrorLevel type, char const * const file, ui32 const line)
 {
     if (nullptr != g_error_hdl)
     {
@@ -76,19 +76,17 @@ void reportError(ErrorLevel type, char const * const file, ui32 const line)
     }
 }
 
-void reportNotImplemented(ErrorLevel type, char const * const file, ui32 const line,
-                          char const * msg)
+void sb::internal::reportNotImplemented(ErrorLevel type, char const * const file, ui32 const line,
+                                        char const * msg)
 {
     char msg_fmt[255];
     sb::stringFormat(msg_fmt, "Not implemented: '{}'", msg);
     reportError(type, file, line, msg_fmt);
 }
 
-void setErrorHandler(ErrorHandler const & hdl)
+void sb::setErrorHandler(ErrorHandler const & hdl)
 {
     g_error_hdl = hdl;
 }
-
-} // namespace sb::internal
 
 #endif

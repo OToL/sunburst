@@ -15,6 +15,6 @@ inline usize strCpyT(char (&output)[COUNT], char const * __restrict src)
 }
 
 // returns true if 'str' begins with 'start_str'
-bool strStartWith(char const * __restrict str, char const * __restrict start_str);
+b8 strStartWith(char const * __restrict str, char const * __restrict start_str);
 
 } // namespace sb

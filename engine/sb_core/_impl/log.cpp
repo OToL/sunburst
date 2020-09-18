@@ -4,13 +4,11 @@
 
 #include <sb_std/iterator>
 
-namespace sb::internal {
-
-static LogHandler g_log_hdl;
+static sb::LogHandler g_log_hdl;
 
 static char const * const LOG_TYPE_TO_STR[] = {"ERROR", "WARNING", "INFO", "DEBUG"};
 
-void logMessage(LogLevel type, char const * file, ui32 line, char const * msg)
+void sb::internal::logMessage(LogLevel type, char const * file, ui32 line, char const * msg)
 {
     sbAssert((ui8)type < sbstd::size(LOG_TYPE_TO_STR));
 
@@ -27,9 +25,7 @@ void logMessage(LogLevel type, char const * file, ui32 line, char const * msg)
     }
 }
 
-void setLogHandler(LogHandler const & hdl)
+void sb::setLogHandler(LogHandler const & hdl)
 {
     g_log_hdl = hdl;
 }
-
-} // namespace sb::internal

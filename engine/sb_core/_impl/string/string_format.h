@@ -80,7 +80,7 @@ inline void expandFmtArgs(sbstd::span<FmtArg> argList, T const & arg, TArgs &&..
     expandFmtArgs(argList.subspan(1), args...);
 }
 
-namespace detail {
+namespace internal {
 
     usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
                        sbstd::span<FmtArg> agrs);
@@ -93,7 +93,7 @@ namespace detail {
                                 sbstd::forward<TArgs>(args)...);
     }
 
-} // namespace detail
+} // namespace internal
 
 template <typename... TArgs>
 inline usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
@@ -109,7 +109,7 @@ inline usize stringFormat(sbstd::span<char> dest_buffer, char const * const form
     FmtArg arg_list[MAX_FMT_PARAM];
     expandFmtArgs(arg_list, args...);
 
-    return detail::stringFormat(dest_buffer, format, {arg_list, arg_cnt});
+    return internal::stringFormat(dest_buffer, format, {arg_list, arg_cnt});
 }
 
 } // namespace sb

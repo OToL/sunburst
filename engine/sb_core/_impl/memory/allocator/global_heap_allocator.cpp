@@ -5,33 +5,29 @@
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/alloc.h>
 
-namespace sb {
-
-void * GlobalHeapAllocator::allocate(usize const size)
+void * sb::GlobalHeapAllocator::allocate(usize const size)
 {
     return sbMalloc(size);
 }
 
-void * GlobalHeapAllocator::allocate(usize const size, Alignment const alignment)
+void * sb::GlobalHeapAllocator::allocate(usize const size, Alignment const alignment)
 {
     return sbMalloc(size, alignment);
 }
 
-void GlobalHeapAllocator::deallocate(void * ptr)
+void sb::GlobalHeapAllocator::deallocate(void * ptr)
 {
     sbFree(ptr);
 }
 
-usize GlobalHeapAllocator::getBlockSize(void * ptr) const
+sb::usize sb::GlobalHeapAllocator::getBlockSize(void * ptr) const
 {
     return sbMallocUsabeSize(ptr);
 }
 
-b8 GlobalHeapAllocator::owns(void const *) const
+sb::b8 sb::GlobalHeapAllocator::owns(void const *) const
 {
     sbNotImplemented(__FUNCTION__);
 
     return false;
 }
-
-} // namespace sb

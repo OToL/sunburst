@@ -7,24 +7,14 @@
 
 namespace sb {
 
-struct LogicPath
-{
-    static constexpr usize MAX_LEN = 255;
-    static constexpr char const * SEPARATOR = "/";
+inline constexpr ui32 VFS_PATH_MAX_LEN = 255U;
+inline constexpr char VFS_PATH_SEPARATOR = '/';
 
-    static b8 isValid(char const * path);
-};
+inline constexpr ui32 PHYS_PATH_MAX_LEN = internal::OS_FILE_PATH_MAX_LEN;
+inline constexpr char PHYS_PATH_SEPARATOR = internal::OS_FILE_PATH_SEPARATOR;
 
-struct PhysicPath
-{
-    static constexpr usize MAX_LEN = 255;
-    static constexpr char const * SEPARATOR = FILE_PATH_SEPARATOR;
+b8 isVfsPathValid(char const * vfs_path);
 
-    // base_path is modified & base_path.data() is returned
-    static char * concat(sbstd::span<char> base_path, char const * path_cat);
-};
-
-using LPath = LogicPath;
-using PPath = PhysicPath;
+char * concatPhysPath(sbstd::span<char> base_path, char const * path_cat);
 
 } // namespace sb

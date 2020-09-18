@@ -1,44 +1,40 @@
 #include <sb_core/memory/global_heap.h>
 
-namespace sb {
-
-void * GlobalHeap::allocate(usize const size)
+void * sb::GlobalHeap::allocate(usize const size)
 {
     return m_parent.allocate(size);
 }
 
-void * GlobalHeap::allocate(usize const size, Alignment const alignment)
+void * sb::GlobalHeap::allocate(usize const size, Alignment const alignment)
 {
     return m_parent.allocate(size, alignment);
 }
 
-void GlobalHeap::deallocate(void * ptr)
+void sb::GlobalHeap::deallocate(void * ptr)
 {
     m_parent.deallocate(ptr);
 }
 
-b8 GlobalHeap::owns(void const * ptr) const
+sb::b8 sb::GlobalHeap::owns(void const * ptr) const
 {
     return m_parent.owns(ptr);
 }
 
-usize GlobalHeap::getBlockSize(void * ptr) const
+sb::usize sb::GlobalHeap::getBlockSize(void * ptr) const
 {
     return m_parent.getBlockSize(ptr);
 }
 
-GlobalHeap * getGlobalHeap()
+sb::GlobalHeap * sb::getGlobalHeap()
 {
     static GlobalHeap s_global_heap;
 
     return &s_global_heap;
 }
 
-AllocatorView const & getGlobalHeapView()
+sb::AllocatorView const & sb::getGlobalHeapView()
 {
     static AllocatorView s_global_heap_view{*getGlobalHeap()};
 
     return s_global_heap_view;
 }
-
-} // namespace sb

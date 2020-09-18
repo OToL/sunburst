@@ -1,23 +1,19 @@
 #include <sb_core/memory/provider/global_heap_provider.h>
 #include <sb_core/memory/alloc.h>
 
-namespace sb {
+sb::GlobalHeapProvider::GlobalHeapProvider() { }
 
-GlobalHeapProvider::GlobalHeapProvider() { }
-
-MemoryArena GlobalHeapProvider::allocate(usize const size)
+sb::MemoryArena sb::GlobalHeapProvider::allocate(usize const size)
 {
     return {sbMalloc(size), size};
 }
 
-MemoryArena GlobalHeapProvider::allocate(usize const size, Alignment const alignment)
+sb::MemoryArena sb::GlobalHeapProvider::allocate(usize const size, Alignment const alignment)
 {
     return {sbMalloc(size, alignment), size};
 }
 
-void GlobalHeapProvider::deallocate(MemoryArena const & arena)
+void sb::GlobalHeapProvider::deallocate(MemoryArena const & arena)
 {
     sbFree(arena.m_ptr);
 }
-
-} // namespace sb

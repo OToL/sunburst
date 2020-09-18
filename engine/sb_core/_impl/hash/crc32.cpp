@@ -2,9 +2,7 @@
 
 #include <sb_std/cstring>
 
-namespace sb {
-
-static ui32 const CRC32_TAB[] = {
+static sb::ui32 const CRC32_TAB[] = {
     0x00000000L, 0x77073096L, 0xee0e612cL, 0x990951baL, 0x076dc419L, 0x706af48fL, 0xe963a535L,
     0x9e6495a3L, 0x0edb8832L, 0x79dcb8a4L, 0xe0d5e91eL, 0x97d2d988L, 0x09b64c2bL, 0x7eb17cbdL,
     0xe7b82d07L, 0x90bf1d91L, 0x1db71064L, 0x6ab020f2L, 0xf3b97148L, 0x84be41deL, 0x1adad47dL,
@@ -43,7 +41,7 @@ static ui32 const CRC32_TAB[] = {
     0xcdd70693L, 0x54de5729L, 0x23d967bfL, 0xb3667a2eL, 0xc4614ab8L, 0x5d681b02L, 0x2a6f2b94L,
     0xb40bbe37L, 0xc30c8ea1L, 0x5a05df1bL, 0x2d02ef8dL};
 
-ui32 computeCRC32(sbstd::span<ui8 const> buffer)
+sb::ui32 sb::computeCRC32(sbstd::span<ui8 const> buffer)
 {
     ui32 crc_value = 0U;
 
@@ -58,7 +56,7 @@ ui32 computeCRC32(sbstd::span<ui8 const> buffer)
     return crc_value;
 }
 
-ui32 computeCRC32(sbstd::string_view buffer)
+sb::ui32 sb::computeCRC32(sbstd::string_view buffer)
 {
     ui32 crc_value = 0U;
 
@@ -73,7 +71,7 @@ ui32 computeCRC32(sbstd::string_view buffer)
     return crc_value;
 }
 
-ui32 computeCRC32(char const * const str)
+sb::ui32 sb::computeCRC32(char const * const str)
 {
     ui32 crc_value = 0U;
 
@@ -87,5 +85,3 @@ ui32 computeCRC32(char const * const str)
 
     return crc_value;
 }
-
-} // namespace sb

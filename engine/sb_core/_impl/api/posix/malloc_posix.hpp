@@ -5,7 +5,7 @@
 #include <sb_core/string/utility.h>
 #include <sb_core/conversion.h>
 
-namespace sb::detail {
+namespace sb::internal {
 
 usize const SYS_MALLOC_DEFAULT_ALIGNMENT = sizeof(void *);
 
@@ -50,7 +50,7 @@ void * malloc(usize size, Alignment alignment)
 
 void * malloc(usize size)
 {
-    return ::sb::detail::malloc(size, ALIGN_DEFAULT);
+    return ::sb::internal::malloc(size, ALIGN_DEFAULT);
 }
 
 void free(void * mem_ptr)
@@ -70,4 +70,4 @@ usize mallocUsableSize(void * mem_ptr)
     return header->m_size;
 }
 
-} // namespace sb::detail
+} // namespace sb::internal

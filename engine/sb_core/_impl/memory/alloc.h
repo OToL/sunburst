@@ -14,7 +14,7 @@ AllocatorView const & getGlobalHeapView();
 
 }
 
-namespace sb::detail {
+namespace sb::internal {
 
 void * malloc(usize size);
 
@@ -169,7 +169,7 @@ struct MemoryOperatorHelperDeleteArray : protected MemoryOperatorHelper<TType>
     using BaseClass::MemoryOperatorHelper;
 };
 
-} // namespace sb::detail
+} // namespace sb::internal
 
 void * operator new(sb::usize byte_count);
 

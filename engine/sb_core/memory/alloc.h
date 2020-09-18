@@ -3,30 +3,30 @@
 namespace sb {
 
 // TODO: return arena
-#define sbMalloc(size, ...) sb::detail::malloc(size, ##__VA_ARGS__)
+#define sbMalloc(size, ...) sb::internal::malloc(size, ##__VA_ARGS__)
 
-#define sbMallocUsabeSize(ptr) sb::detail::mallocUsableSize(ptr)
+#define sbMallocUsabeSize(ptr) sb::internal::mallocUsableSize(ptr)
 
-#define sbFree(ptr) sb::detail::free(ptr)
+#define sbFree(ptr) sb::internal::free(ptr)
 
 #define sbNew(type, ...)                                                                           \
-    sb::detail::MemoryOperatorHelperNew<type>                                                      \
+    sb::internal::MemoryOperatorHelperNew<type>                                                    \
     {                                                                                              \
         __VA_ARGS__                                                                                \
     }
 
 #define sbDelete(ptr, ...)                                                                         \
-    sb::detail::MemoryOperatorHelperDelete<                                                        \
+    sb::internal::MemoryOperatorHelperDelete<                                                      \
         typename sbstd::remove_pointer<decltype(ptr)>::type>::Destroy(ptr, ##__VA_ARGS__);
 
 #define sbNewArray(type, ...)                                                                      \
-    sb::detail::MemoryOperatorHelperNewArray<type>                                                 \
+    sb::internal::MemoryOperatorHelperNewArray<type>                                               \
     {                                                                                              \
         __VA_ARGS__                                                                                \
     }
 
 #define sbDeleteArray(ptr, ...)                                                                    \
-    sb::detail::MemoryOperatorHelperDeleteArray<                                                   \
+    sb::internal::MemoryOperatorHelperDeleteArray<                                                 \
         typename sbstd::remove_pointer<decltype(ptr)>::type>::DestroyArray(ptr, ##__VA_ARGS__)
 
 } // namespace sb

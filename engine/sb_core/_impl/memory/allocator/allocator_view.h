@@ -2,7 +2,7 @@
 
 #include <sb_core/core.h>
 
-namespace sb::detail {
+namespace sb::internal {
 
 struct AllocatorVTable
 {
@@ -35,4 +35,4 @@ AllocatorVTable const & getAllocatorVTable()
 
     return vtable;
 }
-} // namespace sb::detail
+} // namespace sb::internal

@@ -17,7 +17,7 @@ public:
 
         template <typename T>
         InitParams(T & alloc)
-            : m_vtable(&detail::getAllocatorVTable<T>())
+            : m_vtable(&internal::getAllocatorVTable<T>())
             , m_alloc(&alloc)
         {
         }
@@ -28,7 +28,7 @@ public:
         {
         }
 
-        detail::AllocatorVTable const * m_vtable = nullptr;
+        internal::AllocatorVTable const * m_vtable = nullptr;
         void * m_alloc = nullptr;
     };
 
@@ -46,7 +46,7 @@ public:
 
     template <typename T>
     AllocatorView(T & alloc)
-        : m_vtable(&detail::getAllocatorVTable<T>())
+        : m_vtable(&internal::getAllocatorVTable<T>())
         , m_alloc(&alloc)
     {
     }
@@ -99,7 +99,7 @@ public:
     }
 
 private:
-    detail::AllocatorVTable const * m_vtable;
+    internal::AllocatorVTable const * m_vtable;
     void * m_alloc;
 };
 

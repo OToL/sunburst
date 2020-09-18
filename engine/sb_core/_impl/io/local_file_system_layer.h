@@ -9,7 +9,7 @@
 
 namespace sb {
 
-using StaticPhysicalPath = StaticString<PPath::MAX_LEN + 1>;
+using StaticPhysicalPath = StaticString<PHYS_PATH_MAX_LEN + 1>;
 
 class LocalFileSystemLayer : public IFileSystemLayer
 {

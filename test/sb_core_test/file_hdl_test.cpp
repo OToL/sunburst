@@ -8,7 +8,7 @@ using namespace sb;
 
 TEST_CASE("FileHdl default ctor invalid", "[file_hdl]")
 {
-    FileHdl hdl;
+    FileHdl hdl = {};
 
     REQUIRE_FALSE(isValid(hdl));
 }

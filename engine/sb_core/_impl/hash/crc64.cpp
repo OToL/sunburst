@@ -2,9 +2,7 @@
 
 #include <sb_std/cstring>
 
-namespace sb {
-
-static ui64 const CRC64_TAB[256] = {
+static sb::ui64 const CRC64_TAB[256] = {
     0x0000000000000000ULL, 0x42f0e1eba9ea3693ULL, 0x85e1c3d753d46d26ULL, 0xc711223cfa3e5bb5ULL,
     0x493366450e42ecdfULL, 0x0bc387aea7a8da4cULL, 0xccd2a5925d9681f9ULL, 0x8e224479f47cb76aULL,
     0x9266cc8a1c85d9beULL, 0xd0962d61b56fef2dULL, 0x17870f5d4f51b498ULL, 0x5577eeb6e6bb820bULL,
@@ -70,7 +68,7 @@ static ui64 const CRC64_TAB[256] = {
     0x14dea25f3af9026dULL, 0x562e43b4931334feULL, 0x913f6188692d6f4bULL, 0xd3cf8063c0c759d8ULL,
     0x5dedc41a34bbeeb2ULL, 0x1f1d25f19d51d821ULL, 0xd80c07cd676f8394ULL, 0x9afce626ce85b507ULL};
 
-ui64 computeCRC64(sbstd::span<ui8 const> buffer)
+sb::ui64 sb::computeCRC64(sbstd::span<ui8 const> buffer)
 {
     ui64 crc_value = 0ULL;
 
@@ -85,7 +83,7 @@ ui64 computeCRC64(sbstd::span<ui8 const> buffer)
     return crc_value;
 }
 
-ui64 computeCRC64(sbstd::string_view buffer)
+sb::ui64 sb::computeCRC64(sbstd::string_view buffer)
 {
     ui64 crc_value = 0ULL;
 
@@ -100,7 +98,7 @@ ui64 computeCRC64(sbstd::string_view buffer)
     return crc_value;
 }
 
-ui64 computeCRC64(char const * const str)
+sb::ui64 sb::computeCRC64(char const * const str)
 {
     ui64 crc_value = 0ULL;
 
@@ -114,5 +112,3 @@ ui64 computeCRC64(char const * const str)
 
     return crc_value;
 }
-
-} // namespace sb
