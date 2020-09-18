@@ -44,7 +44,6 @@ struct Hash32Str
         // TODO: register hash/string
     }
 
-
     ui32 value;
 };
 

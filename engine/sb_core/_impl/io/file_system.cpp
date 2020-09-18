@@ -67,8 +67,9 @@ public:
                          LPath::isValid(layer.m_logical_path) &&
                          (layer.m_logical_path[layer_path_len - 1] == *LPath::SEPARATOR)))
             {
-                m_layers.push_back({.m_id = layer.m_name, .m_logical_path = layer.m_logical_path, .m_layer = sbstd::move(layer.m_layer)});
-
+                m_layers.push_back({.m_id = layer.m_name,
+                                    .m_logical_path = layer.m_logical_path,
+                                    .m_layer = sbstd::move(layer.m_layer)});
             }
         }
     }

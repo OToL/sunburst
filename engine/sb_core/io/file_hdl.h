@@ -4,12 +4,11 @@
 
 namespace sb {
 
-
 struct FileHdl
 {
     using ValueType = ui32;
 
-    ValueType value = 0U;
+    ValueType value;
 };
 
 constexpr b8 operator==(FileHdl lval, FileHdl rval)
