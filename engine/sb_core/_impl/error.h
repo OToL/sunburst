@@ -4,9 +4,12 @@
 
 #if sbIsEnabled(ERROR_FACILITY)
 
+#include <sb_std/span>
+
 namespace sb {
 template <typename... TArgs>
-usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args);
+usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
+                          TArgs &&... args);
 }
 
 namespace sb::internal {
@@ -22,13 +25,10 @@ template <typename... TArgs>
 void reportError(ErrorLevel type, char const * const file, ui32 const line, char const * msg,
                  TArgs... args)
 {
-    if constexpr (sizeof...(args))
-    {
-        char fmt_msg[255];
-        sb::stringFormat(fmt_msg, sizeof(fmt_msg), msg, sbstd::forward<TArgs>(args)...);
+    char fmt_msg[255];
+    sb::stringFormat(fmt_msg, msg, sbstd::forward<TArgs>(args)...);
 
-        reportError(type, file, line, fmt_msg);
-    }
+    reportError(type, file, line, fmt_msg);
 }
 
 } // namespace sb::internal

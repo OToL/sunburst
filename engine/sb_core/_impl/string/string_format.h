@@ -1,13 +1,10 @@
 #pragma once
 
-#include <sb_core/core.h>
-#include <sb_core/error.h>
 #include <sb_core/conversion.h>
 
 #include <sb_std/utility>
-#include <sb_std/span>
 
-namespace sb {
+namespace sb::internal {
 
 template <typename T>
 inline usize fmtArgFwCall(void const * value, sbstd::span<char> dest_buffer)
@@ -66,8 +63,6 @@ struct FmtArgDesc<T, sbstd::enable_if_t<sbstd::is_arithmetic<T>::value>>
 template <typename T, typename... TArgs>
 inline void expandFmtArgs(sbstd::span<FmtArg> argList, T const & arg, TArgs &&... args)
 {
-    sbAssert(!argList.empty());
-
     FmtArg & arg_desc = argList[0];
 
     using TypeDesc = FmtArgDesc<T>;
@@ -80,36 +75,35 @@ inline void expandFmtArgs(sbstd::span<FmtArg> argList, T const & arg, TArgs &&..
     expandFmtArgs(argList.subspan(1), args...);
 }
 
-namespace internal {
-
-    usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
-                       sbstd::span<FmtArg> agrs);
-
-    template <typename... TArgs>
-    inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format,
-                              TArgs &&... args)
-    {
-        return sb::stringFormat({dest_buffer, (sptrdiff)capacity}, format,
-                                sbstd::forward<TArgs>(args)...);
-    }
-
-} // namespace internal
+usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
+                    sbstd::span<FmtArg> agrs);
 
 template <typename... TArgs>
-inline usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
-                          TArgs &&... args)
+inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format,
+                            TArgs &&... args)
 {
-    sbAssert(nullptr != format);
-
-    constexpr usize MAX_FMT_PARAM = 10;
-
-    constexpr int arg_cnt = sizeof...(TArgs);
-    sbExpect(MAX_FMT_PARAM >= arg_cnt);
-
-    FmtArg arg_list[MAX_FMT_PARAM];
-    expandFmtArgs(arg_list, args...);
-
-    return internal::stringFormat(dest_buffer, format, {arg_list, arg_cnt});
+    return sb::stringFormat({dest_buffer, (sptrdiff)capacity}, format,
+                            sbstd::forward<TArgs>(args)...);
 }
 
-} // namespace sb
+}
+
+template <typename... TArgs>
+inline sb::usize sb::stringFormat(sbstd::span<char> dest_buffer, char const * const format,
+                          TArgs &&... args)
+{
+    internal::FmtArg arg_list[sizeof...(TArgs)];
+    expandFmtArgs(arg_list, args...);
+
+    return internal::stringFormat(dest_buffer, format, {arg_list, sizeof...(TArgs)});
+}
+
+
+namespace sb{
+
+inline usize stringFormat(sbstd::span<char> dest_buffer, char const * const format)
+{
+    return internal::stringFormat(dest_buffer, format, {});
+}
+
+}

@@ -1,15 +1,15 @@
+#include <sb_core/core.h>
 #include <sb_core/string/string_format.h>
 #include <sb_core/error.h>
-#include <sb_core/core.h>
 #include <sb_core/conversion.h>
 #include <sb_core/io/io.h>
 #include <sb_core/string/static_string.h>
 #include <sb_core/enum.h>
-#include <sb_core/_impl/io/file_system_platform.h>
+#include <sb_core/_impl/io/local_file_system.h>
 
 #include <sb_std/cstdio>
 
-sb::internal::PlatformFileHdl sb::internal::platformOpenFileRead(char const * path, FileFormat fmt)
+sb::internal::LayerFileHdl sb::internal::platformOpenFileRead(char const * path, FileFormat fmt)
 {
     StaticString<3> flags{"r"};
 
@@ -21,7 +21,7 @@ sb::internal::PlatformFileHdl sb::internal::platformOpenFileRead(char const * pa
     return {(void *)fopen(path, flags.data())};
 }
 
-sb::internal::PlatformFileHdl
+sb::internal::LayerFileHdl
     sb::internal::platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
     StaticString<5> flags;
@@ -40,7 +40,7 @@ sb::internal::PlatformFileHdl
     }
 
     if (fmt == FileFormat::Bin)
-    {
+    {   
         flags.push_back('b');
     }
 
@@ -49,7 +49,7 @@ sb::internal::PlatformFileHdl
     return {(void *)fopen(path, flags.c_str())};
 }
 
-sb::internal::PlatformFileHdl sb::internal::platformCreateFile(char const * path, FileFormat fmt)
+sb::internal::LayerFileHdl sb::internal::platformCreateFile(char const * path, FileFormat fmt)
 {
     StaticString<3> flags{"w"};
 
@@ -61,25 +61,25 @@ sb::internal::PlatformFileHdl sb::internal::platformCreateFile(char const * path
     return {(void *)fopen(path, flags.c_str())};
 }
 
-void sb::internal::platformCloseFile(PlatformFileHdl hdl)
+void sb::internal::platformCloseFile(LayerFileHdl hdl)
 {
-    sbAssert(nullptr != hdl.m_value);
+    sbAssert(nullptr != hdl.value);
 
-    fclose((FILE *)hdl.m_value);
+    fclose((FILE *)hdl.value);
 }
 
-sb::FileSize sb::internal::platformReadFile(PlatformFileHdl hdl, ui8 * buffer, FileSize count)
+sb::FileSize sb::internal::platformReadFile(LayerFileHdl hdl, ui8 * buffer, FileSize count)
 {
-    sbAssert(nullptr != hdl.m_value);
+    sbAssert(nullptr != hdl.value);
 
-    return numericConv<FileSize>(fread((void *)buffer, 1, (usize)count, (FILE *)hdl.m_value));
+    return numericConv<FileSize>(fread((void *)buffer, 1, (usize)count, (FILE *)hdl.value));
 }
 
-sb::FileSize sb::internal::platformFileLength(PlatformFileHdl hdl)
+sb::FileSize sb::internal::platformFileLength(LayerFileHdl hdl)
 {
-    sbAssert(nullptr != hdl.m_value);
+    sbAssert(nullptr != hdl.value);
 
-    FILE * const actual_hdl = reinterpret_cast<FILE *>(hdl.m_value);
+    FILE * const actual_hdl = reinterpret_cast<FILE *>(hdl.value);
 
     auto const curr_pos = ftell(actual_hdl);
 

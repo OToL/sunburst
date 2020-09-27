@@ -1,43 +1,53 @@
 #include <sb_core/io/path.h>
-#include <sb_core/io/file_system.h>
 #include <sb_core/conversion.h>
 #include <sb_core/error.h>
 #include <sb_core/string/utility.h>
 #include <sb_core/core.h>
 
+#include <sb_std/algorithm>
+
 constexpr char const * INVALID_LOGICAL_PATH_SEPARATOR = "\\";
 
-sb::b8 sb::isVfsPathValid(char const * vfs_path)
+sb::b8 sb::isVFSPathValid(char const * vfs_path)
 {
     sbAssert(nullptr != vfs_path);
 
-    return ((VFS_PATH_SEPARATOR == *vfs_path) &&
-            (nullptr == strchr(vfs_path, *INVALID_LOGICAL_PATH_SEPARATOR)));
+    return ((VFS_PATH_SEPARATOR == *vfs_path) && (nullptr == strchr(vfs_path, *INVALID_LOGICAL_PATH_SEPARATOR)));    
 }
 
-char * sb::concatPhysPath(sbstd::span<char> base_path, char const * path_cat)
+char * sb::concatLocalPath(sbstd::span<char> base_path, usize base_path_len, char const * path_cat)
 {
-    auto const base_path_capacity = base_path.size();
-    auto base_path_len = strlen(base_path.data());
-    auto const cat_len = strlen(path_cat);
-    auto expected_len = base_path_len + cat_len;
+    sbAssert(base_path[base_path_len] == 0);
+    usize concat_offset = base_path_len;
 
-    if (base_path[base_path_len - 1] != PHYS_PATH_SEPARATOR)
+    if (base_path[concat_offset - 1] != LOCAL_PATH_SEPARATOR)
     {
-        ++expected_len;
-    }
-
-    if (sbExpect(base_path_capacity > expected_len))
-    {
-        if (base_path[base_path_len - 1] != PHYS_PATH_SEPARATOR)
+        if (sbExpect(base_path_len < base_path.size()))
         {
-            ++base_path_len;
-            base_path[base_path_len] = PHYS_PATH_SEPARATOR;
+            base_path[concat_offset] = LOCAL_PATH_SEPARATOR;
+            ++concat_offset;
         }
-
-        strCpyT(base_path.data() + base_path_len,
-                numericConv<usize>(base_path_capacity - base_path_len), path_cat);
+        else
+        {
+            return base_path.data();
+        }
     }
+
+    strCpyT(base_path.data() + concat_offset,
+            numericConv<usize>(base_path.size() - concat_offset), path_cat);
 
     return base_path.data();
+}
+
+char * sb::concatLocalPath(sbstd::span<char> base_path, char const * path_cat)
+{
+    auto const base_path_len = strlen(base_path.data());
+
+    return concatLocalPath(base_path, base_path_len, path_cat);
+}
+
+char * sb::normalizeLocalPath(char * path)
+{
+    sbAssert(nullptr != path);
+    return path;
 }

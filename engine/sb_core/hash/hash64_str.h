@@ -32,7 +32,7 @@ struct Hash64Str
         // TODO: register hash/string
     }
 
-    constexpr explicit Hash64Str(Hash64StrLiteral val)
+    constexpr Hash64Str(Hash64StrLiteral val)
         : value(val.value)
     {
         // TODO: register hash/string

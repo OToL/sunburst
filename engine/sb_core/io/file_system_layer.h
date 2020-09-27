@@ -12,7 +12,7 @@ class IFileSystemLayer
 public:
     struct FileId
     {
-        void * m_value;
+        void * value;
     };
 
     virtual ~IFileSystemLayer() { }

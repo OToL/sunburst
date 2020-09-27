@@ -12,7 +12,7 @@ namespace sb {
 
 /// Returns the number of characters copied without the null terminated character ('\0')
 template <typename... TArgs>
-inline usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
+usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
                           TArgs &&... args);
 
 } // namespace sb

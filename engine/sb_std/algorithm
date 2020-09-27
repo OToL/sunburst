@@ -18,5 +18,6 @@ namespace SB_STD_NS {
     SB_SRC_STD_USE(min);
     SB_SRC_STD_USE(max);
     SB_SRC_STD_USE(move);
+    SB_SRC_STD_USE(replace);
 
 }
