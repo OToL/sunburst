@@ -6,6 +6,9 @@ namespace sb::internal {
     {
         void * value;
     };
-    
 
+    inline b8 isValid(LayerFileHdl hdl)
+    {
+        return nullptr != hdl.value;
+    }
 }

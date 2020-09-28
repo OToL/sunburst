@@ -376,7 +376,7 @@ namespace sb::internal
 
         struct FileDesc
         {
-            void * hdl;
+            LayerFileHdl hdl;
             ui16 gen;
         };
         
@@ -465,7 +465,7 @@ namespace sb::internal
             sbAssert(0 < opened_file_count);
 
             auto & desc = getFileDesc(hdl);
-            internal::platformCloseFile({desc.hdl});
+            internal::platformCloseFile(desc.hdl);
 
             destroyFileDesc(hdl);
 
@@ -485,11 +485,11 @@ namespace sb::internal
                     strCpyT(local_file_path, layer_desc.local_path.c_str());
                     concatLocalPath(local_file_path, layer_desc.local_path.length(), path + layer_desc.vfs_path.length());
 
-                    auto const platform_file_hdl = internal::platformOpenFileRead(local_file_path, fmt);
+                    auto const local_file_hdl = internal::platformOpenFileRead(local_file_path, fmt);
 
-                    if (platform_file_hdl.value)
+                    if (isValid(local_file_hdl))
                     {
-                        FileHdl file_hdl = createFileHdl(platform_file_hdl.value);
+                        FileHdl file_hdl = createFileHdl(local_file_hdl);
                         
                         if (sbExpect(isValid(file_hdl), "Out of file descriptors"))
                         {
@@ -498,7 +498,7 @@ namespace sb::internal
                         }
                         else
                         {
-                            internal::platformCloseFile({platform_file_hdl});
+                            internal::platformCloseFile({local_file_hdl});
                         }                        
 
                         break;
@@ -513,13 +513,13 @@ namespace sb::internal
 
         using FileDescPool = ObjectPoolAllocator<FileDesc, GlobalHeapProvider>;
 
-        FileHdl createFileHdl(void * internal_hdl)
+        FileHdl createFileHdl(LayerFileHdl layer_hdl)
         {
             FileDesc * const file_desc = static_cast<FileDesc *>(file_desc_pool.allocate());
 
             if (sbExpect(nullptr != file_desc))
             {
-                *file_desc = {internal_hdl, ++curr_file_gen};
+                *file_desc = {layer_hdl, ++curr_file_gen};
 
                 MemoryArena arena = file_desc_pool.getArena();
                 FileDesc * const base_obj = static_cast<FileDesc *>(arena.m_ptr);
