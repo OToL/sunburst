@@ -4,12 +4,11 @@
 
 #if sbIsEnabled(ERROR_FACILITY)
 
-#include <sb_std/span>
+#    include <sb_std/span>
 
 namespace sb {
 template <typename... TArgs>
-usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
-                          TArgs &&... args);
+usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args);
 }
 
 namespace sb::internal {

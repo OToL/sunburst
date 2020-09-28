@@ -21,8 +21,8 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileRead(char const * path,
     return {(void *)fopen(path, flags.data())};
 }
 
-sb::internal::LayerFileHdl
-    sb::internal::platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
+sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path,
+                                                               FileWriteMode mode, FileFormat fmt)
 {
     StaticString<5> flags;
 
@@ -40,7 +40,7 @@ sb::internal::LayerFileHdl
     }
 
     if (fmt == FileFormat::Bin)
-    {   
+    {
         flags.push_back('b');
     }
 
@@ -75,6 +75,7 @@ sb::FileSize sb::internal::platformReadFile(LayerFileHdl hdl, ui8 * buffer, File
     return numericConv<FileSize>(fread((void *)buffer, 1, (usize)count, (FILE *)hdl.value));
 }
 
+// @todo: could be optimized
 sb::FileSize sb::internal::platformFileLength(LayerFileHdl hdl)
 {
     sbAssert(nullptr != hdl.value);
