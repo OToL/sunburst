@@ -140,6 +140,34 @@ public:
         return internal::platformFileLength(desc.hdl);
     }
 
+    b8 fileExists(char const * path)
+    {
+        for (auto const & layer_desc : layers)
+        {
+            if (strStartWith(path, layer_desc.vfs_path.c_str()))
+            {
+                char local_file_path[LOCAL_PATH_MAX_LEN + 1];
+                buildLocalFilePath(local_file_path, layer_desc, path);
+
+                if (internal::platformFileExists(local_file_path))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    static void buildLocalFilePath(char (&local_file_path)[LOCAL_PATH_MAX_LEN + 1],
+                                   LayerDesc const & layer_desc, char const * file_path)
+    {
+        strCpyT(local_file_path, layer_desc.local_path.c_str());
+        concatLocalPath(local_file_path, layer_desc.local_path.length(),
+                        file_path + layer_desc.vfs_path.length());
+        normalizeLocalPath(local_file_path);
+    }
+
     FileHdl openFileRead(char const * path, FileFormat fmt)
     {
         for (auto const & layer_desc : layers)
@@ -147,11 +175,7 @@ public:
             if (strStartWith(path, layer_desc.vfs_path.c_str()))
             {
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
-
-                strCpyT(local_file_path, layer_desc.local_path.c_str());
-                concatLocalPath(local_file_path, layer_desc.local_path.length(),
-                                path + layer_desc.vfs_path.length());
-                normalizeLocalPath(local_file_path);
+                buildLocalFilePath(local_file_path, layer_desc, path);
 
                 auto const local_file_hdl = internal::platformOpenFileRead(local_file_path, fmt);
 
@@ -184,11 +208,7 @@ public:
             if (strStartWith(path, layer_desc.vfs_path.c_str()))
             {
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
-
-                strCpyT(local_file_path, layer_desc.local_path.c_str());
-                concatLocalPath(local_file_path, layer_desc.local_path.length(),
-                                path + layer_desc.vfs_path.length());
-                normalizeLocalPath(local_file_path);
+                buildLocalFilePath(local_file_path, layer_desc, path);
 
                 auto const local_file_hdl =
                     internal::platformOpenFileWrite(local_file_path, mode, fmt);
@@ -222,11 +242,7 @@ public:
             if (strStartWith(path, layer_desc.vfs_path.c_str()))
             {
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
-
-                strCpyT(local_file_path, layer_desc.local_path.c_str());
-                concatLocalPath(local_file_path, layer_desc.local_path.length(),
-                                path + layer_desc.vfs_path.length());
-                normalizeLocalPath(local_file_path);
+                buildLocalFilePath(local_file_path, layer_desc, path);
 
                 auto const local_file_hdl = internal::platformCreateFile(local_file_path, fmt);
 
@@ -363,6 +379,7 @@ sb::FileHdl sb::VirtualFileSystem::createFile(char const * path, FileFormat fmt)
 
 sb::FileSize sb::VirtualFileSystem::readFile(FileHdl hdl, sbstd::span<ui8> buffer, FileSize cnt)
 {
+    sbAssert(nullptr != g_vfs);
     sbAssert((FileSize)buffer.size() >= cnt);
     sbAssert(-1 <= cnt);
 
@@ -376,10 +393,19 @@ sb::FileSize sb::VirtualFileSystem::readFile(FileHdl hdl, sbstd::span<ui8> buffe
 
 sb::FileSize sb::VirtualFileSystem::getFileLength(FileHdl hdl)
 {
+    sbAssert(nullptr != g_vfs);
+
     if (sbExpect(isValid(hdl)))
     {
         return g_vfs->getFileLength(hdl);
     }
 
     return 0;
+}
+
+sb::b8 sb::VirtualFileSystem::fileExists(char const * path)
+{
+    sbAssert(nullptr != g_vfs);
+
+    return g_vfs->fileExists(path);
 }

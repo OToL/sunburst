@@ -18,4 +18,6 @@ FileSize platformFileLength(LayerFileHdl hdl);
 
 void platformCloseFile(LayerFileHdl hdl);
 
+b8 platformFileExists(char const * path);
+
 } // namespace sb::internal

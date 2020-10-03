@@ -13,6 +13,7 @@ namespace sb {
 
 class IFileSystemLayer;
 
+// @todo: Review the different ways to open/create files vs fopen options
 struct VirtualFileSystem
 {
     using LayerName = HashStr;
@@ -33,12 +34,14 @@ struct VirtualFileSystem
 
     static b8 terminate();
 
+    // static FileHdl openFileRead(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
+    // FileFormat fmt = FileFormat::Bin);
     static FileHdl openFileRead(char const * path, FileFormat fmt = FileFormat::Bin);
-
     static FileHdl openFileWrite(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
                                  FileFormat fmt = FileFormat::Bin);
 
     static FileHdl createFile(char const * path, FileFormat fmt = FileFormat::Bin);
+    // static FileHdl createFileWrite(char const * path, FileFormat fmt = FileFormat::Bin);
 
     static void closeFile(FileHdl hdl);
 
@@ -46,7 +49,7 @@ struct VirtualFileSystem
 
     static FileSize getFileLength(FileHdl hdl);
 
-    static char const * getLayerPhysicalPath(LayerName name);
+    static b8 fileExists(char const * path);
 };
 
 using VFS = VirtualFileSystem;
