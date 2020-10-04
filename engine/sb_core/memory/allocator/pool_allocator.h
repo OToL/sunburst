@@ -116,14 +116,12 @@ public:
     void deallocate(void * ptr) override
     {
         sbAssert(0U ==
-                 (static_cast<usize>(static_cast<ui8 *>(ptr) - static_cast<ui8 *>(m_arena.m_ptr)) %
-                  ACTUAL_BLOCK_SIZE));
+                 (static_cast<usize>(static_cast<ui8 *>(ptr) - static_cast<ui8 *>(m_arena.m_ptr)) % ACTUAL_BLOCK_SIZE));
 
         if (sbExpect(m_arena.isInRange(ptr)))
         {
             Node * const dealloc_node = static_cast<Node *>(ptr);
-            NodeIdx const dealloc_node_idx =
-                numericConv<NodeIdx>(dealloc_node - static_cast<Node *>(m_arena.m_ptr));
+            NodeIdx const dealloc_node_idx = numericConv<NodeIdx>(dealloc_node - static_cast<Node *>(m_arena.m_ptr));
 
             if (INVALID_NODE == m_free_list)
             {

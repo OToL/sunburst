@@ -5,8 +5,7 @@
 #include <sb_std/cctype>
 #include <sb_std/type_traits>
 
-sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const * const format,
-                                     sbstd::span<FmtArg> args)
+sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbstd::span<FmtArg> args)
 {
     usize copied_bytes = 0;
 
@@ -30,9 +29,8 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
                 {
                     ++format_iter;
                 }
-                else if (sbDontExpect(0 == next_token,
-                                      "Reached end of format string without finding "
-                                      "argument closing '}'"))
+                else if (sbDontExpect(0 == next_token, "Reached end of format string without finding "
+                                                       "argument closing '}'"))
                 {
                     break;
                 }
@@ -45,8 +43,7 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
                     {
                         format_iter += 2;
 
-                        if (sbExpect(-1 != lastParamIdx,
-                                     "You cannot mix indexed and auto-increment arguments"))
+                        if (sbExpect(-1 != lastParamIdx, "You cannot mix indexed and auto-increment arguments"))
                         {
                             arg_idx = lastParamIdx++;
                         }
@@ -56,13 +53,10 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
                         }
                     }
                     // Argument specification
-                    else if (sbExpect(sbstd::isdigit(next_token),
-                                      "Only digit is allowed in argument specification") &&
-                             sbExpect(0 >= lastParamIdx,
-                                      "You cannot mix indexed and auto-increment "
-                                      "argument specification") &&
-                             sbExpect('}' == format_iter[2],
-                                      "Format argument index must be within [0-9] range"))
+                    else if (sbExpect(sbstd::isdigit(next_token), "Only digit is allowed in argument specification") &&
+                             sbExpect(0 >= lastParamIdx, "You cannot mix indexed and auto-increment "
+                                                         "argument specification") &&
+                             sbExpect('}' == format_iter[2], "Format argument index must be within [0-9] range"))
                     {
                         arg_idx = next_token - '0';
                         lastParamIdx = -1;
@@ -86,8 +80,7 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
                     }
 
                     copied_bytes += args[(ui32)arg_idx].m_fmt_cb(
-                        args[(ui32)arg_idx].m_value,
-                        sbstd::span<char>{dest_iter, dest_capacity - copied_bytes});
+                        args[(ui32)arg_idx].m_value, sbstd::span<char>{dest_iter, dest_capacity - copied_bytes});
                     dest_iter = dest_buffer.data() + copied_bytes;
 
                     continue;

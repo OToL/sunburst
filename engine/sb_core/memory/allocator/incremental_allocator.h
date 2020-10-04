@@ -53,8 +53,7 @@ public:
 
         if (nullptr != m_top)
         {
-            ui8 * new_top =
-                reinterpret_cast<ui8 *>(alignUp(reinterpret_cast<uptr>(m_top), m_alignment));
+            ui8 * new_top = reinterpret_cast<ui8 *>(alignUp(reinterpret_cast<uptr>(m_top), m_alignment));
 
             if (m_arena.isInRange(new_top, size))
             {
@@ -72,8 +71,7 @@ public:
 
         if (nullptr != m_top)
         {
-            ui8 * new_top =
-                reinterpret_cast<ui8 *>(alignUp(reinterpret_cast<uptr>(m_top), alignment));
+            ui8 * new_top = reinterpret_cast<ui8 *>(alignUp(reinterpret_cast<uptr>(m_top), alignment));
 
             if (m_arena.isInRange(new_top, size))
             {

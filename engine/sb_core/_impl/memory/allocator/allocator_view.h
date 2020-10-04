@@ -23,9 +23,7 @@ template <typename TAllocator>
 AllocatorVTable const & getAllocatorVTable()
 {
     static AllocatorVTable vtable = {
-        [](void * alloc, usize const size) {
-            return static_cast<TAllocator *>(alloc)->allocate(size);
-        },
+        [](void * alloc, usize const size) { return static_cast<TAllocator *>(alloc)->allocate(size); },
         [](void * alloc, usize const size, Alignment const alignment) {
             return static_cast<TAllocator *>(alloc)->allocate(size, alignment);
         },

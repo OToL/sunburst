@@ -146,8 +146,7 @@ auto allocateUnique(TAlloc const & alloc, TArgs &&... args)
 {
     using DeleteType = AllocatorDelete<T, TAlloc>;
 
-    return UniquePtr<T, DeleteType>{sbNew(T, alloc)(sbstd::forward<TArgs>(args)...),
-                                    DeleteType{alloc}};
+    return UniquePtr<T, DeleteType>{sbNew(T, alloc)(sbstd::forward<TArgs>(args)...), DeleteType{alloc}};
 }
 
 template <class T, typename TAlloc, class... TArgs>
@@ -156,8 +155,7 @@ auto allocateUnique(sbstd::reference_wrapper<TAlloc> alloc, TArgs &&... args)
 {
     using DeleteType = AllocatorDelete<T, TAlloc &>;
 
-    return UniquePtr<T, DeleteType>{sbNew(T, alloc.get())(sbstd::forward<TArgs>(args)...),
-                                    DeleteType{alloc}};
+    return UniquePtr<T, DeleteType>{sbNew(T, alloc.get())(sbstd::forward<TArgs>(args)...), DeleteType{alloc}};
 }
 
 template <typename T, typename TAlloc>
@@ -199,15 +197,13 @@ namespace SB_STD_NS {
 template <class U, class T, class A>
 auto static_pointer_cast(std::unique_ptr<T, A> && r) noexcept
 {
-    return std::unique_ptr<U, typename A::template RebindDelete<U>>{static_cast<U *>(r.release()),
-                                                                    r.get_deleter()};
+    return std::unique_ptr<U, typename A::template RebindDelete<U>>{static_cast<U *>(r.release()), r.get_deleter()};
 }
 
 template <class U, class T, class A>
 auto static_pointer_cast(std::unique_ptr<T, A> & r) noexcept
 {
-    return std::unique_ptr<U, typename A::template RebindDelete<U>>{static_cast<U *>(r.release()),
-                                                                    r.get_deleter()};
+    return std::unique_ptr<U, typename A::template RebindDelete<U>>{static_cast<U *>(r.release()), r.get_deleter()};
 }
 
 } // namespace SB_STD_NS

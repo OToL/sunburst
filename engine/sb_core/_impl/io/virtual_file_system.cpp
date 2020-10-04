@@ -47,10 +47,8 @@ class VirtualFileSystemImpl
 public:
     LayerDesc * findLayer(VFS::LayerName layer_id)
     {
-        auto const layer_iter =
-            sbstd::find_if(begin(layers), end(layers), [layer_id](LayerDesc const & layer_desc) {
-                return layer_desc.id == layer_id;
-            });
+        auto const layer_iter = sbstd::find_if(
+            begin(layers), end(layers), [layer_id](LayerDesc const & layer_desc) { return layer_desc.id == layer_id; });
 
         return (layer_iter == end(layers)) ? nullptr : layer_iter;
     }
@@ -65,15 +63,13 @@ public:
         for (auto & layer_desc : layers_desc)
         {
             if (!(sbExpect(isValid(layer_desc.name), "VFS layer must have a valid name") &&
-                  sbExpect(nullptr == findLayer(layer_desc.name),
-                           "VFS layer already registered with the same name") &&
+                  sbExpect(nullptr == findLayer(layer_desc.name), "VFS layer already registered with the same name") &&
                   sbExpect(isVFSPathValid(layer_desc.vfs_path.c_str()), "Invalid layer VFS path")))
             {
                 continue;
             }
 
-            auto & new_layer =
-                layers.emplace_back(layer_desc.name, layer_desc.vfs_path, layer_desc.local_path);
+            auto & new_layer = layers.emplace_back(layer_desc.name, layer_desc.vfs_path, layer_desc.local_path);
 
             if (VFS_PATH_SEPARATOR != new_layer.vfs_path.back())
             {
@@ -97,8 +93,7 @@ public:
 
     ~VirtualFileSystemImpl()
     {
-        sbWarn(0 == opened_file_count,
-               "Not all files have been closed before destroying the File System");
+        sbWarn(0 == opened_file_count, "Not all files have been closed before destroying the File System");
     }
 
     FileDesc & getFileDesc(FileHdl hdl)
@@ -159,12 +154,11 @@ public:
         return false;
     }
 
-    static void buildLocalFilePath(char (&local_file_path)[LOCAL_PATH_MAX_LEN + 1],
-                                   LayerDesc const & layer_desc, char const * file_path)
+    static void buildLocalFilePath(char (&local_file_path)[LOCAL_PATH_MAX_LEN + 1], LayerDesc const & layer_desc,
+                                   char const * file_path)
     {
         strCpyT(local_file_path, layer_desc.local_path.c_str());
-        concatLocalPath(local_file_path, layer_desc.local_path.length(),
-                        file_path + layer_desc.vfs_path.length());
+        concatLocalPath(local_file_path, layer_desc.local_path.length(), file_path + layer_desc.vfs_path.length());
         normalizeLocalPath(local_file_path);
     }
 
@@ -201,7 +195,7 @@ public:
         return {};
     }
 
-    FileHdl openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
+    FileHdl openFileReadWrite(char const * path, FileWriteMode mode, FileFormat fmt)
     {
         for (auto const & layer_desc : layers)
         {
@@ -210,8 +204,7 @@ public:
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
 
-                auto const local_file_hdl =
-                    internal::platformOpenFileWrite(local_file_path, mode, fmt);
+                auto const local_file_hdl = internal::platformOpenFileReadWrite(local_file_path, mode, fmt);
 
                 if (isValid(local_file_hdl))
                 {
@@ -235,7 +228,7 @@ public:
         return {};
     }
 
-    FileHdl createFile(char const * path, FileFormat fmt)
+    FileHdl openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
     {
         for (auto const & layer_desc : layers)
         {
@@ -244,7 +237,73 @@ public:
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
 
-                auto const local_file_hdl = internal::platformCreateFile(local_file_path, fmt);
+                auto const local_file_hdl = internal::platformOpenFileWrite(local_file_path, mode, fmt);
+
+                if (isValid(local_file_hdl))
+                {
+                    FileHdl file_hdl = createFileHdl(local_file_hdl);
+
+                    if (sbExpect(isValid(file_hdl), "Out of file descriptors"))
+                    {
+                        ++opened_file_count;
+                        return file_hdl;
+                    }
+                    else
+                    {
+                        internal::platformCloseFile({local_file_hdl});
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return {};
+    }
+
+    FileHdl createFileReadWrite(char const * path, FileFormat fmt)
+    {
+        for (auto const & layer_desc : layers)
+        {
+            if (strStartWith(path, layer_desc.vfs_path.c_str()))
+            {
+                char local_file_path[LOCAL_PATH_MAX_LEN + 1];
+                buildLocalFilePath(local_file_path, layer_desc, path);
+
+                auto const local_file_hdl = internal::platformCreateFileReadWrite(local_file_path, fmt);
+
+                if (isValid(local_file_hdl))
+                {
+                    FileHdl file_hdl = createFileHdl(local_file_hdl);
+
+                    if (sbExpect(isValid(file_hdl), "Out of file descriptors"))
+                    {
+                        ++opened_file_count;
+                        return file_hdl;
+                    }
+                    else
+                    {
+                        internal::platformCloseFile({local_file_hdl});
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return {};
+    }
+
+    FileHdl createFileWrite(char const * path, FileFormat fmt)
+    {
+        for (auto const & layer_desc : layers)
+        {
+            if (strStartWith(path, layer_desc.vfs_path.c_str()))
+            {
+                char local_file_path[LOCAL_PATH_MAX_LEN + 1];
+                buildLocalFilePath(local_file_path, layer_desc, path);
+
+                auto const local_file_hdl = internal::platformCreateFileWrite(local_file_path, fmt);
 
                 if (isValid(local_file_hdl))
                 {
@@ -282,9 +341,8 @@ private:
             MemoryArena arena = file_desc_pool.getArena();
             FileDesc * const base_obj = static_cast<FileDesc *>(arena.m_ptr);
 
-            FileHdlHelper const helper_hdl = {
-                .unpacked = {numericConv<ui16>(sbstd::distance(base_obj, file_desc)),
-                             numericConv<ui16>(file_desc->gen)}};
+            FileHdlHelper const helper_hdl = {.unpacked = {numericConv<ui16>(sbstd::distance(base_obj, file_desc)),
+                                                           numericConv<ui16>(file_desc->gen)}};
 
             return FileHdl{helper_hdl.packed};
         }
@@ -342,6 +400,38 @@ sb::b8 sb::VirtualFileSystem::terminate()
     return false;
 }
 
+sb::FileHdl sb::VirtualFileSystem::openFile(char const * path, FileWriteMode mode, FileFormat fmt, bool create_if_not_exist)
+{
+    sbAssert(nullptr != g_vfs);
+    sbAssert(nullptr != path);
+    sbWarn(isVFSPathValid(path));
+
+    FileHdl file_hdl = g_vfs->openFileReadWrite(path, mode, fmt);
+
+    if (create_if_not_exist && !isValid(file_hdl))
+    {
+        file_hdl = createFile(path, fmt);
+    }
+
+    return file_hdl;
+}
+
+sb::FileHdl sb::VirtualFileSystem::openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt, bool create_if_not_exist)
+{
+    sbAssert(nullptr != g_vfs);
+    sbAssert(nullptr != path);
+    sbWarn(isVFSPathValid(path));
+
+    FileHdl file_hdl = g_vfs->openFileWrite(path, mode, fmt);
+
+    if (create_if_not_exist && !isValid(file_hdl))
+    {
+        file_hdl = createFileWrite(path, fmt);
+    }
+
+    return file_hdl;
+}
+
 sb::FileHdl sb::VirtualFileSystem::openFileRead(char const * path, FileFormat fmt)
 {
     sbAssert(nullptr != g_vfs);
@@ -349,16 +439,6 @@ sb::FileHdl sb::VirtualFileSystem::openFileRead(char const * path, FileFormat fm
     sbWarn(isVFSPathValid(path));
 
     return g_vfs->openFileRead(path, fmt);
-}
-
-sb::FileHdl sb::VirtualFileSystem::openFileWrite(char const * path, FileWriteMode mode,
-                                                 FileFormat fmt)
-{
-    sbAssert(nullptr != g_vfs);
-    sbAssert(nullptr != path);
-    sbWarn(isVFSPathValid(path));
-
-    return g_vfs->openFileWrite(path, mode, fmt);
 }
 
 void sb::VirtualFileSystem::closeFile(FileHdl hdl)
@@ -369,12 +449,20 @@ void sb::VirtualFileSystem::closeFile(FileHdl hdl)
     return g_vfs->closeFile(hdl);
 }
 
+sb::FileHdl sb::VirtualFileSystem::createFileWrite(char const * path, FileFormat fmt)
+{
+    sbAssert(nullptr != g_vfs);
+    sbAssert(nullptr != path) sbWarn(isVFSPathValid(path));
+
+    return g_vfs->createFileWrite(path, fmt);    
+}
+
 sb::FileHdl sb::VirtualFileSystem::createFile(char const * path, FileFormat fmt)
 {
     sbAssert(nullptr != g_vfs);
     sbAssert(nullptr != path) sbWarn(isVFSPathValid(path));
 
-    return g_vfs->createFile(path, fmt);
+    return g_vfs->createFileReadWrite(path, fmt);
 }
 
 sb::FileSize sb::VirtualFileSystem::readFile(FileHdl hdl, sbstd::span<ui8> buffer, FileSize cnt)

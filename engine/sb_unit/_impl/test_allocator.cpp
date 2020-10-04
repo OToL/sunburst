@@ -26,12 +26,10 @@ void * TestAllocator::allocate(size_t const size)
         m_stats.m_allocated_byte += size;
         ++m_stats.m_alloc_count;
 
-        auto const alloc_desc =
-            sbstd::find_if(begin(m_allocs), end(m_allocs), [mem_ptr](AllocDesc const & val) {
-                return (val.m_mem <= mem_ptr) &&
-                       (reinterpret_cast<uintptr_t>(mem_ptr) <=
-                        (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
-            });
+        auto const alloc_desc = sbstd::find_if(begin(m_allocs), end(m_allocs), [mem_ptr](AllocDesc const & val) {
+            return (val.m_mem <= mem_ptr) &&
+                   (reinterpret_cast<uintptr_t>(mem_ptr) <= (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
+        });
         sbAssert(alloc_desc == end(m_allocs));
         m_allocs.emplace_back(mem_ptr, size);
     }
@@ -48,12 +46,10 @@ void * TestAllocator::allocate(size_t const size, sb::Alignment alignment)
         m_stats.m_allocated_byte += size;
         ++m_stats.m_alloc_count;
 
-        auto const alloc_desc =
-            sbstd::find_if(begin(m_allocs), end(m_allocs), [mem_ptr](AllocDesc const & val) {
-                return (val.m_mem <= mem_ptr) &&
-                       (reinterpret_cast<uintptr_t>(mem_ptr) <=
-                        (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
-            });
+        auto const alloc_desc = sbstd::find_if(begin(m_allocs), end(m_allocs), [mem_ptr](AllocDesc const & val) {
+            return (val.m_mem <= mem_ptr) &&
+                   (reinterpret_cast<uintptr_t>(mem_ptr) <= (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
+        });
         sbAssert(alloc_desc == end(m_allocs));
         m_allocs.emplace_back(mem_ptr, size);
     }
@@ -71,8 +67,7 @@ void TestAllocator::deallocate(void * ptr)
         --m_stats.m_alloc_count;
 
         auto const alloc_desc =
-            sbstd::find_if(begin(m_allocs), end(m_allocs),
-                           [ptr](AllocDesc const & val) { return val.m_mem == ptr; });
+            sbstd::find_if(begin(m_allocs), end(m_allocs), [ptr](AllocDesc const & val) { return val.m_mem == ptr; });
         sbAssert(alloc_desc != end(m_allocs));
         m_allocs.erase(alloc_desc);
     }
@@ -82,11 +77,10 @@ void TestAllocator::deallocate(void * ptr)
 
 bool TestAllocator::owns(void const * ptr) const
 {
-    auto const alloc_desc =
-        sbstd::find_if(begin(m_allocs), end(m_allocs), [ptr](AllocDesc const & val) {
-            return (val.m_mem <= ptr) && (reinterpret_cast<uintptr_t>(ptr) <=
-                                          (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
-        });
+    auto const alloc_desc = sbstd::find_if(begin(m_allocs), end(m_allocs), [ptr](AllocDesc const & val) {
+        return (val.m_mem <= ptr) &&
+               (reinterpret_cast<uintptr_t>(ptr) <= (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
+    });
 
     return alloc_desc != end(m_allocs);
 }

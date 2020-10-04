@@ -23,8 +23,7 @@ class SmallVector : public internal::SmallVectorBase<TType, TAllocator>
 
     using Impl = typename BaseClass::Impl;
 
-    static constexpr usize BITS_PER_WORD =
-        static_cast<usize>(sizeof(typename BaseClass::size_type) * 8);
+    static constexpr usize BITS_PER_WORD = static_cast<usize>(sizeof(typename BaseClass::size_type) * 8);
 
 public:
     using typename BaseClass::const_iterator;
@@ -56,8 +55,7 @@ public:
         sbstd::uninitialized_default_construct(m_impl.m_begin, m_impl.m_end);
     }
 
-    SmallVector(size_type count, value_type const & value,
-                allocator_type const & alloc = allocator_type())
+    SmallVector(size_type count, value_type const & value, allocator_type const & alloc = allocator_type())
         : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
     {
         buyMore(count);
@@ -84,8 +82,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
-    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src,
-                allocator_type const & alloc)
+    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src, allocator_type const & alloc)
         : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
     {
         buyMore(src.size());
@@ -116,8 +113,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC>
-    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TAllocator> && src,
-                allocator_type const & alloc)
+    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TAllocator> && src, allocator_type const & alloc)
         : m_impl(alloc)
     {
         if (!src.isSmallStorage() && (src.size() > BASE_CAPACITY))
@@ -166,19 +162,16 @@ public:
 
             if ((src_size <= capacity()) && (dst_size <= src.capacity()))
             {
-                sbstd::swap_ranges(m_impl.m_begin, m_impl.m_begin + common_size,
-                                   src.m_impl.m_begin);
+                sbstd::swap_ranges(m_impl.m_begin, m_impl.m_begin + common_size, src.m_impl.m_begin);
 
                 if (src_size > dst_size)
                 {
-                    sbstd::uninitialized_move(src.m_impl.m_begin + common_size, src.m_impl.m_end,
-                                              m_impl.m_end);
+                    sbstd::uninitialized_move(src.m_impl.m_begin + common_size, src.m_impl.m_end, m_impl.m_end);
                     sbstd::destroy(src.m_impl.m_begin + common_size, src.m_impl.m_end);
                 }
                 else if (dst_size > src_size)
                 {
-                    sbstd::uninitialized_move(m_impl.m_begin + common_size, m_impl.m_end,
-                                              src.m_impl.m_end);
+                    sbstd::uninitialized_move(m_impl.m_begin + common_size, m_impl.m_end, src.m_impl.m_end);
                     sbstd::destroy(m_impl.m_begin + common_size, m_impl.m_end);
                 }
 
@@ -491,8 +484,7 @@ public:
             {
                 if (new_capacity <= BASE_CAPACITY)
                 {
-                    sbstd::uninitialized_move(m_impl.m_begin, m_impl.m_end,
-                                              reinterpret_cast<pointer>(&m_buffer[0]));
+                    sbstd::uninitialized_move(m_impl.m_begin, m_impl.m_end, reinterpret_cast<pointer>(&m_buffer[0]));
                     sbstd::destroy(m_impl.m_begin, m_impl.m_end);
                     m_impl.deallocate(m_impl.m_begin, curr_capacity);
 

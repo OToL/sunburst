@@ -1,8 +1,7 @@
 #include <sb_core/string/utility.h>
 #include <sb_core/error.h>
 
-char * sb::strCatT(char * __sb_restrict dst, usize dst_len, usize dst_capacity,
-                   char const * __sb_restrict concat)
+char * sb::strCatT(char * __sb_restrict dst, usize dst_len, usize dst_capacity, char const * __sb_restrict concat)
 {
     sbAssert(dst_len <= dst_capacity);
     sbAssert(dst[dst_len] == 0);

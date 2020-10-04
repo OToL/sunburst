@@ -21,8 +21,34 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileRead(char const * path,
     return {(void *)fopen(path, flags.data())};
 }
 
-sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path,
-                                                               FileWriteMode mode, FileFormat fmt)
+sb::internal::LayerFileHdl sb::internal::platformOpenFileReadWrite(char const * path, FileWriteMode mode, FileFormat fmt)
+{
+    StaticString<5> flags;
+
+    if (mode == FileWriteMode::APPEND)
+    {
+        flags.append("a+");
+    }
+    else if (mode == FileWriteMode::TRUNC)
+    {
+        flags.append("w+");
+    }
+    else
+    {
+        sbWarn(false, "Unhandled write mode {}", getEnumValue(mode));
+    }
+
+    if (fmt == FileFormat::Bin)
+    {
+        flags.push_back('b');
+    }
+
+    flags.push_back('x');
+
+    return {(void *)fopen(path, flags.c_str())};
+}
+
+sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
     StaticString<5> flags;
 
@@ -49,9 +75,21 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path
     return {(void *)fopen(path, flags.c_str())};
 }
 
-sb::internal::LayerFileHdl sb::internal::platformCreateFile(char const * path, FileFormat fmt)
+sb::internal::LayerFileHdl sb::internal::platformCreateFileWrite(char const * path, FileFormat fmt)
 {
     StaticString<3> flags{"w"};
+
+    if (fmt == FileFormat::Bin)
+    {
+        flags.push_back('b');
+    }
+
+    return {(void *)fopen(path, flags.c_str())};
+}
+
+sb::internal::LayerFileHdl sb::internal::platformCreateFileReadWrite(char const * path, FileFormat fmt)
+{
+    StaticString<3> flags{"w+"};
 
     if (fmt == FileFormat::Bin)
     {

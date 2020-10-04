@@ -8,9 +8,13 @@ namespace sb::internal {
 
 LayerFileHdl platformOpenFileRead(char const * path, FileFormat fmt);
 
+LayerFileHdl platformOpenFileReadWrite(char const * path, FileWriteMode mode, FileFormat fmt);
+
 LayerFileHdl platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt);
 
-LayerFileHdl platformCreateFile(char const * path, FileFormat fmt);
+LayerFileHdl platformCreateFileReadWrite(char const * path, FileFormat fmt);
+
+LayerFileHdl platformCreateFileWrite(char const * path, FileFormat fmt);
 
 FileSize platformReadFile(LayerFileHdl hdl, ui8 * buffer, FileSize count);
 

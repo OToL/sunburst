@@ -31,25 +31,28 @@ struct VirtualFileSystem
     };
 
     static b8 initialize(InitDesc const & init);
-
     static b8 terminate();
 
-    // static FileHdl openFileRead(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
-    // FileFormat fmt = FileFormat::Bin);
-    static FileHdl openFileRead(char const * path, FileFormat fmt = FileFormat::Bin);
-    static FileHdl openFileWrite(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
-                                 FileFormat fmt = FileFormat::Bin);
+    static b8 fileExists(char const * path);
+    // enumerate
+    // delete file
 
+    static FileHdl openFile(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
+                            FileFormat fmt = FileFormat::Bin, bool create_if_not_exist = false);
+    static FileHdl openFileWrite(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
+                                 FileFormat fmt = FileFormat::Bin, bool create_if_not_exist = false);
+    static FileHdl openFileRead(char const * path, FileFormat fmt = FileFormat::Bin);
+
+    // Overwite file if exists
     static FileHdl createFile(char const * path, FileFormat fmt = FileFormat::Bin);
-    // static FileHdl createFileWrite(char const * path, FileFormat fmt = FileFormat::Bin);
+    static FileHdl createFileWrite(char const * path, FileFormat fmt = FileFormat::Bin);
 
     static void closeFile(FileHdl hdl);
 
     static FileSize readFile(FileHdl hdl, sbstd::span<ui8> buffer, FileSize cnt = -1);
+    // write file
 
     static FileSize getFileLength(FileHdl hdl);
-
-    static b8 fileExists(char const * path);
 };
 
 using VFS = VirtualFileSystem;

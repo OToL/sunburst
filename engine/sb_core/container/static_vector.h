@@ -182,8 +182,7 @@ public:
     }
 
 private:
-    using StorageType =
-        typename sbstd::aligned_storage<sizeof(value_type), alignof(value_type)>::type;
+    using StorageType = typename sbstd::aligned_storage<sizeof(value_type), alignof(value_type)>::type;
 
     StorageType m_data[CAPACITY];
     size_type m_size;
@@ -202,15 +201,13 @@ typename StaticVector<TType, CAPACITY>::iterator end(StaticVector<TType, CAPACIT
 }
 
 template <typename TType, usize CAPACITY>
-typename StaticVector<TType, CAPACITY>::const_iterator
-    begin(StaticVector<TType, CAPACITY> const & vect)
+typename StaticVector<TType, CAPACITY>::const_iterator begin(StaticVector<TType, CAPACITY> const & vect)
 {
     return vect.begin();
 }
 
 template <typename TType, usize CAPACITY>
-typename StaticVector<TType, CAPACITY>::const_iterator
-    end(StaticVector<TType, CAPACITY> const & vect)
+typename StaticVector<TType, CAPACITY>::const_iterator end(StaticVector<TType, CAPACITY> const & vect)
 {
     return vect.end();
 }

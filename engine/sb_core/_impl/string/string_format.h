@@ -75,22 +75,18 @@ inline void expandFmtArgs(sbstd::span<FmtArg> argList, T const & arg, TArgs &&..
     expandFmtArgs(argList.subspan(1), args...);
 }
 
-usize stringFormat(sbstd::span<char> dest_buffer, char const * const format,
-                   sbstd::span<FmtArg> agrs);
+usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbstd::span<FmtArg> agrs);
 
 template <typename... TArgs>
-inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format,
-                          TArgs &&... args)
+inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args)
 {
-    return sb::stringFormat({dest_buffer, (sptrdiff)capacity}, format,
-                            sbstd::forward<TArgs>(args)...);
+    return sb::stringFormat({dest_buffer, (sptrdiff)capacity}, format, sbstd::forward<TArgs>(args)...);
 }
 
 } // namespace sb::internal
 
 template <typename... TArgs>
-inline sb::usize sb::stringFormat(sbstd::span<char> dest_buffer, char const * const format,
-                                  TArgs &&... args)
+inline sb::usize sb::stringFormat(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args)
 {
     internal::FmtArg arg_list[sizeof...(TArgs)];
     expandFmtArgs(arg_list, args...);

@@ -38,8 +38,7 @@ void * malloc(usize size, Alignment alignment)
         notifyOOM(size, "malloc OOM");
     }
 
-    void * const aligned_mem_ptr =
-        reinterpret_cast<void *>(alignUp(usize(mem_ptr + sizeof(AllocHeader)), alignment));
+    void * const aligned_mem_ptr = reinterpret_cast<void *>(alignUp(usize(mem_ptr + sizeof(AllocHeader)), alignment));
 
     AllocHeader * const header = dataToHeader(aligned_mem_ptr);
     header->m_size = size;
