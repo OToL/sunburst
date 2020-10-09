@@ -212,19 +212,19 @@ TEST_F(STATIC_ARRAY, ALIGNED_STORAGE)
 {
     struct alignas(32) AlignedType
     {
-        ui32 m_x;
+        u32 m_x;
     };
 
     StaticVector<AlignedType, 10> aligned_array;
 
-    for (ui32 idx = 0; idx < 5; ++idx)
+    for (u32 idx = 0; idx < 5; ++idx)
     {
         aligned_array.emplace_back(idx);
     }
 
     EXPECT_TRUE(isAlignedTo(aligned_array.data(), 32));
 
-    for (ui32 idx = 0; idx < 5; ++idx)
+    for (u32 idx = 0; idx < 5; ++idx)
     {
         EXPECT_EQ(aligned_array[idx].m_x, idx);
     }

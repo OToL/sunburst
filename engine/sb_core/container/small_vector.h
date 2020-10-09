@@ -674,7 +674,7 @@ private:
     static constexpr usize BASE_CAPACITY_BYTES = BASE_CAPACITY * sizeof(TType);
 
     Impl m_impl;
-    alignas(value_type) ui8 m_buffer[BASE_CAPACITY_BYTES];
+    alignas(value_type) u8 m_buffer[BASE_CAPACITY_BYTES];
 };
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>

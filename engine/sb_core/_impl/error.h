@@ -13,14 +13,14 @@ usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, TAr
 
 namespace sb::internal {
 
-void reportNotImplemented(ErrorLevel type, char const * const file, ui32 const line, char const * msg);
+void reportNotImplemented(ErrorLevel type, char const * const file, u32 const line, char const * msg);
 
-void reportError(ErrorLevel type, char const * const file, ui32 const line, char const * msg);
+void reportError(ErrorLevel type, char const * const file, u32 const line, char const * msg);
 
-void reportError(ErrorLevel type, char const * const file, ui32 const line);
+void reportError(ErrorLevel type, char const * const file, u32 const line);
 
 template <typename... TArgs>
-void reportError(ErrorLevel type, char const * const file, ui32 const line, char const * msg, TArgs... args)
+void reportError(ErrorLevel type, char const * const file, u32 const line, char const * msg, TArgs... args)
 {
     char fmt_msg[255];
     sb::stringFormat(fmt_msg, msg, sbstd::forward<TArgs>(args)...);

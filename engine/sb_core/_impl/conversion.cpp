@@ -44,12 +44,12 @@ sb::usize sb::internal::decimalToString(T src, sbstd::span<char> dest)
     return 0;
 }
 
-template sb::usize sb::internal::decimalToString<sb::si64>(si64 src, sbstd::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::si32>(si32 src, sbstd::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::si16>(si16 src, sbstd::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::si8>(si8 src, sbstd::span<char> dest);
+template sb::usize sb::internal::decimalToString<sb::s64>(s64 src, sbstd::span<char> dest);
+template sb::usize sb::internal::decimalToString<sb::s32>(s32 src, sbstd::span<char> dest);
+template sb::usize sb::internal::decimalToString<sb::s16>(s16 src, sbstd::span<char> dest);
+template sb::usize sb::internal::decimalToString<sb::s8>(s8 src, sbstd::span<char> dest);
 
-template sb::usize sb::internal::decimalToString<sb::ui64>(ui64 src, sbstd::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::ui32>(ui32 src, sbstd::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::ui16>(ui16 src, sbstd::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::ui8>(ui8 src, sbstd::span<char> dest);
+template sb::usize sb::internal::decimalToString<sb::u64>(u64 src, sbstd::span<char> dest);
+template sb::usize sb::internal::decimalToString<sb::u32>(u32 src, sbstd::span<char> dest);
+template sb::usize sb::internal::decimalToString<sb::u16>(u16 src, sbstd::span<char> dest);
+template sb::usize sb::internal::decimalToString<sb::u8>(u8 src, sbstd::span<char> dest);

@@ -44,21 +44,21 @@ TEST_CASE("strCpyT", "[string_utility]")
     }
 }
 
-TEST_CASE("strStartWith", "[string_utility]")
+TEST_CASE("strStartsWith", "[string_utility]")
 {
     SECTION("Exact match")
     {
-        REQUIRE(strStartWith("Hello", "Hello"));
+        REQUIRE(strStartsWith("Hello", "Hello"));
     }
 
     SECTION("Exact sub-match")
     {
-        REQUIRE(strStartWith("Hello World", "Hello"));
+        REQUIRE(strStartsWith("Hello World", "Hello"));
     }
 
     SECTION("No match")
     {
-        REQUIRE_FALSE(strStartWith("Hello", "Helli"));
+        REQUIRE_FALSE(strStartsWith("Hello", "Helli"));
     }
 }
 

@@ -88,72 +88,72 @@ TEST_CASE("String format numeric arguments", "[string_format]")
 {
     char test[255];
 
-    SECTION("ui8 argument")
+    SECTION("u8 argument")
     {
-        ui8 const value = 10;
+        u8 const value = 10;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("10"));
         REQUIRE(byte_cnt == 2U);
     }
 
-    SECTION("si8 argument")
+    SECTION("s8 argument")
     {
-        si8 const value = -10;
+        s8 const value = -10;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("-10"));
         REQUIRE(byte_cnt== 3U);
     }
 
-    SECTION("ui16 argument")
+    SECTION("u16 argument")
     {
-        ui16 const value = 512;
+        u16 const value = 512;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("512"));
         REQUIRE(byte_cnt == 3U);
     }
 
-    SECTION("si16 argument")
+    SECTION("s16 argument")
     {
-        si16 const value = -512;
+        s16 const value = -512;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("-512"));
         REQUIRE(byte_cnt == 4U);
     }
 
-    SECTION("ui32 argument")
+    SECTION("u32 argument")
     {
-        ui32 const value = 16777215U;
+        u32 const value = 16777215U;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("16777215"));
         REQUIRE(byte_cnt == 8U);
     }
 
-    SECTION("si32 argument")
+    SECTION("s32 argument")
     {
-        si32 const value = -16777215;
+        s32 const value = -16777215;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("-16777215"));
         REQUIRE(byte_cnt == 9U);
     }
 
-    SECTION("ui64 argument")
+    SECTION("u64 argument")
     {
-        ui64 const value = 1099511627775;
+        u64 const value = 1099511627775;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("1099511627775"));
         REQUIRE(byte_cnt == 13U);
     }
 
-    SECTION("si64 argument")
+    SECTION("s64 argument")
     {
-        si64 const value = -1099511627775;
+        s64 const value = -1099511627775;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("-1099511627775"));

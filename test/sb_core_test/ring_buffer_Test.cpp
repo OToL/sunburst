@@ -12,12 +12,12 @@ struct TestRingItem
     {
     }
 
-    TestRingItem(ui32 id)
+    TestRingItem(u32 id)
         : m_id(id)
     {
     }
 
-    ui32 m_id;
+    u32 m_id;
 };
 
 struct TestRingItemCDtor
@@ -56,12 +56,12 @@ struct TestRingItemCDtor
         ++ms_dtor_count;
     }
 
-    static ui32 ms_ctor_count;
-    static ui32 ms_dtor_count;
+    static u32 ms_ctor_count;
+    static u32 ms_dtor_count;
 };
 
-ui32 TestRingItemCDtor::ms_ctor_count = 0;
-ui32 TestRingItemCDtor::ms_dtor_count = 0;
+u32 TestRingItemCDtor::ms_ctor_count = 0;
+u32 TestRingItemCDtor::ms_dtor_count = 0;
 
 class RingBuffertemCDTorFixture : public testing::Test
 {
@@ -95,7 +95,7 @@ TEST_F(RING_BUFFER, PushBackToLimit)
 {
     RingBuffer<TestRingItem> test_ring_buffer(4);
 
-    for (ui32 iter = 0; iter != 4; ++iter)
+    for (u32 iter = 0; iter != 4; ++iter)
     {
         test_ring_buffer.push(TestRingItem{});
 
@@ -133,14 +133,14 @@ TEST_F(RING_BUFFER, CirclePushBackPop)
 {
     RingBuffer<TestRingItem> test_ring_buffer(4);
 
-    for (ui32 iter = 0; iter != 4; ++iter)
+    for (u32 iter = 0; iter != 4; ++iter)
     {
         test_ring_buffer.push(TestRingItem{iter + 1});
     }
 
     EXPECT_TRUE(test_ring_buffer.full());
 
-    for (ui32 iter = 0; iter != 2; ++iter)
+    for (u32 iter = 0; iter != 2; ++iter)
     {
         TestRingItem val = test_ring_buffer.pop();
 
@@ -149,14 +149,14 @@ TEST_F(RING_BUFFER, CirclePushBackPop)
 
     EXPECT_FALSE(test_ring_buffer.full());
 
-    for (ui32 iter = 0; iter != 2; ++iter)
+    for (u32 iter = 0; iter != 2; ++iter)
     {
         test_ring_buffer.push(TestRingItem{4 + iter + 1});
     }
 
     EXPECT_TRUE(test_ring_buffer.full());
 
-    for (ui32 iter = 0; iter != 4; ++iter)
+    for (u32 iter = 0; iter != 4; ++iter)
     {
         TestRingItem val = test_ring_buffer.pop();
 
@@ -182,7 +182,7 @@ TEST_F(RingBuffertemCDTorFixture, DtorCleanUp)
         EXPECT_EQ(TestRingItemCDtor::ms_ctor_count, 0U);
         EXPECT_EQ(TestRingItemCDtor::ms_dtor_count, 0U);
 
-        for (ui32 iter = 0; iter != 4; ++iter)
+        for (u32 iter = 0; iter != 4; ++iter)
         {
             test_ring_buffer.push(TestRingItemCDtor{});
         }

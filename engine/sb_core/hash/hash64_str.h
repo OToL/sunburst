@@ -8,7 +8,7 @@ namespace sb {
 
 struct Hash64StrLiteral
 {
-    ui64 value;
+    u64 value;
     char const * str;
 };
 
@@ -21,7 +21,7 @@ struct Hash64Str
 {
     Hash64Str() = default;
 
-    constexpr explicit Hash64Str(ui64 value)
+    constexpr explicit Hash64Str(u64 value)
         : value(value)
     {
     }
@@ -44,7 +44,7 @@ struct Hash64Str
         // TODO: register hash/string
     }
 
-    ui64 value;
+    u64 value;
 };
 
 constexpr b32 isValid(Hash64Str hash_val)

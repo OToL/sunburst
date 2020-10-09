@@ -36,7 +36,7 @@ sb::usize sb::strCpyT(char * __sb_restrict output, usize capacity, char const * 
     return copy_count;
 }
 
-sb::b8 sb::strStartWith(char const * __sb_restrict str, char const * __sb_restrict start_str)
+sb::b8 sb::strStartsWith(char const * __sb_restrict str, char const * __sb_restrict start_str)
 {
     char const * __sb_restrict src_iter = str;
     char const * __sb_restrict start_str_iter = start_str;

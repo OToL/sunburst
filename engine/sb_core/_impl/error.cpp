@@ -15,7 +15,7 @@ static sb::ErrorHandler g_error_hdl;
 static constexpr char const * ERROR_DEFAULT_MSG[] = {"Critical error detected", "Unhandled error detected",
                                                      "Non fatal error detected"};
 
-void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::ui32 const line, char const * msg)
+void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::u32 const line, char const * msg)
 {
     char fmt_msg[255];
     sb::stringFormat(fmt_msg, "{} ({}, {})", msg, file, line);
@@ -39,7 +39,7 @@ void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::ui32 c
     }
 }
 
-void sb::internal::reportError(ErrorLevel type, char const * const file, ui32 const line, char const * msg)
+void sb::internal::reportError(ErrorLevel type, char const * const file, u32 const line, char const * msg)
 {
     if (nullptr != g_error_hdl)
     {
@@ -56,7 +56,7 @@ void sb::internal::reportError(ErrorLevel type, char const * const file, ui32 co
     }
 }
 
-void sb::internal::reportError(ErrorLevel type, char const * const file, ui32 const line)
+void sb::internal::reportError(ErrorLevel type, char const * const file, u32 const line)
 {
     if (nullptr != g_error_hdl)
     {
@@ -67,13 +67,14 @@ void sb::internal::reportError(ErrorLevel type, char const * const file, ui32 co
         logDefaultErrorMsg(type, file, line, ERROR_DEFAULT_MSG[getEnumValue(type)]);
     }
 
-    if (ErrorLevel::CRITICAL == type)
+    if ((ErrorLevel::CRITICAL == type) ||
+        (ErrorLevel::WARNING == type))
     {
         sb::debugBreak();
     }
 }
 
-void sb::internal::reportNotImplemented(ErrorLevel type, char const * const file, ui32 const line, char const * msg)
+void sb::internal::reportNotImplemented(ErrorLevel type, char const * const file, u32 const line, char const * msg)
 {
     char msg_fmt[255];
     sb::stringFormat(msg_fmt, "Not implemented: '{}'", msg);

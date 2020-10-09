@@ -194,10 +194,10 @@ SDL_SwapFloat(float x)
     union
     {
         float f;
-        Uint32 ui32;
+        Uint32 u32;
     } swapper;
     swapper.f = x;
-    swapper.ui32 = SDL_Swap32(swapper.ui32);
+    swapper.u32 = SDL_Swap32(swapper.u32);
     return swapper.f;
 }
 

@@ -11,7 +11,7 @@
 namespace sb {
 
 using HashStr = Hash32Str;
-using HashStrValue = ui32;
+using HashStrValue = u32;
 
 constexpr Hash32StrLiteral operator"" _hs(char const * str, usize len)
 {
@@ -27,7 +27,7 @@ constexpr Hash32StrLiteral operator"" _hs(char const * str, usize len)
 namespace sb {
 
 using HashStr = Hash64Str;
-using HashStrValue = ui64;
+using HashStrValue = u64;
 
 constexpr Hash64StrLiteral operator"" _hs(char const * str, usize len)
 {

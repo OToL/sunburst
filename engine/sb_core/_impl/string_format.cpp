@@ -17,7 +17,7 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
         usize const dest_capacity = numericConv<usize>(dest_buffer.size());
 
         char const * format_iter = format;
-        si32 lastParamIdx = 0;
+        s32 lastParamIdx = 0;
 
         while ((0 != *format_iter) && (copied_bytes < dest_capacity))
         {
@@ -36,7 +36,7 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
                 }
                 else
                 {
-                    si32 arg_idx = -1;
+                    s32 arg_idx = -1;
 
                     // Argument auto index increment '{}'
                     if ('}' == next_token)
@@ -79,8 +79,8 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
                         }
                     }
 
-                    copied_bytes += args[(ui32)arg_idx].m_fmt_cb(
-                        args[(ui32)arg_idx].m_value, sbstd::span<char>{dest_iter, dest_capacity - copied_bytes});
+                    copied_bytes += args[(u32)arg_idx].m_fmt_cb(
+                        args[(u32)arg_idx].m_value, sbstd::span<char>{dest_iter, dest_capacity - copied_bytes});
                     dest_iter = dest_buffer.data() + copied_bytes;
 
                     continue;

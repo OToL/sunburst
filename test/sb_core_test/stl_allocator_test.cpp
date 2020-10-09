@@ -14,16 +14,16 @@ TEST(STL_ALLOCATOR, AllocatorView)
     gtestx::AllocatorStats allocator_test;
     
     {        
-        Vector<ui32, STLAllocatorView<ui32>> vector_test{STLAllocatorView<ui32>{allocator_test}};
+        Vector<u32, STLAllocatorView<u32>> vector_test{STLAllocatorView<u32>{allocator_test}};
 
-        ui32 const array_test [] = {0, 1, 2, 3, 4};
+        u32 const array_test [] = {0, 1, 2, 3, 4};
 
         sbstd::copy(sbstd::begin(array_test), sbstd::end(array_test), back_inserter(vector_test));
 
         EXPECT_NE(allocator_test.getStats().m_alloc_count, 0U);
         EXPECT_GE(allocator_test.getStats().m_allocated_byte, sizeof(array_test));
 
-        for (ui32 idx = 0 ; idx != sbstd::size(array_test) ; ++idx)
+        for (u32 idx = 0 ; idx != sbstd::size(array_test) ; ++idx)
         {
             EXPECT_EQ(array_test[idx], idx);
             EXPECT_EQ(array_test[idx], vector_test[idx]);

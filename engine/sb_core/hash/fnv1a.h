@@ -7,13 +7,13 @@
 
 namespace sb {
 
-inline constexpr ui32 computeFNV1a32(sbstd::string_view buffer);
-inline constexpr ui32 computeFNV1a32(sbstd::span<ui8 const> buffer);
-inline constexpr ui32 computeFNV1a32(char const * const str);
+inline constexpr u32 computeFNV1a32(sbstd::string_view buffer);
+inline constexpr u32 computeFNV1a32(sbstd::span<u8 const> buffer);
+inline constexpr u32 computeFNV1a32(char const * const str);
 
-inline constexpr ui64 computeFNV1a64(sbstd::string_view buffer);
-inline constexpr ui64 computeFNV1a64(sbstd::span<ui8 const> buffer);
-inline constexpr ui64 computeFNV1a64(char const * const str);
+inline constexpr u64 computeFNV1a64(sbstd::string_view buffer);
+inline constexpr u64 computeFNV1a64(sbstd::span<u8 const> buffer);
+inline constexpr u64 computeFNV1a64(char const * const str);
 
 } // namespace sb
 

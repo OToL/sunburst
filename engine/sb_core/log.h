@@ -6,7 +6,7 @@
 
 namespace sb {
 
-enum class LogLevel : ui8
+enum class LogLevel : u8
 {
     ERROR, // Important message to read & solve e.g. crash, out of memory, etc.
     WARNING, // Message about a problem which may impact application behavior e.g.
@@ -17,7 +17,7 @@ enum class LogLevel : ui8
 };
 
 using LogHandler =
-    sbstdx::inplace_function<void(LogLevel lvl, char const * const file, ui32 const line, char const * const msg)>;
+    sbstdx::inplace_function<void(LogLevel lvl, char const * const file, u32 const line, char const * const msg)>;
 
 void setLogHandler(LogHandler const & hdl);
 void setLogQuiet(b8 quiet);

@@ -6,7 +6,7 @@
 
 namespace sb {
 
-enum class ErrorLevel : ui8
+enum class ErrorLevel : u8
 {
     CRITICAL, // Unhandled critical error leading to a crash
     WARNING, // ErrorLevel with side effect(s) affecting progam's behavior (graphic glitch,
@@ -15,7 +15,7 @@ enum class ErrorLevel : ui8
 };
 
 using ErrorHandler =
-    sbstdx::inplace_function<void(ErrorLevel type, char const * file, ui32 const line, char const * msg)>;
+    sbstdx::inplace_function<void(ErrorLevel type, char const * file, u32 const line, char const * msg)>;
 
 void setErrorHandler(ErrorHandler const & hdl);
 

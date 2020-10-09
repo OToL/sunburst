@@ -31,7 +31,7 @@ void * malloc(usize size, Alignment alignment)
     sbAssert((0 != alignment) && sb::isPowerOf2(alignment));
 
     usize const total_size = sizeWithPadding(size, alignment);
-    ui8 * const mem_ptr = reinterpret_cast<ui8 *>(::malloc(total_size));
+    u8 * const mem_ptr = reinterpret_cast<u8 *>(::malloc(total_size));
 
     if (nullptr == mem_ptr)
     {
@@ -42,7 +42,7 @@ void * malloc(usize size, Alignment alignment)
 
     AllocHeader * const header = dataToHeader(aligned_mem_ptr);
     header->m_size = size;
-    header->m_offset = sb::numericConv<ui16>(uptr(header) - uptr(mem_ptr));
+    header->m_offset = sb::numericConv<u16>(uptr(header) - uptr(mem_ptr));
 
     return aligned_mem_ptr;
 }
@@ -57,7 +57,7 @@ void free(void * mem_ptr)
     if (nullptr != mem_ptr)
     {
         AllocHeader * const header = dataToHeader(mem_ptr);
-        void * const raw_mem_ptr = reinterpret_cast<ui8 *>(header) - header->m_offset;
+        void * const raw_mem_ptr = reinterpret_cast<u8 *>(header) - header->m_offset;
 
         ::free(raw_mem_ptr);
     }

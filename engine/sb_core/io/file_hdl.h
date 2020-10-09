@@ -6,7 +6,7 @@ namespace sb {
 
 struct FileHdl
 {
-    using ValueType = ui32;
+    using ValueType = u32;
 
     ValueType value;
 };

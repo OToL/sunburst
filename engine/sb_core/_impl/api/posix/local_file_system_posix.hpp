@@ -13,7 +13,7 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileRead(char const * path,
 {
     StaticString<3> flags{"r"};
 
-    if (fmt == FileFormat::Bin)
+    if (fmt == FileFormat::BIN)
     {
         flags.push_back('b');
     }
@@ -38,7 +38,7 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileReadWrite(char const * 
         sbWarn(false, "Unhandled write mode {}", getEnumValue(mode));
     }
 
-    if (fmt == FileFormat::Bin)
+    if (fmt == FileFormat::BIN)
     {
         flags.push_back('b');
     }
@@ -65,7 +65,7 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path
         sbWarn(false, "Unhandled write mode {}", getEnumValue(mode));
     }
 
-    if (fmt == FileFormat::Bin)
+    if (fmt == FileFormat::BIN)
     {
         flags.push_back('b');
     }
@@ -79,7 +79,7 @@ sb::internal::LayerFileHdl sb::internal::platformCreateFileWrite(char const * pa
 {
     StaticString<3> flags{"w"};
 
-    if (fmt == FileFormat::Bin)
+    if (fmt == FileFormat::BIN)
     {
         flags.push_back('b');
     }
@@ -91,7 +91,7 @@ sb::internal::LayerFileHdl sb::internal::platformCreateFileReadWrite(char const 
 {
     StaticString<3> flags{"w+"};
 
-    if (fmt == FileFormat::Bin)
+    if (fmt == FileFormat::BIN)
     {
         flags.push_back('b');
     }
@@ -106,11 +106,18 @@ void sb::internal::platformCloseFile(LayerFileHdl hdl)
     fclose((FILE *)hdl.value);
 }
 
-sb::FileSize sb::internal::platformReadFile(LayerFileHdl hdl, ui8 * buffer, FileSize count)
+sb::FileSize sb::internal::platformReadFile(LayerFileHdl hdl, u8 * buffer, FileSize count)
 {
     sbAssert(nullptr != hdl.value);
 
     return numericConv<FileSize>(fread((void *)buffer, 1, (usize)count, (FILE *)hdl.value));
+}
+
+sb::FileSize sb::internal::platformWriteFile(LayerFileHdl hdl, u8 const * buffer, FileSize count)
+{
+    sbAssert(nullptr != hdl.value);
+
+    return numericConv<FileSize>(fwrite((void *)buffer, 1, (usize)count, (FILE *)hdl.value));
 }
 
 // @todo: could be optimized

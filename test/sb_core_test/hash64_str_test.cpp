@@ -23,7 +23,7 @@ TEST_CASE("Set Hash64Str from string", "[hash64_str]")
 
 TEST_CASE("Set Hash64Str from value", "[hash64_str]")
 {
-    ui64 const HASH_TEST_VALUE = computeHash64(HASH_STR_TEST_STRING);
+    u64 const HASH_TEST_VALUE = computeHash64(HASH_STR_TEST_STRING);
     Hash64Str const hash(HASH_STR_TEST_STRING);
 
     REQUIRE(hash.value == HASH_TEST_VALUE);

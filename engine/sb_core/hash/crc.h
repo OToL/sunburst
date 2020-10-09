@@ -7,12 +7,12 @@
 
 namespace sb {
 
-ui32 computeCRC32(sbstd::string_view buffer);
-ui32 computeCRC32(sbstd::span<ui8 const> buffer);
-ui32 computeCRC32(char const * const str);
+u32 computeCRC32(sbstd::string_view buffer);
+u32 computeCRC32(sbstd::span<u8 const> buffer);
+u32 computeCRC32(char const * const str);
 
-ui64 computeCRC64(sbstd::string_view buffer);
-ui64 computeCRC64(sbstd::span<ui8 const> buffer);
-ui64 computeCRC64(char const * const str);
+u64 computeCRC64(sbstd::string_view buffer);
+u64 computeCRC64(sbstd::span<u8 const> buffer);
+u64 computeCRC64(char const * const str);
 
 } // namespace sb

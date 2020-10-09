@@ -357,7 +357,7 @@ typedef char stb__testsize2_32[sizeof(stb_uint32)==4 ? 1 : -1];
 #ifdef _MSC_VER
   typedef unsigned __int64 stb_uint64;
   typedef          __int64 stb_int64;
-  #define STB_IMM_UINT64(literalui64) (literalui64##ui64)
+  #define STB_IMM_UINT64(literalui64) (literalui64##u64)
   #define STB_IMM_INT64(literali64) (literali64##i64)
 #else
   // ??

@@ -67,9 +67,9 @@ struct MemoryOperatorHelper
                                                : (alignof(TType) + sizeof(ArrayInfo));
             usize const total_size = required_padding + sizeof(TType) * count;
 
-            ui8 * const mem_ptr = reinterpret_cast<ui8 *>(m_allocator.allocate(total_size));
-            ui8 * const client_ptr =
-                reinterpret_cast<ui8 *>(alignUp(reinterpret_cast<uptr>(mem_ptr + sizeof(ArrayInfo)), alignof(TType)));
+            u8 * const mem_ptr = reinterpret_cast<u8 *>(m_allocator.allocate(total_size));
+            u8 * const client_ptr =
+                reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(mem_ptr + sizeof(ArrayInfo)), alignof(TType)));
             client_obj = reinterpret_cast<TType *>(client_ptr);
 
             ArrayInfo * const array_info = reinterpret_cast<ArrayInfo *>(client_ptr - sizeof(ArrayInfo));
@@ -108,10 +108,10 @@ struct MemoryOperatorHelper
             }
             else
             {
-                ui8 * const objs_ptr = reinterpret_cast<ui8 *>(ptr);
+                u8 * const objs_ptr = reinterpret_cast<u8 *>(ptr);
                 ArrayInfo * const array_info = reinterpret_cast<ArrayInfo *>(objs_ptr - sizeof(ArrayInfo));
 
-                ui8 * const base_ptr = objs_ptr - array_info->m_base_offset;
+                u8 * const base_ptr = objs_ptr - array_info->m_base_offset;
 
                 for (usize obj_idx = 0; obj_idx != array_info->m_obj_count; ++obj_idx)
                 {

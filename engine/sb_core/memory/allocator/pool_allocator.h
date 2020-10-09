@@ -16,7 +16,7 @@ class PoolAllocator final : public IAllocator
     sbBaseClass(IAllocator);
 
     static constexpr usize ACTUAL_BLOCK_SIZE = alignUp(BLOCK_SIZE, BLOCK_ALIGNMENT);
-    using NodeIdx = si32;
+    using NodeIdx = s32;
     static constexpr NodeIdx INVALID_NODE = -1;
 
     struct alignas(BLOCK_ALIGNMENT) Node
@@ -24,7 +24,7 @@ class PoolAllocator final : public IAllocator
         union
         {
             NodeIdx m_next;
-            ui8 m_padding[ACTUAL_BLOCK_SIZE];
+            u8 m_padding[ACTUAL_BLOCK_SIZE];
         };
     };
 
@@ -33,7 +33,7 @@ class PoolAllocator final : public IAllocator
 
     void initFreeList()
     {
-        si32 const block_cnt = numericConv<NodeIdx>(m_arena.m_size / ACTUAL_BLOCK_SIZE);
+        s32 const block_cnt = numericConv<NodeIdx>(m_arena.m_size / ACTUAL_BLOCK_SIZE);
         sbAssert(0 != block_cnt);
 
         Node * node_iter = static_cast<Node *>(m_arena.m_ptr);
@@ -116,7 +116,7 @@ public:
     void deallocate(void * ptr) override
     {
         sbAssert(0U ==
-                 (static_cast<usize>(static_cast<ui8 *>(ptr) - static_cast<ui8 *>(m_arena.m_ptr)) % ACTUAL_BLOCK_SIZE));
+                 (static_cast<usize>(static_cast<u8 *>(ptr) - static_cast<u8 *>(m_arena.m_ptr)) % ACTUAL_BLOCK_SIZE));
 
         if (sbExpect(m_arena.isInRange(ptr)))
         {

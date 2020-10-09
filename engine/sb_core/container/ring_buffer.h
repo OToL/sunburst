@@ -18,7 +18,7 @@ public:
     {
         sbAssert((0 != capacity) && alloc.isValid());
 
-        m_data = allocateUnique<ui8[], AllocatorView>(alloc, capacity * sizeof(TType));
+        m_data = allocateUnique<u8[], AllocatorView>(alloc, capacity * sizeof(TType));
     }
 
     RingBuffer(usize capacity)
@@ -27,7 +27,7 @@ public:
         , m_size(0)
     {
         sbAssert(0 != capacity);
-        m_data = allocateUnique<ui8[], AllocatorView>(getGlobalHeapView(), capacity * sizeof(TType));
+        m_data = allocateUnique<u8[], AllocatorView>(getGlobalHeapView(), capacity * sizeof(TType));
     }
 
     RingBuffer & operator=(RingBuffer const &) = delete;
@@ -98,7 +98,7 @@ public:
     }
 
 private:
-    UniquePtr<ui8[], AllocatorViewDelete<ui8[]>> m_data;
+    UniquePtr<u8[], AllocatorViewDelete<u8[]>> m_data;
     usize m_begin;
     usize m_capacity;
     usize m_size;

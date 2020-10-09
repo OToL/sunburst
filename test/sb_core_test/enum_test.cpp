@@ -6,26 +6,35 @@
 
 using namespace sb;
 
-enum class TestMask : ui8
+enum class TestMask : u8
 {
-    VALUE0 = 1,
-    VALUE1 = 2
+    VALUE0,
+    VALUE1
 }; 
 
 TEST_CASE("Single value mask", "[enum]")
 {
-    REQUIRE(getEnumValue(TestMask::VALUE0) == makeEnumMask(TestMask::VALUE0));
+    REQUIRE(getEnumValue(TestMask::VALUE0) == makeEnumMaskValue(TestMask::VALUE0));
 }
 
 TEST_CASE("Multi value mask", "[enum]")
 {
-    REQUIRE(0b11U == makeEnumMask(TestMask::VALUE0, TestMask::VALUE1));
+    REQUIRE(makeEnumMaskValue(TestMask::VALUE0, TestMask::VALUE1) == 0b11U);
 }
 
 TEST_CASE("Constexpr masks", "[enum]")
 {
-    STATIC_REQUIRE(getEnumValue(TestMask::VALUE0) == 1);
-    STATIC_REQUIRE(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1) == 0b11U);
+    STATIC_REQUIRE(makeEnumMaskValue(TestMask::VALUE0, TestMask::VALUE1) == 0b11U);
+    STATIC_REQUIRE(makeEnumMaskValue(TestMask::VALUE1) == 0b10U);
+    STATIC_REQUIRE(makeEnumMaskValue(TestMask::VALUE0) == 0b01U);
+}
+
+TEST_CASE("Enum mask", "[enum]")
+{
+    STATIC_REQUIRE(hasEnumValues(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0, TestMask::VALUE1));
+    STATIC_REQUIRE(hasAnyEnumValues(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0, TestMask::VALUE1));
+    STATIC_REQUIRE(hasAnyEnumValues(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE1));
+    STATIC_REQUIRE(hasAnyEnumValues(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0));
 }
 
 #include <catch2/test_epilog.h>

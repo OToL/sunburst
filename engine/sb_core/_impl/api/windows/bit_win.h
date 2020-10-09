@@ -2,7 +2,7 @@
 
 #include <intrin.h>
 
-inline sb::ui32 sb::countLeadingZeros(ui32 val)
+inline sb::u32 sb::countLeadingZeros(u32 val)
 {
     unsigned long ret;
     _BitScanForward(&ret, (unsigned long)val);
@@ -10,7 +10,7 @@ inline sb::ui32 sb::countLeadingZeros(ui32 val)
     return ret;
 }
 
-inline sb::ui32 sb::countLeadingZeros(ui64 val)
+inline sb::u32 sb::countLeadingZeros(u64 val)
 {
     unsigned long ret;
     _BitScanForward64(&ret, val);

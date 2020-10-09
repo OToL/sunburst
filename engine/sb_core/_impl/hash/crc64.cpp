@@ -2,7 +2,7 @@
 
 #include <sb_std/cstring>
 
-static sb::ui64 const CRC64_TAB[256] = {
+static sb::u64 const CRC64_TAB[256] = {
     0x0000000000000000ULL, 0x42f0e1eba9ea3693ULL, 0x85e1c3d753d46d26ULL, 0xc711223cfa3e5bb5ULL, 0x493366450e42ecdfULL,
     0x0bc387aea7a8da4cULL, 0xccd2a5925d9681f9ULL, 0x8e224479f47cb76aULL, 0x9266cc8a1c85d9beULL, 0xd0962d61b56fef2dULL,
     0x17870f5d4f51b498ULL, 0x5577eeb6e6bb820bULL, 0xdb55aacf12c73561ULL, 0x99a54b24bb2d03f2ULL, 0x5eb4691841135847ULL,
@@ -56,11 +56,11 @@ static sb::ui64 const CRC64_TAB[256] = {
     0x913f6188692d6f4bULL, 0xd3cf8063c0c759d8ULL, 0x5dedc41a34bbeeb2ULL, 0x1f1d25f19d51d821ULL, 0xd80c07cd676f8394ULL,
     0x9afce626ce85b507ULL};
 
-sb::ui64 sb::computeCRC64(sbstd::span<ui8 const> buffer)
+sb::u64 sb::computeCRC64(sbstd::span<u8 const> buffer)
 {
-    ui64 crc_value = 0ULL;
+    u64 crc_value = 0ULL;
 
-    ui8 const * const data = buffer.data();
+    u8 const * const data = buffer.data();
     auto const len = buffer.size();
 
     for (usize iter = 0; iter < len; iter++)
@@ -71,9 +71,9 @@ sb::ui64 sb::computeCRC64(sbstd::span<ui8 const> buffer)
     return crc_value;
 }
 
-sb::ui64 sb::computeCRC64(sbstd::string_view buffer)
+sb::u64 sb::computeCRC64(sbstd::string_view buffer)
 {
-    ui64 crc_value = 0ULL;
+    u64 crc_value = 0ULL;
 
     char const * const data = buffer.data();
     auto const len = buffer.size();
@@ -86,11 +86,11 @@ sb::ui64 sb::computeCRC64(sbstd::string_view buffer)
     return crc_value;
 }
 
-sb::ui64 sb::computeCRC64(char const * const str)
+sb::u64 sb::computeCRC64(char const * const str)
 {
-    ui64 crc_value = 0ULL;
+    u64 crc_value = 0ULL;
 
-    ui8 const * iter = reinterpret_cast<ui8 const *>(str);
+    u8 const * iter = reinterpret_cast<u8 const *>(str);
 
     while ('\0' != *iter)
     {

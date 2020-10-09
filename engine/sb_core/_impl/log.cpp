@@ -9,9 +9,9 @@ static sb::LogHandler g_log_hdl;
 
 static char const * const LOG_TYPE_TO_STR[] = {"ERROR", "WARNING", "INFO", "DEBUG"};
 
-void sb::internal::logMessage(LogLevel type, char const * file, ui32 line, char const * msg)
+void sb::internal::logMessage(LogLevel type, char const * file, u32 line, char const * msg)
 {
-    sbAssert((ui8)type < sbstd::size(LOG_TYPE_TO_STR));
+    sbAssert((u8)type < sbstd::size(LOG_TYPE_TO_STR));
 
     if (nullptr != g_log_hdl)
     {
@@ -20,7 +20,7 @@ void sb::internal::logMessage(LogLevel type, char const * file, ui32 line, char 
     else
     {
         char tmp_msg[255];
-        sb::stringFormat(tmp_msg, "[{}] {}\n", LOG_TYPE_TO_STR[(ui8)type], msg);
+        sb::stringFormat(tmp_msg, "[{}] {}\n", LOG_TYPE_TO_STR[(u8)type], msg);
 
         outputDebugString(tmp_msg);
     }

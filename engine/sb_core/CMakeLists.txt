@@ -6,7 +6,7 @@ add_library(sb_core STATIC
     _impl/error.cpp
     _impl/hash/crc32.cpp
     _impl/hash/crc64.cpp
-    _impl/io/file.cpp
+    _impl/io/file_stream.cpp
     _impl/io/virtual_file_system.cpp
     _impl/io/path.cpp
     _impl/string/string_utility.cpp

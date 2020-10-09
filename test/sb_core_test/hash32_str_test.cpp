@@ -23,7 +23,7 @@ TEST_CASE("Set Hash32Str from string", "[hash32_str]")
 
 TEST_CASE("Set Hash32Str from value", "[hash32_str]")
 {
-    ui32 const HASH_TEST_VALUE = computeHash32(HASH_STR_TEST_STRING);
+    u32 const HASH_TEST_VALUE = computeHash32(HASH_STR_TEST_STRING);
     Hash32Str const hash(HASH_STR_TEST_STRING);
 
     REQUIRE(hash.value == HASH_TEST_VALUE);

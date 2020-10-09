@@ -16,7 +16,9 @@ LayerFileHdl platformCreateFileReadWrite(char const * path, FileFormat fmt);
 
 LayerFileHdl platformCreateFileWrite(char const * path, FileFormat fmt);
 
-FileSize platformReadFile(LayerFileHdl hdl, ui8 * buffer, FileSize count);
+FileSize platformReadFile(LayerFileHdl hdl, u8 * buffer, FileSize count);
+
+FileSize platformWriteFile(LayerFileHdl hdl, u8 const * buffer, FileSize count);
 
 FileSize platformFileLength(LayerFileHdl hdl);
 

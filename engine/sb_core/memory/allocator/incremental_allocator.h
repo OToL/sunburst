@@ -27,7 +27,7 @@ public:
         : m_mem_provider(mem_provider)
         , m_alignment(init.m_alignment)
         , m_arena(m_mem_provider.allocate(init.m_size))
-        , m_top(reinterpret_cast<ui8 *>(m_arena.m_ptr))
+        , m_top(reinterpret_cast<u8 *>(m_arena.m_ptr))
     {
     }
 
@@ -35,7 +35,7 @@ public:
         : m_mem_provider()
         , m_alignment(init.m_alignment)
         , m_arena(m_mem_provider.allocate(init.m_size))
-        , m_top(reinterpret_cast<ui8 *>(m_arena.m_ptr))
+        , m_top(reinterpret_cast<u8 *>(m_arena.m_ptr))
     {
     }
 
@@ -53,7 +53,7 @@ public:
 
         if (nullptr != m_top)
         {
-            ui8 * new_top = reinterpret_cast<ui8 *>(alignUp(reinterpret_cast<uptr>(m_top), m_alignment));
+            u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(m_top), m_alignment));
 
             if (m_arena.isInRange(new_top, size))
             {
@@ -71,7 +71,7 @@ public:
 
         if (nullptr != m_top)
         {
-            ui8 * new_top = reinterpret_cast<ui8 *>(alignUp(reinterpret_cast<uptr>(m_top), alignment));
+            u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(m_top), alignment));
 
             if (m_arena.isInRange(new_top, size))
             {
@@ -90,7 +90,7 @@ public:
 
     void deallocateAll()
     {
-        m_top = static_cast<ui8 *>(m_arena.m_ptr);
+        m_top = static_cast<u8 *>(m_arena.m_ptr);
     }
 
     b8 owns(void const * ptr) const override
@@ -112,7 +112,7 @@ private:
     TMemProvider m_mem_provider;
     Alignment m_alignment;
     MemoryArena m_arena;
-    ui8 * m_top;
+    u8 * m_top;
 };
 
 } // namespace sb

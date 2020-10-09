@@ -6,6 +6,7 @@
 #include <sb_core/memory/alloc.h>
 #include <sb_core/container/static_vector.h>
 #include <sb_core/string/utility.h>
+#include <sb_core/enum.h>
 
 #include <sb_std/algorithm>
 #include <sb_std/xutility>
@@ -21,20 +22,21 @@ class VirtualFileSystemImpl
         StaticString<LOCAL_PATH_MAX_LEN + 1> local_path;
     };
 
-    using FileGen = ui16;
+    using FileGen = u16;
 
     struct FileDesc
     {
+        FileProps props;
         internal::LayerFileHdl hdl;
-        ui16 gen;
+        u16 gen;
     };
 
     union FileHdlHelper
     {
         struct
         {
-            ui16 hdl;
-            ui16 gen;
+            u16 hdl;
+            u16 gen;
         } unpacked;
 
         FileHdl::ValueType packed;
@@ -123,10 +125,28 @@ public:
         --opened_file_count;
     }
 
-    FileSize readFile(FileHdl hdl, ui8 * buffer, FileSize cnt)
+    FileSize readFile(FileHdl hdl, u8 * buffer, FileSize cnt)
     {
         auto const & desc = getFileDesc(hdl);
-        return internal::platformReadFile(desc.hdl, buffer, cnt);
+
+        if (sbExpect(hasEnumValues(desc.props.access, FileAccess::READ)))
+        {
+            return internal::platformReadFile(desc.hdl, buffer, cnt);
+        }
+
+        return 0;
+    }
+
+    FileSize writeFile(FileHdl hdl, u8 const * buffer, FileSize cnt)
+    {
+        auto const & desc = getFileDesc(hdl);
+
+        if (sbExpect(hasEnumValues(desc.props.access, FileAccess::WRITE)))
+        {
+            return internal::platformWriteFile(desc.hdl, buffer, cnt);
+        }
+
+        return 0;
     }
 
     FileSize getFileLength(FileHdl hdl)
@@ -135,11 +155,17 @@ public:
         return internal::platformFileLength(desc.hdl);
     }
 
+    FileProps getFileProps(FileHdl hdl)
+    {
+        auto const & desc = getFileDesc(hdl);
+        return desc.props;
+    }
+
     b8 fileExists(char const * path)
     {
         for (auto const & layer_desc : layers)
         {
-            if (strStartWith(path, layer_desc.vfs_path.c_str()))
+            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
             {
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
@@ -166,7 +192,7 @@ public:
     {
         for (auto const & layer_desc : layers)
         {
-            if (strStartWith(path, layer_desc.vfs_path.c_str()))
+            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
             {
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
@@ -175,7 +201,8 @@ public:
 
                 if (isValid(local_file_hdl))
                 {
-                    FileHdl file_hdl = createFileHdl(local_file_hdl);
+                    FileProps const file_props = {.fmt = fmt, .access = makeEnumMask(FileAccess::READ)};
+                    FileHdl file_hdl = createFileHdl(local_file_hdl, file_props);
 
                     if (sbExpect(isValid(file_hdl), "Out of file descriptors"))
                     {
@@ -199,7 +226,7 @@ public:
     {
         for (auto const & layer_desc : layers)
         {
-            if (strStartWith(path, layer_desc.vfs_path.c_str()))
+            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
             {
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
@@ -208,7 +235,8 @@ public:
 
                 if (isValid(local_file_hdl))
                 {
-                    FileHdl file_hdl = createFileHdl(local_file_hdl);
+                    FileProps const file_props = {.fmt = fmt, .access = makeEnumMask(FileAccess::READ, FileAccess::WRITE)};
+                    FileHdl file_hdl = createFileHdl(local_file_hdl, file_props);
 
                     if (sbExpect(isValid(file_hdl), "Out of file descriptors"))
                     {
@@ -232,7 +260,7 @@ public:
     {
         for (auto const & layer_desc : layers)
         {
-            if (strStartWith(path, layer_desc.vfs_path.c_str()))
+            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
             {
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
@@ -241,7 +269,8 @@ public:
 
                 if (isValid(local_file_hdl))
                 {
-                    FileHdl file_hdl = createFileHdl(local_file_hdl);
+                    FileProps const file_props = {.fmt = fmt, .access = makeEnumMask(FileAccess::WRITE)};
+                    FileHdl file_hdl = createFileHdl(local_file_hdl, file_props);
 
                     if (sbExpect(isValid(file_hdl), "Out of file descriptors"))
                     {
@@ -265,7 +294,7 @@ public:
     {
         for (auto const & layer_desc : layers)
         {
-            if (strStartWith(path, layer_desc.vfs_path.c_str()))
+            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
             {
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
@@ -274,7 +303,8 @@ public:
 
                 if (isValid(local_file_hdl))
                 {
-                    FileHdl file_hdl = createFileHdl(local_file_hdl);
+                    FileProps const file_props = {.fmt = fmt, .access = makeEnumMask(FileAccess::READ, FileAccess::WRITE)};
+                    FileHdl file_hdl = createFileHdl(local_file_hdl, file_props);
 
                     if (sbExpect(isValid(file_hdl), "Out of file descriptors"))
                     {
@@ -298,7 +328,7 @@ public:
     {
         for (auto const & layer_desc : layers)
         {
-            if (strStartWith(path, layer_desc.vfs_path.c_str()))
+            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
             {
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
@@ -307,7 +337,8 @@ public:
 
                 if (isValid(local_file_hdl))
                 {
-                    FileHdl file_hdl = createFileHdl(local_file_hdl);
+                    FileProps const file_props = {.fmt = fmt, .access = makeEnumMask(FileAccess::WRITE)};
+                    FileHdl file_hdl = createFileHdl(local_file_hdl, file_props);
 
                     if (sbExpect(isValid(file_hdl), "Out of file descriptors"))
                     {
@@ -330,19 +361,19 @@ public:
 private:
     using FileDescPool = ObjectPoolAllocator<FileDesc, GlobalHeapProvider>;
 
-    FileHdl createFileHdl(internal::LayerFileHdl layer_hdl)
+    FileHdl createFileHdl(internal::LayerFileHdl layer_hdl, FileProps props)
     {
         FileDesc * const file_desc = static_cast<FileDesc *>(file_desc_pool.allocate());
 
         if (sbExpect(nullptr != file_desc))
         {
-            *file_desc = {layer_hdl, ++curr_file_gen};
+            *file_desc = {props, layer_hdl, ++curr_file_gen};
 
             MemoryArena arena = file_desc_pool.getArena();
             FileDesc * const base_obj = static_cast<FileDesc *>(arena.m_ptr);
 
-            FileHdlHelper const helper_hdl = {.unpacked = {numericConv<ui16>(sbstd::distance(base_obj, file_desc)),
-                                                           numericConv<ui16>(file_desc->gen)}};
+            FileHdlHelper const helper_hdl = {.unpacked = {numericConv<u16>(sbstd::distance(base_obj, file_desc)),
+                                                           numericConv<u16>(file_desc->gen)}};
 
             return FileHdl{helper_hdl.packed};
         }
@@ -369,7 +400,7 @@ private:
     FileDescPool file_desc_pool;
     sb::StaticVector<LayerDesc, VFS_LAYER_MAX_COUNT> layers;
     FileGen curr_file_gen;
-    ui16 opened_file_count;
+    u16 opened_file_count;
 };
 
 } // namespace sb
@@ -465,11 +496,11 @@ sb::FileHdl sb::VirtualFileSystem::createFile(char const * path, FileFormat fmt)
     return g_vfs->createFileReadWrite(path, fmt);
 }
 
-sb::FileSize sb::VirtualFileSystem::readFile(FileHdl hdl, sbstd::span<ui8> buffer, FileSize cnt)
+sb::FileSize sb::VirtualFileSystem::readFile(FileHdl hdl, sbstd::span<u8> buffer, FileSize cnt)
 {
     sbAssert(nullptr != g_vfs);
-    sbAssert((FileSize)buffer.size() >= cnt);
     sbAssert(-1 <= cnt);
+    sbAssert(numericConv<FileSize>(buffer.size()) >= cnt);
 
     if (sbExpect(isValid(hdl)))
     {
@@ -478,6 +509,21 @@ sb::FileSize sb::VirtualFileSystem::readFile(FileHdl hdl, sbstd::span<ui8> buffe
 
     return 0;
 }
+
+sb::FileSize sb::VirtualFileSystem::writeFile(FileHdl hdl, sbstd::span<u8 const> buffer, FileSize cnt)
+{
+    sbAssert(nullptr != g_vfs);
+    sbAssert(-1 <= cnt);
+    sbAssert(numericConv<FileSize>(buffer.size()) >= cnt);
+
+    if (sbExpect(isValid(hdl)))
+    {
+        return g_vfs->writeFile(hdl, buffer.data(), (cnt == -1) ? (FileSize)buffer.size() : cnt);
+    }
+
+    return 0;
+}
+
 
 sb::FileSize sb::VirtualFileSystem::getFileLength(FileHdl hdl)
 {
@@ -490,6 +536,19 @@ sb::FileSize sb::VirtualFileSystem::getFileLength(FileHdl hdl)
 
     return 0;
 }
+
+sb::FileProps sb::VirtualFileSystem::getFileProps(FileHdl hdl)
+{
+    sbAssert(nullptr != g_vfs);
+
+    if (sbExpect(isValid(hdl)))
+    {
+        return g_vfs->getFileProps(hdl);
+    }
+
+    return {};
+}
+
 
 sb::b8 sb::VirtualFileSystem::fileExists(char const * path)
 {

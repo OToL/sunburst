@@ -8,7 +8,7 @@ namespace sb {
 
 struct Hash32StrLiteral
 {
-    ui32 value;
+    u32 value;
     char const * str;
 };
 
@@ -21,7 +21,7 @@ struct Hash32Str
 {
     Hash32Str() = default;
 
-    constexpr explicit Hash32Str(ui32 value)
+    constexpr explicit Hash32Str(u32 value)
         : value(value)
     {
     }
@@ -44,7 +44,7 @@ struct Hash32Str
         // TODO: register hash/string
     }
 
-    ui32 value;
+    u32 value;
 };
 
 constexpr b8 isValid(Hash32Str hash_val)

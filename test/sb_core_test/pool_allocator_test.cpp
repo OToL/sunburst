@@ -12,7 +12,7 @@ namespace sb;
 
 struct TestPoolObj
 {
-    ui32 m_data;
+    u32 m_data;
 };
 
 constexpr usize OBJECT_COUNT = 10;

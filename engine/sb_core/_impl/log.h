@@ -25,13 +25,13 @@ inline void setLogMinLevel(LogLevel min_level)
     gs_log_min_level = min_level;
 }
 
-void logMessage(LogLevel lvl, char const * file, ui32 line, char const * msg);
+void logMessage(LogLevel lvl, char const * file, u32 line, char const * msg);
 
 template <bool IS_ENABLED>
 struct LogFilter
 {
     template <typename... TArgs>
-    static void logMessage(LogLevel lvl, char const * file, ui32 line, char const * msg, TArgs &&... args)
+    static void logMessage(LogLevel lvl, char const * file, u32 line, char const * msg, TArgs &&... args)
     {
         if constexpr (0 == sizeof...(args))
         {
@@ -56,7 +56,7 @@ struct LogFilter<false>
 } // namespace sb::internal
 
 #    define sbLogImpl(lvl, file, line, msg, ...)                                                                       \
-        (!::sb::internal::gs_log_quiet && ((::sb::ui8)lvl) <= ((::sb::ui8)sb::internal::gs_log_min_level)) &&          \
+        (!::sb::internal::gs_log_quiet && ((::sb::u8)lvl) <= ((::sb::u8)sb::internal::gs_log_min_level)) &&          \
             (::sb::internal::LogFilter<sbIsEnabled(LOG_FACILITY)>::logMessage(lvl, file, line, msg, ##__VA_ARGS__),    \
              true)
 

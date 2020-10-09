@@ -10,7 +10,7 @@
 
 namespace sb {
 
-inline constexpr ui32 computeHash32(sbstd::string_view buffer)
+inline constexpr u32 computeHash32(sbstd::string_view buffer)
 {
 #if sbIsEqual(HASH_POLICY, SB_HASH_POLICY_CRC)
     return computeCRC32(buffer);
@@ -19,7 +19,7 @@ inline constexpr ui32 computeHash32(sbstd::string_view buffer)
 #endif
 }
 
-inline constexpr ui32 computeHash32(sbstd::span<ui8 const> buffer)
+inline constexpr u32 computeHash32(sbstd::span<u8 const> buffer)
 {
 #if sbIsEqual(HASH_POLICY, SB_HASH_POLICY_CRC)
     return computeCRC32(buffer);
@@ -28,7 +28,7 @@ inline constexpr ui32 computeHash32(sbstd::span<ui8 const> buffer)
 #endif
 }
 
-inline constexpr ui32 computeHash32(char const * const str)
+inline constexpr u32 computeHash32(char const * const str)
 {
 #if sbIsEqual(HASH_POLICY, SB_HASH_POLICY_CRC)
     return computeCRC32(str);
@@ -37,7 +37,7 @@ inline constexpr ui32 computeHash32(char const * const str)
 #endif
 }
 
-inline constexpr ui64 computeHash64(sbstd::string_view buffer)
+inline constexpr u64 computeHash64(sbstd::string_view buffer)
 {
 #if sbIsEqual(HASH_POLICY, SB_HASH_POLICY_CRC)
     return computeCRC64(buffer);
@@ -46,7 +46,7 @@ inline constexpr ui64 computeHash64(sbstd::string_view buffer)
 #endif
 }
 
-inline constexpr ui64 computeHash64(sbstd::span<ui8 const> buffer)
+inline constexpr u64 computeHash64(sbstd::span<u8 const> buffer)
 {
 #if sbIsEqual(HASH_POLICY, SB_HASH_POLICY_CRC)
     return computeCRC64(buffer);
@@ -55,7 +55,7 @@ inline constexpr ui64 computeHash64(sbstd::span<ui8 const> buffer)
 #endif
 }
 
-inline constexpr ui64 computeHash64(char const * const str)
+inline constexpr u64 computeHash64(char const * const str)
 {
 #if sbIsEqual(HASH_POLICY, SB_HASH_POLICY_CRC)
     return computeCRC64(str);
@@ -64,7 +64,7 @@ inline constexpr ui64 computeHash64(char const * const str)
 #endif
 }
 
-inline constexpr ui64 computeHash(sbstd::string_view buffer)
+inline constexpr u64 computeHash(sbstd::string_view buffer)
 {
 #if sbIsEqual(HASH_POLICY, SB_HASH_POLICY_CRC)
 #    if sbIsEqual(HASH_SIZE, SB_HASH_SIZE_32BIT)
@@ -81,7 +81,7 @@ inline constexpr ui64 computeHash(sbstd::string_view buffer)
 #endif
 }
 
-inline constexpr ui64 computeHash(sbstd::span<ui8 const> buffer)
+inline constexpr u64 computeHash(sbstd::span<u8 const> buffer)
 {
 #if sbIsEqual(HASH_POLICY, SB_HASH_POLICY_CRC)
 #    if sbIsEqual(HASH_SIZE, SB_HASH_SIZE_32BIT)
@@ -98,7 +98,7 @@ inline constexpr ui64 computeHash(sbstd::span<ui8 const> buffer)
 #endif
 }
 
-inline constexpr ui64 computeHash(char const * const str)
+inline constexpr u64 computeHash(char const * const str)
 {
 #if sbIsEqual(HASH_POLICY, SB_HASH_POLICY_CRC)
 #    if sbIsEqual(HASH_SIZE, SB_HASH_SIZE_32BIT)

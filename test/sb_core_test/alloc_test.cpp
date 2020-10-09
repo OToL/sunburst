@@ -43,13 +43,13 @@ TEST_F(MEMORY_OPERATOR, NEW_DELETE_PARAM)
         sbBaseClass(gtestx::ObjectTracker);
 
     public:
-        ParamObject(ui32 value)
+        ParamObject(u32 value)
             : BaseClass()
             , m_value(value)
         {
         }
 
-        ui32 m_value;
+        u32 m_value;
     };
 
     {
@@ -180,7 +180,7 @@ TEST_F(MEMORY_OPERATOR, NEW_DELETE_ARRAY_TIVIAL)
 {
     struct TrivialType
     {
-        ui32 m_value;
+        u32 m_value;
     };
 
     gtestx::AllocatorStats test_allocator;

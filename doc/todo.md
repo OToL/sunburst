@@ -40,6 +40,6 @@
 
 # SB::CORE
 
-- [ ] introduce byte type to replace ui8
+- [ ] introduce byte type to replace u8
 - [ ] typedef the character type used for filesystem path i.e. char vs utf16 vs etc.
 
