@@ -14,7 +14,7 @@ TEST(STL_ALLOCATOR, AllocatorView)
     gtestx::AllocatorStats allocator_test;
     
     {        
-        Vector<u32, STLAllocatorView<u32>> vector_test{STLAllocatorView<u32>{allocator_test}};
+        DArray<u32, STLAllocatorView<u32>> vector_test{STLAllocatorView<u32>{allocator_test}};
 
         u32 const array_test [] = {0, 1, 2, 3, 4};
 

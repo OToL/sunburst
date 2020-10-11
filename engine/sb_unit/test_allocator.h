@@ -1,5 +1,5 @@
 #include <sb_core/core.h>
-#include <sb_core/container/vector.h>
+#include <sb_core/container/darray.h>
 
 namespace sb {
 
@@ -45,7 +45,7 @@ private:
     };
 
     Stats m_stats;
-    Vector<AllocDesc> m_allocs;
+    DArray<AllocDesc> m_allocs;
 };
 
 } // namespace sb

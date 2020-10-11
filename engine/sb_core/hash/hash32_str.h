@@ -6,46 +6,27 @@
 
 namespace sb {
 
-struct Hash32StrLiteral
-{
-    u32 value;
-    char const * str;
-};
-
-constexpr Hash32StrLiteral operator"" _h32s(char const * str, usize len)
-{
-    return {computeHash32({str, len}), str};
-}
-
 struct Hash32Str
 {
-    Hash32Str() = default;
-
-    constexpr explicit Hash32Str(u32 value)
-        : value(value)
-    {
-    }
-
-    constexpr explicit Hash32Str(char const * str)
-        : value(computeHash32(str))
-    {
-        // TODO: register hash/string
-    }
-
-    constexpr explicit Hash32Str(Hash32StrLiteral val)
-        : value(val.value)
-    {
-        // TODO: register hash/string
-    }
-
-    constexpr Hash32Str(char const * str, usize len)
-        : value(computeHash32({str, len}))
-    {
-        // TODO: register hash/string
-    }
+    using ValueType = u32;
 
     u32 value;
 };
+
+constexpr Hash32Str operator"" _h32s(char const * str, usize len)
+{
+    return {computeHash32({str, len})};
+}
+
+constexpr Hash32Str makeHash32Str(char const * str)
+{
+    return {computeHash32(str)};
+}
+
+constexpr Hash32Str makeHash32Str(char const * str, usize len)
+{
+    return {computeHash32({str, len})};
+}
 
 constexpr b8 isValid(Hash32Str hash_val)
 {

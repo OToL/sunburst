@@ -3,7 +3,7 @@
 #include <sb_core/conversion.h>
 #include <sb_core/error.h>
 #include <sb_core/memory/allocator/stl_allocator.h>
-#include <sb_core/_impl/container/small_vector_base.h>
+#include <sb_core/_impl/container/sarray_base.h>
 #include <sb_core/core.h>
 
 #include <sb_std/algorithm>
@@ -14,12 +14,12 @@
 namespace sb {
 
 template <typename TType, usize BASE_CAPACITY, typename TAllocator = STLAllocator<TType>>
-class SmallVector : public internal::SmallVectorBase<TType, TAllocator>
+class SArray : public internal::SArrayBase<TType, TAllocator>
 {
-    sbBaseClass(internal::SmallVectorBase<TType, TAllocator>);
+    sbBaseClass(internal::SArrayBase<TType, TAllocator>);
 
     template <typename, usize, typename>
-    friend class SmallVector;
+    friend class SArray;
 
     using Impl = typename BaseClass::Impl;
 
@@ -37,26 +37,26 @@ public:
     using typename BaseClass::value_type;
     using allocator_type = TAllocator;
 
-    SmallVector()
-        : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]))
+    SArray()
+        : SArray(reinterpret_cast<pointer>(&m_buffer[0]))
     {
     }
 
-    explicit SmallVector(allocator_type const & alloc)
-        : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
+    explicit SArray(allocator_type const & alloc)
+        : SArray(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
     {
     }
 
-    explicit SmallVector(size_type count, allocator_type const & alloc = allocator_type())
-        : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
+    explicit SArray(size_type count, allocator_type const & alloc = allocator_type())
+        : SArray(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
     {
         buyMore(count);
 
         sbstd::uninitialized_default_construct(m_impl.m_begin, m_impl.m_end);
     }
 
-    SmallVector(size_type count, value_type const & value, allocator_type const & alloc = allocator_type())
-        : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
+    SArray(size_type count, value_type const & value, allocator_type const & alloc = allocator_type())
+        : SArray(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
     {
         buyMore(count);
 
@@ -64,8 +64,8 @@ public:
     }
 
     template <class TIterator>
-    SmallVector(TIterator first, TIterator last, allocator_type const & alloc = allocator_type())
-        : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
+    SArray(TIterator first, TIterator last, allocator_type const & alloc = allocator_type())
+        : SArray(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
     {
         buyMore(numericConv<size_type>(last - first));
 
@@ -73,8 +73,8 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
-    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src)
-        : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), src.m_impl.get_allocator())
+    SArray(SArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src)
+        : SArray(reinterpret_cast<pointer>(&m_buffer[0]), src.m_impl.get_allocator())
     {
         buyMore(src.size());
 
@@ -82,8 +82,8 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
-    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src, allocator_type const & alloc)
-        : SmallVector(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
+    SArray(SArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src, allocator_type const & alloc)
+        : SArray(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
     {
         buyMore(src.size());
 
@@ -91,7 +91,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC>
-    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TAllocator> && src)
+    SArray(SArray<TType, BASE_CAPACITY_SRC, TAllocator> && src)
         : m_impl(src.m_impl.get_allocator())
     {
         if (!src.isSmallStorage() && (src.size() > BASE_CAPACITY))
@@ -113,7 +113,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC>
-    SmallVector(SmallVector<TType, BASE_CAPACITY_SRC, TAllocator> && src, allocator_type const & alloc)
+    SArray(SArray<TType, BASE_CAPACITY_SRC, TAllocator> && src, allocator_type const & alloc)
         : m_impl(alloc)
     {
         if (!src.isSmallStorage() && (src.size() > BASE_CAPACITY))
@@ -134,7 +134,7 @@ public:
         }
     }
 
-    ~SmallVector()
+    ~SArray()
     {
         clear();
 
@@ -145,7 +145,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC>
-    void swap(SmallVector<TType, BASE_CAPACITY_SRC, TAllocator> & src)
+    void swap(SArray<TType, BASE_CAPACITY_SRC, TAllocator> & src)
     {
         if (!isSmallStorage() && !src.isSmallStorage())
         {
@@ -435,7 +435,7 @@ public:
         return *(m_impl.m_begin + idx);
     }
 
-    SmallVector & operator=(SmallVector const & src)
+    SArray & operator=(SArray const & src)
     {
         if (this != &src)
         {
@@ -446,14 +446,14 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
-    SmallVector & operator=(SmallVector<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src)
+    SArray & operator=(SArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src)
     {
         assign(src.begin(), src.end());
 
         return *this;
     }
 
-    SmallVector & operator=(SmallVector && src)
+    SArray & operator=(SArray && src)
     {
         if (this != &src)
         {
@@ -465,7 +465,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
-    SmallVector & operator=(SmallVector<TType, BASE_CAPACITY_SRC, TSrcAllocator> && src)
+    SArray & operator=(SArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> && src)
     {
         clear();
         this->swap(src);
@@ -604,12 +604,12 @@ public:
     }
 
 private:
-    SmallVector(pointer begin, allocator_type const & alloc)
+    SArray(pointer begin, allocator_type const & alloc)
         : m_impl(begin, begin + BASE_CAPACITY, alloc)
     {
     }
 
-    SmallVector(pointer begin)
+    SArray(pointer begin)
         : m_impl(begin, begin + BASE_CAPACITY)
     {
     }
@@ -678,50 +678,50 @@ private:
 };
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::iterator
-    begin(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect)
+typename sb::SArray<TType, BASE_CAPACITY, TAllocator>::iterator
+    begin(sb::SArray<TType, BASE_CAPACITY, TAllocator> & vect)
 {
     return vect.begin();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::iterator
-    end(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect)
+typename sb::SArray<TType, BASE_CAPACITY, TAllocator>::iterator
+    end(sb::SArray<TType, BASE_CAPACITY, TAllocator> & vect)
 {
     return vect.end();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator
-    begin(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::SArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    begin(sb::SArray<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.begin();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator
-    end(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::SArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    end(sb::SArray<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.end();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator
-    cbegin(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::SArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    cbegin(sb::SArray<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.cbegin();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallVector<TType, BASE_CAPACITY, TAllocator>::const_iterator
-    cend(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::SArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    cend(sb::SArray<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.cend();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, sb::usize BASE_CAPACITY2, typename TAllocator>
-void swap(sb::SmallVector<TType, BASE_CAPACITY, TAllocator> & vect1,
-          typename sb::SmallVector<TType, BASE_CAPACITY2, TAllocator> & vect2)
+void swap(sb::SArray<TType, BASE_CAPACITY, TAllocator> & vect1,
+          typename sb::SArray<TType, BASE_CAPACITY2, TAllocator> & vect2)
 {
     vect1.swap(vect2);
 }

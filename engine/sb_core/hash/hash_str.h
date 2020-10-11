@@ -13,9 +13,19 @@ namespace sb {
 using HashStr = Hash32Str;
 using HashStrValue = u32;
 
-constexpr Hash32StrLiteral operator"" _hs(char const * str, usize len)
+constexpr HashStr operator"" _hs(char const * str, usize len)
 {
-    return {computeHash32({str, len}), str};
+    return {computeHash32({str, len})};
+}
+
+constexpr HashStr makeHashStr(char const * str)
+{
+    return {computeHash32(str)};
+}
+
+constexpr HashStr makeHashStr(char const * str, usize len)
+{
+    return {computeHash32({str, len})};
 }
 
 } // namespace sb
@@ -29,9 +39,19 @@ namespace sb {
 using HashStr = Hash64Str;
 using HashStrValue = u64;
 
-constexpr Hash64StrLiteral operator"" _hs(char const * str, usize len)
+constexpr HashStr operator"" _hs(char const * str, usize len)
 {
-    return {computeHash64({str, len}), str};
+    return {computeHash64({str, len})};
+}
+
+constexpr HashStr makeHashStr(char const * str)
+{
+    return {computeHash64(str)};
+}
+
+constexpr HashStr makeHashStr(char const * str, usize len)
+{
+    return {computeHash64({str, len})};
 }
 
 } // namespace sb

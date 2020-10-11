@@ -32,9 +32,9 @@ TEST_CASE("Constexpr masks", "[enum]")
 TEST_CASE("Enum mask", "[enum]")
 {
     STATIC_REQUIRE(hasEnumValues(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0, TestMask::VALUE1));
-    STATIC_REQUIRE(hasAnyEnumValues(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0, TestMask::VALUE1));
-    STATIC_REQUIRE(hasAnyEnumValues(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE1));
-    STATIC_REQUIRE(hasAnyEnumValues(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0));
+    STATIC_REQUIRE(hasAnyEnumValue(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0, TestMask::VALUE1));
+    STATIC_REQUIRE(hasAnyEnumValue(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE1));
+    STATIC_REQUIRE(hasAnyEnumValue(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0));
 }
 
 #include <catch2/test_epilog.h>

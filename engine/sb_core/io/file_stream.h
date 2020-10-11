@@ -9,28 +9,28 @@
 namespace sb {
 
 // @todo: implement buffered input/output
-class CFileStream
+class FileStream
 {
-    CFileStream(CFileStream const &) = delete;
-    CFileStream & operator=(CFileStream const &) = delete;
+    FileStream(FileStream const &) = delete;
+    FileStream & operator=(FileStream const &) = delete;
 
 public:
-    CFileStream() = default;
+    FileStream() = default;
 
-    explicit CFileStream(FileHdl hdl)
+    explicit FileStream(FileHdl hdl)
         : _hdl(hdl)
     {
     }
 
-    CFileStream(CFileStream && src)
+    FileStream(FileStream && src)
         : _hdl(src._hdl)
     {
         src._hdl = {};
     }
 
-    ~CFileStream();
+    ~FileStream();
 
-    CFileStream & operator=(CFileStream && src);
+    FileStream & operator=(FileStream && src);
 
     b8 isValid() const
     {

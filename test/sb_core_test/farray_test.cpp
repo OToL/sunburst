@@ -1,4 +1,4 @@
-#include <sb_core/container/static_vector.h>
+#include <sb_core/container/farray.h>
 #include <sb_core/bit.h>
 
 #include <gtest/gtest_common.h>
@@ -8,11 +8,11 @@
 
 using namespace sb;
 
-class StaticVectorTestFixture : public testing::Test
+class FArrayTestFixture : public testing::Test
 {
 public:
-    typedef StaticVector<usize, 10> VectorOfPOD;
-    typedef StaticVector<gtestx::ObjectTracker, 10> VectorOfNonPOD;
+    typedef FArray<usize, 10> VectorOfPOD;
+    typedef FArray<gtestx::ObjectTracker, 10> VectorOfNonPOD;
 
     void FillTestArray(VectorOfPOD & test_vector, sbstd::true_type const & /* push */ = sbstd::true_type{})
     {
@@ -72,7 +72,7 @@ protected:
     }
 };
 
-typedef StaticVectorTestFixture STATIC_ARRAY;
+typedef FArrayTestFixture STATIC_ARRAY;
 
 TEST_F(STATIC_ARRAY, DEFAULT_CTOR)
 {
@@ -215,7 +215,7 @@ TEST_F(STATIC_ARRAY, ALIGNED_STORAGE)
         u32 m_x;
     };
 
-    StaticVector<AlignedType, 10> aligned_array;
+    FArray<AlignedType, 10> aligned_array;
 
     for (u32 idx = 0; idx < 5; ++idx)
     {

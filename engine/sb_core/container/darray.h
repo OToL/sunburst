@@ -2,11 +2,11 @@
 
 #include <sb_core/memory/allocator/stl_allocator.h>
 
-#include <sb_std/vector>
+#include <sb_std/_impl/vector>
 
 namespace sb {
 
 template <typename T, typename TAllocator = STLAllocator<T>>
-using Vector = sbstd::internal::vector<T, TAllocator>;
+using DArray = sbstd::internal::vector<T, TAllocator>;
 
 }

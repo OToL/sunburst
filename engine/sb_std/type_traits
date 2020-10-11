@@ -61,5 +61,19 @@ namespace SB_STD_NS_EXT {
     {
     };
 
+    template<typename TType, typename ... TTypes>
+    struct are_same
+    {
+        static constexpr bool value = (std::is_same_v<TType, TTypes> && ...);
+    };
+
+    template<typename TType>
+    struct are_same<TType>
+    {
+        static constexpr bool value = true;
+    };
+
+    template<typename ... TTypes>
+    constexpr bool are_same_v = are_same<TTypes...>::value; 
 }
 }

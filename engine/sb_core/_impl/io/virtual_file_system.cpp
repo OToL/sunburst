@@ -4,7 +4,7 @@
 #include <sb_core/memory/allocator/pool_allocator.h>
 #include <sb_core/memory/provider/global_heap_provider.h>
 #include <sb_core/memory/alloc.h>
-#include <sb_core/container/static_vector.h>
+#include <sb_core/container/farray.h>
 #include <sb_core/string/utility.h>
 #include <sb_core/enum.h>
 
@@ -398,7 +398,7 @@ private:
     }
 
     FileDescPool file_desc_pool;
-    sb::StaticVector<LayerDesc, VFS_LAYER_MAX_COUNT> layers;
+    sb::FArray<LayerDesc, VFS_LAYER_MAX_COUNT> layers;
     FileGen curr_file_gen;
     u16 opened_file_count;
 };

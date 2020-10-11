@@ -2,7 +2,7 @@
 #include <sb_core/io/virtual_file_system.h>
 #include <sb_core/error.h>
 
-sb::CFileStream & sb::CFileStream::operator=(CFileStream && src)
+sb::FileStream & sb::FileStream::operator=(FileStream && src)
 {
     if (this != &src)
     {
@@ -13,33 +13,33 @@ sb::CFileStream & sb::CFileStream::operator=(CFileStream && src)
     return *this;
 }
 
-sb::CFileStream::~CFileStream()
+sb::FileStream::~FileStream()
 {
     reset();
 }
 
-sb::FileSize sb::CFileStream::read(sbstd::span<u8> buffer, FileSize cnt)
+sb::FileSize sb::FileStream::read(sbstd::span<u8> buffer, FileSize cnt)
 {
     sbAssert(sb::isValid(_hdl));
 
     return VFS::readFile(_hdl, buffer, cnt);
 }
 
-sb::FileSize sb::CFileStream::write(sbstd::span<u8 const> buffer, FileSize cnt)
+sb::FileSize sb::FileStream::write(sbstd::span<u8 const> buffer, FileSize cnt)
 {
     sbAssert(sb::isValid(_hdl));
 
     return VFS::writeFile(_hdl, buffer, cnt);
 }
 
-sb::FileSize sb::CFileStream::getLength() const
+sb::FileSize sb::FileStream::getLength() const
 {
     sbAssert(sb::isValid(_hdl));
 
     return VFS::getFileLength(_hdl);
 }
 
-void sb::CFileStream::reset(FileHdl hdl)
+void sb::FileStream::reset(FileHdl hdl)
 {
     if (hdl != _hdl)
     {
@@ -52,7 +52,7 @@ void sb::CFileStream::reset(FileHdl hdl)
     }
 }
 
-sb::FileHdl sb::CFileStream::swap(FileHdl hdl)
+sb::FileHdl sb::FileStream::swap(FileHdl hdl)
 {
     FileHdl const prev_hdl = _hdl;
     _hdl = hdl;

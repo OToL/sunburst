@@ -6,46 +6,27 @@
 
 namespace sb {
 
-struct Hash64StrLiteral
-{
-    u64 value;
-    char const * str;
-};
-
-constexpr Hash64StrLiteral operator"" _h64s(char const * str, usize len)
-{
-    return {computeHash64({str, len}), str};
-}
-
 struct Hash64Str
 {
-    Hash64Str() = default;
+    using ValueType = u64;
 
-    constexpr explicit Hash64Str(u64 value)
-        : value(value)
-    {
-    }
-
-    constexpr explicit Hash64Str(char const * str)
-        : value(computeHash64(str))
-    {
-        // TODO: register hash/string
-    }
-
-    constexpr Hash64Str(Hash64StrLiteral val)
-        : value(val.value)
-    {
-        // TODO: register hash/string
-    }
-
-    constexpr Hash64Str(char const * str, usize len)
-        : value(computeHash64({str, len}))
-    {
-        // TODO: register hash/string
-    }
-
-    u64 value;
+    ValueType value;
 };
+
+constexpr Hash64Str operator"" _h64s(char const * str, usize len)
+{
+    return {computeHash64({str, len})};
+}
+
+constexpr Hash64Str makeHash64Str(char const * str)
+{
+    return {computeHash64(str)};
+}
+
+constexpr Hash64Str makeHash64Str(char const * str, usize len)
+{
+    return {computeHash64({str, len})};
+}
 
 constexpr b32 isValid(Hash64Str hash_val)
 {
