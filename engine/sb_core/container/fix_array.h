@@ -14,7 +14,7 @@ namespace sb {
 // TODO: try_emplace
 // TODO: try_pushback
 template <typename TType, usize CAPACITY>
-class FArray
+class FixArray
 {
 public:
     using value_type = TType;
@@ -26,15 +26,15 @@ public:
     using const_iterator = TType const *;
     using size_type = usize;
 
-    FArray()
+    FixArray()
         : m_size(0)
     {
     }
 
-    FArray & operator=(FArray const &) = delete;
-    FArray(FArray const &) = delete;
+    FixArray & operator=(FixArray const &) = delete;
+    FixArray(FixArray const &) = delete;
 
-    ~FArray()
+    ~FixArray()
     {
         clear();
     }
@@ -189,27 +189,30 @@ private:
 };
 
 template <typename TType, usize CAPACITY>
-typename FArray<TType, CAPACITY>::iterator begin(FArray<TType, CAPACITY> & vect)
+typename FixArray<TType, CAPACITY>::iterator begin(FixArray<TType, CAPACITY> & vect)
 {
     return vect.begin();
 }
 
 template <typename TType, usize CAPACITY>
-typename FArray<TType, CAPACITY>::iterator end(FArray<TType, CAPACITY> & vect)
+typename FixArray<TType, CAPACITY>::iterator end(FixArray<TType, CAPACITY> & vect)
 {
     return vect.end();
 }
 
 template <typename TType, usize CAPACITY>
-typename FArray<TType, CAPACITY>::const_iterator begin(FArray<TType, CAPACITY> const & vect)
+typename FixArray<TType, CAPACITY>::const_iterator begin(FixArray<TType, CAPACITY> const & vect)
 {
     return vect.begin();
 }
 
 template <typename TType, usize CAPACITY>
-typename FArray<TType, CAPACITY>::const_iterator end(FArray<TType, CAPACITY> const & vect)
+typename FixArray<TType, CAPACITY>::const_iterator end(FixArray<TType, CAPACITY> const & vect)
 {
     return vect.end();
 }
+
+template <typename TType, usize CAPACITY>
+using FArray = FixArray<TType, CAPACITY>;
 
 } // namespace sb

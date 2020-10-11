@@ -3,7 +3,7 @@
 namespace sb::internal {
 
 template <typename TType, typename TAllocator>
-class SArrayBase
+class SmallArrayBase
 {
 public:
     using value_type = TType;
@@ -17,10 +17,10 @@ public:
     using difference_type = sptrdiff;
 
 protected:
-    SArrayBase & operator=(SArrayBase const &) = delete;
-    SArrayBase(SArrayBase const &) = delete;
+    SmallArrayBase & operator=(SmallArrayBase const &) = delete;
+    SmallArrayBase(SmallArrayBase const &) = delete;
 
-    SArrayBase() = default;
+    SmallArrayBase() = default;
 
     struct Impl : public TAllocator
     {

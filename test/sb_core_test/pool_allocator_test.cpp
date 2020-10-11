@@ -1,7 +1,7 @@
 #include <sb_core/memory/allocator/pool_allocator.h>
 #include <sb_core/memory/provider/memory_arena_provider.h>
 #include <sb_core/memory/global_heap.h>
-#include <sb_core/container/farray.h>
+#include <sb_core/container/fix_array.h>
 
 #include <gtest/gtest_common.h>
 #include <gtest/allocator_stats.h>

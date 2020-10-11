@@ -1,4 +1,4 @@
-#include <sb_core/container/farray.h>
+#include <sb_core/container/fix_array.h>
 #include <sb_core/bit.h>
 
 #include <gtest/gtest_common.h>

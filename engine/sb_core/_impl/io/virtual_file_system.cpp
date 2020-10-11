@@ -4,7 +4,7 @@
 #include <sb_core/memory/allocator/pool_allocator.h>
 #include <sb_core/memory/provider/global_heap_provider.h>
 #include <sb_core/memory/alloc.h>
-#include <sb_core/container/farray.h>
+#include <sb_core/container/fix_array.h>
 #include <sb_core/string/utility.h>
 #include <sb_core/enum.h>
 

@@ -11,12 +11,12 @@ add_executable(sb_core_test
     fnv1a64_test.cpp
     hash64_str_test.cpp
     hash32_str_test.cpp
-    sarray_test.cpp
+    small_array_test.cpp
     string_utility_test.cpp
     string_format_test.cpp
     file_hdl_test.cpp
     # static_string_test.cpp
-    # farray_test.cpp
+    # fix_array_test.cpp
     # alloc_test.cpp
     # incremental_allocator_test.cpp
     # null_allocator_test.cpp

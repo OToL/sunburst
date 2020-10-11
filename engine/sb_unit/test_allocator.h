@@ -1,5 +1,5 @@
 #include <sb_core/core.h>
-#include <sb_core/container/darray.h>
+#include <sb_core/container/dynamic_array.h>
 
 namespace sb {
 
