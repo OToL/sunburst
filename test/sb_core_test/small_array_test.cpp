@@ -19,7 +19,7 @@ public:
 
     SArrayFixture()
     {
-        TestObjectCnt::restStats();
+        TestObjectCnt::resetStats();
     }
 
     ~SArrayFixture()
@@ -211,7 +211,7 @@ bool areTestObjectsSequencial(sbstd::span<TestObjectCnt> objects, usize start_id
         ++obj_id;
     }
 
-    return true;
+    return true;    
 }
 
 TEST_CASE_METHOD(SArrayFixture, "SArray ctor range insert", "[small_vector]")

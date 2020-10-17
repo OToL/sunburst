@@ -1,4 +1,4 @@
-#include <sb_core/string/utility.h>
+#include <sb_core/string/string_utility.h>
 #include <sb_core/error.h>
 
 char * sb::strCatT(char * __sb_restrict dst, usize dst_len, usize dst_capacity, char const * __sb_restrict concat)

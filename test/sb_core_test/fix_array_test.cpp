@@ -1,231 +1,198 @@
 #include <sb_core/container/fix_array.h>
 #include <sb_core/bit.h>
 
-#include <gtest/gtest_common.h>
-#include <gtest/object_tracker.h>
+#include <sb_unit/test_object_cnt.h>
 
-#include <sb_std/type_traits>
+#include <sb_std/algorithm>
+#include <sb_std/iterator>
+
+#include <catch2/xcatch.hpp>
+#include <catch2/test_prolog.h>
 
 using namespace sb;
 
-class FArrayTestFixture : public testing::Test
+constexpr usize TEST_FARRAY_CAPACITY = 10;
+constexpr usize TEST_FARRAY_REF[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+using TestFArrayPOD = FArray<usize, TEST_FARRAY_CAPACITY>;
+using TestFArray = FArray<TestObjectCnt, TEST_FARRAY_CAPACITY>;
+
+namespace {
+
+void FillTestFArrayPush(TestFArrayPOD & test_array)
 {
-public:
-    typedef FArray<usize, 10> VectorOfPOD;
-    typedef FArray<gtestx::ObjectTracker, 10> VectorOfNonPOD;
-
-    void FillTestArray(VectorOfPOD & test_vector, sbstd::true_type const & /* push */ = sbstd::true_type{})
+    for (usize idx = 0; idx != test_array.capacity(); ++idx)
     {
-        for (usize idx = 0; idx != test_vector.capacity(); ++idx)
-        {
-            test_vector.push_back(idx);
-        }
-
-        EXPECT_EQ(test_vector.size(), 10ULL);
-        EXPECT_FALSE(test_vector.empty());
+        test_array.push_back(idx);
     }
 
-    void FillTestArray(VectorOfPOD & test_vector, sbstd::false_type const &)
-    {
-        for (usize idx = 0; idx != test_vector.capacity(); ++idx)
-        {
-            test_vector.emplace_back(idx);
-        }
-
-        EXPECT_EQ(test_vector.size(), 10ULL);
-        EXPECT_FALSE(test_vector.empty());
-    }
-
-    void FillTestArray(VectorOfNonPOD & test_vector, sbstd::true_type const & /* push */ = sbstd::true_type{})
-    {
-        for (usize idx = 0; idx != test_vector.capacity(); ++idx)
-        {
-            test_vector.push_back(gtestx::ObjectTracker{idx});
-        }
-
-        EXPECT_EQ(test_vector.size(), 10ULL);
-        EXPECT_FALSE(test_vector.empty());
-        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 10ULL);
-    }
-
-    void FillTestArray(VectorOfNonPOD & test_vector, sbstd::false_type const &)
-    {
-        for (usize idx = 0; idx != test_vector.capacity(); ++idx)
-        {
-            test_vector.emplace_back(gtestx::ObjectTracker{idx});
-        }
-
-        EXPECT_EQ(test_vector.size(), 10ULL);
-        EXPECT_FALSE(test_vector.empty());
-        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 10ULL);
-    }
-
-protected:
-    virtual void SetUp() override
-    {
-        gtestx::ObjectTracker::resetStats();
-    }
-
-    virtual void TearDown() override
-    {
-        gtestx::ObjectTracker::resetStats();
-    }
-};
-
-typedef FArrayTestFixture STATIC_ARRAY;
-
-TEST_F(STATIC_ARRAY, DEFAULT_CTOR)
-{
-    VectorOfPOD test_vector;
-
-    EXPECT_EQ(test_vector.size(), 0ULL);
-    EXPECT_TRUE(test_vector.empty());
+    REQUIRE(test_array.size() == test_array.capacity());
 }
 
-TEST_F(STATIC_ARRAY, PUSH_BACK_POD)
+void FillTestFArrayEmplace(TestFArrayPOD & test_array)
 {
-    VectorOfPOD test_vector;
-
-    FillTestArray(test_vector);
-
-    usize const * const test_value = test_vector.data();
-
-    for (usize idx = 0; idx != test_vector.capacity(); ++idx)
+    for (usize idx = 0; idx != test_array.capacity(); ++idx)
     {
-        EXPECT_EQ(idx, test_value[idx]);
-    }
-}
-
-TEST_F(STATIC_ARRAY, BACK)
-{
-    VectorOfPOD test_vector;
-
-    test_vector.push_back(0U);
-    test_vector.push_back(1U);
-    test_vector.push_back(2U);
-
-    EXPECT_EQ(test_vector.back(), 2U);
-}
-
-TEST_F(STATIC_ARRAY, PUSH_BACK_CTOR)
-{
-    {
-        VectorOfNonPOD test_vector;
-
-        FillTestArray(test_vector);
+        test_array.emplace_back(idx);
     }
 
-    EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0ULL);
+    REQUIRE(test_array.size() == test_array.capacity());
 }
 
-TEST_F(STATIC_ARRAY, EMPLACE_BACK_CTOR)
+void FillTestFArrayPush(TestFArray & test_array)
 {
+    for (usize idx = 0; idx != test_array.capacity(); ++idx)
     {
-        VectorOfNonPOD test_vector;
-
-        FillTestArray(test_vector, sbstd::false_type{});
+        test_array.push_back(TestObjectCnt{idx});
     }
 
-    EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0ULL);
+    REQUIRE(test_array.size() == test_array.capacity());
+    REQUIRE(TestObjectCnt::getStats() == test_array.capacity());
 }
 
-TEST_F(STATIC_ARRAY, ERASE_CTOR_BEGIN)
+void FillTestFArrayEmplace(TestFArray & test_array)
 {
+    for (usize idx = 0; idx != test_array.capacity(); ++idx)
     {
-        VectorOfNonPOD test_vector;
-
-        FillTestArray(test_vector);
-
-        test_vector.erase(test_vector.begin());
-
-        EXPECT_EQ(test_vector.size(), 9ULL);
-        EXPECT_FALSE(test_vector.empty());
-        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 9ULL);
-
-        usize idx = 1;
-        for (auto const & iter : test_vector)
-        {
-            EXPECT_EQ(idx, iter.getId());
-            ++idx;
-        }
+        test_array.emplace_back(TestObjectCnt{idx});
     }
 
-    EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0ULL);
+    REQUIRE(test_array.size() == test_array.capacity());
+    REQUIRE(TestObjectCnt::getStats() == test_array.capacity());
 }
 
-TEST_F(STATIC_ARRAY, ERASE_CTOR_LAST)
+}
+
+TEST_CASE("FArray POD default ctor", "[fix_array]")
 {
+    TestFArrayPOD test_array;
+
+    REQUIRE(test_array.size() == 0ULL);
+    REQUIRE(test_array.empty());
+}
+
+TEST_CASE("FArray POD push back", "[fix_array]")
+{
+    TestFArrayPOD test_array;
+
+    FillTestFArrayPush(test_array);
+
+    REQUIRE(sbstd::equal(begin(test_array), end(test_array), sbstd::begin(TEST_FARRAY_REF)));
+}
+
+TEST_CASE("FArray POD back", "[fix_array]")
+{
+    TestFArrayPOD test_array;
+
+    test_array.push_back(0U);
+    test_array.push_back(1U);
+    test_array.push_back(2U);
+
+    REQUIRE(test_array.back() == 2U);
+}
+
+TEST_CASE("FArray push_back dtor", "[fix_array]")
+{
+    TestObjectCnt::resetStats();
+
     {
-        VectorOfNonPOD test_vector;
+        TestFArray test_array;
 
-        FillTestArray(test_vector);
-
-        test_vector.erase(test_vector.end() - 1);
-
-        EXPECT_EQ(test_vector.size(), 9ULL);
-        EXPECT_FALSE(test_vector.empty());
-        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 9ULL);
-
-        usize idx = 0;
-        for (auto const & iter : test_vector)
-        {
-            EXPECT_EQ(idx, iter.getId());
-            ++idx;
-        }
+        FillTestFArrayPush(test_array);
     }
 
-    EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0ULL);
+    REQUIRE(TestObjectCnt::getStats() == 0ULL);
 }
 
-TEST_F(STATIC_ARRAY, ERASE_CTOR_MIDDLE)
+TEST_CASE("FArray emplace_back dtor", "[fix_array]")
 {
+    TestObjectCnt::resetStats();
+
     {
-        VectorOfNonPOD test_vector;
+        TestFArray test_array;
 
-        FillTestArray(test_vector);
-
-        usize const ERASE_OFFSET = 2;
-        test_vector.erase(test_vector.begin() + ERASE_OFFSET);
-
-        EXPECT_EQ(test_vector.size(), 9ULL);
-        EXPECT_FALSE(test_vector.empty());
-        EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 9ULL);
-
-        usize idx = 0;
-        for (auto const & iter : test_vector)
-        {
-            if (ERASE_OFFSET == idx)
-            {
-                ++idx;
-            }
-
-            EXPECT_EQ(idx, iter.getId());
-
-            ++idx;
-        }
+        FillTestFArrayEmplace(test_array);
     }
 
-    EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0ULL);
+    REQUIRE(TestObjectCnt::getStats() == 0ULL);
 }
 
-TEST_F(STATIC_ARRAY, ALIGNED_STORAGE)
+TEST_CASE("FArray erase first element", "[fix_array]")
 {
+    TestObjectCnt::resetStats();
+
+    {
+        TestFArray test_array;
+
+        FillTestFArrayPush(test_array);
+
+        test_array.erase(test_array.begin());
+
+        REQUIRE(test_array.size() == (test_array.capacity() - 1));
+        REQUIRE(TestObjectCnt::getStats() == 9ULL);
+
+        REQUIRE(sbstd::equal(begin(test_array), end(test_array), sbstd::begin(TEST_FARRAY_REF) + 1));
+    }
+
+    REQUIRE(TestObjectCnt::getStats() == 0ULL);
+}
+
+TEST_CASE("FArray erase last element", "[fix_array]")
+{
+    TestObjectCnt::resetStats();
+
+    {
+        TestFArray test_array;
+
+        FillTestFArrayPush(test_array);
+
+        test_array.erase(test_array.end() - 1);
+
+        REQUIRE(test_array.size() == (test_array.capacity() - 1));
+        REQUIRE(TestObjectCnt::getStats() == (test_array.capacity() - 1));
+
+        REQUIRE(sbstd::equal(begin(test_array), end(test_array) - 1, sbstd::begin(TEST_FARRAY_REF)));
+    }
+
+    REQUIRE(TestObjectCnt::getStats() == 0ULL);
+}
+
+TEST_CASE("FArray erase middle element", "[fix_array]")
+{
+    TestObjectCnt::resetStats();
+
+    {
+        TestFArray test_array;
+
+        FillTestFArrayPush(test_array);
+
+        constexpr usize ERASE_OFFSET = 2;
+        test_array.erase(test_array.begin() + ERASE_OFFSET);
+
+        REQUIRE(test_array.size() == (test_array.capacity() - 1));
+        REQUIRE(TestObjectCnt::getStats() == (test_array.capacity() - 1));
+
+        REQUIRE(sbstd::equal(begin(test_array), begin(test_array) + ERASE_OFFSET, sbstd::begin(TEST_FARRAY_REF)));
+        REQUIRE(sbstd::equal(begin(test_array) + ERASE_OFFSET, end(test_array), sbstd::begin(TEST_FARRAY_REF) + ERASE_OFFSET + 1));
+    }
+
+    REQUIRE(TestObjectCnt::getStats() == 0ULL);
+}
+
+TEST_CASE("FArray aligned storage", "[fix_array]")
+{
+#pragma warning(push)
+#pragma warning(disable:4324)
     struct alignas(32) AlignedType
     {
-        u32 m_x;
+        u32 value;
     };
+#pragma warning(pop)
 
     FArray<AlignedType, 10> aligned_array;
+    aligned_array.emplace_back(1U);
 
-    for (u32 idx = 0; idx < 5; ++idx)
-    {
-        aligned_array.emplace_back(idx);
-    }
-
-    EXPECT_TRUE(isAlignedTo(aligned_array.data(), 32));
-
-    for (u32 idx = 0; idx < 5; ++idx)
-    {
-        EXPECT_EQ(aligned_array[idx].m_x, idx);
-    }
+    REQUIRE(isAlignedTo(aligned_array.data(), 32U));
 }
+
+#include <catch2/test_epilog.h>

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/string/utility.h>
+#include <sb_core/string/string_utility.h>
 #include <sb_core/error.h>
 
 #include <sb_std/cstring>
@@ -10,17 +10,17 @@ namespace sb {
 
 // TODO: Proper character traits
 template <usize CAPACITY, typename TChar = char>
-class StaticString
+class FixString
 {
-    static_assert(CAPACITY != 0, "StaticString cannot 0 as CAPACITY");
+    static_assert(CAPACITY != 0, "FixString cannot 0 as CAPACITY");
 
 public:
-    StaticString()
+    FixString()
     {
         clear();
     }
 
-    StaticString(TChar const * src)
+    FixString(TChar const * src)
     {
         if (nullptr == src)
         {
@@ -33,17 +33,17 @@ public:
     }
 
     template <usize SRC_CAPACITY>
-    StaticString(StaticString<SRC_CAPACITY, TChar> const & src)
+    FixString(FixString<SRC_CAPACITY, TChar> const & src)
     {
         m_len = strCpyT(m_data, src.c_str());
     }
 
-    StaticString(StaticString<CAPACITY, TChar> const & src)
+    FixString(FixString<CAPACITY, TChar> const & src)
     {
         m_len = strCpyT(m_data, src.c_str());
     }
 
-    ~StaticString() { }
+    ~FixString() { }
 
     usize capacity() const
     {
@@ -104,7 +104,7 @@ public:
         return false;
     }
 
-    StaticString & append(TChar const * str)
+    FixString & append(TChar const * str)
     {
         sbstd::strncat(m_data, str, CAPACITY - 1);
         m_data[CAPACITY - 1] = TChar{};
@@ -126,21 +126,21 @@ public:
     }
 
     template <usize SRC_CAPACITY>
-    StaticString & operator=(StaticString<SRC_CAPACITY, TChar> const & src)
+    FixString & operator=(FixString<SRC_CAPACITY, TChar> const & src)
     {
         m_len = strCpyT(m_data, src.c_str());
 
         return *this;
     }
 
-    StaticString & operator=(StaticString const & src)
+    FixString & operator=(FixString const & src)
     {
         m_len = strCpyT(m_data, src.c_str());
 
         return *this;
     }
 
-    StaticString & operator=(TChar const * src)
+    FixString & operator=(TChar const * src)
     {
         m_len = strCpyT(m_data, src);
 
@@ -148,12 +148,12 @@ public:
     }
 
     template <usize SRC_CAPACITY>
-    StaticString & operator+=(StaticString<SRC_CAPACITY, TChar> const & src)
+    FixString & operator+=(FixString<SRC_CAPACITY, TChar> const & src)
     {
         return append(src.c_str());
     }
 
-    StaticString & operator+=(TChar const * src)
+    FixString & operator+=(TChar const * src)
     {
         return append(src);
     }
@@ -162,4 +162,8 @@ private:
     TChar m_data[CAPACITY];
     usize m_len;
 };
+
+template <usize CAPACITY, typename TChar = char>
+using FString = FixString<CAPACITY, TChar>;
+
 } // namespace sb

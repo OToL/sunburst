@@ -3,7 +3,7 @@
 #include "io.h"
 #include "file_hdl.h"
 #include <sb_core/hash/hash_str.h>
-#include <sb_core/string/static_string.h>
+#include <sb_core/string/fix_string.h>
 
 #include <sb_core/core.h>
 
@@ -21,8 +21,8 @@ struct VirtualFileSystem
     struct LayerInitDesc
     {
         LayerName name;
-        StaticString<VFS_PATH_MAX_LEN + 1> vfs_path;
-        StaticString<LOCAL_PATH_MAX_LEN + 1> local_path;
+        FixString<VFS_PATH_MAX_LEN + 1> vfs_path;
+        FixString<LOCAL_PATH_MAX_LEN + 1> local_path;
     };
 
     struct InitDesc

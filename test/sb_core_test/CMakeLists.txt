@@ -15,13 +15,13 @@ add_executable(sb_core_test
     string_utility_test.cpp
     string_format_test.cpp
     file_hdl_test.cpp
-    # static_string_test.cpp
-    # fix_array_test.cpp
+    fix_array_test.cpp
+    ring_buffer_Test.cpp
+    fix_string_test.cpp
     # alloc_test.cpp
     # incremental_allocator_test.cpp
     # null_allocator_test.cpp
     # pool_allocator_test.cpp
-    # ring_buffer_Test.cpp
     # stl_allocator_test.cpp
     # unique_ptr_test.cpp
 )

@@ -56,7 +56,7 @@ struct LogFilter<false>
 } // namespace sb::internal
 
 #    define sbLogImpl(lvl, file, line, msg, ...)                                                                       \
-        (!::sb::internal::gs_log_quiet && ((::sb::u8)lvl) <= ((::sb::u8)sb::internal::gs_log_min_level)) &&          \
+        (!::sb::internal::gs_log_quiet && ((::sb::u8)lvl) <= ((::sb::u8)sb::internal::gs_log_min_level)) &&            \
             (::sb::internal::LogFilter<sbIsEnabled(LOG_FACILITY)>::logMessage(lvl, file, line, msg, ##__VA_ARGS__),    \
              true)
 

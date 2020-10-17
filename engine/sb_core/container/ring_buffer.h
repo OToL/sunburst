@@ -5,71 +5,158 @@
 #include <sb_core/unique_ptr.h>
 #include <sb_core/error.h>
 
+#include <sb_std/type_traits>
+
 namespace sb {
 
 template <typename TType>
 class RingBuffer
 {
 public:
+    using ValueType = TType;
+    static constexpr bool IS_TRIVIAL_VALUE = sbstd::is_trivial_v<ValueType>;
+
     RingBuffer(usize capacity, AllocatorView const & alloc)
-        : m_begin(0)
-        , m_capacity(capacity)
-        , m_size(0)
+        : _begin(0)
+        , _capacity(capacity)
+        , _size(0)
     {
         sbAssert((0 != capacity) && alloc.isValid());
 
-        m_data = allocateUnique<u8[], AllocatorView>(alloc, capacity * sizeof(TType));
+        _data = allocateUnique<u8[], AllocatorView>(alloc, capacity * sizeof(TType));
     }
 
     RingBuffer(usize capacity)
-        : m_begin(0)
-        , m_capacity(capacity)
-        , m_size(0)
+        : _begin(0)
+        , _capacity(capacity)
+        , _size(0)
     {
         sbAssert(0 != capacity);
-        m_data = allocateUnique<u8[], AllocatorView>(getGlobalHeapView(), capacity * sizeof(TType));
+        _data = allocateUnique<u8[], AllocatorView>(getGlobalHeapView(), capacity * sizeof(TType));
     }
 
     RingBuffer & operator=(RingBuffer const &) = delete;
     RingBuffer(RingBuffer const &) = delete;
 
+    // @todo: to implement
+    RingBuffer & operator=(RingBuffer &&) = delete;
+    RingBuffer(RingBuffer &&) = delete;
+
     ~RingBuffer()
     {
-        while (!empty())
+        if constexpr (!IS_TRIVIAL_VALUE)
         {
-            pop();
+            // @todo: just a for loop
+            while (!empty())
+            {
+                pop();
+            }
         }
     }
 
-    bool push(TType const & val)
+    void put_overflow(TType const & val)
     {
-        if (!full())
+        if (full())
         {
-            reinterpret_cast<TType *>(m_data.get())[(m_begin + m_size) % m_capacity] = val;
-            ++m_size;
+            if constexpr (IS_TRIVIAL_VALUE)
+            {
+                *(reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) = val;
+            }
+            else
+            {
+                reinterpret_cast<TType *>(_data.get() + ((_begin + _size) % _capacity))->~TType();
+                new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) ValueType(val);
+            }
 
-            return true;
+            _begin = (_begin + 1) % _capacity;
         }
         else
         {
-            TType & prevItem = reinterpret_cast<TType *>(m_data.get())[(m_begin + m_size) % m_capacity];
-            prevItem.~TType();
-            prevItem = val;
+            if constexpr (IS_TRIVIAL_VALUE)
+            {
+                *(reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) = val;
+            }
+            else
+            {
+                new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) ValueType(val);
+            }
 
-            return false;
+            ++_size;
         }
+    }
+
+    template <class... TArgs>
+    void emplace_put_overflow(TArgs &&... args)
+    {
+        if (full())
+        {
+            if constexpr (!IS_TRIVIAL_VALUE)
+            {
+                reinterpret_cast<TType *>(_data.get() + ((_begin + _size) % _capacity))->~TType();
+            }
+
+            new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity))
+                ValueType(sbstd::forward<TArgs>(args)...);
+            _begin = (_begin + 1) % _capacity;
+        }
+        else
+        {
+            new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity))
+                ValueType(sbstd::forward<TArgs>(args)...);
+            ++_size;
+        }
+    }
+
+    bool put(TType const & val)
+    {
+        if (!full())
+        {
+            if constexpr (IS_TRIVIAL_VALUE)
+            {
+                *(reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) = val;
+            }
+            else
+            {
+                new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) ValueType(val);
+            }
+
+            ++_size;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    template <class... TArgs>
+    bool emplace_put(TArgs &&... args)
+    {
+        if (!full())
+        {
+            new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity))
+                ValueType(sbstd::forward<TArgs>(args)...);
+            ++_size;
+
+            return true;
+        }
+
+        return false;
     }
 
     TType pop()
     {
         if (!empty())
         {
-            TType & currItem = reinterpret_cast<TType *>(m_data.get())[m_begin];
+            TType & currItem = reinterpret_cast<TType *>(_data.get())[_begin];
             TType const val = currItem;
-            currItem.~TType();
 
-            m_begin = (m_begin + 1) % m_capacity;
-            --m_size;
+            if constexpr (!IS_TRIVIAL_VALUE)
+            {
+                currItem.~TType();
+            }
+
+            _begin = (_begin + 1) % _capacity;
+            --_size;
 
             return val;
         }
@@ -79,29 +166,32 @@ public:
 
     bool empty() const
     {
-        return (m_size == 0);
+        return (_size == 0);
     };
 
     bool full() const
     {
-        return (m_size == m_capacity);
+        return (_size == _capacity);
     };
 
     usize capacity() const
     {
-        return m_capacity;
+        return _capacity;
     }
 
     usize size() const
     {
-        return m_size;
+        return _size;
     }
 
 private:
-    UniquePtr<u8[], AllocatorViewDelete<u8[]>> m_data;
-    usize m_begin;
-    usize m_capacity;
-    usize m_size;
+    UniquePtr<u8[], AllocatorViewDelete<u8[]>> _data;
+    usize _begin;
+    usize _capacity;
+    usize _size;
+
+    // head
+    // tail
 };
 
 } // namespace sb

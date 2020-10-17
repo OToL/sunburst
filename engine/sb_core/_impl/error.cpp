@@ -67,8 +67,7 @@ void sb::internal::reportError(ErrorLevel type, char const * const file, u32 con
         logDefaultErrorMsg(type, file, line, ERROR_DEFAULT_MSG[getEnumValue(type)]);
     }
 
-    if ((ErrorLevel::CRITICAL == type) ||
-        (ErrorLevel::WARNING == type))
+    if ((ErrorLevel::CRITICAL == type) || (ErrorLevel::WARNING == type))
     {
         sb::debugBreak();
     }

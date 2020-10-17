@@ -1,195 +1,681 @@
 #include <sb_core/container/ring_buffer.h>
 
-#include <gtest/allocator_stats.h>
-#include <gtest/gtest_common.h>
+#include <sb_unit/test_object_cnt.h>
+#include <sb_unit/test_allocator.h>
+
+#include <sb_std/xutility>
+
+#include <catch2/xcatch.hpp>
+#include <catch2/test_prolog.h>
 
 using namespace sb;
 
-struct TestRingItem
+using TestRingBufferPOD = RingBuffer<usize>;
+using TestRingBuffer = RingBuffer<TestObjectCnt>;
+
+constexpr usize TEST_RING_BUFFER_CAPACITY = 10;
+constexpr usize TEST_RING_BUFFER_REF[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+void FillTestRingBufferEmplacePut(TestRingBufferPOD & test_ring)
 {
-    TestRingItem()
-        : m_id(0)
+    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
     {
+        test_ring.emplace_put(idx);
     }
-
-    TestRingItem(u32 id)
-        : m_id(id)
-    {
-    }
-
-    u32 m_id;
-};
-
-struct TestRingItemCDtor
-{
-    TestRingItemCDtor()
-    {
-        ++ms_ctor_count;
-    }
-
-    TestRingItemCDtor(TestRingItemCDtor const &)
-    {
-        ++ms_ctor_count;
-    }
-
-    TestRingItemCDtor(TestRingItemCDtor &&)
-    {
-        ++ms_ctor_count;
-    }
-
-    TestRingItemCDtor & operator=(TestRingItemCDtor const &)
-    {
-        ++ms_ctor_count;
-
-        return *this;
-    }
-
-    TestRingItemCDtor & operator=(TestRingItemCDtor &&)
-    {
-        ++ms_ctor_count;
-
-        return *this;
-    }
-
-    ~TestRingItemCDtor()
-    {
-        ++ms_dtor_count;
-    }
-
-    static u32 ms_ctor_count;
-    static u32 ms_dtor_count;
-};
-
-u32 TestRingItemCDtor::ms_ctor_count = 0;
-u32 TestRingItemCDtor::ms_dtor_count = 0;
-
-class RingBuffertemCDTorFixture : public testing::Test
-{
-protected:
-    RingBuffertemCDTorFixture() {}
-
-    ~RingBuffertemCDTorFixture() override {}
-
-    void SetUp() override
-    {
-        TestRingItemCDtor::ms_ctor_count = 0;
-        TestRingItemCDtor::ms_dtor_count = 0;
-    }
-
-    void TearDown() override {}
-};
-
-using RING_BUFFER = RingBuffertemCDTorFixture;
-
-TEST_F(RING_BUFFER, DefaultCtor)
-{
-    RingBuffer<TestRingItem> test_ring_buffer(4);
-
-    EXPECT_TRUE(test_ring_buffer.empty());
-    EXPECT_EQ(test_ring_buffer.size(), 0U);
-    EXPECT_EQ(test_ring_buffer.capacity(), 4U);
-    EXPECT_FALSE(test_ring_buffer.full());
 }
 
-TEST_F(RING_BUFFER, PushBackToLimit)
+void FillTestRingBufferEmplacePut(TestRingBuffer & test_ring)
 {
-    RingBuffer<TestRingItem> test_ring_buffer(4);
-
-    for (u32 iter = 0; iter != 4; ++iter)
+    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
     {
-        test_ring_buffer.push(TestRingItem{});
-
-        EXPECT_FALSE(test_ring_buffer.empty());
-        EXPECT_EQ(test_ring_buffer.size(), iter + 1U);
-
-        if (iter != 3)
-        {
-            EXPECT_FALSE(test_ring_buffer.full());
-        }
+        test_ring.emplace_put(idx);
     }
-
-    EXPECT_TRUE(test_ring_buffer.full());
-
-    test_ring_buffer.push(TestRingItem{});
-    EXPECT_TRUE(test_ring_buffer.full());
 }
 
-TEST_F(RING_BUFFER, SimplePushBackPop)
+void FillTestRingBufferEmplacePutOverflow(TestRingBufferPOD & test_ring)
 {
-    RingBuffer<TestRingItem> test_ring_buffer(4);
-
-    test_ring_buffer.push(TestRingItem{10});
-
-    EXPECT_FALSE(test_ring_buffer.empty());
-    EXPECT_EQ(test_ring_buffer.size(), 1U);
-
-    TestRingItem val = test_ring_buffer.pop();
-
-    EXPECT_TRUE(test_ring_buffer.empty());
-    EXPECT_EQ(val.m_id, 10U);
+    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
+    {
+        test_ring.emplace_put_overflow(idx);
+    }
 }
 
-TEST_F(RING_BUFFER, CirclePushBackPop)
+void FillTestRingBufferEmplacePutOverflow(TestRingBuffer & test_ring)
 {
-    RingBuffer<TestRingItem> test_ring_buffer(4);
-
-    for (u32 iter = 0; iter != 4; ++iter)
+    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
     {
-        test_ring_buffer.push(TestRingItem{iter + 1});
+        test_ring.emplace_put_overflow(idx);
     }
-
-    EXPECT_TRUE(test_ring_buffer.full());
-
-    for (u32 iter = 0; iter != 2; ++iter)
-    {
-        TestRingItem val = test_ring_buffer.pop();
-
-        EXPECT_EQ(val.m_id, iter + 1);
-    }
-
-    EXPECT_FALSE(test_ring_buffer.full());
-
-    for (u32 iter = 0; iter != 2; ++iter)
-    {
-        test_ring_buffer.push(TestRingItem{4 + iter + 1});
-    }
-
-    EXPECT_TRUE(test_ring_buffer.full());
-
-    for (u32 iter = 0; iter != 4; ++iter)
-    {
-        TestRingItem val = test_ring_buffer.pop();
-
-        EXPECT_EQ(val.m_id, 2 + iter + 1);
-    }
-
-    EXPECT_TRUE(test_ring_buffer.empty());
 }
 
-TEST_F(RingBuffertemCDTorFixture, BasicInit)
+void FillTestRingBufferPutOverflow(TestRingBufferPOD & test_ring)
 {
-    RingBuffer<TestRingItemCDtor> test_ring_buffer(4);
-
-    EXPECT_EQ(TestRingItemCDtor::ms_ctor_count, 0U);
-    EXPECT_EQ(TestRingItemCDtor::ms_dtor_count, 0U);
+    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
+    {
+        test_ring.put_overflow(idx);
+    }
 }
 
-TEST_F(RingBuffertemCDTorFixture, DtorCleanUp)
+void FillTestRingBufferPutOverflow(TestRingBuffer & test_ring)
 {
+    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
     {
-        RingBuffer<TestRingItemCDtor> test_ring_buffer(4);
+        test_ring.put_overflow(idx);
+    }
+}
 
-        EXPECT_EQ(TestRingItemCDtor::ms_ctor_count, 0U);
-        EXPECT_EQ(TestRingItemCDtor::ms_dtor_count, 0U);
+void FillTestRingBufferPut(TestRingBufferPOD & test_ring)
+{
+    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
+    {
+        test_ring.put(idx);
+    }
+}
 
-        for (u32 iter = 0; iter != 4; ++iter)
-        {
-            test_ring_buffer.push(TestRingItemCDtor{});
+void FillTestRingBufferPut(TestRingBuffer & test_ring)
+{
+    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
+    {
+        test_ring.put(idx);
+    }
+}
+
+TEST_CASE("RingBuffer ctor", "[ring_buffer]")
+{
+    TestObjectCnt::resetStats();
+    TestAllocator alloc_stats;
+
+    TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY, alloc_stats);
+
+    REQUIRE_FALSE(ring_buffer.full());
+    REQUIRE(ring_buffer.empty());
+    REQUIRE(ring_buffer.size() == 0U);
+    REQUIRE(ring_buffer.capacity() == TEST_RING_BUFFER_CAPACITY);
+    REQUIRE(TestObjectCnt::getStats() == 0U);
+    REQUIRE(alloc_stats.getStats().m_alloc_count == 1U);
+    REQUIRE(alloc_stats.getStats().m_allocated_byte == (TEST_RING_BUFFER_CAPACITY * sizeof(TestRingBuffer::ValueType)));
+}
+
+TEST_CASE("RingBuffer put_overflow", "[ring_buffer]")
+{
+    SECTION("RingBuffer POD filling")
+    {
+        TestRingBufferPOD ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferPutOverflow(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize ref_val : TEST_RING_BUFFER_REF)
+        {            
+            REQUIRE(ref_val == ring_buffer.pop());
         }
 
-        EXPECT_NE(TestRingItemCDtor::ms_ctor_count, 0U);
-        EXPECT_NE(TestRingItemCDtor::ms_dtor_count, 0U);
+        REQUIRE(ring_buffer.size() == 0U);
+        REQUIRE(ring_buffer.empty());
+
     }
 
-    EXPECT_EQ(TestRingItemCDtor::ms_ctor_count, TestRingItemCDtor::ms_dtor_count);
+    constexpr usize OVERFLOW_REF[] = {10, 11, 12}; 
+
+    SECTION("RingBuffer POD overflow")
+    {
+        TestRingBufferPOD ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferPutOverflow(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize val : OVERFLOW_REF)
+        {
+            ring_buffer.put_overflow(val);
+        }
+
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize idx = 0 ; idx != (TEST_RING_BUFFER_CAPACITY - sbstd::size(OVERFLOW_REF)) ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + sbstd::size(OVERFLOW_REF)]);
+        }
+
+        REQUIRE(sbstd::size(OVERFLOW_REF) == ring_buffer.size());
+
+        for (usize idx = 0 ; idx != sbstd::size(OVERFLOW_REF) ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == OVERFLOW_REF[idx]);
+        }
+
+        REQUIRE(ring_buffer.empty());
+    }
+
+    SECTION("RingBuffer non-POD fill")
+    {
+        TestObjectCnt::resetStats();
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferPutOverflow(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == TEST_RING_BUFFER_CAPACITY);
+
+        for (usize ref_val : TEST_RING_BUFFER_REF)
+        {            
+            REQUIRE(ref_val == ring_buffer.pop());
+        }
+
+        REQUIRE(TestObjectCnt::getStats() == 0);
+        REQUIRE(ring_buffer.size() == 0U);
+        REQUIRE(ring_buffer.empty());
+
+    }
+
+    SECTION("RingBuffer non-POD overflow")
+    {
+        TestObjectCnt::resetStats();
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferPutOverflow(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
+
+        for (usize val : OVERFLOW_REF)
+        {
+            ring_buffer.put_overflow(val);
+        }
+
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
+
+        for (usize idx = 0 ; idx != (TEST_RING_BUFFER_CAPACITY - sbstd::size(OVERFLOW_REF)) ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + sbstd::size(OVERFLOW_REF)]);
+        }
+
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+        REQUIRE(sbstd::size(OVERFLOW_REF) == ring_buffer.size());
+
+        for (usize idx = 0 ; idx != sbstd::size(OVERFLOW_REF) ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == OVERFLOW_REF[idx]);
+        }
+
+        REQUIRE(ring_buffer.empty());
+        REQUIRE(TestObjectCnt::getStats() == 0U);
+    }
 }
+
+TEST_CASE("RingBuffer emplace_put_overflow", "[ring_buffer]")
+{
+    SECTION("RingBuffer POD filling")
+    {
+        TestRingBufferPOD ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePutOverflow(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize ref_val : TEST_RING_BUFFER_REF)
+        {            
+            REQUIRE(ref_val == ring_buffer.pop());
+        }
+
+        REQUIRE(ring_buffer.size() == 0U);
+        REQUIRE(ring_buffer.empty());
+
+    }
+
+    constexpr usize OVERFLOW_REF[] = {10, 11, 12}; 
+
+    SECTION("RingBuffer POD overflow")
+    {
+        TestRingBufferPOD ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePutOverflow(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize val : OVERFLOW_REF)
+        {
+            ring_buffer.emplace_put_overflow(val);
+        }
+
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize idx = 0 ; idx != (TEST_RING_BUFFER_CAPACITY - sbstd::size(OVERFLOW_REF)) ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + sbstd::size(OVERFLOW_REF)]);
+        }
+
+        REQUIRE(sbstd::size(OVERFLOW_REF) == ring_buffer.size());
+
+        for (usize idx = 0 ; idx != sbstd::size(OVERFLOW_REF) ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == OVERFLOW_REF[idx]);
+        }
+
+        REQUIRE(ring_buffer.empty());
+    }
+
+    SECTION("RingBuffer non-POD fill")
+    {
+        TestObjectCnt::resetStats();
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePutOverflow(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == TEST_RING_BUFFER_CAPACITY);
+
+        for (usize ref_val : TEST_RING_BUFFER_REF)
+        {            
+            REQUIRE(ref_val == ring_buffer.pop());
+        }
+
+        REQUIRE(TestObjectCnt::getStats() == 0);
+        REQUIRE(ring_buffer.size() == 0U);
+        REQUIRE(ring_buffer.empty());
+
+    }
+
+    SECTION("RingBuffer non-POD overflow")
+    {
+        TestObjectCnt::resetStats();
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePutOverflow(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
+
+        for (usize val : OVERFLOW_REF)
+        {
+            ring_buffer.emplace_put_overflow(val);
+        }
+
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
+
+        for (usize idx = 0 ; idx != (TEST_RING_BUFFER_CAPACITY - sbstd::size(OVERFLOW_REF)) ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + sbstd::size(OVERFLOW_REF)]);
+        }
+
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+        REQUIRE(sbstd::size(OVERFLOW_REF) == ring_buffer.size());
+
+        for (usize idx = 0 ; idx != sbstd::size(OVERFLOW_REF) ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == OVERFLOW_REF[idx]);
+        }
+
+        REQUIRE(ring_buffer.empty());
+        REQUIRE(TestObjectCnt::getStats() == 0U);
+    }
+}
+
+TEST_CASE("RingBuffer put", "[ring_buffer]")
+{
+    SECTION("RingBuffer POD filling")
+    {
+        TestRingBufferPOD ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferPut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize ref_val : TEST_RING_BUFFER_REF)
+        {            
+            REQUIRE(ref_val == ring_buffer.pop());
+        }
+
+        REQUIRE(ring_buffer.size() == 0U);
+        REQUIRE(ring_buffer.empty());
+
+    }
+
+    constexpr usize OVERFLOW_REF[] = {10, 11, 12}; 
+
+    SECTION("RingBuffer POD overflow")
+    {
+        TestRingBufferPOD ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferPut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize val : OVERFLOW_REF)
+        {
+            REQUIRE_FALSE(ring_buffer.put(val));
+        }
+
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize idx = 0 ; idx != TEST_RING_BUFFER_CAPACITY ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx]);
+        }
+
+        REQUIRE(ring_buffer.empty());
+    }
+
+    SECTION("RingBuffer non-POD fill")
+    {
+        TestObjectCnt::resetStats();
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferPut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == TEST_RING_BUFFER_CAPACITY);
+
+        for (usize ref_val : TEST_RING_BUFFER_REF)
+        {            
+            REQUIRE(ref_val == ring_buffer.pop());
+        }
+
+        REQUIRE(TestObjectCnt::getStats() == 0);
+        REQUIRE(ring_buffer.size() == 0U);
+        REQUIRE(ring_buffer.empty());
+
+    }
+
+    SECTION("RingBuffer non-POD overflow")
+    {
+        TestObjectCnt::resetStats();
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferPut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
+
+        for (usize val : OVERFLOW_REF)
+        {
+            REQUIRE_FALSE(ring_buffer.put(val));
+        }
+
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
+
+        for (usize idx = 0 ; idx != TEST_RING_BUFFER_CAPACITY ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx]);
+        }
+
+        REQUIRE(ring_buffer.empty());
+        REQUIRE(TestObjectCnt::getStats() == 0U);
+    }
+}
+
+TEST_CASE("RingBuffer emplace_put", "[ring_buffer]")
+{
+    SECTION("RingBuffer POD filling")
+    {
+        TestRingBufferPOD ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize ref_val : TEST_RING_BUFFER_REF)
+        {            
+            REQUIRE(ref_val == ring_buffer.pop());
+        }
+
+        REQUIRE(ring_buffer.size() == 0U);
+        REQUIRE(ring_buffer.empty());
+
+    }
+
+    constexpr usize OVERFLOW_REF[] = {10, 11, 12}; 
+
+    SECTION("RingBuffer POD overflow")
+    {
+        TestRingBufferPOD ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize val : OVERFLOW_REF)
+        {
+            REQUIRE_FALSE(ring_buffer.emplace_put(val));
+        }
+
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for (usize idx = 0 ; idx != TEST_RING_BUFFER_CAPACITY ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx]);
+        }
+
+        REQUIRE(ring_buffer.empty());
+    }
+
+    SECTION("RingBuffer non-POD fill")
+    {
+        TestObjectCnt::resetStats();
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == TEST_RING_BUFFER_CAPACITY);
+
+        for (usize ref_val : TEST_RING_BUFFER_REF)
+        {            
+            REQUIRE(ref_val == ring_buffer.pop());
+        }
+
+        REQUIRE(TestObjectCnt::getStats() == 0);
+        REQUIRE(ring_buffer.size() == 0U);
+        REQUIRE(ring_buffer.empty());
+
+    }
+
+    SECTION("RingBuffer non-POD overflow")
+    {
+        TestObjectCnt::resetStats();
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
+
+        for (usize val : OVERFLOW_REF)
+        {
+            REQUIRE_FALSE(ring_buffer.emplace_put(val));
+        }
+
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
+
+        for (usize idx = 0 ; idx != TEST_RING_BUFFER_CAPACITY ; ++idx)
+        {
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx]);
+        }
+
+        REQUIRE(ring_buffer.empty());
+        REQUIRE(TestObjectCnt::getStats() == 0U);
+    }
+}
+
+TEST_CASE("RingBuffer dtor cleanup", "[ring_buffer]")
+{
+    TestObjectCnt::resetStats();
+
+    {
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        ring_buffer.put(1);
+        ring_buffer.put(2);
+
+        REQUIRE(TestObjectCnt::getStats() == 2U);
+        REQUIRE(ring_buffer.size() == 2U);
+    }
+
+    REQUIRE(TestObjectCnt::getStats() == 0U);
+}
+
+TEST_CASE("RingBuffer pop after full", "[ring_buffer]")
+{
+    constexpr usize TEST_VALUE = 100U;
+
+    SECTION("RingBuffer POD put")
+    {
+        TestRingBufferPOD ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferPut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        REQUIRE_FALSE(ring_buffer.put(TEST_VALUE));
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        REQUIRE(TEST_RING_BUFFER_REF[0] == ring_buffer.pop());
+        REQUIRE(ring_buffer.size() == (ring_buffer.capacity() - 1));
+
+        REQUIRE(ring_buffer.put(TEST_VALUE));
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for(usize idx = 1 ; idx != TEST_RING_BUFFER_CAPACITY; ++idx)
+        {
+            REQUIRE(TEST_RING_BUFFER_REF[idx] == ring_buffer.pop());
+        }
+        REQUIRE(ring_buffer.size() == 1U);
+
+        REQUIRE(TEST_VALUE == ring_buffer.pop());
+        REQUIRE(ring_buffer.empty());
+    }
+
+    SECTION("RingBuffer POD emplace_put")
+    {
+        TestRingBufferPOD ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        REQUIRE_FALSE(ring_buffer.emplace_put(TEST_VALUE));
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        REQUIRE(TEST_RING_BUFFER_REF[0] == ring_buffer.pop());
+        REQUIRE(ring_buffer.size() == (ring_buffer.capacity() - 1));
+
+        REQUIRE(ring_buffer.emplace_put(TEST_VALUE));
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for(usize idx = 1 ; idx != TEST_RING_BUFFER_CAPACITY; ++idx)
+        {
+            REQUIRE(TEST_RING_BUFFER_REF[idx] == ring_buffer.pop());
+        }
+        REQUIRE(ring_buffer.size() == 1U);
+
+        REQUIRE(TEST_VALUE == ring_buffer.pop());
+        REQUIRE(ring_buffer.empty());
+    }
+
+    SECTION("RingBuffer POD emplace_put_overflow")
+    {
+        TestRingBufferPOD ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePutOverflow(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        REQUIRE(TEST_RING_BUFFER_REF[0] == ring_buffer.pop());
+        REQUIRE(ring_buffer.size() == (ring_buffer.capacity() - 1));
+
+        ring_buffer.emplace_put_overflow(TEST_VALUE);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+
+        for(usize idx = 1 ; idx != TEST_RING_BUFFER_CAPACITY; ++idx)
+        {
+            REQUIRE(TEST_RING_BUFFER_REF[idx] == ring_buffer.pop());
+        }
+        REQUIRE(ring_buffer.size() == 1U);
+
+        REQUIRE(TEST_VALUE == ring_buffer.pop());
+        REQUIRE(ring_buffer.empty());
+    }
+
+    SECTION("RingBuffer non-POD put")
+    {
+        TestObjectCnt::resetStats();
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferPut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        REQUIRE_FALSE(ring_buffer.put(TEST_VALUE));
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
+
+        REQUIRE(TEST_RING_BUFFER_REF[0] == ring_buffer.pop());
+        REQUIRE(ring_buffer.size() == (ring_buffer.capacity() - 1));
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        REQUIRE(ring_buffer.put(TEST_VALUE));
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        for(usize idx = 1 ; idx != TEST_RING_BUFFER_CAPACITY; ++idx)
+        {
+            REQUIRE(TEST_RING_BUFFER_REF[idx] == ring_buffer.pop());
+        }
+        REQUIRE(ring_buffer.size() == 1U);
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        REQUIRE(TEST_VALUE == ring_buffer.pop());
+        REQUIRE(ring_buffer.empty());
+        REQUIRE(TestObjectCnt::getStats() == 0U);
+    }
+
+    SECTION("RingBuffer non-POD emplace_put")
+    {
+        TestObjectCnt::resetStats();
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePut(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        REQUIRE_FALSE(ring_buffer.emplace_put(TEST_VALUE));
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
+
+        REQUIRE(TEST_RING_BUFFER_REF[0] == ring_buffer.pop());
+        REQUIRE(ring_buffer.size() == (ring_buffer.capacity() - 1));
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        REQUIRE(ring_buffer.emplace_put(TEST_VALUE));
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        for(usize idx = 1 ; idx != TEST_RING_BUFFER_CAPACITY; ++idx)
+        {
+            REQUIRE(TEST_RING_BUFFER_REF[idx] == ring_buffer.pop());
+        }
+        REQUIRE(ring_buffer.size() == 1U);
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        REQUIRE(TEST_VALUE == ring_buffer.pop());
+        REQUIRE(ring_buffer.empty());
+        REQUIRE(TestObjectCnt::getStats() == 0U);
+    }
+
+    SECTION("RingBuffer non-POD emplace_put_overflow")
+    {
+        TestObjectCnt::resetStats();
+        TestRingBuffer ring_buffer(TEST_RING_BUFFER_CAPACITY);
+
+        FillTestRingBufferEmplacePutOverflow(ring_buffer);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        REQUIRE(TEST_RING_BUFFER_REF[0] == ring_buffer.pop());
+        REQUIRE(ring_buffer.size() == (ring_buffer.capacity() - 1));
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        ring_buffer.emplace_put_overflow(TEST_VALUE);
+        REQUIRE(ring_buffer.size() == ring_buffer.capacity());
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        for(usize idx = 1 ; idx != TEST_RING_BUFFER_CAPACITY; ++idx)
+        {
+            REQUIRE(TEST_RING_BUFFER_REF[idx] == ring_buffer.pop());
+        }
+        REQUIRE(ring_buffer.size() == 1U);
+        REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
+
+        REQUIRE(TEST_VALUE == ring_buffer.pop());
+        REQUIRE(ring_buffer.empty());
+        REQUIRE(TestObjectCnt::getStats() == 0U);
+    }
+}
+
+#include <catch2/test_epilog.h>

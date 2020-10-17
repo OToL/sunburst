@@ -5,7 +5,7 @@
 #include <sb_core/memory/provider/global_heap_provider.h>
 #include <sb_core/memory/alloc.h>
 #include <sb_core/container/fix_array.h>
-#include <sb_core/string/utility.h>
+#include <sb_core/string/string_utility.h>
 #include <sb_core/enum.h>
 
 #include <sb_std/algorithm>
@@ -18,8 +18,8 @@ class VirtualFileSystemImpl
     struct LayerDesc
     {
         VFS::LayerName id;
-        StaticString<VFS_PATH_MAX_LEN + 1> vfs_path;
-        StaticString<LOCAL_PATH_MAX_LEN + 1> local_path;
+        FixString<VFS_PATH_MAX_LEN + 1> vfs_path;
+        FixString<LOCAL_PATH_MAX_LEN + 1> local_path;
     };
 
     using FileGen = u16;
@@ -235,7 +235,8 @@ public:
 
                 if (isValid(local_file_hdl))
                 {
-                    FileProps const file_props = {.fmt = fmt, .access = makeEnumMask(FileAccess::READ, FileAccess::WRITE)};
+                    FileProps const file_props = {.fmt = fmt,
+                                                  .access = makeEnumMask(FileAccess::READ, FileAccess::WRITE)};
                     FileHdl file_hdl = createFileHdl(local_file_hdl, file_props);
 
                     if (sbExpect(isValid(file_hdl), "Out of file descriptors"))
@@ -303,7 +304,8 @@ public:
 
                 if (isValid(local_file_hdl))
                 {
-                    FileProps const file_props = {.fmt = fmt, .access = makeEnumMask(FileAccess::READ, FileAccess::WRITE)};
+                    FileProps const file_props = {.fmt = fmt,
+                                                  .access = makeEnumMask(FileAccess::READ, FileAccess::WRITE)};
                     FileHdl file_hdl = createFileHdl(local_file_hdl, file_props);
 
                     if (sbExpect(isValid(file_hdl), "Out of file descriptors"))
@@ -372,8 +374,8 @@ private:
             MemoryArena arena = file_desc_pool.getArena();
             FileDesc * const base_obj = static_cast<FileDesc *>(arena.m_ptr);
 
-            FileHdlHelper const helper_hdl = {.unpacked = {numericConv<u16>(sbstd::distance(base_obj, file_desc)),
-                                                           numericConv<u16>(file_desc->gen)}};
+            FileHdlHelper const helper_hdl = {
+                .unpacked = {numericConv<u16>(sbstd::distance(base_obj, file_desc)), numericConv<u16>(file_desc->gen)}};
 
             return FileHdl{helper_hdl.packed};
         }
@@ -431,7 +433,8 @@ sb::b8 sb::VirtualFileSystem::terminate()
     return false;
 }
 
-sb::FileHdl sb::VirtualFileSystem::openFile(char const * path, FileWriteMode mode, FileFormat fmt, bool create_if_not_exist)
+sb::FileHdl sb::VirtualFileSystem::openFile(char const * path, FileWriteMode mode, FileFormat fmt,
+                                            bool create_if_not_exist)
 {
     sbAssert(nullptr != g_vfs);
     sbAssert(nullptr != path);
@@ -447,7 +450,8 @@ sb::FileHdl sb::VirtualFileSystem::openFile(char const * path, FileWriteMode mod
     return file_hdl;
 }
 
-sb::FileHdl sb::VirtualFileSystem::openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt, bool create_if_not_exist)
+sb::FileHdl sb::VirtualFileSystem::openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt,
+                                                 bool create_if_not_exist)
 {
     sbAssert(nullptr != g_vfs);
     sbAssert(nullptr != path);
@@ -485,7 +489,7 @@ sb::FileHdl sb::VirtualFileSystem::createFileWrite(char const * path, FileFormat
     sbAssert(nullptr != g_vfs);
     sbAssert(nullptr != path) sbWarn(isVFSPathValid(path));
 
-    return g_vfs->createFileWrite(path, fmt);    
+    return g_vfs->createFileWrite(path, fmt);
 }
 
 sb::FileHdl sb::VirtualFileSystem::createFile(char const * path, FileFormat fmt)
@@ -524,7 +528,6 @@ sb::FileSize sb::VirtualFileSystem::writeFile(FileHdl hdl, sbstd::span<u8 const>
     return 0;
 }
 
-
 sb::FileSize sb::VirtualFileSystem::getFileLength(FileHdl hdl)
 {
     sbAssert(nullptr != g_vfs);
@@ -548,7 +551,6 @@ sb::FileProps sb::VirtualFileSystem::getFileProps(FileHdl hdl)
 
     return {};
 }
-
 
 sb::b8 sb::VirtualFileSystem::fileExists(char const * path)
 {

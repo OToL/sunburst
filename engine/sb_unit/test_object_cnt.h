@@ -11,8 +11,8 @@ public:
 
     struct Stats
     {
-        usize m_object_count = 0U;
-        usize m_valid_object_count = 0U;
+        usize obj_cnt = 0U;
+        usize valid_obj_cnt = 0U;
     };
 
     struct CompEqual
@@ -61,7 +61,7 @@ public:
 
     static Stats getStats();
 
-    static void restStats();
+    static void resetStats();
 
     static void initSequence(sbstd::span<TestObjectCnt> objects, ValueType start_id = 0U);
 
@@ -72,8 +72,9 @@ private:
     ValueType m_id;
 };
 
+bool operator==(TestObjectCnt const & lval, TestObjectCnt::ValueType rval);
+bool operator==(TestObjectCnt::ValueType lval, TestObjectCnt const & rval);
 bool operator==(TestObjectCnt::Stats const & stats, usize val);
-bool operator==(usize val, TestObjectCnt::Stats const & stats);
 bool operator==(TestObjectCnt const & val1, TestObjectCnt const & val2);
 
 } // namespace sb

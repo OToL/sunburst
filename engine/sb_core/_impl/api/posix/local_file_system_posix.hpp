@@ -3,7 +3,7 @@
 #include <sb_core/error.h>
 #include <sb_core/conversion.h>
 #include <sb_core/io/io.h>
-#include <sb_core/string/static_string.h>
+#include <sb_core/string/fix_string.h>
 #include <sb_core/enum.h>
 #include <sb_core/_impl/io/local_file_system.h>
 
@@ -11,7 +11,7 @@
 
 sb::internal::LayerFileHdl sb::internal::platformOpenFileRead(char const * path, FileFormat fmt)
 {
-    StaticString<3> flags{"r"};
+    FixString<3> flags{"r"};
 
     if (fmt == FileFormat::BIN)
     {
@@ -21,9 +21,10 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileRead(char const * path,
     return {(void *)fopen(path, flags.data())};
 }
 
-sb::internal::LayerFileHdl sb::internal::platformOpenFileReadWrite(char const * path, FileWriteMode mode, FileFormat fmt)
+sb::internal::LayerFileHdl sb::internal::platformOpenFileReadWrite(char const * path, FileWriteMode mode,
+                                                                   FileFormat fmt)
 {
-    StaticString<5> flags;
+    FixString<5> flags;
 
     if (mode == FileWriteMode::APPEND)
     {
@@ -50,7 +51,7 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileReadWrite(char const * 
 
 sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
-    StaticString<5> flags;
+    FixString<5> flags;
 
     if (mode == FileWriteMode::APPEND)
     {
@@ -77,7 +78,7 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path
 
 sb::internal::LayerFileHdl sb::internal::platformCreateFileWrite(char const * path, FileFormat fmt)
 {
-    StaticString<3> flags{"w"};
+    FixString<3> flags{"w"};
 
     if (fmt == FileFormat::BIN)
     {
@@ -89,7 +90,7 @@ sb::internal::LayerFileHdl sb::internal::platformCreateFileWrite(char const * pa
 
 sb::internal::LayerFileHdl sb::internal::platformCreateFileReadWrite(char const * path, FileFormat fmt)
 {
-    StaticString<3> flags{"w+"};
+    FixString<3> flags{"w+"};
 
     if (fmt == FileFormat::BIN)
     {

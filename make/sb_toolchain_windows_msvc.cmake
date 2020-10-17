@@ -11,7 +11,8 @@ function(sb_set_target_properties BASE_TARGET_NAME)
     target_compile_features(${BASE_TARGET_NAME}_public INTERFACE cxx_std_20)
     target_compile_definitions(${BASE_TARGET_NAME}_public 
         INTERFACE 
-            SB_COMPILER_MSVC SB_PLATFORM_WINDOWS)
+            SB_COMPILER_MSVC SB_PLATFORM_WINDOWS
+            _ENABLE_EXTENDED_ALIGNED_STORAGE)
 
 endfunction()
 
@@ -26,7 +27,8 @@ function(sb_set_target_warnings BASE_TARGET_NAME)
         /wd4521 # 'class' : multiple copy constructors specified
         /wd4626 # 'derived class' : assignment operator was implicitly defined as deleted because a base class assignment operator is inaccessible or deleted
         /wd4820 # 'bytes' bytes padding added after construct 'member_name'
-        /wd4868 # compiler may not enforce left-to-right evaluation order in braced initializer list 
+        /wd4868 # compiler may not enforce left-to-right evaluation order in braced initializer list
+        /wd4866 # compiler may not enforce left-to-right evaluation order for call to ''
         )
 
     if(SB_WARNINGS_AS_ERRORS)

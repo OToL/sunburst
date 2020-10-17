@@ -2,7 +2,7 @@
 #include <sb_core/core.h>
 #include <sb_core/error.h>
 #include <sb_core/bit.h>
-#include <sb_core/string/utility.h>
+#include <sb_core/string/string_utility.h>
 #include <sb_core/conversion.h>
 
 namespace sb::internal {

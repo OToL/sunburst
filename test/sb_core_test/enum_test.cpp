@@ -13,12 +13,12 @@ enum class TestMask : u8
 }; 
 
 TEST_CASE("Single value mask", "[enum]")
-{
-    REQUIRE(getEnumValue(TestMask::VALUE0) == makeEnumMaskValue(TestMask::VALUE0));
+{   
+    REQUIRE(0b01U == makeEnumMaskValue(TestMask::VALUE0));
 }
 
 TEST_CASE("Multi value mask", "[enum]")
-{
+{   
     REQUIRE(makeEnumMaskValue(TestMask::VALUE0, TestMask::VALUE1) == 0b11U);
 }
 

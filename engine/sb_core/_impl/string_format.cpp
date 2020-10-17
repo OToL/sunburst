@@ -1,5 +1,5 @@
 #include <sb_core/string/string_format.h>
-#include <sb_core/string/utility.h>
+#include <sb_core/string/string_utility.h>
 #include <sb_core/error.h>
 
 #include <sb_std/cctype>

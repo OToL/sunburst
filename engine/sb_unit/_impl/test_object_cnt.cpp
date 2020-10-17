@@ -11,16 +11,16 @@ TestObjectCnt::TestObjectCnt()
     : m_valid(true)
     , m_id(0U)
 {
-    ++gs_stats.m_valid_object_count;
-    ++gs_stats.m_object_count;
+    ++gs_stats.valid_obj_cnt;
+    ++gs_stats.obj_cnt;
 }
 
 TestObjectCnt::TestObjectCnt(usize id)
     : m_valid(true)
     , m_id(id)
 {
-    ++gs_stats.m_object_count;
-    ++gs_stats.m_valid_object_count;
+    ++gs_stats.obj_cnt;
+    ++gs_stats.valid_obj_cnt;
 }
 
 TestObjectCnt::TestObjectCnt(TestObjectCnt && src)
@@ -28,7 +28,7 @@ TestObjectCnt::TestObjectCnt(TestObjectCnt && src)
     , m_id(src.m_id)
 {
     sbAssert(src.m_valid);
-    ++gs_stats.m_object_count;
+    ++gs_stats.obj_cnt;
 
     src.m_valid = false;
 }
@@ -37,8 +37,8 @@ TestObjectCnt::TestObjectCnt(TestObjectCnt const & src)
     : m_valid(true)
     , m_id(src.m_id)
 {
-    ++gs_stats.m_object_count;
-    ++gs_stats.m_valid_object_count;
+    ++gs_stats.obj_cnt;
+    ++gs_stats.valid_obj_cnt;
 }
 
 TestObjectCnt & TestObjectCnt::operator=(TestObjectCnt const & src)
@@ -58,8 +58,8 @@ TestObjectCnt & TestObjectCnt::operator=(TestObjectCnt && src)
 
     if (m_valid)
     {
-        sbAssert(0 < gs_stats.m_valid_object_count);
-        --gs_stats.m_valid_object_count;
+        sbAssert(0 < gs_stats.valid_obj_cnt);
+        --gs_stats.valid_obj_cnt;
     }
     else
     {
@@ -73,17 +73,17 @@ TestObjectCnt & TestObjectCnt::operator=(TestObjectCnt && src)
 
 TestObjectCnt::~TestObjectCnt()
 {
-    sbAssert(0 < gs_stats.m_object_count);
-    --gs_stats.m_object_count;
+    sbAssert(0 < gs_stats.obj_cnt);
+    --gs_stats.obj_cnt;
 
     if (m_valid)
     {
-        sbAssert(0 < gs_stats.m_valid_object_count);
-        --gs_stats.m_valid_object_count;
+        sbAssert(0 < gs_stats.valid_obj_cnt);
+        --gs_stats.valid_obj_cnt;
     }
 }
 
-void TestObjectCnt::restStats()
+void TestObjectCnt::resetStats()
 {
     gs_stats = {};
 }
@@ -121,9 +121,19 @@ bool TestObjectCnt::areSequencial(sbstd::span<TestObjectCnt> objects, usize star
     return true;
 }
 
+bool operator==(TestObjectCnt const & lval, TestObjectCnt::ValueType rval)
+{
+    return lval.getId() == rval;
+}
+
+bool operator==(TestObjectCnt::ValueType lval, TestObjectCnt const & rval)
+{
+    return lval == rval.getId();
+}
+
 bool operator==(TestObjectCnt::Stats const & stats, usize val)
 {
-    return (stats.m_object_count == val) && (stats.m_valid_object_count == val);
+    return (stats.obj_cnt == val) && (stats.valid_obj_cnt == val);
 }
 
 bool operator==(usize val, TestObjectCnt::Stats const & stats)
