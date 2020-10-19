@@ -16,19 +16,19 @@ using TestRingBuffer = RingBuffer<TestObjectCnt>;
 constexpr usize TEST_RING_BUFFER_CAPACITY = 10;
 constexpr usize TEST_RING_BUFFER_REF[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-void FillTestRingBufferEmplacePut(TestRingBufferPOD & test_ring)
+void FillTestRingBufferPutOverflow(TestRingBufferPOD & test_ring)
 {
     for (usize idx = 0; idx != test_ring.capacity(); ++idx)
     {
-        test_ring.emplace_put(idx);
+        test_ring.put_overflow(idx);
     }
 }
 
-void FillTestRingBufferEmplacePut(TestRingBuffer & test_ring)
+void FillTestRingBufferPutOverflow(TestRingBuffer & test_ring)
 {
     for (usize idx = 0; idx != test_ring.capacity(); ++idx)
     {
-        test_ring.emplace_put(idx);
+        test_ring.put_overflow(idx);
     }
 }
 
@@ -48,22 +48,6 @@ void FillTestRingBufferEmplacePutOverflow(TestRingBuffer & test_ring)
     }
 }
 
-void FillTestRingBufferPutOverflow(TestRingBufferPOD & test_ring)
-{
-    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
-    {
-        test_ring.put_overflow(idx);
-    }
-}
-
-void FillTestRingBufferPutOverflow(TestRingBuffer & test_ring)
-{
-    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
-    {
-        test_ring.put_overflow(idx);
-    }
-}
-
 void FillTestRingBufferPut(TestRingBufferPOD & test_ring)
 {
     for (usize idx = 0; idx != test_ring.capacity(); ++idx)
@@ -80,6 +64,22 @@ void FillTestRingBufferPut(TestRingBuffer & test_ring)
     }
 }
 
+void FillTestRingBufferEmplacePut(TestRingBufferPOD & test_ring)
+{
+    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
+    {
+        test_ring.emplace_put(idx);
+    }
+}
+
+void FillTestRingBufferEmplacePut(TestRingBuffer & test_ring)
+{
+    for (usize idx = 0; idx != test_ring.capacity(); ++idx)
+    {
+        test_ring.emplace_put(idx);
+    }
+}
+
 TEST_CASE("RingBuffer ctor", "[ring_buffer]")
 {
     TestObjectCnt::resetStats();
@@ -93,7 +93,7 @@ TEST_CASE("RingBuffer ctor", "[ring_buffer]")
     REQUIRE(ring_buffer.capacity() == TEST_RING_BUFFER_CAPACITY);
     REQUIRE(TestObjectCnt::getStats() == 0U);
     REQUIRE(alloc_stats.getStats().m_alloc_count == 1U);
-    REQUIRE(alloc_stats.getStats().m_allocated_byte == (TEST_RING_BUFFER_CAPACITY * sizeof(TestRingBuffer::ValueType)));
+    REQUIRE(alloc_stats.getStats().m_allocated_byte != 0U);
 }
 
 TEST_CASE("RingBuffer put_overflow", "[ring_buffer]")

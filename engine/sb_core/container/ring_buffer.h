@@ -17,21 +17,23 @@ public:
     static constexpr bool IS_TRIVIAL_VALUE = sbstd::is_trivial_v<ValueType>;
 
     RingBuffer(usize capacity, AllocatorView const & alloc)
-        : _begin(0)
+        : _tail(0)
+        , _head(0)
         , _capacity(capacity)
-        , _size(0)
+        , _full(0)
     {
-        sbAssert((0 != capacity) && alloc.isValid());
+        sbAssert((0 != _capacity) && alloc.isValid());
 
         _data = allocateUnique<u8[], AllocatorView>(alloc, capacity * sizeof(TType));
     }
 
     RingBuffer(usize capacity)
-        : _begin(0)
+        : _tail(0)
+        , _head(0)
         , _capacity(capacity)
-        , _size(0)
+        , _full(0)
     {
-        sbAssert(0 != capacity);
+        sbAssert(0 != _capacity);
         _data = allocateUnique<u8[], AllocatorView>(getGlobalHeapView(), capacity * sizeof(TType));
     }
 
@@ -56,54 +58,64 @@ public:
 
     void put_overflow(TType const & val)
     {
+        TType * data_ptr = reinterpret_cast<TType *>(_data.get());
+        TType * curr_head_ptr = data_ptr + _head;
+
         if (full())
         {
             if constexpr (IS_TRIVIAL_VALUE)
             {
-                *(reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) = val;
+                *curr_head_ptr = val;
             }
             else
             {
-                reinterpret_cast<TType *>(_data.get() + ((_begin + _size) % _capacity))->~TType();
-                new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) ValueType(val);
+                curr_head_ptr->~TType();
+                new (curr_head_ptr) ValueType(val);
             }
 
-            _begin = (_begin + 1) % _capacity;
+            _head = (_head + 1) % _capacity;
+            _tail = _head;
         }
         else
         {
             if constexpr (IS_TRIVIAL_VALUE)
             {
-                *(reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) = val;
+                *curr_head_ptr = val;
             }
             else
             {
-                new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) ValueType(val);
+                new (curr_head_ptr) ValueType(val);
             }
 
-            ++_size;
+            _head = (_head + 1) % _capacity;
+            _full = (_head == _tail);
         }
     }
 
     template <class... TArgs>
     void emplace_put_overflow(TArgs &&... args)
     {
+        TType * data_ptr = reinterpret_cast<TType *>(_data.get());
+        TType * curr_head_ptr = data_ptr + _head;
+
         if (full())
         {
             if constexpr (!IS_TRIVIAL_VALUE)
             {
-                reinterpret_cast<TType *>(_data.get() + ((_begin + _size) % _capacity))->~TType();
+                curr_head_ptr->~TType();
             }
 
-            new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity))
-                ValueType(sbstd::forward<TArgs>(args)...);
-            _begin = (_begin + 1) % _capacity;
+            new (curr_head_ptr) ValueType(sbstd::forward<TArgs>(args)...);
+
+            _head = (_head + 1) % _capacity;
+            _tail = _head;
         }
         else
         {
-            new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity))
-                ValueType(sbstd::forward<TArgs>(args)...);
-            ++_size;
+            new (curr_head_ptr) ValueType(sbstd::forward<TArgs>(args)...);
+
+            _head = (_head + 1) % _capacity;
+            _full = (_head == _tail);
         }
     }
 
@@ -111,16 +123,20 @@ public:
     {
         if (!full())
         {
+            TType * data_ptr = reinterpret_cast<TType *>(_data.get());
+            TType * curr_head_ptr = data_ptr + _head;
+
             if constexpr (IS_TRIVIAL_VALUE)
             {
-                *(reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) = val;
+                *curr_head_ptr = val;
             }
             else
             {
-                new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity)) ValueType(val);
+                new (curr_head_ptr) ValueType(val);
             }
 
-            ++_size;
+            _head = (_head + 1) % _capacity;
+            _full = (_head == _tail);
 
             return true;
         }
@@ -133,9 +149,13 @@ public:
     {
         if (!full())
         {
-            new (reinterpret_cast<TType *>(_data.get()) + ((_begin + _size) % _capacity))
-                ValueType(sbstd::forward<TArgs>(args)...);
-            ++_size;
+            TType * data_ptr = reinterpret_cast<TType *>(_data.get());
+            TType * curr_head_ptr = data_ptr + _head;
+
+            new (curr_head_ptr) ValueType(sbstd::forward<TArgs>(args)...);
+
+            _head = (_head + 1) % _capacity;
+            _tail = _head;
 
             return true;
         }
@@ -147,16 +167,18 @@ public:
     {
         if (!empty())
         {
-            TType & currItem = reinterpret_cast<TType *>(_data.get())[_begin];
-            TType const val = currItem;
+            TType * data_ptr = reinterpret_cast<TType *>(_data.get());
+            TType * curr_tail_ptr = data_ptr + _tail;
+
+            TType const val = *curr_tail_ptr;
 
             if constexpr (!IS_TRIVIAL_VALUE)
             {
-                currItem.~TType();
+                curr_tail_ptr->~TType();
             }
 
-            _begin = (_begin + 1) % _capacity;
-            --_size;
+            _tail = (_tail + 1) % _capacity;
+            _full = 0;
 
             return val;
         }
@@ -166,12 +188,12 @@ public:
 
     bool empty() const
     {
-        return (_size == 0);
+        return (_head == _tail) && (_full == 0);
     };
 
     bool full() const
     {
-        return (_size == _capacity);
+        return (_full != 0);
     };
 
     usize capacity() const
@@ -181,17 +203,28 @@ public:
 
     usize size() const
     {
-        return _size;
+        if (!_full)
+        {
+            if (_head >= _tail)
+            {
+                return _head - _tail;
+            }
+            else
+            {
+                return (_capacity - (_head - _tail));
+            }
+        }
+
+        return _capacity;
     }
 
 private:
     UniquePtr<u8[], AllocatorViewDelete<u8[]>> _data;
-    usize _begin;
-    usize _capacity;
-    usize _size;
 
-    // head
-    // tail
+    usize _tail;
+    usize _head;
+    usize _capacity;
+    usize _full;
 };
 
 } // namespace sb
