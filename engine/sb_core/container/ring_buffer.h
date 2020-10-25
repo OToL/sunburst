@@ -2,7 +2,7 @@
 
 #include <sb_core/core.h>
 #include <sb_core/memory/allocator/allocator_view.h>
-#include <sb_core/unique_ptr.h>
+#include <sb_core/memory/global_heap.h>
 #include <sb_core/error.h>
 
 #include <sb_std/type_traits>
@@ -17,24 +17,29 @@ public:
     static constexpr bool IS_TRIVIAL_VALUE = sbstd::is_trivial_v<ValueType>;
 
     RingBuffer(usize capacity, AllocatorView const & alloc)
-        : _tail(0)
+        : _alloc(alloc)
+        , _tail(0)
         , _head(0)
         , _capacity(capacity)
         , _full(0)
     {
         sbAssert((0 != _capacity) && alloc.isValid());
 
-        _data = allocateUnique<u8[], AllocatorView>(alloc, capacity * sizeof(TType));
+        _data = (ValueType *)_alloc.allocate(capacity * sizeof(ValueType), alignOf<ValueType>());
+        sbAssert(nullptr != _data);
     }
 
     RingBuffer(usize capacity)
-        : _tail(0)
+        : _alloc(getGlobalHeapView())
+        , _tail(0)
         , _head(0)
         , _capacity(capacity)
         , _full(0)
     {
         sbAssert(0 != _capacity);
-        _data = allocateUnique<u8[], AllocatorView>(getGlobalHeapView(), capacity * sizeof(TType));
+
+        _data = (ValueType *)_alloc.allocate(capacity * sizeof(ValueType), alignOf<ValueType>());
+        sbAssert(nullptr != _data);
     }
 
     RingBuffer & operator=(RingBuffer const &) = delete;
@@ -48,18 +53,19 @@ public:
     {
         if constexpr (!IS_TRIVIAL_VALUE)
         {
-            // @todo: just a for loop
+            // @todo: can be simplified with a for loop instead of using pop
             while (!empty())
             {
                 pop();
             }
         }
+
+        _alloc.deallocate(_data);
     }
 
     void put_overflow(TType const & val)
     {
-        TType * data_ptr = reinterpret_cast<TType *>(_data.get());
-        TType * curr_head_ptr = data_ptr + _head;
+        TType * curr_head_ptr = _data + _head;
 
         if (full())
         {
@@ -95,8 +101,7 @@ public:
     template <class... TArgs>
     void emplace_put_overflow(TArgs &&... args)
     {
-        TType * data_ptr = reinterpret_cast<TType *>(_data.get());
-        TType * curr_head_ptr = data_ptr + _head;
+        TType * curr_head_ptr = _data + _head;
 
         if (full())
         {
@@ -123,8 +128,7 @@ public:
     {
         if (!full())
         {
-            TType * data_ptr = reinterpret_cast<TType *>(_data.get());
-            TType * curr_head_ptr = data_ptr + _head;
+            TType * curr_head_ptr = _data + _head;
 
             if constexpr (IS_TRIVIAL_VALUE)
             {
@@ -149,13 +153,12 @@ public:
     {
         if (!full())
         {
-            TType * data_ptr = reinterpret_cast<TType *>(_data.get());
-            TType * curr_head_ptr = data_ptr + _head;
+            TType * curr_head_ptr = _data + _head;
 
             new (curr_head_ptr) ValueType(sbstd::forward<TArgs>(args)...);
 
             _head = (_head + 1) % _capacity;
-            _tail = _head;
+            _full = (_head == _tail);
 
             return true;
         }
@@ -167,8 +170,7 @@ public:
     {
         if (!empty())
         {
-            TType * data_ptr = reinterpret_cast<TType *>(_data.get());
-            TType * curr_tail_ptr = data_ptr + _tail;
+            TType * curr_tail_ptr = _data + _tail;
 
             TType const val = *curr_tail_ptr;
 
@@ -211,7 +213,7 @@ public:
             }
             else
             {
-                return (_capacity - (_head - _tail));
+                return _capacity + (_head - _tail);
             }
         }
 
@@ -219,8 +221,8 @@ public:
     }
 
 private:
-    UniquePtr<u8[], AllocatorViewDelete<u8[]>> _data;
-
+    AllocatorView _alloc;
+    ValueType * _data;
     usize _tail;
     usize _head;
     usize _capacity;

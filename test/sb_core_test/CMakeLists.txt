@@ -23,7 +23,6 @@ add_executable(sb_core_test
     # null_allocator_test.cpp
     # pool_allocator_test.cpp
     # stl_allocator_test.cpp
-    # unique_ptr_test.cpp
 )
 
 target_link_libraries(sb_core_test

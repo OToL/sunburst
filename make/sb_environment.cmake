@@ -20,7 +20,7 @@ function(sb_setup_host_environment ROOT_DIR_PATH)
 
 endfunction()
 
-function(sb_setup_target_platform)
+function(sb_setup_destination_platform)
     
     if(((${CMAKE_SYSTEM_PROCESSOR} STREQUAL "i386") AND (CMAKE_SIZEOF_VOID_P EQUAL 8)) OR
         (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64") OR 
@@ -49,8 +49,8 @@ function(sb_setup_target_platform)
         message(FATAL_ERROR "Unknown target: ${CMAKE_SYSTEM_NAME}")
     endif()
 
-    set(SB_TARGET_FULL_ID ${SB_TARGET_PLATFORM_ID}_${SB_TARGET_CPU_ID} PARENT_SCOPE)
-    set(SB_EXTERN_LIB_DIR_PATH "${SB_SRC_EXTERN_LIB_DIR_PATH}/${SB_TARGET_FULL_ID}" PARENT_SCOPE)
-    set(SB_EXTERN_BIN_DIR_PATH "${SB_SRC_EXTERN_BIN_DIR_PATH}/${SB_TARGET_FULL_ID}" PARENT_SCOPE)
+    set(SB_TARGET_PLATFORM_FULL_ID ${SB_TARGET_PLATFORM_ID}_${SB_TARGET_CPU_ID} PARENT_SCOPE)
+    set(SB_EXTERN_LIB_DIR_PATH "${SB_SRC_EXTERN_LIB_DIR_PATH}/${SB_TARGET_PLATFORM_FULL_ID}" PARENT_SCOPE)
+    set(SB_EXTERN_BIN_DIR_PATH "${SB_SRC_EXTERN_BIN_DIR_PATH}/${SB_TARGET_PLATFORM_FULL_ID}" PARENT_SCOPE)
 
 endfunction()

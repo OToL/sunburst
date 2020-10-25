@@ -6,6 +6,8 @@
 #include <sb_std/type_traits>
 #include <sb_std/utility>
 
+#include "_impl/conversion.h"
+
 namespace sb {
 
 template <typename TDst, typename TSrc>
@@ -35,5 +37,3 @@ inline usize stringConvT(TSrc && src, sbstd::span<char> dest)
 }
 
 } // namespace sb
-
-#include "_impl/conversion.h"
