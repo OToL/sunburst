@@ -8,15 +8,15 @@ namespace sb {
 
 class GlobalHeap
 {
-    GlobalHeap() { }
-    ~GlobalHeap() { }
+    GlobalHeap() = default;
+    ~GlobalHeap() = default;
 
     friend GlobalHeap * getGlobalHeap();
 
 public:
-    void * allocate(usize const size);
+    MemoryArena allocate(usize const size);
 
-    void * allocate(usize const size, Alignment const alignment);
+    MemoryArena allocate(usize const size, Alignment const alignment);
 
     void deallocate(void * ptr);
 
@@ -24,7 +24,7 @@ public:
 
     constexpr usize getAlignment() const
     {
-        return ALIGN_DEFAULT;
+        return ALIGNMENT_DEFAULT;
     }
 
     usize getBlockSize(void * ptr) const;

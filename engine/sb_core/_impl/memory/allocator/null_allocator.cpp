@@ -3,14 +3,14 @@
 
 sb::NullAllocator::NullAllocator(InitParams const &) { }
 
-void * sb::NullAllocator::allocate(usize const)
+sb::MemoryArena sb::NullAllocator::allocate(usize const)
 {
-    return nullptr;
+    return {};
 }
 
-void * sb::NullAllocator::allocate(usize const, Alignment const)
+sb::MemoryArena sb::NullAllocator::allocate(usize const, Alignment const)
 {
-    return nullptr;
+    return {};
 }
 
 void sb::NullAllocator::deallocate([[maybe_unused]] void * ptr)

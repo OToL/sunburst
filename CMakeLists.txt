@@ -24,7 +24,7 @@ add_library(sb::cxx_properties_private ALIAS sb_cxx_properties_private)
 include(make/sb_environment.cmake)
 
 sb_setup_host_environment(${CMAKE_CURRENT_LIST_DIR})
-sb_setup_destination_platform()
+sb_setup_dest_environment()
 
 include(make/sb_toolchain.cmake)
 

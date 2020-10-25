@@ -1,11 +1,11 @@
 #include <sb_core/memory/global_heap.h>
 
-void * sb::GlobalHeap::allocate(usize const size)
+sb::MemoryArena sb::GlobalHeap::allocate(usize const size)
 {
     return m_parent.allocate(size);
 }
 
-void * sb::GlobalHeap::allocate(usize const size, Alignment const alignment)
+sb::MemoryArena sb::GlobalHeap::allocate(usize const size, Alignment const alignment)
 {
     return m_parent.allocate(size, alignment);
 }

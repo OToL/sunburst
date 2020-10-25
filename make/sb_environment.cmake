@@ -20,7 +20,7 @@ function(sb_setup_host_environment ROOT_DIR_PATH)
 
 endfunction()
 
-function(sb_setup_destination_platform)
+function(sb_setup_dest_environment)
     
     if(((${CMAKE_SYSTEM_PROCESSOR} STREQUAL "i386") AND (CMAKE_SIZEOF_VOID_P EQUAL 8)) OR
         (${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64") OR 

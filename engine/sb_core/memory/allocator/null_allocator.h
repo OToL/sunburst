@@ -19,9 +19,9 @@ public:
 
     NullAllocator(InitParams const &);
 
-    void * allocate(usize const) override;
+    MemoryArena allocate(usize const) override;
 
-    void * allocate(usize const, Alignment const) override;
+    MemoryArena allocate(usize const, Alignment const) override;
 
     void deallocate(void * ptr) override;
 
@@ -31,7 +31,7 @@ public:
 
     constexpr Alignment getAlignment()
     {
-        return ALIGN_DEFAULT;
+        return ALIGNMENT_DEFAULT;
     }
 };
 

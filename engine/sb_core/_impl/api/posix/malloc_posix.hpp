@@ -49,7 +49,7 @@ void * malloc(usize size, Alignment alignment)
 
 void * malloc(usize size)
 {
-    return ::sb::internal::malloc(size, ALIGN_DEFAULT);
+    return ::sb::internal::malloc(size, ALIGNMENT_DEFAULT);
 }
 
 void free(void * mem_ptr)

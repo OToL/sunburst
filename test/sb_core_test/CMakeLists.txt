@@ -18,8 +18,9 @@ add_executable(sb_core_test
     fix_array_test.cpp
     ring_buffer_Test.cpp
     fix_string_test.cpp
-    # alloc_test.cpp
+    memory_arena_allocator_test.cpp
     # incremental_allocator_test.cpp
+    # alloc_test.cpp
     # null_allocator_test.cpp
     # pool_allocator_test.cpp
     # stl_allocator_test.cpp

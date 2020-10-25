@@ -6,11 +6,11 @@ namespace sb {
 
 enum Alignment : usize
 {
-    ALIGN_4B = 4,
-    ALIGN_8B = 8,
-    ALIGN_16B = 16,
+    ALIGNMENT_4B = 4,
+    ALIGNMENT_8B = 8,
+    ALIGNMENT_16B = 16,
 
-    ALIGN_DEFAULT = ALIGN_8B
+    ALIGNMENT_DEFAULT = ALIGNMENT_8B
 };
 
 void zeroMemory(void * const memPtr, usize const byteCount);
@@ -28,7 +28,7 @@ void zeroStruct(T & obj)
 }
 
 template <typename T, usize COUNT>
-void zeroStructArray(T (&objPtr)[COUNT])
+void zeroStruct(T (&objPtr)[COUNT])
 {
     zeroMemory(objPtr, sizeof(T) * COUNT);
 }

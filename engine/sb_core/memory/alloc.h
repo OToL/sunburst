@@ -1,34 +1,31 @@
 #pragma once
 
-namespace sb {
+#include "memory_tag.h"
+
+#include <sb_std/new>
 
 // TODO: return arena
 #define sbMalloc(size, ...) sb::internal::malloc(size, ##__VA_ARGS__)
-
 #define sbMallocUsabeSize(ptr) sb::internal::mallocUsableSize(ptr)
-
 #define sbFree(ptr) sb::internal::free(ptr)
 
-#define sbNew(type, ...)                                                                                               \
-    sb::internal::MemoryOperatorHelperNew<type>                                                                        \
-    {                                                                                                                  \
-        __VA_ARGS__                                                                                                    \
-    }
+#define sbNew new
+#define sbDelete delete
 
-#define sbDelete(ptr, ...)                                                                                             \
-    sb::internal::MemoryOperatorHelperDelete<typename sbstd::remove_pointer<decltype(ptr)>::type>::Destroy(            \
-        ptr, ##__VA_ARGS__);
+void * operator new(sb::usize byte_count);
+void * operator new(sb::usize byte_count, sb::MemoryTag tag);
+void * operator new(sb::usize byte_count, sbstd::nothrow_t const & tag) noexcept;
+void * operator new(sb::usize byte_count, sbstd::align_val_t alignment);
+void * operator new[](sb::usize byte_count, sb::MemoryTag tag);
+void * operator new[](sb::usize byte_count, sbstd::nothrow_t const & tag) noexcept;
+void * operator new[](sb::usize byte_count, sbstd::align_val_t alignment);
 
-#define sbNewArray(type, ...)                                                                                          \
-    sb::internal::MemoryOperatorHelperNewArray<type>                                                                   \
-    {                                                                                                                  \
-        __VA_ARGS__                                                                                                    \
-    }
-
-#define sbDeleteArray(ptr, ...)                                                                                        \
-    sb::internal::MemoryOperatorHelperDeleteArray<typename sbstd::remove_pointer<decltype(ptr)>::type>::DestroyArray(  \
-        ptr, ##__VA_ARGS__)
-
-} // namespace sb
+void operator delete(void * ptr) noexcept;
+void operator delete(void * ptr, sb::MemoryTag tag) noexcept;
+void operator delete(void * ptr, sbstd::nothrow_t const & tag) noexcept;
+void operator delete(void *, sbstd::align_val_t alignment, sb::MemoryTag tag) noexcept;
+void operator delete[](void * ptr) noexcept;
+void operator delete[](void * ptr, sbstd::nothrow_t const & tag) noexcept;
+void operator delete[](void *, sbstd::align_val_t alignment) noexcept;
 
 #include <sb_core/_impl/memory/alloc.h>

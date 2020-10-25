@@ -3,6 +3,7 @@
 #include <sb_core/os.h>
 #include <sb_core/memory/allocator/allocator_view.h>
 #include <sb_core/memory/global_heap.h>
+#include <sb_core/memory/memory.h>
 
 #include <sb_std/type_traits>
 #include <sb_std/limits>
@@ -65,7 +66,7 @@ public:
 
     [[nodiscard]] pointer allocate(size_type nb)
     {
-        return (pointer)m_alloc.allocate(nb * sizeof(T), alignOf<T>());
+        return (pointer)m_alloc.allocate(nb * sizeof(T), alignOf<T>()).m_ptr;
     }
 
     void deallocate(pointer data, size_type /*nb*/)
@@ -238,13 +239,13 @@ public:
 
     [[nodiscard]] pointer allocate(size_type nb)
     {
-        if constexpr (GLOBAL_HEAP_ALIGNMENT <= alignof(T))
+        if constexpr (ALIGNMENT_DEFAULT <= alignof(T))
         {
-            return (pointer)getGlobalHeap()->allocate(nb * sizeof(T));
+            return (pointer)getGlobalHeap()->allocate(nb * sizeof(T)).m_ptr;
         }
         else
         {
-            return (pointer)getGlobalHeap()->allocate(nb * sizeof(T), alignOf<T>());
+            return (pointer)getGlobalHeap()->allocate(nb * sizeof(T), alignOf<T>()).m_ptr;
         }
     }
 

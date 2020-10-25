@@ -413,7 +413,7 @@ sb::b8 sb::VirtualFileSystem::initialize(InitDesc const & init)
 {
     if (sbExpect(nullptr == g_vfs, "Vritual File System is already initialized"))
     {
-        g_vfs = sbNew(VirtualFileSystemImpl)(init.layers);
+        g_vfs = sbNew VirtualFileSystemImpl(init.layers);
         return true;
     }
 
@@ -424,7 +424,7 @@ sb::b8 sb::VirtualFileSystem::terminate()
 {
     if (sbExpect(nullptr != g_vfs, "Vritual File System is not initialized"))
     {
-        sbDelete(g_vfs);
+        sbDelete g_vfs;
         g_vfs = nullptr;
 
         return true;

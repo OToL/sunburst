@@ -4,6 +4,7 @@
 
 namespace sb {
 
+// @todo: move member functions to global scope
 struct MemoryArena
 {
     b8 isInRange(void const * ptr, size_t size) const
@@ -18,7 +19,7 @@ struct MemoryArena
 
     b8 isEmpty() const
     {
-        return ((0 == m_size) || (nullptr == m_ptr));
+        return (0U == m_size);
     }
 
     void * m_ptr = nullptr;

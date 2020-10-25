@@ -2,6 +2,7 @@
 
 #include <sb_core/os.h>
 #include <sb_core/error.h>
+#include <sb_core/memory/memory.h>
 
 #include <sb_std/algorithm>
 
@@ -14,47 +15,47 @@ TestAllocator::~TestAllocator()
 
 usize TestAllocator::getAlignment() const
 {
-    return GLOBAL_HEAP_ALIGNMENT;
+    return ALIGNMENT_DEFAULT;
 }
 
-void * TestAllocator::allocate(size_t const size)
+sb::MemoryArena TestAllocator::allocate(size_t const size)
 {
-    void * const mem_ptr = sb::getGlobalHeap()->allocate(size);
+    MemoryArena mem_arena = sb::getGlobalHeap()->allocate(size);
 
-    if (nullptr != mem_ptr)
+    if (!mem_arena.isEmpty())
     {
         m_stats.m_allocated_byte += size;
         ++m_stats.m_alloc_count;
 
-        auto const alloc_desc = sbstd::find_if(begin(m_allocs), end(m_allocs), [mem_ptr](AllocDesc const & val) {
-            return (val.m_mem <= mem_ptr) &&
-                   (reinterpret_cast<uintptr_t>(mem_ptr) <= (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
+        auto const alloc_desc = sbstd::find_if(begin(m_allocs), end(m_allocs), [mem_arena](AllocDesc const & val) {
+            return (val.m_mem <= mem_arena.m_ptr) && (reinterpret_cast<uintptr_t>(mem_arena.m_ptr) <=
+                                                      (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
         });
         sbAssert(alloc_desc == end(m_allocs));
-        m_allocs.emplace_back(mem_ptr, size);
+        m_allocs.emplace_back(mem_arena.m_ptr, size);
     }
 
-    return mem_ptr;
+    return mem_arena;
 }
 
-void * TestAllocator::allocate(size_t const size, sb::Alignment alignment)
+sb::MemoryArena TestAllocator::allocate(size_t const size, sb::Alignment alignment)
 {
-    void * mem_ptr = getGlobalHeap()->allocate(size, alignment);
+    MemoryArena mem_arena = getGlobalHeap()->allocate(size, alignment);
 
-    if (nullptr != mem_ptr)
+    if (!mem_arena.isEmpty())
     {
         m_stats.m_allocated_byte += size;
         ++m_stats.m_alloc_count;
 
-        auto const alloc_desc = sbstd::find_if(begin(m_allocs), end(m_allocs), [mem_ptr](AllocDesc const & val) {
-            return (val.m_mem <= mem_ptr) &&
-                   (reinterpret_cast<uintptr_t>(mem_ptr) <= (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
+        auto const alloc_desc = sbstd::find_if(begin(m_allocs), end(m_allocs), [mem_arena](AllocDesc const & val) {
+            return (val.m_mem <= mem_arena.m_ptr) && (reinterpret_cast<uintptr_t>(mem_arena.m_ptr) <=
+                                                      (reinterpret_cast<uintptr_t>(val.m_mem) + val.m_size));
         });
         sbAssert(alloc_desc == end(m_allocs));
-        m_allocs.emplace_back(mem_ptr, size);
+        m_allocs.emplace_back(mem_arena.m_ptr, size);
     }
 
-    return mem_ptr;
+    return mem_arena;
 }
 
 void TestAllocator::deallocate(void * ptr)

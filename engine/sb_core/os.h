@@ -14,8 +14,6 @@
 
 namespace sb {
 
-inline constexpr usize GLOBAL_HEAP_ALIGNMENT = 8;
-
 char * getWorkingDirectory(sbstd::span<char> buffer);
 void outputDebugString(char const * msg);
 

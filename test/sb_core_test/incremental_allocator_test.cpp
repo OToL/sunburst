@@ -4,15 +4,25 @@
 #include <sb_core/memory/memory.h>
 #include <sb_core/bit.h>
 
-#include <gtest/gtest_common.h>
+#include <catch2/xcatch.hpp>
+#include <catch2/test_prolog.h>
 
 using namespace sb;
 
+TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
+{   
+
+}
+
+#include <catch2/test_epilog.h>
+
+#if 0
+
 using TestIncrementalAllocator = IncrementalAllocator<MemoryArenaProvider>;
-constexpr Alignment TEST_ALLOC_DEFAULT_ALIGN = ALIGN_8B;
+constexpr Alignment TEST_ALLOC_DEFAULT_ALIGN = ALIGNMENT_8B;
 
 TEST(INCREMENTAL_ALLOCATOR, Allocate)
-{
+{   
     usize const alloc_count = 4;
     usize const arena_size = alloc_count * TEST_ALLOC_DEFAULT_ALIGN;
 
@@ -36,7 +46,7 @@ TEST(INCREMENTAL_ALLOCATOR, Allocate)
 TEST(INCREMENTAL_ALLOCATOR, AlignedAllocate)
 {
     usize const alloc_count = 4;
-    Alignment const test_alignment = ALIGN_16B;
+    Alignment const test_alignment = ALIGNMENT_16B;
     usize const alloc_size = 8;
     usize const arena_size = alloc_count * test_alignment;
 
@@ -87,3 +97,5 @@ TEST(INCREMENTAL_ALLOCATOR, DeallocateAll)
         --test_count;
     }
 }
+
+#endif

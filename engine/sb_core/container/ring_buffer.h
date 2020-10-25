@@ -25,7 +25,7 @@ public:
     {
         sbAssert((0 != _capacity) && alloc.isValid());
 
-        _data = (ValueType *)_alloc.allocate(capacity * sizeof(ValueType), alignOf<ValueType>());
+        _data = (ValueType *)_alloc.allocate(capacity * sizeof(ValueType), alignOf<ValueType>()).m_ptr;
         sbAssert(nullptr != _data);
     }
 
@@ -38,7 +38,7 @@ public:
     {
         sbAssert(0 != _capacity);
 
-        _data = (ValueType *)_alloc.allocate(capacity * sizeof(ValueType), alignOf<ValueType>());
+        _data = (ValueType *)_alloc.allocate(capacity * sizeof(ValueType), alignOf<ValueType>()).m_ptr;
         sbAssert(nullptr != _data);
     }
 

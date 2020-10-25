@@ -5,14 +5,14 @@
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/alloc.h>
 
-void * sb::GlobalHeapAllocator::allocate(usize const size)
+sb::MemoryArena sb::GlobalHeapAllocator::allocate(usize const size)
 {
-    return sbMalloc(size);
+    return {sbMalloc(size), size};
 }
 
-void * sb::GlobalHeapAllocator::allocate(usize const size, Alignment const alignment)
+sb::MemoryArena sb::GlobalHeapAllocator::allocate(usize const size, Alignment const alignment)
 {
-    return sbMalloc(size, alignment);
+    return {sbMalloc(size, alignment), size};
 }
 
 void sb::GlobalHeapAllocator::deallocate(void * ptr)

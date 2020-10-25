@@ -17,9 +17,9 @@ public:
 
     explicit GlobalHeapAllocator(InitParams const &) { }
 
-    void * allocate(usize const size) override;
+    MemoryArena allocate(usize const size) override;
 
-    void * allocate(usize const size, Alignment const alignment) override;
+    MemoryArena allocate(usize const size, Alignment const alignment) override;
 
     void deallocate(void * ptr) override;
 
@@ -27,7 +27,7 @@ public:
 
     usize getAlignment() const
     {
-        return ALIGN_DEFAULT;
+        return ALIGNMENT_DEFAULT;
     }
 
     usize getBlockSize(void * ptr) const;

@@ -91,7 +91,7 @@ public:
         m_mem_provider.deallocate(m_arena);
     }
 
-    void * allocate(usize const size) override
+    MemoryArena allocate(usize const size) override
     {
         void * block_ptr = nullptr;
 
@@ -103,10 +103,10 @@ public:
             m_free_list = free_node->m_next;
         }
 
-        return block_ptr;
+        return {block_ptr, size};
     }
 
-    void * allocate(usize const size, [[maybe_unused]] Alignment const alignment) override
+    MemoryArena allocate(usize const size, [[maybe_unused]] Alignment const alignment) override
     {
         sbAssert(alignment <= BLOCK_ALIGNMENT);
 
@@ -143,7 +143,7 @@ public:
 
     void * allocate()
     {
-        return allocate(ACTUAL_BLOCK_SIZE);
+        return allocate(ACTUAL_BLOCK_SIZE).m_ptr;
     }
 
     void deallocateAll()

@@ -831,11 +831,11 @@ HTML_FOOTER            =
 
 HTML_STYLESHEET        = 
 
-# If the HTML_ALIGN_MEMBERS tag is set to YES, the members of classes, 
+# If the HTML_ALIGNMENT_MEMBERS tag is set to YES, the members of classes, 
 # files or namespaces will be aligned in HTML using tables. If set to 
 # NO a bullet list will be used.
 
-HTML_ALIGN_MEMBERS     = YES
+HTML_ALIGNMENT_MEMBERS     = YES
 
 # If the HTML_DYNAMIC_SECTIONS tag is set to YES then the generated HTML 
 # documentation will contain sections that can be hidden and shown after the 

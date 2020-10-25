@@ -2,117 +2,58 @@
 
 #include <sb_core/core.h>
 #include <sb_core/memory/memory.h>
-#include <sb_core/memory/memory_arena.h>
-#include <sb_core/bit.h>
-#include <sb_core/error.h>
-#include "allocator.h"
+#include <sb_core/_impl/memory/allocator/incremental_allocator_base.h>
 
 namespace sb {
 
 template <typename TMemProvider>
-class IncrementalAllocator final : public IAllocator
+class IncrementalAllocator final : public IncrementalAllocatorBase
 {
-    sbBaseClass(IAllocator);
+    sbBaseClass(IncrementalAllocatorBase);
 
 public:
-    struct InitParams
-    {
-        usize m_size;
-        Alignment m_alignment = ALIGN_DEFAULT;
-    };
+    using MemProvider = TMemProvider;
 
     IncrementalAllocator() = default;
 
-    IncrementalAllocator(InitParams const & init, TMemProvider const & mem_provider)
-        : m_mem_provider(mem_provider)
-        , m_alignment(init.m_alignment)
-        , m_arena(m_mem_provider.allocate(init.m_size))
-        , m_top(reinterpret_cast<u8 *>(m_arena.m_ptr))
+    IncrementalAllocator(MemProvider const & mem_provider, usize capacity, Alignment default_align = ALIGNMENT_DEFAULT)
+        : BaseClass()
+        , _mem_provider(mem_provider)
     {
+        BaseClass::init(_mem_provider.allocate(capacity, default_align));
     }
 
-    IncrementalAllocator(InitParams const & init)
-        : m_mem_provider()
-        , m_alignment(init.m_alignment)
-        , m_arena(m_mem_provider.allocate(init.m_size))
-        , m_top(reinterpret_cast<u8 *>(m_arena.m_ptr))
+    IncrementalAllocator(usize capacity, Alignment default_align = ALIGNMENT_DEFAULT)
+        : BaseClass()
+        , _mem_provider()
     {
+        BaseClass::init(_mem_provider.allocate(capacity, default_align));
     }
 
     IncrementalAllocator & operator=(IncrementalAllocator const &) = delete;
+    IncrementalAllocator & operator=(IncrementalAllocator const &&) = delete;
     IncrementalAllocator(IncrementalAllocator const &) = delete;
+    IncrementalAllocator(IncrementalAllocator &&) = delete;
 
     ~IncrementalAllocator() override
     {
-        m_mem_provider.deallocate(m_arena);
+        _mem_provider.deallocate(_arena.m_ptr);
     }
 
-    void * allocate(usize const size) override
-    {
-        void * mem_ptr = nullptr;
+    using BaseClass::allocate;
+    using BaseClass::deallocate;
+    using BaseClass::owns;
 
-        if (nullptr != m_top)
-        {
-            u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(m_top), m_alignment));
-
-            if (m_arena.isInRange(new_top, size))
-            {
-                mem_ptr = new_top;
-                m_top = new_top + size;
-            }
-        }
-
-        return mem_ptr;
-    }
-
-    void * allocate(usize const size, Alignment const alignment) override
-    {
-        void * mem_ptr = nullptr;
-
-        if (nullptr != m_top)
-        {
-            u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(m_top), alignment));
-
-            if (m_arena.isInRange(new_top, size))
-            {
-                mem_ptr = new_top;
-                m_top = new_top + size;
-            }
-        }
-
-        return mem_ptr;
-    }
-
-    void deallocate(void * ptr) override
-    {
-        sbWarn(m_arena.isInRange(ptr));
-    }
-
-    void deallocateAll()
-    {
-        m_top = static_cast<u8 *>(m_arena.m_ptr);
-    }
-
-    b8 owns(void const * ptr) const override
-    {
-        return m_arena.isInRange(ptr);
-    }
+    using BaseClass::deallocateAll;
+    using BaseClass::getAlignment;
 
     TMemProvider const & getProvider() const
     {
-        return m_mem_provider;
-    }
-
-    Alignment getAlignment() const
-    {
-        return m_alignment;
+        return _mem_provider;
     }
 
 private:
-    TMemProvider m_mem_provider;
-    Alignment m_alignment;
-    MemoryArena m_arena;
-    u8 * m_top;
+    MemProvider _mem_provider;
 };
 
 } // namespace sb

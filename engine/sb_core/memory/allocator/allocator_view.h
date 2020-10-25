@@ -2,6 +2,7 @@
 
 #include <sb_core/core.h>
 #include <sb_core/memory/memory.h>
+#include <sb_core/memory/memory_arena.h>
 #include <sb_core/_impl/memory/allocator/allocator_view.h>
 
 #include <sb_std/type_traits>
@@ -68,12 +69,12 @@ public:
     AllocatorView & operator=(AllocatorView const &) = default;
     AllocatorView & operator=(AllocatorView &&) = default;
 
-    void * allocate(usize const size)
+    MemoryArena allocate(usize const size)
     {
         return m_vtable->m_allocate(m_alloc, size);
     }
 
-    void * allocate(usize const size, Alignment const alignment)
+    MemoryArena allocate(usize const size, Alignment const alignment)
     {
         return m_vtable->m_aligned_allocate(m_alloc, size, alignment);
     }

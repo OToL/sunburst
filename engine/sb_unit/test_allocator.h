@@ -18,9 +18,9 @@ public:
 
     usize getAlignment() const;
 
-    void * allocate(size_t const size);
+    MemoryArena allocate(size_t const size);
 
-    void * allocate(size_t const size, sb::Alignment alignment);
+    MemoryArena allocate(size_t const size, sb::Alignment alignment);
 
     void deallocate(void * ptr);
 

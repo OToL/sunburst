@@ -25,7 +25,7 @@ using MEMORY_OPERATOR = MemoryOperatorFixture;
 
 TEST_F(MEMORY_OPERATOR, NEW_DELETE_DEFAULT)
 {
-    gtestx::ObjectTracker * test_obj = sbNew(gtestx::ObjectTracker)();
+    gtestx::ObjectTracker * test_obj = sbNew gtestx::ObjectTracker();
 
     EXPECT_NE(test_obj, nullptr);
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 1U);

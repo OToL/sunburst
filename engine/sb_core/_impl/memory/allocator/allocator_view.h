@@ -6,8 +6,8 @@ namespace sb::internal {
 
 struct AllocatorVTable
 {
-    using AllocateCB = void * (*)(void *, usize const);
-    using AllocateAlignedCB = void * (*)(void *, usize const, Alignment const);
+    using AllocateCB = MemoryArena (*)(void *, usize const);
+    using AllocateAlignedCB = MemoryArena (*)(void *, usize const, Alignment const);
     using DeallocateCB = void (*)(void *, void *);
     using OwnsCB = b8 (*)(void *, void const *);
     using AlignmentCB = usize (*)(void *);
