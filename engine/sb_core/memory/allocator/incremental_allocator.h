@@ -12,15 +12,13 @@ class IncrementalAllocator final : public IncrementalAllocatorBase
     sbBaseClass(IncrementalAllocatorBase);
 
 public:
-    using MemProvider = TMemProvider;
-
     IncrementalAllocator() = default;
 
-    IncrementalAllocator(MemProvider const & mem_provider, usize capacity, Alignment default_align = ALIGNMENT_DEFAULT)
+    IncrementalAllocator(TMemProvider const & mem_provider, usize capacity, Alignment default_align = ALIGNMENT_DEFAULT)
         : BaseClass()
         , _mem_provider(mem_provider)
     {
-        BaseClass::init(_mem_provider.allocate(capacity, default_align));
+        BaseClass::init(_mem_provider.allocate(capacity, default_align), default_align);
     }
 
     IncrementalAllocator(usize capacity, Alignment default_align = ALIGNMENT_DEFAULT)
@@ -37,7 +35,10 @@ public:
 
     ~IncrementalAllocator() override
     {
-        _mem_provider.deallocate(_arena.m_ptr);
+        if (!_arena.isEmpty())
+        {
+            _mem_provider.deallocate(_arena.m_ptr);
+        }
     }
 
     using BaseClass::allocate;
@@ -53,7 +54,7 @@ public:
     }
 
 private:
-    MemProvider _mem_provider;
+    TMemProvider _mem_provider;
 };
 
 } // namespace sb

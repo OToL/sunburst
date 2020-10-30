@@ -10,9 +10,6 @@ class IncrementalAllocatorBase : public IAllocator
 {
     sbBaseClass(IAllocator);
 
-protected:
-    void init(MemoryArena arena, Alignment default_align);
-
 public:
     IncrementalAllocatorBase() = default;
     ~IncrementalAllocatorBase() = default;
@@ -35,7 +32,9 @@ public:
 
     Alignment getAlignment() const;
 
-private:
+protected:
+    void init(MemoryArena arena, Alignment default_align);
+
     MemoryArena _arena;
     u8 * _top;
     Alignment _default_alignment;

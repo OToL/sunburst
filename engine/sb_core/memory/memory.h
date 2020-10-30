@@ -6,9 +6,12 @@ namespace sb {
 
 enum Alignment : usize
 {
+    ALIGNMENT_1B = 1,
+    ALIGNMENT_2B = 2,
     ALIGNMENT_4B = 4,
     ALIGNMENT_8B = 8,
     ALIGNMENT_16B = 16,
+    ALIGNMENT_128B = 128,
 
     ALIGNMENT_DEFAULT = ALIGNMENT_8B
 };

@@ -1,107 +1,163 @@
 #include <sb_core/memory/allocator/pool_allocator.h>
-#include <sb_core/memory/provider/memory_arena_provider.h>
-#include <sb_core/memory/global_heap.h>
+#include <sb_core/memory/allocator/memory_arena_allocator.h>
 #include <sb_core/container/fix_array.h>
-
-#include <gtest/gtest_common.h>
-#include <gtest/allocator_stats.h>
 
 #include <sb_std/algorithm>
 
-namespace sb;
+#include <catch2/xcatch.hpp>
+#include <catch2/test_prolog.h>
+
+using namespace sb;
+
+constexpr usize TEST_OBJECT_COUNT = 10;
+constexpr Alignment TEST_OBJECT_ALIGNMENT = ALIGNMENT_DEFAULT;
 
 struct TestPoolObj
 {
-    u32 m_data;
+    alignas(TEST_OBJECT_ALIGNMENT) u64 m_data;
 };
+static_assert(sizeof(TestPoolObj) == TEST_OBJECT_ALIGNMENT);
 
-constexpr usize OBJECT_COUNT = 10;
-constexpr usize POOL_SIZE = OBJECT_COUNT * sizeof(TestPoolObj);
+constexpr usize TEST_POOL_CAPACITY = TEST_OBJECT_COUNT * sizeof(TestPoolObj);
 
-using PoolTestAllocator = PoolAllocator<sizeof(TestPoolObj), alignOf<TestPoolObj>(), MemoryArenaProvider>;
+using TestObjectArray = TestPoolObj [TEST_OBJECT_COUNT];
+using TestPoolAllocator = PoolAllocator<MemoryArenaAllocator>;
 
-TEST(POOL_ALLOCATOR, AllocateAll)
+TEST_CASE("Pool Allocator empty", "[pool_allocator]")
 {
-    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignOf<TestPoolObj>());
-    MemoryArena const pool_arena = {pool_base, POOL_SIZE};
-
+    SECTION("Allocate")
     {
-        PoolTestAllocator alloc({OBJECT_COUNT}, {pool_arena});
-
-        usize alloc_obj_cnt = 0;
-        void * obj_ptr = alloc.allocate(sizeof(TestPoolObj));
-
-        while (nullptr != obj_ptr)
-        {
-            ++alloc_obj_cnt;
-            obj_ptr = alloc.allocate(sizeof(TestPoolObj));
-            EXPECT_TRUE((alloc_obj_cnt == OBJECT_COUNT) || ((nullptr != obj_ptr) && alloc.owns(obj_ptr)));
-        }
-
-        EXPECT_EQ(alloc_obj_cnt, OBJECT_COUNT);
+        TestPoolAllocator test_alloc;
+        REQUIRE(test_alloc.allocate().isEmpty());
+        REQUIRE(test_alloc.allocate(sizeof(TestPoolObj)).isEmpty());
     }
 
-    getGlobalHeap()->deallocate(pool_base);
+    SECTION("Aligned allocate")
+    {
+        TestPoolAllocator test_alloc;
+        REQUIRE(test_alloc.allocate(sizeof(TestPoolObj), TEST_OBJECT_ALIGNMENT).isEmpty());
+    }
 }
 
-TEST(POOL_ALLOCATOR, AlignAllocateAll)
+TEST_CASE("Pool Allocator edge cases", "[pool_allocator]")
 {
-    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignOf<TestPoolObj>());
-    MemoryArena const pool_arena = {pool_base, POOL_SIZE};
-
+    SECTION("Allocate bigger object")
     {
-        PoolTestAllocator alloc({OBJECT_COUNT}, {pool_arena});
+        TestObjectArray testObjectArray;
+        TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
 
-        usize alloc_obj_cnt = 0;
-        void * obj_ptr = alloc.allocate(sizeof(TestPoolObj));
-
-        while (nullptr != obj_ptr)
-        {
-            ++alloc_obj_cnt;
-            obj_ptr = alloc.allocate(sizeof(TestPoolObj), alignOf<TestPoolObj>());
-            EXPECT_TRUE((alloc_obj_cnt == OBJECT_COUNT) || ((nullptr != obj_ptr) && alloc.owns(obj_ptr)));
-        }
-
-        EXPECT_EQ(alloc_obj_cnt, OBJECT_COUNT);
+        REQUIRE(test_alloc.allocate(sizeof(TestPoolObj)+ 1).isEmpty());
+        REQUIRE(test_alloc.allocate(sizeof(TestPoolObj)+ 1, TEST_OBJECT_ALIGNMENT).isEmpty());
     }
 
-    getGlobalHeap()->deallocate(pool_base);
-}
-
-TEST(POOL_ALLOCATOR, DeallocateAll)
-{
-    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignOf<TestPoolObj>());
-    MemoryArena const pool_arena = {pool_base, POOL_SIZE};
-
-    usize test_cnt = 1;
-
-    PoolTestAllocator alloc({OBJECT_COUNT}, {pool_arena});
-
-    while (OBJECT_COUNT > test_cnt)
+    SECTION("Allocate smaller object")
     {
-        usize alloc_obj_cnt = 0;
-        void * obj_ptr = alloc.allocate(sizeof(TestPoolObj));
+        TestObjectArray testObjectArray;
+        TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
 
-        while (alloc_obj_cnt != test_cnt)
-        {
-            ++alloc_obj_cnt;
-            obj_ptr = alloc.allocate(sizeof(TestPoolObj));
-            EXPECT_TRUE((alloc_obj_cnt == OBJECT_COUNT) || ((nullptr != obj_ptr) && alloc.owns(obj_ptr)));
-        }
-
-        alloc.deallocateAll();
-
-        ++test_cnt;
+        REQUIRE(test_alloc.allocate(sizeof(TestPoolObj) / 2).m_size == sizeof(TestPoolObj));
     }
 
-    getGlobalHeap()->deallocate(pool_base);
+    SECTION("Allocate larger alignment")
+    {
+        TestObjectArray testObjectArray;
+        TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
+
+        REQUIRE(ALIGNMENT_128B > TEST_OBJECT_ALIGNMENT);
+        REQUIRE(test_alloc.allocate(sizeof(TestPoolObj), ALIGNMENT_128B).isEmpty());
+    }
 }
 
-TEST(POOL_ALLOCATOR, AllocateDeallocate)
+TEST_CASE("Pool Allocator consume all", "[pool_allocator]")
 {
-    void * const pool_base = getGlobalHeap()->allocate(POOL_SIZE, alignOf<TestPoolObj>());
-    MemoryArena const pool_arena = {pool_base, POOL_SIZE};
-    PoolTestAllocator alloc({OBJECT_COUNT}, {pool_arena});
+    SECTION("Allocate all")
+    {
+        TestObjectArray testObjectArray;
+        TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
+
+        usize alloc_obj_cnt = 0;
+        MemoryArena mem_arena;
+
+        do 
+        {
+            mem_arena = test_alloc.allocate(sizeof(TestPoolObj));
+
+            if (!mem_arena.isEmpty())
+            {
+                REQUIRE(mem_arena.m_size == sizeof(TestPoolObj));
+                REQUIRE(test_alloc.owns(mem_arena.m_ptr));
+                REQUIRE(mem_arena.m_ptr == &testObjectArray[alloc_obj_cnt]);
+                ++alloc_obj_cnt;
+            }
+        }
+        while (!mem_arena.isEmpty());
+
+        REQUIRE(alloc_obj_cnt == TEST_OBJECT_COUNT);
+    }
+
+    SECTION("Aligned allocate all")
+    {
+        TestObjectArray testObjectArray;
+        TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
+
+        usize alloc_obj_cnt = 0;
+        MemoryArena mem_arena;
+
+        do 
+        {
+            mem_arena = test_alloc.allocate(sizeof(TestPoolObj), TEST_OBJECT_ALIGNMENT);
+
+            if (!mem_arena.isEmpty())
+            {
+                REQUIRE(mem_arena.m_size == sizeof(TestPoolObj));
+                REQUIRE(test_alloc.owns(mem_arena.m_ptr));
+                REQUIRE(mem_arena.m_ptr == &testObjectArray[alloc_obj_cnt]);
+                ++alloc_obj_cnt;
+            }
+        }
+        while (!mem_arena.isEmpty());
+
+        REQUIRE(alloc_obj_cnt == TEST_OBJECT_COUNT);
+    }
+}
+
+TEST_CASE("Pool Allocator deallocate all", "[pool_allocator]")
+{
+    TestObjectArray testObjectArray;
+    TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
+
+    usize test_iter_count = 2;
+
+    while (0 != test_iter_count)
+    {
+        usize alloc_obj_cnt = 0;
+        MemoryArena mem_arena;
+
+        do 
+        {
+            mem_arena = test_alloc.allocate(sizeof(TestPoolObj));
+
+            if (!mem_arena.isEmpty())
+            {
+                REQUIRE(mem_arena.m_size == sizeof(TestPoolObj));
+                REQUIRE(test_alloc.owns(mem_arena.m_ptr));
+                REQUIRE(mem_arena.m_ptr == &testObjectArray[alloc_obj_cnt]);
+                ++alloc_obj_cnt;
+            }
+        }
+        while (!mem_arena.isEmpty());
+
+        REQUIRE(alloc_obj_cnt == TEST_OBJECT_COUNT);
+        test_alloc.deallocateAll();
+
+        --test_iter_count;
+    }
+}
+
+TEST_CASE("Pool Allocator deallocate", "[pool_allocator]")
+{
+    TestObjectArray testObjectArray;
+    TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
 
     struct TestOp
     {
@@ -109,22 +165,21 @@ TEST(POOL_ALLOCATOR, AllocateDeallocate)
         usize m_dealloc_cnt;
     };
 
-    TestOp ops[] = {{5, 3}, {6, 1}, {2, 5}, {3, 4}};
-    FArray<void *, OBJECT_COUNT> alloc_objs;
+    TestOp ops[] = {{5U, 3U}, {6U, 1U}, {2U, 5U}, {3U, 4U}};
+    FArray<void *, TEST_OBJECT_COUNT> alloc_objs;
 
     for (auto const & op : ops)
     {
         usize alloc_cnt = op.m_alloc_cnt;
-
         while (alloc_cnt != 0)
         {
-            void * const obj_ptr = alloc.allocate(sizeof(TestPoolObj));
+            auto const mem_arena = test_alloc.allocate(sizeof(TestPoolObj));
 
-            EXPECT_NE(nullptr, obj_ptr);
-            EXPECT_TRUE(alloc.owns(obj_ptr));
-            EXPECT_EQ(end(alloc_objs), sbstd::find(begin(alloc_objs), end(alloc_objs), obj_ptr));
+            REQUIRE(!mem_arena.isEmpty());
+            REQUIRE(test_alloc.owns(mem_arena.m_ptr));
+            REQUIRE(end(alloc_objs) == sbstd::find(begin(alloc_objs), end(alloc_objs), mem_arena.m_ptr));
 
-            alloc_objs.push_back(obj_ptr);
+            alloc_objs.push_back(mem_arena.m_ptr);
 
             --alloc_cnt;
         }
@@ -135,14 +190,14 @@ TEST(POOL_ALLOCATOR, AllocateDeallocate)
             auto obj_ptr = alloc_objs.back();
 
             auto obj_iter = sbstd::find(begin(alloc_objs), end(alloc_objs), obj_ptr);
-            EXPECT_NE(end(alloc_objs), obj_ptr);
+            REQUIRE(end(alloc_objs) != obj_ptr);
             alloc_objs.erase(obj_iter);
 
-            alloc.deallocate(obj_ptr);
+            test_alloc.deallocate(obj_ptr);
 
             --dealloc_cnt;
         }
     }
-
-    getGlobalHeap()->deallocate(pool_base);
 }
+
+#include <catch2/test_epilog.h>

@@ -10,140 +10,134 @@
 
 namespace sb {
 
-template <usize BLOCK_SIZE, Alignment BLOCK_ALIGNMENT, typename TMemProvider>
-class PoolAllocator final : public IAllocator
+// todo(ebeau): make it final again
+template <typename TMemProvider>
+class PoolAllocator : public IAllocator
 {
     sbBaseClass(IAllocator);
 
-    static constexpr usize ACTUAL_BLOCK_SIZE = alignUp(BLOCK_SIZE, BLOCK_ALIGNMENT);
     using NodeIdx = s32;
-    static constexpr NodeIdx INVALID_NODE = -1;
-
-    struct alignas(BLOCK_ALIGNMENT) Node
-    {
-        union
-        {
-            NodeIdx m_next;
-            u8 m_padding[ACTUAL_BLOCK_SIZE];
-        };
-    };
-
-    static_assert(ACTUAL_BLOCK_SIZE >= sizeof(NodeIdx));
-    static_assert(isPowerOf2(BLOCK_ALIGNMENT));
+    static constexpr NodeIdx INVALID_NODE_IDX = -1;
 
     void initFreeList()
     {
-        s32 const block_cnt = numericConv<NodeIdx>(m_arena.m_size / ACTUAL_BLOCK_SIZE);
-        sbAssert(0 != block_cnt);
+        s32 const block_cnt = numericConv<NodeIdx>(_arena.m_size / _actual_block_size);
 
-        Node * node_iter = static_cast<Node *>(m_arena.m_ptr);
+        u8 * node_iter = static_cast<u8 *>(_arena.m_ptr);
 
         for (NodeIdx idx = 0; (block_cnt - 1) != idx; ++idx)
         {
-            node_iter->m_next = idx + 1;
-            ++node_iter;
+            *reinterpret_cast<NodeIdx *>(node_iter) = idx + 1;
+            node_iter += _actual_block_size;
         }
 
-        node_iter->m_next = INVALID_NODE;
-        m_free_list = 0;
+        *reinterpret_cast<NodeIdx *>(node_iter) = INVALID_NODE_IDX;
+        _free_list_head = 0;
     }
 
 public:
-    struct InitParams
-    {
-        usize m_block_count;
-    };
-
     PoolAllocator()
-        : m_mem_provider()
-        , m_arena()
-        , m_free_list(INVALID_NODE)
+        : _default_alignment(ALIGNMENT_DEFAULT)
+        , _actual_block_size(0U)
+        , _mem_provider()
+        , _arena()
+        , _free_list_head(INVALID_NODE_IDX)
     {
     }
 
-    PoolAllocator(InitParams const & init)
-        : m_mem_provider()
-        , m_arena(m_mem_provider.allocate(init.m_block_count * BLOCK_SIZE, BLOCK_ALIGNMENT))
-        , m_free_list(0)
+    PoolAllocator(usize block_size, usize block_count, Alignment default_align = ALIGNMENT_DEFAULT)
+        : _default_alignment(default_align)
+        , _mem_provider()
+        , _free_list_head(INVALID_NODE_IDX)
     {
-        sbAssert(!m_arena.isEmpty());
-        sbAssert(isAlignedTo(m_arena.m_ptr, BLOCK_ALIGNMENT));
+        _actual_block_size = alignUp(block_size, default_align);
+        sbAssert(sizeof(NodeIdx) <= _actual_block_size);
+
+        _arena = _mem_provider.allocate(block_count * _actual_block_size, default_align);
+        sbAssert(!_arena.isEmpty());
 
         initFreeList();
     }
 
-    PoolAllocator(InitParams const & init, TMemProvider const & mem_provider)
-        : m_mem_provider(mem_provider)
-        , m_arena(m_mem_provider.allocate(init.m_block_count * BLOCK_SIZE, BLOCK_ALIGNMENT))
-        , m_free_list(0)
+    PoolAllocator(TMemProvider const & mem_provider, usize block_size, usize block_count,
+                  Alignment default_align = ALIGNMENT_DEFAULT)
+        : _default_alignment(default_align)
+        , _mem_provider(mem_provider)
+        , _free_list_head(INVALID_NODE_IDX)
     {
-        sbAssert(!m_arena.isEmpty());
-        sbAssert(isAlignedTo(m_arena.m_ptr, BLOCK_ALIGNMENT));
+        _actual_block_size = alignUp(block_size, default_align);
+        sbAssert(sizeof(NodeIdx) <= _actual_block_size);
+
+        _arena = _mem_provider.allocate(block_count * _actual_block_size, default_align);
+        sbAssert(!_arena.isEmpty());
 
         initFreeList();
     }
 
     PoolAllocator & operator=(PoolAllocator const &) = delete;
+    PoolAllocator & operator=(PoolAllocator &&) = delete;
     PoolAllocator(PoolAllocator const &) = delete;
+    PoolAllocator(PoolAllocator &&) = delete;
 
     ~PoolAllocator() override
     {
-        m_mem_provider.deallocate(m_arena);
+        if (!_arena.isEmpty())
+        {
+            _mem_provider.deallocate(_arena.m_ptr);
+        }
     }
 
     MemoryArena allocate(usize const size) override
     {
-        void * block_ptr = nullptr;
-
-        if ((INVALID_NODE != m_free_list) && sbExpect(size <= BLOCK_SIZE))
+        if ((INVALID_NODE_IDX != _free_list_head) && (size <= _actual_block_size))
         {
-            Node * const free_node = static_cast<Node *>(m_arena.m_ptr) + m_free_list;
-            block_ptr = free_node;
+            u8 * const free_node = static_cast<u8 *>(_arena.m_ptr) + (_free_list_head * _actual_block_size);
+            void * block_ptr = free_node;
 
-            m_free_list = free_node->m_next;
+            _free_list_head = *reinterpret_cast<NodeIdx *>(free_node);
+
+            return {block_ptr, _actual_block_size};
         }
 
-        return {block_ptr, size};
+        return {};
     }
 
     MemoryArena allocate(usize const size, [[maybe_unused]] Alignment const alignment) override
     {
-        sbAssert(alignment <= BLOCK_ALIGNMENT);
+        if (alignment <= _default_alignment)
+        {
+            return allocate(size);
+        }
 
-        return allocate(size);
+        return {};
     }
 
     void deallocate(void * ptr) override
     {
-        sbAssert(0U ==
-                 (static_cast<usize>(static_cast<u8 *>(ptr) - static_cast<u8 *>(m_arena.m_ptr)) % ACTUAL_BLOCK_SIZE));
-
-        if (sbExpect(m_arena.isInRange(ptr)))
+        if (sbExpect(_arena.isInRange(ptr)))
         {
-            Node * const dealloc_node = static_cast<Node *>(ptr);
-            NodeIdx const dealloc_node_idx = numericConv<NodeIdx>(dealloc_node - static_cast<Node *>(m_arena.m_ptr));
+            auto const ptr_offset = static_cast<u8 *>(ptr) - static_cast<u8 *>(_arena.m_ptr);
+            sbAssert(0U == (ptr_offset % _actual_block_size));
 
-            if (INVALID_NODE == m_free_list)
+            NodeIdx * const dealloc_node = static_cast<NodeIdx *>(ptr);
+            NodeIdx const dealloc_node_idx = numericConv<NodeIdx>(ptr_offset / _actual_block_size);
+
+            if (INVALID_NODE_IDX == _free_list_head)
             {
-                dealloc_node->m_next = INVALID_NODE;
+                *dealloc_node = INVALID_NODE_IDX;
             }
             else
             {
-                dealloc_node->m_next = m_free_list;
+                *dealloc_node = _free_list_head;
             }
 
-            m_free_list = dealloc_node_idx;
+            _free_list_head = dealloc_node_idx;
         }
     }
 
     b8 owns(void const * ptr) const override
     {
-        return m_arena.isInRange(ptr);
-    }
-
-    void * allocate()
-    {
-        return allocate(ACTUAL_BLOCK_SIZE).m_ptr;
+        return _arena.isInRange(ptr);
     }
 
     void deallocateAll()
@@ -151,24 +145,27 @@ public:
         initFreeList();
     }
 
-    constexpr Alignment getAlignment() const
+    MemoryArena allocate()
     {
-        return BLOCK_ALIGNMENT;
+        return allocate(_actual_block_size);
+    }
+
+    Alignment getAlignment() const
+    {
+        return _default_alignment;
     }
 
     MemoryArena getArena() const
     {
-        return m_arena;
+        return _arena;
     }
 
 private:
-    TMemProvider m_mem_provider;
-    MemoryArena m_arena;
-    NodeIdx m_free_list;
+    Alignment _default_alignment;
+    usize _actual_block_size;
+    TMemProvider _mem_provider;
+    MemoryArena _arena;
+    NodeIdx _free_list_head;
 };
-
-// TODO: ctor with number of objects instead of size
-template <typename TObject, typename TMemoryProvider>
-using ObjectPoolAllocator = PoolAllocator<sizeof(TObject), alignOf<TObject>(), TMemoryProvider>;
 
 } // namespace sb

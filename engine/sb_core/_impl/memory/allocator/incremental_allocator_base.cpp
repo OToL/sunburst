@@ -11,17 +11,19 @@ void sb::IncrementalAllocatorBase::init(MemoryArena arena, Alignment default_ali
 
 sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size)
 {
-    if (nullptr != _top)
+    if (_arena.isEmpty() || (size == 0U))
     {
-        u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(_top), _default_alignment));
+        return {};
+    }
 
-        if (_arena.isInRange(new_top, size))
-        {
-            void * mem_ptr = new_top;
-            _top = new_top + size;
+    u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(_top), _default_alignment));
 
-            return {mem_ptr, size};
-        }
+    if (_arena.isInRange(new_top, size))
+    {
+        void * mem_ptr = new_top;
+        _top = new_top + size;
+
+        return {mem_ptr, size};
     }
 
     return {};
@@ -29,17 +31,19 @@ sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size)
 
 sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size, Alignment const alignment)
 {
-    if (nullptr != _top)
+    if (_arena.isEmpty() || (size == 0U))
     {
-        u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(_top), alignment));
+        return {};
+    }
 
-        if (_arena.isInRange(new_top, size))
-        {
-            void * mem_ptr = new_top;
-            _top = new_top + size;
+    u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(_top), alignment));
 
-            return {mem_ptr, size};
-        }
+    if (_arena.isInRange(new_top, size))
+    {
+        void * mem_ptr = new_top;
+        _top = new_top + size;
+
+        return {mem_ptr, size};
     }
 
     return {};

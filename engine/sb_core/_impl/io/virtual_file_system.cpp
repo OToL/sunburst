@@ -1,8 +1,8 @@
 #include "local_file_system.h"
 #include <sb_core/io/virtual_file_system.h>
 #include <sb_core/io/path.h>
-#include <sb_core/memory/allocator/pool_allocator.h>
-#include <sb_core/memory/provider/global_heap_provider.h>
+#include <sb_core/memory/allocator/object_pool_allocator.h>
+#include <sb_core/memory/allocator/global_heap_allocator.h>
 #include <sb_core/memory/alloc.h>
 #include <sb_core/container/fix_array.h>
 #include <sb_core/string/string_utility.h>
@@ -56,7 +56,7 @@ public:
     }
 
     VirtualFileSystemImpl(sbstd::span<VFS::LayerInitDesc> layers_desc)
-        : file_desc_pool({VFS_FILE_MAX_OPENED})
+        : file_desc_pool(VFS_FILE_MAX_OPENED)
         , curr_file_gen(0U)
         , opened_file_count(0U)
     {
@@ -361,11 +361,11 @@ public:
     }
 
 private:
-    using FileDescPool = ObjectPoolAllocator<FileDesc, GlobalHeapProvider>;
+    using FileDescPool = ObjectPoolAllocator<FileDesc, GlobalHeapAllocator>;
 
     FileHdl createFileHdl(internal::LayerFileHdl layer_hdl, FileProps props)
     {
-        FileDesc * const file_desc = static_cast<FileDesc *>(file_desc_pool.allocate());
+        FileDesc * const file_desc = static_cast<FileDesc *>(file_desc_pool.allocate().m_ptr);
 
         if (sbExpect(nullptr != file_desc))
         {

@@ -20,7 +20,7 @@ void sb::NullAllocator::deallocate([[maybe_unused]] void * ptr)
 
 void sb::NullAllocator::deallocateAll() { }
 
-sb::b8 sb::NullAllocator::owns(void const * ptr) const
+sb::b8 sb::NullAllocator::owns(void const * /*ptr*/) const
 {
-    return (nullptr == ptr);
+    return false;
 }

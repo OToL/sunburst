@@ -32,6 +32,8 @@ public:
 
     MemoryArena getArena() const;
 
+    b8 isEmpty() const;
+
 private:
     MemoryArena _arena = {};
     b8 _empty = false;

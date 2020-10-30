@@ -15,8 +15,10 @@ public:
 
     virtual MemoryArena allocate(usize const size, Alignment const alignment) = 0;
 
+    // todo: should it be Arena instead?
     virtual void deallocate(void * ptr) = 0;
 
+    // todo: should it be Arena instead?
     virtual b8 owns(void const * ptr) const = 0;
 };
 

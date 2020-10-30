@@ -1,7 +1,6 @@
 add_library(sb_core STATIC
     _impl/string_format.cpp
     _impl/log.cpp
-    
     _impl/conversion.cpp
     _impl/error.cpp
     _impl/hash/crc32.cpp
@@ -14,8 +13,6 @@ add_library(sb_core STATIC
     _impl/memory/allocator/null_allocator.cpp
     _impl/memory/allocator/incremental_allocator_base.cpp
     _impl/memory/allocator/memory_arena_allocator.cpp
-    _impl/memory/provider/memory_arena_provider.cpp
-    _impl/memory/provider/global_heap_provider.cpp
     _impl/memory/global_heap.cpp
     _impl/memory/memory.cpp
     _impl/memory/alloc.cpp

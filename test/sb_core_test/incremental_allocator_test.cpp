@@ -1,101 +1,119 @@
 #include <sb_core/memory/allocator/incremental_allocator.h>
-#include <sb_core/memory/provider/memory_arena_provider.h>
-#include <sb_core/memory/global_heap.h>
+#include <sb_core/memory/allocator/memory_arena_allocator.h>
 #include <sb_core/memory/memory.h>
-#include <sb_core/bit.h>
 
 #include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
 
 using namespace sb;
 
+constexpr usize TEST_BACKSTORE_CAPACITY = 10U;
+using TestBackstore = u8 [TEST_BACKSTORE_CAPACITY];
+
+TEST_CASE("Incremetal Allocator null", "[incremental_allocator]")
+{   
+    IncrementalAllocator<MemoryArenaAllocator> test_alloc;
+
+    REQUIRE(test_alloc.allocate(1).isEmpty());
+}
+
 TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
 {   
+    SECTION("Packed alignment")
+    {
+        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY, ALIGNMENT_1B);
 
+        for (usize idx = 0; idx != TEST_BACKSTORE_CAPACITY; ++idx)
+        {
+            auto mem_arena = test_alloc.allocate(1);
+            REQUIRE(!mem_arena.isEmpty());
+            REQUIRE((uptr)mem_arena.m_ptr == idx);
+            REQUIRE(test_alloc.owns(mem_arena.m_ptr));
+        }
+
+        REQUIRE(test_alloc.allocate(1).isEmpty());
+    }
+
+    SECTION("Null alloc")
+    {   
+        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
+
+        REQUIRE(test_alloc.allocate(0).isEmpty());
+    }
+
+    SECTION("Default aligmnent")
+    {
+        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY, ALIGNMENT_4B);
+
+        for (usize idx = 0; idx != (TEST_BACKSTORE_CAPACITY/ALIGNMENT_4B + 1); ++idx)
+        {
+            auto mem_arena = test_alloc.allocate(1);
+            REQUIRE(!mem_arena.isEmpty());
+            REQUIRE((uptr)mem_arena.m_ptr == idx*ALIGNMENT_4B);
+            REQUIRE(test_alloc.owns(mem_arena.m_ptr));
+        }
+
+        REQUIRE(test_alloc.allocate(1).isEmpty());
+    }
 }
+
+TEST_CASE("Incremetal Allocator aligned allocate", "[incremental_allocator]")
+{   
+    SECTION("Alloc")
+    {    
+        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
+
+        for (usize idx = 0; idx != (TEST_BACKSTORE_CAPACITY/ALIGNMENT_4B + 1); ++idx)
+        {
+            auto mem_arena = test_alloc.allocate(1, ALIGNMENT_4B);
+            REQUIRE(!mem_arena.isEmpty());
+            REQUIRE((uptr)mem_arena.m_ptr == idx*ALIGNMENT_4B);
+            REQUIRE(test_alloc.owns(mem_arena.m_ptr));
+        }
+
+        REQUIRE(test_alloc.allocate(1).isEmpty());
+    }
+
+    SECTION("Null alloc")
+    {   
+        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
+
+        REQUIRE(test_alloc.allocate(0, ALIGNMENT_4B).isEmpty());
+    }
+}
+
+
+TEST_CASE("Incremetal Allocator deallocate all", "[incremental_allocator]")
+{
+    IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
+    MemoryArena mem_arena;
+    usize alloc_count_1 = 0U;
+    usize alloc_count_2 = 0U;
+    
+    do
+    {
+        mem_arena = test_alloc.allocate(1);
+        if (!mem_arena.isEmpty())
+        {
+            ++alloc_count_1;
+        }
+    } while (!mem_arena.isEmpty());
+    
+    test_alloc.deallocateAll();
+
+    do
+    {
+        mem_arena = test_alloc.allocate(1);
+        if (!mem_arena.isEmpty())
+        {
+            ++alloc_count_2;
+        }
+    } while (!mem_arena.isEmpty());
+
+    REQUIRE(alloc_count_1 != 0U);
+    REQUIRE(alloc_count_1 == alloc_count_2);
+}
+
 
 #include <catch2/test_epilog.h>
 
-#if 0
-
-using TestIncrementalAllocator = IncrementalAllocator<MemoryArenaProvider>;
-constexpr Alignment TEST_ALLOC_DEFAULT_ALIGN = ALIGNMENT_8B;
-
-TEST(INCREMENTAL_ALLOCATOR, Allocate)
-{   
-    usize const alloc_count = 4;
-    usize const arena_size = alloc_count * TEST_ALLOC_DEFAULT_ALIGN;
-
-    void * arena_ptr = getGlobalHeap()->allocate(arena_size);
-    EXPECT_NE(nullptr, arena_ptr);
-
-    TestIncrementalAllocator alloc{{arena_size, TEST_ALLOC_DEFAULT_ALIGN}, {{arena_ptr, arena_size}}};
-
-    for (usize idx = 0; idx != alloc_count; ++idx)
-    {
-        void * mem_ptr = alloc.allocate(TEST_ALLOC_DEFAULT_ALIGN);
-        EXPECT_NE(nullptr, mem_ptr);
-        EXPECT_TRUE(alloc.owns(mem_ptr));
-    }
-
-    EXPECT_EQ(nullptr, alloc.allocate(TEST_ALLOC_DEFAULT_ALIGN));
-
-    getGlobalHeap()->deallocate(arena_ptr);
-}
-
-TEST(INCREMENTAL_ALLOCATOR, AlignedAllocate)
-{
-    usize const alloc_count = 4;
-    Alignment const test_alignment = ALIGNMENT_16B;
-    usize const alloc_size = 8;
-    usize const arena_size = alloc_count * test_alignment;
-
-    void * arena_ptr = getGlobalHeap()->allocate(arena_size, test_alignment);
-    EXPECT_NE(nullptr, arena_ptr);
-
-    TestIncrementalAllocator alloc{{arena_size, TEST_ALLOC_DEFAULT_ALIGN}, {{arena_ptr, arena_size}}};
-
-    for (usize idx = 0; idx != alloc_count; ++idx)
-    {
-        void * mem_ptr = alloc.allocate(alloc_size, test_alignment);
-        EXPECT_NE(nullptr, mem_ptr);
-        EXPECT_TRUE(isAlignedTo(reinterpret_cast<uptr>(mem_ptr), test_alignment));
-        EXPECT_TRUE(alloc.owns(mem_ptr));
-    }
-
-    EXPECT_EQ(nullptr, alloc.allocate(8, test_alignment));
-    EXPECT_NE(nullptr, alloc.allocate(8));
-    EXPECT_EQ(nullptr, alloc.allocate(8));
-
-    getGlobalHeap()->deallocate(arena_ptr);
-}
-
-TEST(INCREMENTAL_ALLOCATOR, DeallocateAll)
-{
-    usize const alloc_count = 4;
-    usize const arena_size = alloc_count * TEST_ALLOC_DEFAULT_ALIGN;
-
-    void * arena_ptr = getGlobalHeap()->allocate(arena_size);
-    EXPECT_NE(nullptr, arena_ptr);
-
-    TestIncrementalAllocator alloc{{arena_size, TEST_ALLOC_DEFAULT_ALIGN}, {{arena_ptr, arena_size}}};
-
-    usize test_count = 2;
-
-    while (test_count != 0)
-    {
-        for (usize idx = 0; idx != alloc_count; ++idx)
-        {
-            void * mem_ptr = alloc.allocate(TEST_ALLOC_DEFAULT_ALIGN);
-            EXPECT_NE(nullptr, mem_ptr);
-            EXPECT_TRUE(alloc.owns(mem_ptr));
-        }
-
-        EXPECT_EQ(nullptr, alloc.allocate(TEST_ALLOC_DEFAULT_ALIGN));
-
-        alloc.deallocateAll();
-        --test_count;
-    }
-}
-
-#endif
