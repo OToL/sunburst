@@ -35,9 +35,10 @@ public:
 
     ~IncrementalAllocator() override
     {
-        if (!_arena.isEmpty())
+        MemoryArena mem_arena = BaseClass::getArena();
+        if (!mem_arena.isEmpty())
         {
-            _mem_provider.deallocate(_arena.m_ptr);
+            _mem_provider.deallocate(mem_arena.m_ptr);
         }
     }
 

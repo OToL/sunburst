@@ -18,6 +18,11 @@ void sb::NullAllocator::deallocate([[maybe_unused]] void * ptr)
     sbWarn(nullptr == ptr);
 }
 
+void sb::NullAllocator::deallocate(MemoryArena arena)
+{
+    sbWarn(arena.isEmpty());
+}
+
 void sb::NullAllocator::deallocateAll() { }
 
 sb::b8 sb::NullAllocator::owns(void const * /*ptr*/) const

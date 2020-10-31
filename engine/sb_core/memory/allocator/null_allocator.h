@@ -25,6 +25,8 @@ public:
 
     void deallocate(void * ptr) override;
 
+    void deallocate(MemoryArena arena) override;
+
     b8 owns(void const * ptr) const override;
 
     void deallocateAll();

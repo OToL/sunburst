@@ -20,7 +20,7 @@ usize TestAllocator::getAlignment() const
 
 sb::MemoryArena TestAllocator::allocate(size_t const size)
 {
-    MemoryArena mem_arena = sb::getGlobalHeap()->allocate(size);
+    MemoryArena mem_arena = sb::getGlobalHeap().allocate(size);
 
     if (!mem_arena.isEmpty())
     {
@@ -40,7 +40,7 @@ sb::MemoryArena TestAllocator::allocate(size_t const size)
 
 sb::MemoryArena TestAllocator::allocate(size_t const size, sb::Alignment alignment)
 {
-    MemoryArena mem_arena = getGlobalHeap()->allocate(size, alignment);
+    MemoryArena mem_arena = getGlobalHeap().allocate(size, alignment);
 
     if (!mem_arena.isEmpty())
     {
@@ -60,11 +60,11 @@ sb::MemoryArena TestAllocator::allocate(size_t const size, sb::Alignment alignme
 
 void TestAllocator::deallocate(void * ptr)
 {
-    auto const global_heap = sb::getGlobalHeap();
+    auto & global_heap = sb::getGlobalHeap();
 
     if (ptr)
     {
-        m_stats.m_allocated_byte -= global_heap->getBlockSize(ptr);
+        m_stats.m_allocated_byte -= global_heap.getBlockSize(ptr);
         --m_stats.m_alloc_count;
 
         auto const alloc_desc =
@@ -73,7 +73,7 @@ void TestAllocator::deallocate(void * ptr)
         m_allocs.erase(alloc_desc);
     }
 
-    global_heap->deallocate(ptr);
+    global_heap.deallocate(ptr);
 }
 
 bool TestAllocator::owns(void const * ptr) const

@@ -6,10 +6,8 @@
 
 namespace sb {
 
-// todo: move to a separate file
-// todo: remove inheritance and move to member
 template <typename TObject, typename TMemProvider>
-class ObjectPoolAllocator : public PoolAllocator<TMemProvider>
+class ObjectPoolAllocator final : public IAllocator
 {
     sbBaseClass(PoolAllocator<TMemProvider>);
 
@@ -20,12 +18,12 @@ public:
     }
 
     ObjectPoolAllocator(usize obj_count)
-        : BaseClass(sizeof(TObject), obj_count, alignOf<TObject>())
+        : _allocator(sizeof(TObject), obj_count, alignOf<TObject>())
     {
     }
 
     ObjectPoolAllocator(TMemProvider const & mem_provider, usize obj_count)
-        : BaseClass(mem_provider, sizeof(TObject), obj_count, alignOf<TObject>())
+        : _allocator(mem_provider, sizeof(TObject), obj_count, alignOf<TObject>())
 
     {
     }
@@ -35,15 +33,53 @@ public:
     ObjectPoolAllocator(ObjectPoolAllocator const &) = delete;
     ObjectPoolAllocator(ObjectPoolAllocator &&) = delete;
 
-    using BaseClass::deallocate;
+    MemoryArena allocate(usize const size) override
+    {
+        return _allocator.allocate(size);
+    }
 
-    using BaseClass::owns;
+    MemoryArena allocate(usize const size, Alignment const alignment) override
+    {
+        return _allocator.allocate(size, alignment);
+    }
 
-    using BaseClass::deallocateAll;
-    using BaseClass::allocate;
+    void deallocate(void * ptr) override
+    {
+        _allocator.deallocate(ptr);
+    }
 
-    using BaseClass::getAlignment;
-    using BaseClass::getArena;
+    void deallocate(MemoryArena arena) override
+    {
+        _allocator.deallocate(arena);
+    }
+
+    b8 owns(void const * ptr) const override
+    {
+        return _allocator.owns(ptr);
+    }
+
+    void deallocateAll()
+    {
+        _allocator.deallocateAll();
+    }
+
+    MemoryArena allocate()
+    {
+        return _allocator.allocate();
+    }
+
+    Alignment getAlignment() const
+    {
+        return _allocator.getAlignment();
+    }
+
+    MemoryArena getArena() const
+    {
+        return _allocator.getArena();
+    }
+
+private:
+    PoolAllocator<TMemProvider> _allocator;
 };
 
 } // namespace sb

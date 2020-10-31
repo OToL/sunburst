@@ -3,6 +3,7 @@
 #include <sb_core/io/path.h>
 #include <sb_core/memory/allocator/object_pool_allocator.h>
 #include <sb_core/memory/allocator/global_heap_allocator.h>
+#include <sb_core/memory/global_heap.h>
 #include <sb_core/memory/alloc.h>
 #include <sb_core/container/fix_array.h>
 #include <sb_core/string/string_utility.h>
@@ -413,7 +414,7 @@ sb::b8 sb::VirtualFileSystem::initialize(InitDesc const & init)
 {
     if (sbExpect(nullptr == g_vfs, "Vritual File System is already initialized"))
     {
-        g_vfs = sbNew VirtualFileSystemImpl(init.layers);
+        g_vfs = sbNew(GHEAP, VirtualFileSystemImpl, init.layers);
         return true;
     }
 
@@ -424,7 +425,7 @@ sb::b8 sb::VirtualFileSystem::terminate()
 {
     if (sbExpect(nullptr != g_vfs, "Vritual File System is not initialized"))
     {
-        sbDelete g_vfs;
+        sbDelete(GHEAP, g_vfs);
         g_vfs = nullptr;
 
         return true;

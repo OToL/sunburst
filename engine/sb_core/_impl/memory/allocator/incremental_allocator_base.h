@@ -10,10 +10,13 @@ class IncrementalAllocatorBase : public IAllocator
 {
     sbBaseClass(IAllocator);
 
-public:
-    IncrementalAllocatorBase() = default;
+protected:
+    IncrementalAllocatorBase();
     ~IncrementalAllocatorBase() = default;
 
+    void init(MemoryArena arena, Alignment default_align);
+
+public:
     IncrementalAllocatorBase(IncrementalAllocatorBase const &) = delete;
     IncrementalAllocatorBase(IncrementalAllocatorBase &&) = delete;
 
@@ -26,15 +29,26 @@ public:
 
     void deallocate(void * ptr) override;
 
+    void deallocate(MemoryArena arena) override
+    {
+        deallocate(arena.m_ptr);
+    }
+
     b8 owns(void const * ptr) const override;
 
     void deallocateAll();
 
-    Alignment getAlignment() const;
+    Alignment getAlignment() const
+    {
+        return _default_alignment;
+    }
 
-protected:
-    void init(MemoryArena arena, Alignment default_align);
+    MemoryArena getArena() const
+    {
+        return _arena;
+    }
 
+private:
     MemoryArena _arena;
     u8 * _top;
     Alignment _default_alignment;

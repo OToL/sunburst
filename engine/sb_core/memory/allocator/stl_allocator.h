@@ -241,17 +241,17 @@ public:
     {
         if constexpr (ALIGNMENT_DEFAULT <= alignof(T))
         {
-            return (pointer)getGlobalHeap()->allocate(nb * sizeof(T)).m_ptr;
+            return (pointer)getGlobalHeap().allocate(nb * sizeof(T)).m_ptr;
         }
         else
         {
-            return (pointer)getGlobalHeap()->allocate(nb * sizeof(T), alignOf<T>()).m_ptr;
+            return (pointer)getGlobalHeap().allocate(nb * sizeof(T), alignOf<T>()).m_ptr;
         }
     }
 
     void deallocate(pointer data, size_type /*nb*/)
     {
-        getGlobalHeap()->deallocate((void *)data);
+        getGlobalHeap().deallocate((void *)data);
     }
 
     size_type max_size() const

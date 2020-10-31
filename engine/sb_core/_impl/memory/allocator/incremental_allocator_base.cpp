@@ -9,6 +9,13 @@ void sb::IncrementalAllocatorBase::init(MemoryArena arena, Alignment default_ali
     _default_alignment = default_align;
 }
 
+sb::IncrementalAllocatorBase::IncrementalAllocatorBase()
+    : _arena()
+    , _top(nullptr)
+    , _default_alignment(ALIGNMENT_DEFAULT)
+{
+}
+
 sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size)
 {
     if (_arena.isEmpty() || (size == 0U))
@@ -62,9 +69,4 @@ sb::b8 sb::IncrementalAllocatorBase::owns(void const * ptr) const
 void sb::IncrementalAllocatorBase::deallocateAll()
 {
     _top = static_cast<u8 *>(_arena.m_ptr);
-}
-
-sb::Alignment sb::IncrementalAllocatorBase::getAlignment() const
-{
-    return _default_alignment;
 }

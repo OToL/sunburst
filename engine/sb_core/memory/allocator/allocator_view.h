@@ -3,58 +3,27 @@
 #include <sb_core/core.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/memory_arena.h>
+#include <sb_core/memory/allocator/allocator.h>
 #include <sb_core/_impl/memory/allocator/allocator_view.h>
 
 #include <sb_std/type_traits>
 
 namespace sb {
 
-class AllocatorView
+class AllocatorView : public IAllocator
 {
 public:
-    struct InitParams
-    {
-        InitParams() = default;
-
-        template <typename T>
-        InitParams(T & alloc)
-            : m_vtable(&internal::getAllocatorVTable<T>())
-            , m_alloc(&alloc)
-        {
-        }
-
-        InitParams(AllocatorView & alloc)
-            : m_vtable(alloc.m_vtable)
-            , m_alloc(alloc.m_alloc)
-        {
-        }
-
-        internal::AllocatorVTable const * m_vtable = nullptr;
-        void * m_alloc = nullptr;
-    };
-
     AllocatorView()
         : m_vtable(nullptr)
         , m_alloc(nullptr)
     {
     }
 
-    AllocatorView(InitParams const & init)
-        : m_vtable(init.m_vtable)
-        , m_alloc(init.m_alloc)
-    {
-    }
+    ~AllocatorView() override { }
 
     template <typename T>
-    AllocatorView(T & alloc)
-        : m_vtable(&internal::getAllocatorVTable<T>())
-        , m_alloc(&alloc)
-    {
-    }
-
-    AllocatorView(AllocatorView & src)
-        : m_vtable(src.m_vtable)
-        , m_alloc(src.m_alloc)
+    AllocatorView(T & alloc) requires !sbstd::is_same_v<T, AllocatorView>
+        : m_vtable(&internal::getAllocatorVTable<T>()), m_alloc(&alloc)
     {
     }
 
@@ -64,10 +33,32 @@ public:
     {
     }
 
-    AllocatorView(AllocatorView &&) = default;
+    AllocatorView(AllocatorView && src)
+        : m_vtable(src.m_vtable)
+        , m_alloc(src.m_alloc)
+    {
+        src.m_vtable = nullptr;
+        src.m_alloc = nullptr;
+    }
 
-    AllocatorView & operator=(AllocatorView const &) = default;
-    AllocatorView & operator=(AllocatorView &&) = default;
+    AllocatorView & operator=(AllocatorView const & src)
+    {
+        m_vtable = src.m_vtable;
+        m_alloc = src.m_alloc;
+
+        return *this;
+    }
+
+    AllocatorView & operator=(AllocatorView && src)
+    {
+        m_vtable = src.m_vtable;
+        m_alloc = src.m_alloc;
+
+        src.m_vtable = nullptr;
+        src.m_alloc = nullptr;
+
+        return *this;
+    }
 
     MemoryArena allocate(usize const size)
     {
@@ -77,6 +68,11 @@ public:
     MemoryArena allocate(usize const size, Alignment const alignment)
     {
         return m_vtable->m_aligned_allocate(m_alloc, size, alignment);
+    }
+
+    void deallocate(MemoryArena arena) override
+    {
+        deallocate(arena.m_ptr);
     }
 
     void deallocate(void * ptr)

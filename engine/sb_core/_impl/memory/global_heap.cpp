@@ -25,16 +25,16 @@ sb::usize sb::GlobalHeap::getBlockSize(void * ptr) const
     return m_parent.getBlockSize(ptr);
 }
 
-sb::GlobalHeap * sb::getGlobalHeap()
+sb::GlobalHeap & sb::getGlobalHeap()
 {
-    static GlobalHeap s_global_heap;
+    static GlobalHeap _global_heap;
 
-    return &s_global_heap;
+    return _global_heap;
 }
 
 sb::AllocatorView const & sb::getGlobalHeapView()
 {
-    static AllocatorView s_global_heap_view{*getGlobalHeap()};
+    static AllocatorView _global_heap_view{getGlobalHeap()};
 
-    return s_global_heap_view;
+    return _global_heap_view;
 }

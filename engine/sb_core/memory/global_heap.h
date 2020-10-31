@@ -11,9 +11,14 @@ class GlobalHeap
     GlobalHeap() = default;
     ~GlobalHeap() = default;
 
-    friend GlobalHeap * getGlobalHeap();
+    friend GlobalHeap & getGlobalHeap();
 
 public:
+    GlobalHeap(GlobalHeap const &) = delete;
+    GlobalHeap(GlobalHeap &&) = delete;
+    GlobalHeap & operator=(GlobalHeap const &) = delete;
+    GlobalHeap & operator=(GlobalHeap &&) = delete;
+
     MemoryArena allocate(usize const size);
 
     MemoryArena allocate(usize const size, Alignment const alignment);
@@ -35,6 +40,8 @@ private:
 
 AllocatorView const & getGlobalHeapView();
 
-GlobalHeap * getGlobalHeap();
+GlobalHeap & getGlobalHeap();
+
+#define GHEAP getGlobalHeap()
 
 } // namespace sb
