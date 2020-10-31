@@ -23,9 +23,9 @@ public:
 
     MemoryArena allocate(usize const size, Alignment alignment) override;
 
-    void deallocate(void * ptr);
+    void deallocate(void * ptr) override;
 
-    void deallocate(MemoryArena arena);
+    void deallocate(MemoryArena arena) override;
 
     bool owns(void const * ptr) const;
 
