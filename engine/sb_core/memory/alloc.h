@@ -4,12 +4,9 @@
 
 #include <sb_std/new>
 
-// TODO: return arena
-// TODO: rename internal to internal::sbMalloc
-// TODO: should it go through GlobalHeap
-#define sbMalloc(size, ...) sb::internal::malloc(size, ##__VA_ARGS__)
-#define sbMallocUsabeSize(ptr) sb::internal::mallocUsableSize(ptr)
-#define sbFree(ptr) sb::internal::free(ptr)
+#define sbMalloc(heap, size, ...) heap.allocate(size, ##__VA_ARGS__)
+#define sbMallocUsabeSize(heap, ptr) heap.getBlockSize(ptr)
+#define sbFree(heap, ptr) heap.deallocate(ptr)
 
 #define sbNew(heap, type, ...) sb::internal::newImpl<type>(heap, ##__VA_ARGS__)
 #define sbDelete(heap, obj) sb::internal::deleteImpl(heap, obj)

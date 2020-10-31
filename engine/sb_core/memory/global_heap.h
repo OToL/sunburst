@@ -1,7 +1,7 @@
 #pragma once
 
-#include <sb_core/memory/allocator/allocator_view.h>
-#include <sb_core/memory/allocator/global_heap_allocator.h>
+#include <sb_core/core.h>
+#include <sb_core/memory/memory_arena.h>
 #include <sb_core/memory/memory.h>
 
 namespace sb {
@@ -35,10 +35,7 @@ public:
     usize getBlockSize(void * ptr) const;
 
 private:
-    GlobalHeapAllocator m_parent;
 };
-
-AllocatorView const & getGlobalHeapView();
 
 GlobalHeap & getGlobalHeap();
 

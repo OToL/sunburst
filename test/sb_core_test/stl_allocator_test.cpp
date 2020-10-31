@@ -1,5 +1,5 @@
 #include <sb_core/core.h>
-#include <sb_core/memory/allocator/stl_allocator.h>
+#include <sb_core/memory/allocator/stl_allocator_wrapper.h>
 #include <sb_core/container/dynamic_array.h>
 
 #include <sb_unit/test_allocator.h>
@@ -13,12 +13,12 @@
 
 using namespace sb;
 
-TEST_CASE("STL Allocator with AllocatorView", "[stl_allocator]")
+TEST_CASE("STL Allocator Wrapper", "[stl_allocator]")
 {
     TestAllocator test_alloc;
     
     {        
-        DArray<u32, STLAllocatorView<u32>> vector_test{STLAllocatorView<u32>{test_alloc}};
+        DArray<u32, STLAllocatorWrapper<u32>> vector_test{STLAllocatorWrapper<u32>{test_alloc}};
 
         u32 const array_test [] = {0, 1, 2, 3, 4};
 
@@ -42,7 +42,7 @@ TEST_CASE("STL Allocator with AllocatorView", "[stl_allocator]")
 
 #if 0
 
-TEST(STL_ALLOCATOR, AllocatorView)
+TEST(STL_ALLOCATOR, default)
 {
 
 }

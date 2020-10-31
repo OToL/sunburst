@@ -14,6 +14,7 @@ add_library(sb_core STATIC
     _impl/memory/allocator/incremental_allocator_base.cpp
     _impl/memory/allocator/memory_arena_allocator.cpp
     _impl/memory/allocator/pool_allocator_base.cpp
+    _impl/memory/allocator/allocator_wrapper.cpp
     _impl/memory/global_heap.cpp
     _impl/memory/memory.cpp
     _impl/memory/alloc.cpp

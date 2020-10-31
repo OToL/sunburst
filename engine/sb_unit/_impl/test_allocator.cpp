@@ -1,8 +1,9 @@
-#include <sb_unit/test_allocator.h>
-
 #include <sb_core/os.h>
 #include <sb_core/error.h>
 #include <sb_core/memory/memory.h>
+#include <sb_core/memory/global_heap.h>
+
+#include <sb_unit/test_allocator.h>
 
 #include <sb_std/algorithm>
 
@@ -56,6 +57,11 @@ sb::MemoryArena TestAllocator::allocate(size_t const size, sb::Alignment alignme
     }
 
     return mem_arena;
+}
+
+void TestAllocator::deallocate(MemoryArena arena)
+{
+    deallocate(arena.m_ptr);
 }
 
 void TestAllocator::deallocate(void * ptr)

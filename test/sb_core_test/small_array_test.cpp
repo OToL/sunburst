@@ -3,6 +3,7 @@
 
 #include <sb_core/container/small_array.h>
 #include <sb_core/memory/allocator/stl_allocator.h>
+#include <sb_core/memory/allocator/stl_allocator_wrapper.h>
 #include <sb_core/memory/global_heap.h>
 #include <sb_core/error.h>
 
@@ -32,8 +33,8 @@ template <usize CAPACITY>
 using SArrayTest = SArray<TestObjectCnt, CAPACITY>;
 
 template <usize CAPACITY>
-using SArrayTestA = SArray<TestObjectCnt, CAPACITY, STLAllocatorView<TestObjectCnt>>;
-using SArrayTestAlloc = STLAllocatorView<TestObjectCnt>;
+using SArrayTestA = SArray<TestObjectCnt, CAPACITY, STLAllocatorWrapper<TestObjectCnt>>;
+using SArrayTestAlloc = STLAllocatorWrapper<TestObjectCnt>;
 
 using SMALL_VECTOR = SArrayFixture;
 

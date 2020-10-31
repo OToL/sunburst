@@ -1,9 +1,10 @@
 #include <sb_core/core.h>
 #include <sb_core/container/dynamic_array.h>
+#include <sb_core/memory/allocator/allocator.h>
 
 namespace sb {
 
-class TestAllocator
+class TestAllocator final : public IAllocator
 {
 public:
     struct Stats
@@ -18,11 +19,13 @@ public:
 
     usize getAlignment() const;
 
-    MemoryArena allocate(size_t const size);
+    MemoryArena allocate(usize const size) override;
 
-    MemoryArena allocate(size_t const size, sb::Alignment alignment);
+    MemoryArena allocate(usize const size, Alignment alignment) override;
 
     void deallocate(void * ptr);
+
+    void deallocate(MemoryArena arena);
 
     bool owns(void const * ptr) const;
 

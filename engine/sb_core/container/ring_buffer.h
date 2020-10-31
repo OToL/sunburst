@@ -1,36 +1,35 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/memory/allocator/allocator_view.h>
-#include <sb_core/memory/global_heap.h>
+#include <sb_core/memory/allocator/global_heap_allocator.h>
 #include <sb_core/error.h>
 
 #include <sb_std/type_traits>
 
 namespace sb {
 
-template <typename TType>
+template <typename TType, typename TAllocator = GlobalHeapAllocator>
 class RingBuffer
 {
 public:
     using ValueType = TType;
     static constexpr bool IS_TRIVIAL_VALUE = sbstd::is_trivial_v<ValueType>;
 
-    RingBuffer(usize capacity, AllocatorView const & alloc)
+    RingBuffer(usize capacity, TAllocator alloc)
         : _alloc(alloc)
         , _tail(0)
         , _head(0)
         , _capacity(capacity)
         , _full(0)
     {
-        sbAssert((0 != _capacity) && alloc.isValid());
+        sbAssert(0 != _capacity);
 
         _data = (ValueType *)_alloc.allocate(capacity * sizeof(ValueType), alignOf<ValueType>()).m_ptr;
         sbAssert(nullptr != _data);
     }
 
     RingBuffer(usize capacity)
-        : _alloc(getGlobalHeapView())
+        : _alloc()
         , _tail(0)
         , _head(0)
         , _capacity(capacity)
@@ -221,7 +220,7 @@ public:
     }
 
 private:
-    AllocatorView _alloc;
+    TAllocator _alloc;
     ValueType * _data;
     usize _tail;
     usize _head;
