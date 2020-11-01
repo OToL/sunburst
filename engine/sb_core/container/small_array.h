@@ -2,8 +2,9 @@
 
 #include <sb_core/conversion.h>
 #include <sb_core/error.h>
-#include <sb_core/memory/allocator/stl_allocator.h>
+#include <sb_core/memory/memory.h>
 #include <sb_core/_impl/container/small_array_base.h>
+#include <sb_core/memory/allocator/container_allocator.h>
 #include <sb_core/core.h>
 
 #include <sb_std/algorithm>
@@ -13,7 +14,7 @@
 
 namespace sb {
 
-template <typename TType, usize BASE_CAPACITY, typename TAllocator = STLAllocator<TType>>
+template <typename TType, usize BASE_CAPACITY, typename TAllocator = ContainerAllocator>
 class SmallArray : public internal::SmallArrayBase<TType, TAllocator>
 {
     sbBaseClass(internal::SmallArrayBase<TType, TAllocator>);
@@ -140,7 +141,7 @@ public:
 
         if (!isSmallStorage())
         {
-            m_impl.deallocate(m_impl.m_begin, (size_type)(m_impl.m_storage_end - m_impl.m_begin));
+            m_impl.deallocate(MemoryArena{m_impl.m_begin, (size_type)(m_impl.m_storage_end - m_impl.m_begin)});
         }
     }
 
@@ -183,7 +184,7 @@ public:
             else if (src_size > capacity())
             {
                 size_type const new_dst_capacity = computeCapacity(src_size);
-                TType * const new_dst_data = m_impl.allocate(new_dst_capacity);
+                TType * const new_dst_data = (TType *)m_impl.allocate(new_dst_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
                 sbAssert(nullptr != new_dst_data);
 
                 sbstd::uninitialized_move(src.m_impl.m_begin, src.m_impl.m_end, new_dst_data);
@@ -193,7 +194,7 @@ public:
 
                 if (!isSmallStorage())
                 {
-                    m_impl.deallocate(m_impl.m_begin, dst_size);
+                    m_impl.deallocate({m_impl.m_begin, dst_size});
                 }
 
                 m_impl.m_begin = new_dst_data;
@@ -205,7 +206,7 @@ public:
             else
             {
                 size_type const new_src_capacity = computeCapacity(dst_size);
-                TType * const new_src_data = src.m_impl.allocate(new_src_capacity);
+                TType * const new_src_data = (TType *)src.m_impl.allocate(new_src_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
                 sbAssert(nullptr != new_src_data);
 
                 sbstd::uninitialized_move(m_impl.m_begin, m_impl.m_end, new_src_data);
@@ -215,7 +216,7 @@ public:
 
                 if (!src.isSmallStorage())
                 {
-                    src.m_impl.deallocate(src.m_impl.m_begin, src_size);
+                    src.m_impl.deallocate({src.m_impl.m_begin, src_size});
                 }
 
                 src.m_impl.m_begin = new_src_data;
@@ -486,18 +487,18 @@ public:
                 {
                     sbstd::uninitialized_move(m_impl.m_begin, m_impl.m_end, reinterpret_cast<pointer>(&m_buffer[0]));
                     sbstd::destroy(m_impl.m_begin, m_impl.m_end);
-                    m_impl.deallocate(m_impl.m_begin, curr_capacity);
+                    m_impl.deallocate({m_impl.m_begin, curr_capacity});
 
                     m_impl.m_begin = reinterpret_cast<pointer>(&m_buffer[0]);
                 }
                 else
                 {
-                    pointer const new_data = m_impl.allocate(new_capacity);
+                    pointer const new_data = (TType *)m_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
                     sbAssert(nullptr != new_data);
 
                     sbstd::uninitialized_move(m_impl.m_begin, m_impl.m_end, new_data);
                     sbstd::destroy(m_impl.m_begin, m_impl.m_end);
-                    m_impl.deallocate(m_impl.m_begin, curr_capacity);
+                    m_impl.deallocate({m_impl.m_begin, curr_capacity});
 
                     m_impl.m_begin = new_data;
                 }
@@ -524,7 +525,7 @@ public:
         else if (src_size > capacity())
         {
             auto const new_capacity = computeCapacity(src_size);
-            pointer const new_data = m_impl.allocate(new_capacity);
+            pointer const new_data = (TType *)m_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
             sbAssert(nullptr != new_data);
 
             sbstd::uninitialized_copy(src_begin, src_end, new_data);
@@ -532,7 +533,7 @@ public:
 
             if (!isSmallStorage())
             {
-                m_impl.deallocate(m_impl.m_begin, curr_size);
+                m_impl.deallocate({m_impl.m_begin, curr_size});
             }
 
             m_impl.m_begin = new_data;
@@ -562,7 +563,7 @@ public:
         else if (count > capacity())
         {
             auto const new_capacity = computeCapacity(count);
-            pointer const new_data = m_impl.allocate(new_capacity);
+            pointer const new_data = (TType *)m_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
             sbAssert(nullptr != new_data);
 
             sbstd::uninitialized_fill(new_data, new_data + count, value);
@@ -570,7 +571,7 @@ public:
 
             if (!isSmallStorage())
             {
-                m_impl.deallocate(m_impl.m_begin, curr_size);
+                m_impl.deallocate({m_impl.m_begin, curr_size});
             }
 
             m_impl.m_begin = new_data;
@@ -639,7 +640,7 @@ private:
         size_type const curr_capacity = capacity();
         size_type const curr_size = size();
 
-        pointer const new_data = m_impl.allocate(new_capacity);
+        pointer const new_data = (TType *)m_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
         sbAssert(nullptr != new_data);
 
         sbstd::uninitialized_move(m_impl.m_begin, m_impl.m_end, new_data);
@@ -647,7 +648,7 @@ private:
 
         if (!isSmallStorage())
         {
-            m_impl.deallocate(m_impl.m_begin, curr_capacity);
+            m_impl.deallocate({m_impl.m_begin, curr_capacity});
         }
 
         m_impl.m_end = new_data + curr_size;
@@ -726,7 +727,7 @@ void swap(sb::SmallArray<TType, BASE_CAPACITY, TAllocator> & vect1,
     vect1.swap(vect2);
 }
 
-template <typename TType, usize BASE_CAPACITY, typename TAllocator = STLAllocator<TType>>
+template <typename TType, usize BASE_CAPACITY, typename TAllocator = ContainerAllocator>
 using SArray = SmallArray<TType, BASE_CAPACITY, TAllocator>;
 
 } // namespace sb

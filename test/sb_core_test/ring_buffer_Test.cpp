@@ -1,5 +1,5 @@
 #include <sb_core/container/ring_buffer.h>
-#include <sb_core/memory/allocator/allocator_wrapper.h>
+#include <sb_core/memory/allocator/container_allocator_wrapper.h>
 
 #include <sb_unit/test_object_cnt.h>
 #include <sb_unit/test_allocator.h>
@@ -11,8 +11,8 @@
 
 using namespace sb;
 
-using TestRingBufferPODA = RingBuffer<usize, AllocatorWrapper>;
-using TestRingBufferA = RingBuffer<TestObjectCnt, AllocatorWrapper>;
+using TestRingBufferPODA = RingBuffer<usize, ContainerAllocatorWrapper>;
+using TestRingBufferA = RingBuffer<TestObjectCnt, ContainerAllocatorWrapper>;
 using TestRingBufferPOD = RingBuffer<usize>;
 using TestRingBuffer = RingBuffer<TestObjectCnt>;
 
@@ -88,7 +88,7 @@ TEST_CASE("RingBuffer ctor", "[ring_buffer]")
     TestObjectCnt::resetStats();
     TestAllocator alloc_stats;
 
-    TestRingBufferA ring_buffer(TEST_RING_BUFFER_CAPACITY, AllocatorWrapper(alloc_stats));
+    TestRingBufferA ring_buffer(TEST_RING_BUFFER_CAPACITY, ContainerAllocatorWrapper(alloc_stats));
 
     REQUIRE_FALSE(ring_buffer.full());
     REQUIRE(ring_buffer.empty());
