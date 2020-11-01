@@ -13192,14 +13192,14 @@ static void stu__mark(stua_obj z)
    }
 }
 
-static int stu__num_allocs, stu__size_allocs;
+static int stu__nu_allocs, stu__size_allocs;
 static stua_obj stu__flow_val = stua_nil; // used for break & return
 
 static void stua_gc(int force)
 {
    int i;
-   if (!force && stu__num_allocs == 0 && stu__size_allocs == 0) return;
-   stu__num_allocs = stu__size_allocs = 0;
+   if (!force && stu__nu_allocs == 0 && stu__size_allocs == 0) return;
+   stu__nu_allocs = stu__size_allocs = 0;
    //printf("[gc]\n");
 
    // clear marks
@@ -13236,7 +13236,7 @@ static void stua_gc(int force)
 static void stu__consider_gc(stua_obj x)
 {
    if (stu__size_allocs < 100000) return;
-   if (stu__num_allocs < 10 && stu__size_allocs < 1000000) return;
+   if (stu__nu_allocs < 10 && stu__size_allocs < 1000000) return;
    stb_arr_push(stu__gc_root_stack, x);
    stua_gc(0);
    stb_arr_pop(stu__gc_root_stack);
@@ -13247,7 +13247,7 @@ static stua_obj stu__makeobj(int type, void *data, int size, int safe_to_gc)
    stua_obj x = stu__makeptr(data);
    ((stu__box *) data)->type = type;
    stb_arr_push(stu__gc_ptrlist, (stu__box *) data);
-   stu__num_allocs  += 1;
+   stu__nu_allocs  += 1;
    stu__size_allocs += size;
    if (safe_to_gc) stu__consider_gc(x);
    return x;

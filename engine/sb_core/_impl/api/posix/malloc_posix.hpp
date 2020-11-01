@@ -2,7 +2,6 @@
 #include <sb_core/core.h>
 #include <sb_core/error.h>
 #include <sb_core/bit.h>
-#include <sb_core/string/string_utility.h>
 #include <sb_core/conversion.h>
 
 namespace sb::internal {
@@ -11,7 +10,7 @@ usize const SYS_MALLOC_DEFAULT_ALIGNMENT = sizeof(void *);
 
 struct AllocHeader
 {
-    usize m_size;
+    usize size;
     usize m_offset;
 };
 
@@ -41,7 +40,7 @@ void * malloc(usize size, Alignment alignment)
     void * const aligned_mem_ptr = reinterpret_cast<void *>(alignUp(usize(mem_ptr + sizeof(AllocHeader)), alignment));
 
     AllocHeader * const header = dataToHeader(aligned_mem_ptr);
-    header->m_size = size;
+    header->size = size;
     header->m_offset = sb::numericConv<u16>(uptr(header) - uptr(mem_ptr));
 
     return aligned_mem_ptr;
@@ -66,7 +65,7 @@ void free(void * mem_ptr)
 usize mallocUsableSize(void * mem_ptr)
 {
     AllocHeader * const header = dataToHeader(mem_ptr);
-    return header->m_size;
+    return header->size;
 }
 
 } // namespace sb::internal

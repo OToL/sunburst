@@ -37,7 +37,7 @@ public:
 
     void deallocate(MemoryArena arena) override
     {
-        deallocate(arena.m_ptr);
+        deallocate(arena.data);
     }
 
     b8 owns(void const * ptr) const override;

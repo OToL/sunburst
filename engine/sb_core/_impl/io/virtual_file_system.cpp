@@ -106,7 +106,7 @@ public:
         FileHdlHelper helper_hdl = {.packed = hdl.value};
 
         MemoryArena arena = file_desc_pool.getArena();
-        FileDesc * const file_desc = static_cast<FileDesc *>(arena.m_ptr) + helper_hdl.unpacked.hdl;
+        FileDesc * const file_desc = static_cast<FileDesc *>(arena.data) + helper_hdl.unpacked.hdl;
 
         sbAssert(arena.isInRange(file_desc));
         sbAssert(helper_hdl.unpacked.gen == file_desc->gen);
@@ -366,14 +366,14 @@ private:
 
     FileHdl createFileHdl(internal::LayerFileHdl layer_hdl, FileProps props)
     {
-        FileDesc * const file_desc = static_cast<FileDesc *>(file_desc_pool.allocate().m_ptr);
+        FileDesc * const file_desc = static_cast<FileDesc *>(file_desc_pool.allocate().data);
 
         if (sbExpect(nullptr != file_desc))
         {
             *file_desc = {props, layer_hdl, ++curr_file_gen};
 
             MemoryArena arena = file_desc_pool.getArena();
-            FileDesc * const base_obj = static_cast<FileDesc *>(arena.m_ptr);
+            FileDesc * const base_obj = static_cast<FileDesc *>(arena.data);
 
             FileHdlHelper const helper_hdl = {
                 .unpacked = {numericConv<u16>(sbstd::distance(base_obj, file_desc)), numericConv<u16>(file_desc->gen)}};
@@ -391,7 +391,7 @@ private:
         FileHdlHelper helper_hdl = {.packed = hdl.value};
 
         MemoryArena const arena = file_desc_pool.getArena();
-        FileDesc * const file_desc = static_cast<FileDesc *>(arena.m_ptr) + helper_hdl.unpacked.hdl;
+        FileDesc * const file_desc = static_cast<FileDesc *>(arena.data) + helper_hdl.unpacked.hdl;
 
         sbAssert(arena.isInRange((void *)file_desc));
         sbAssert(helper_hdl.unpacked.gen == file_desc->gen);

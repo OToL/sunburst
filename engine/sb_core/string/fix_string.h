@@ -24,23 +24,23 @@ public:
     {
         if (nullptr == src)
         {
-            m_data[0] = TChar{};
+            _data[0] = TChar{};
         }
         else
         {
-            m_len = strCpyT(m_data, src);
+            _len = strCpyT(_data, src);
         }
     }
 
     template <usize SRC_CAPACITY>
     FixString(FixString<SRC_CAPACITY, TChar> const & src)
     {
-        m_len = strCpyT(m_data, src.c_str());
+        _len = strCpyT(_data, src.c_str());
     }
 
     FixString(FixString<CAPACITY, TChar> const & src)
     {
-        m_len = strCpyT(m_data, src.c_str());
+        _len = strCpyT(_data, src.c_str());
     }
 
     ~FixString() { }
@@ -52,37 +52,37 @@ public:
 
     usize length() const
     {
-        return m_len;
+        return _len;
     }
 
     bool empty() const
     {
-        return (m_data[0] == TChar{});
+        return (_data[0] == TChar{});
     }
 
     void clear()
     {
-        m_len = 0;
-        m_data[0] = TChar{};
+        _len = 0;
+        _data[0] = TChar{};
     }
 
     TChar operator[](usize idx) const
     {
         // Accessing the null terminator is a valid operation
-        sbAssert(idx <= m_len);
+        sbAssert(idx <= _len);
 
-        return m_data[idx];
+        return _data[idx];
     }
 
     TChar back() const
     {
-        sbWarn(0 != m_len)
+        sbWarn(0 != _len)
 
             TChar backChar = TChar{};
 
-        if (0 != m_len)
+        if (0 != _len)
         {
-            backChar = m_data[m_len - 1];
+            backChar = _data[_len - 1];
         }
 
         return backChar;
@@ -90,13 +90,13 @@ public:
 
     bool push_back(TChar c)
     {
-        sbWarn(m_len != (CAPACITY - 1))
+        sbWarn(_len != (CAPACITY - 1))
 
-            if (m_len != (CAPACITY - 1))
+            if (_len != (CAPACITY - 1))
         {
-            m_data[m_len] = c;
-            ++m_len;
-            m_data[m_len] = TChar{};
+            _data[_len] = c;
+            ++_len;
+            _data[_len] = TChar{};
 
             return true;
         }
@@ -106,43 +106,43 @@ public:
 
     FixString & append(TChar const * str)
     {
-        sbstd::strncat(m_data, str, CAPACITY - 1);
-        m_data[CAPACITY - 1] = TChar{};
+        sbstd::strncat(_data, str, CAPACITY - 1);
+        _data[CAPACITY - 1] = TChar{};
 
         // TODO: implement my own strncat which returns the numbers of copied character
-        m_len = sbstd::strlen(m_data);
+        _len = sbstd::strlen(_data);
 
         return *this;
     }
 
     TChar const * c_str() const
     {
-        return m_data;
+        return _data;
     }
 
     TChar * data()
     {
-        return m_data;
+        return _data;
     }
 
     template <usize SRC_CAPACITY>
     FixString & operator=(FixString<SRC_CAPACITY, TChar> const & src)
     {
-        m_len = strCpyT(m_data, src.c_str());
+        _len = strCpyT(_data, src.c_str());
 
         return *this;
     }
 
     FixString & operator=(FixString const & src)
     {
-        m_len = strCpyT(m_data, src.c_str());
+        _len = strCpyT(_data, src.c_str());
 
         return *this;
     }
 
     FixString & operator=(TChar const * src)
     {
-        m_len = strCpyT(m_data, src);
+        _len = strCpyT(_data, src);
 
         return *this;
     }
@@ -159,8 +159,8 @@ public:
     }
 
 private:
-    TChar m_data[CAPACITY];
-    usize m_len;
+    TChar _data[CAPACITY];
+    usize _len;
 };
 
 template <usize CAPACITY, typename TChar = char>

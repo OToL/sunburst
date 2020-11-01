@@ -73,7 +73,7 @@ TEST_CASE_METHOD(SArrayFixture, "Set SArray size", "[small_vect]")
         REQUIRE(small_vect.isSmallStorage());
         REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{0}));
 
-        REQUIRE(alloc_stats.getStats().m_alloc_count == 0ULL);
+        REQUIRE(alloc_stats.getStats()._alloc_count == 0ULL);
         REQUIRE_FALSE(alloc_stats.owns(small_vect.data()));
     }
 
@@ -102,11 +102,11 @@ TEST_CASE_METHOD(SArrayFixture, "Set SArray size", "[small_vect]")
             REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{0}));
             REQUIRE_FALSE(small_vect.isSmallStorage());
 
-            REQUIRE(alloc_stats.getStats().m_alloc_count != 0ULL);
+            REQUIRE(alloc_stats.getStats()._alloc_count != 0ULL);
             REQUIRE(alloc_stats.owns(small_vect.data()));
         }
 
-        REQUIRE(alloc_stats.getStats().m_alloc_count == 0ULL);
+        REQUIRE(alloc_stats.getStats()._alloc_count == 0ULL);
     }
 }
 
@@ -145,7 +145,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor with default value", "[small_vector
             REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{init_obj}));
             REQUIRE(small_vect.isSmallStorage());
 
-            REQUIRE(alloc_stats.getStats().m_alloc_count == 0ULL);
+            REQUIRE(alloc_stats.getStats()._alloc_count == 0ULL);
             REQUIRE_FALSE(alloc_stats.owns(small_vect.data()));
         }
 
@@ -178,11 +178,11 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor with default value", "[small_vector
             REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{init_obj}));
             REQUIRE_FALSE(small_vect.isSmallStorage());
 
-            REQUIRE(alloc_stats.getStats().m_alloc_count == 1ULL);
+            REQUIRE(alloc_stats.getStats()._alloc_count == 1ULL);
             REQUIRE(alloc_stats.owns(small_vect.data()));
         }
 
-        REQUIRE(alloc_stats.getStats().m_alloc_count == 0ULL);
+        REQUIRE(alloc_stats.getStats()._alloc_count == 0ULL);
         REQUIRE(TestObjectCnt::getStats() == 1U);
     }
 }
@@ -251,7 +251,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor range insert", "[small_vector]")
                 REQUIRE(TestObjectCnt::getStats() == 10U);
                 
                 REQUIRE(!alloc_stats.owns(small_vect.data()));
-                REQUIRE(alloc_stats.getStats().m_alloc_count == 0ULL);
+                REQUIRE(alloc_stats.getStats()._alloc_count == 0ULL);
 
                 REQUIRE(sbstd::equal(sbstd::begin(objs), sbstd::end(objs), begin(small_vect)));
             }
@@ -293,11 +293,11 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor range insert", "[small_vector]")
                 REQUIRE(sbstd::equal(begin(small_vect), end(small_vect), sbstd::begin(objs)));
                 REQUIRE(TestObjectCnt::getStats() == 20U);
 
-                REQUIRE(alloc_stats.getStats().m_alloc_count == 1U);
+                REQUIRE(alloc_stats.getStats()._alloc_count == 1U);
                 REQUIRE(alloc_stats.owns(small_vect.data()));
             }
 
-            REQUIRE(alloc_stats.getStats().m_alloc_count == 0U);
+            REQUIRE(alloc_stats.getStats()._alloc_count == 0U);
             REQUIRE(TestObjectCnt::getStats() == 10U);
         }
     }
@@ -339,7 +339,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray copy ctor", "[small_vector]")
             initTestObjectSequence(src_vec);
 
             REQUIRE(src_vec.isSmallStorage());
-            REQUIRE(src_alloc_stats.getStats().m_alloc_count == 0U);
+            REQUIRE(src_alloc_stats.getStats()._alloc_count == 0U);
             REQUIRE_FALSE(src_alloc_stats.owns(src_vec.data()));
             REQUIRE(TestObjectCnt::getStats() == 3U);
 
@@ -349,12 +349,12 @@ TEST_CASE_METHOD(SArrayFixture, "SArray copy ctor", "[small_vector]")
             REQUIRE(dst_vec.size() == src_vec.size());
             REQUIRE(sbstd::equal(begin(src_vec), end(src_vec), begin(dst_vec)));
             REQUIRE(dst_vec.isSmallStorage());
-            REQUIRE(dst_alloc_stats.getStats().m_alloc_count == 0U);
+            REQUIRE(dst_alloc_stats.getStats()._alloc_count == 0U);
             REQUIRE_FALSE(dst_alloc_stats.owns(dst_vec.data()));
         }
 
-        REQUIRE(dst_alloc_stats.getStats().m_alloc_count == 0U);
-        REQUIRE(src_alloc_stats.getStats().m_alloc_count == 0U);
+        REQUIRE(dst_alloc_stats.getStats()._alloc_count == 0U);
+        REQUIRE(src_alloc_stats.getStats()._alloc_count == 0U);
     }
 
     SECTION("Objects are copied in order and internal storage is not used when exceeded")
@@ -387,7 +387,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray copy ctor", "[small_vector]")
             initTestObjectSequence(src_vec);
 
             REQUIRE(src_vec.isSmallStorage());
-            REQUIRE(src_alloc.getStats().m_alloc_count == 0U);
+            REQUIRE(src_alloc.getStats()._alloc_count == 0U);
             REQUIRE_FALSE(src_alloc.owns(src_vec.data()));
 
             REQUIRE(TestObjectCnt::getStats() == 6U);
@@ -399,12 +399,12 @@ TEST_CASE_METHOD(SArrayFixture, "SArray copy ctor", "[small_vector]")
             REQUIRE(dst_vec.size() == src_vec.size());
             REQUIRE(sbstd::equal(begin(src_vec), end(src_vec), begin(dst_vec)));
             REQUIRE_FALSE(dst_vec.isSmallStorage());
-            REQUIRE(dst_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(dst_alloc.getStats()._alloc_count != 0U);
             REQUIRE(dst_alloc.owns(dst_vec.data()));
         }
 
-        REQUIRE(dst_alloc.getStats().m_alloc_count == 0U);
-        REQUIRE(src_alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(dst_alloc.getStats()._alloc_count == 0U);
+        REQUIRE(src_alloc.getStats()._alloc_count == 0U);
     }
 }
 
@@ -446,7 +446,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
 
         REQUIRE(src_vec.isSmallStorage());
         REQUIRE_FALSE(alloc.owns(src_vec.data()));
-        REQUIRE(alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(alloc.getStats()._alloc_count == 0U);
 
         REQUIRE(TestObjectCnt::getStats() == 3U);
 
@@ -456,7 +456,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
         REQUIRE(dst_vec.isSmallStorage());
         REQUIRE(src_data != dst_vec.data());
         REQUIRE_FALSE(alloc.owns(dst_vec.data()));
-        REQUIRE(alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(alloc.getStats()._alloc_count == 0U);
 
         for (usize idx = 0 ; idx != dst_vec.size(); ++idx)
         {
@@ -503,7 +503,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
             
             REQUIRE(src_vec.isSmallStorage());
             REQUIRE_FALSE(test_alloc.owns(src_vec.data()));
-            REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count == 0U);
 
             REQUIRE(TestObjectCnt::getStats() == 5U);
 
@@ -514,7 +514,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
             REQUIRE_FALSE(dst_vec.isSmallStorage());
             REQUIRE(test_alloc.owns(dst_vec.data()));
             REQUIRE(src_data != dst_vec.data());
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
 
             for (usize idx = 0 ; idx != dst_vec.size(); ++idx)
             {
@@ -524,7 +524,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
             REQUIRE(TestObjectCnt::getStats() == 5U);
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U);
     }
 
     SECTION("Objects are moved from heap to heap")
@@ -565,7 +565,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
 
             REQUIRE_FALSE(src_vec.isSmallStorage());
             REQUIRE(test_alloc.owns(src_vec.data()));
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
 
             REQUIRE(TestObjectCnt::getStats() == 10U);
 
@@ -575,7 +575,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
             REQUIRE_FALSE(dst_vec.isSmallStorage());
             REQUIRE(src_data == dst_vec.data());
             REQUIRE(test_alloc.owns(dst_vec.data()));
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
 
             for (usize idx = 0 ; idx != dst_vec.size(); ++idx)
             {
@@ -585,7 +585,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
             REQUIRE(TestObjectCnt::getStats() == 10U);
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U);        
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U);        
     }
     
     SECTION("Move from heap to small storage")
@@ -646,7 +646,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
             REQUIRE(TestObjectCnt::getStats() == 10U);
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U);
     }
 }
 
@@ -721,7 +721,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray clear", "[small_vector]")
             REQUIRE_FALSE(vect.empty());
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(10U == vect.size());
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U); 
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U); 
             REQUIRE(TestObjectCnt::getStats() == 10U);
 
             vect.clear();
@@ -729,11 +729,11 @@ TEST_CASE_METHOD(SArrayFixture, "SArray clear", "[small_vector]")
             REQUIRE(vect.empty());
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(0U == vect.size());
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U); 
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U); 
             REQUIRE(TestObjectCnt::getStats() == 0U);
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U); 
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U); 
     }
 }
 
@@ -804,14 +804,14 @@ TEST_CASE_METHOD(SArrayFixture, "SArray capacity reservation", "[small_vector]")
             REQUIRE(vect.isSmallStorage());
             REQUIRE(vect.size() == 3U);
             REQUIRE(TestObjectCnt::getStats() == 3U);
-            REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count == 0U);
 
             vect.reserve(10U);
 
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(vect.size() == 3U);
             REQUIRE(TestObjectCnt::getStats() == 3U);
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
             REQUIRE(small_storage_data != vect.data());
 
             for (usize idx = 0 ; idx != vect.size(); ++idx)
@@ -820,7 +820,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray capacity reservation", "[small_vector]")
             }   
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U);
     }
 }
 
@@ -857,19 +857,19 @@ TEST_CASE_METHOD(SArrayFixture, "SArray shrink to fit", "[small_vector]")
             initTestObjectSequence(vect);
 
             vect.reserve(10U);
-            auto const prev_alloc_mem = test_alloc.getStats().m_allocated_byte;
+            auto const prev_alloc_mem = test_alloc.getStats()._allocated_byte;
 
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(TestObjectCnt::getStats() == 7U);
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
             REQUIRE(small_vect_data != vect.data());
 
             vect.shrink_to_fit();
 
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(TestObjectCnt::getStats() == 7U);
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
-            REQUIRE(test_alloc.getStats().m_allocated_byte < prev_alloc_mem);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._allocated_byte < prev_alloc_mem);
             REQUIRE(small_vect_data != vect.data());
 
             for (usize idx = 0 ; idx != vect.size(); ++idx)
@@ -878,8 +878,8 @@ TEST_CASE_METHOD(SArrayFixture, "SArray shrink to fit", "[small_vector]")
             }
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
-        REQUIRE(test_alloc.getStats().m_allocated_byte == 0U);
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U);
+        REQUIRE(test_alloc.getStats()._allocated_byte == 0U);
     }
 
     SECTION("Shrink to fit moves the objects back to small storage")
@@ -896,14 +896,14 @@ TEST_CASE_METHOD(SArrayFixture, "SArray shrink to fit", "[small_vector]")
 
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(TestObjectCnt::getStats() == 3U);
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
             REQUIRE(small_vect_data != vect.data());
 
             vect.shrink_to_fit();
 
             REQUIRE(vect.isSmallStorage());
             REQUIRE(TestObjectCnt::getStats() == 3U);
-            REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count == 0U);
             REQUIRE(small_vect_data == vect.data());
 
             for (usize idx = 0 ; idx != vect.size(); ++idx)
@@ -995,14 +995,14 @@ TEST_CASE_METHOD(SArrayFixture, "SArray resize", "[small_vector]")
             REQUIRE(vect.size() == 2U);
             REQUIRE(vect.isSmallStorage());
             REQUIRE(TestObjectCnt::getStats() == 2U);
-            REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count == 0U);
 
             vect.resize(10);
 
             REQUIRE(vect.size() == 10U);
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(TestObjectCnt::getStats() == 10U);
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
             REQUIRE(vect.data() != small_storage_data);
 
             for (usize idx = 0 ; idx != 2U ; ++idx)
@@ -1013,7 +1013,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray resize", "[small_vector]")
             REQUIRE(sbstd::all_of(begin(vect) + 2, end(vect), TestObjectCnt::CompEqual{0U}));
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U);
     }
 
     SECTION("Resize to a smaller size destroys objects and does not deallocate memory")
@@ -1029,14 +1029,14 @@ TEST_CASE_METHOD(SArrayFixture, "SArray resize", "[small_vector]")
             REQUIRE(vect.size() == 7U);
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(TestObjectCnt::getStats() == 7U);
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
 
             vect.resize(2);
 
             REQUIRE(vect.size() == 2U);
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(TestObjectCnt::getStats() == 2U);
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
             REQUIRE(vect.data() == vect_data);
 
             for (usize idx = 0 ; idx != 2U ; ++idx)
@@ -1045,7 +1045,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray resize", "[small_vector]")
             }
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U);
     }
 
     SECTION("Resize with value")
@@ -1126,7 +1126,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign value", "[small_vector]")
             REQUIRE(vect.isSmallStorage());
             REQUIRE(vect.size() == 3U);
             REQUIRE(TestObjectCnt::getStats() == 4U);
-            REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count == 0U);
 
             vect.assign(10, REF_OBJECT);
 
@@ -1134,11 +1134,11 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign value", "[small_vector]")
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(sbstd::all_of(begin(vect), end(vect), TestObjectCnt::CompEqual{REF_OBJECT}));
             REQUIRE(TestObjectCnt::getStats() == 11U);
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
             REQUIRE(vect.data() != small_vect_data);
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U);
     }
 
     SECTION("Assign objects which fits in internal storage does not deallocate memory")
@@ -1155,7 +1155,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign value", "[small_vector]")
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(vect.size() == 10U);
             REQUIRE(TestObjectCnt::getStats() == 11U);
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
 
             vect.assign(2, REF_OBJECT);
 
@@ -1164,10 +1164,10 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign value", "[small_vector]")
             REQUIRE(vect.data() == vect_data);
             REQUIRE(sbstd::all_of(begin(vect), end(vect), TestObjectCnt::CompEqual{REF_OBJECT}));
             REQUIRE(TestObjectCnt::getStats() == 3U);
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U);
     }
 }
 
@@ -1216,14 +1216,14 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign operator", "[small_vector]")
 
             REQUIRE(TestObjectCnt::getStats() == 8U);
             REQUIRE(vect.isSmallStorage());
-            REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count == 0U);
 
             vect = vect_src;
             
             REQUIRE(vect.size() == 5U);
             REQUIRE(TestObjectCnt::getStats() == 10U);
             REQUIRE_FALSE(vect.isSmallStorage());
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
 
             for (usize idx = 0 ; idx != 5U ; ++idx)
             {
@@ -1231,7 +1231,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign operator", "[small_vector]")
             }
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U);
     }
 
     SECTION("Assign a vector fitting in small storage does not deallocate memory")
@@ -1251,14 +1251,14 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign operator", "[small_vector]")
 
             REQUIRE(TestObjectCnt::getStats() == 13U);
             REQUIRE_FALSE(vect.isSmallStorage());
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
 
             vect = vect_src;
             
             REQUIRE(vect.size() == 3U);
             REQUIRE(TestObjectCnt::getStats() == 6U);
             REQUIRE_FALSE(vect.isSmallStorage());
-            REQUIRE(test_alloc.getStats().m_alloc_count != 0U);
+            REQUIRE(test_alloc.getStats()._alloc_count != 0U);
 
             for (usize idx = 0 ; idx != 3U ; ++idx)
             {
@@ -1266,7 +1266,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign operator", "[small_vector]")
             }
         }
 
-        REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
+        REQUIRE(test_alloc.getStats()._alloc_count == 0U);
     }
 }
 

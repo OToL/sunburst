@@ -1,3 +1,5 @@
+// @todo: I don't like having this winapi in external
+// it should be in sb_os or _impl/api/windows
 #include <winapi/windows.h>
 
 // @todo: use Win32 API (CreateFile, etc.)

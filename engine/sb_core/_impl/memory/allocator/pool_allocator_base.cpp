@@ -1,13 +1,12 @@
 #include "pool_allocator_base.h"
 #include <sb_core/conversion.h>
 #include <sb_core/error.h>
-#include <sb_core/bit.h>
 
 void sb::PoolAllocatorBase::initFreeList()
 {
-    s32 const block_cnt = numericConv<NodeIdx>(_arena.m_size / _actual_block_size);
+    s32 const block_cnt = numericConv<NodeIdx>(_arena.size / _actual_block_size);
 
-    u8 * node_iter = static_cast<u8 *>(_arena.m_ptr);
+    u8 * node_iter = static_cast<u8 *>(_arena.data);
 
     for (NodeIdx idx = 0; (block_cnt - 1) != idx; ++idx)
     {
@@ -40,7 +39,7 @@ sb::MemoryArena sb::PoolAllocatorBase::allocate(usize const size)
 {
     if ((INVALID_NODE_IDX != _free_list_head) && (size <= _actual_block_size))
     {
-        u8 * const free_node = static_cast<u8 *>(_arena.m_ptr) + (_free_list_head * _actual_block_size);
+        u8 * const free_node = static_cast<u8 *>(_arena.data) + (_free_list_head * _actual_block_size);
         void * block_ptr = free_node;
 
         _free_list_head = *reinterpret_cast<NodeIdx *>(free_node);
@@ -65,7 +64,7 @@ void sb::PoolAllocatorBase::deallocate(void * ptr)
 {
     if (sbExpect(_arena.isInRange(ptr)))
     {
-        auto const ptr_offset = static_cast<u8 *>(ptr) - static_cast<u8 *>(_arena.m_ptr);
+        auto const ptr_offset = static_cast<u8 *>(ptr) - static_cast<u8 *>(_arena.data);
         sbAssert(0U == (ptr_offset % _actual_block_size));
 
         NodeIdx * const dealloc_node = static_cast<NodeIdx *>(ptr);

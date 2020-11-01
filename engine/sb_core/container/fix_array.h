@@ -1,7 +1,6 @@
 #pragma once
 
 #include <sb_core/core.h>
-
 #include <sb_core/error.h>
 
 #include <sb_std/type_traits>
@@ -9,10 +8,10 @@
 
 namespace sb {
 
-// TODO: do no call dtor for pod
-// TODO: uninitialized push maybe just for pod
-// TODO: try_emplace
-// TODO: try_pushback
+// @todo: do no call dtor for pod
+// @todo: uninitialized push maybe just for pod
+// @todo: try_emplace
+// @todo: try_pushback
 template <typename TType, usize CAPACITY>
 class FixArray
 {
@@ -27,7 +26,7 @@ public:
     using size_type = usize;
 
     FixArray()
-        : m_size(0)
+        : _size(0)
     {
     }
 
@@ -41,7 +40,7 @@ public:
 
     size_type size() const
     {
-        return m_size;
+        return _size;
     }
 
     size_type capacity() const
@@ -51,68 +50,68 @@ public:
 
     void clear()
     {
-        pointer const iter = reinterpret_cast<pointer>(&m_data[0]);
+        pointer const iter = reinterpret_cast<pointer>(&_data[0]);
 
-        for (usize idx = 0; idx != m_size; ++idx)
+        for (usize idx = 0; idx != _size; ++idx)
         {
             iter->~value_type();
         }
 
-        m_size = 0;
+        _size = 0;
     }
 
     bool empty() const
     {
-        return (0 == m_size);
+        return (0 == _size);
     }
 
     void push_back(const_reference value)
     {
-        sbAssert(CAPACITY != m_size, "Static vector capacity exceeded");
+        sbAssert(CAPACITY != _size, "Static vector capacity exceeded");
 
-        new (&m_data[m_size]) value_type{value};
-        ++m_size;
+        new (&_data[_size]) value_type{value};
+        ++_size;
     }
 
     void push_back(value_type && value)
     {
-        sbAssert(CAPACITY != m_size, "Static vector capacity exceeded");
+        sbAssert(CAPACITY != _size, "Static vector capacity exceeded");
 
-        new (&m_data[m_size]) value_type{sbstd::move(value)};
-        ++m_size;
+        new (&_data[_size]) value_type{sbstd::move(value)};
+        ++_size;
     }
 
     void pop_back()
     {
-        sbAssert(0 != m_size, "You cannot pop item from empty static vector");
+        sbAssert(0 != _size, "You cannot pop item from empty static vector");
 
-        ((reference)m_data[m_size]).~value_type();
-        --m_size;
+        ((reference)_data[_size]).~value_type();
+        --_size;
     }
 
     template <class... TArgs>
     reference emplace_back(TArgs &&... args)
     {
-        sbAssert(CAPACITY != m_size, "Static vector capacity exceeded");
+        sbAssert(CAPACITY != _size, "Static vector capacity exceeded");
 
-        new (&m_data[m_size]) value_type{sbstd::forward<TArgs>(args)...};
-        ++m_size;
+        new (&_data[_size]) value_type{sbstd::forward<TArgs>(args)...};
+        ++_size;
 
         return back();
     }
 
     reference back()
     {
-        sbAssert(0 != m_size);
+        sbAssert(0 != _size);
 
-        return ((reference)m_data[m_size - 1]);
+        return ((reference)_data[_size - 1]);
     }
 
     const_reference back() const
     {
-        sbAssert(0 != m_size);
+        sbAssert(0 != _size);
 
-        return ((const_reference)&m_data[m_size - 1]);
+        return ((const_reference)&_data[_size - 1]);
     }
 
     iterator erase(iterator pos)
@@ -132,60 +131,60 @@ public:
         }
 
         item2Rem->~value_type();
-        --m_size;
+        --_size;
 
         return pos;
     }
 
     const_pointer data() const
     {
-        return reinterpret_cast<const_pointer>(&m_data[0]);
+        return reinterpret_cast<const_pointer>(&_data[0]);
     }
 
     pointer data()
     {
-        return reinterpret_cast<pointer>(&m_data[0]);
+        return reinterpret_cast<pointer>(&_data[0]);
     }
 
     const_iterator begin() const
     {
-        return reinterpret_cast<const_pointer>(&m_data[0]);
+        return reinterpret_cast<const_pointer>(&_data[0]);
     }
 
     iterator begin()
     {
-        return reinterpret_cast<iterator>(&m_data[0]);
+        return reinterpret_cast<iterator>(&_data[0]);
     }
 
     const_iterator end() const
     {
-        return reinterpret_cast<const_iterator>(&m_data[0]) + m_size;
+        return reinterpret_cast<const_iterator>(&_data[0]) + _size;
     }
 
     iterator end()
     {
-        return reinterpret_cast<iterator>(&m_data[0]) + m_size;
+        return reinterpret_cast<iterator>(&_data[0]) + _size;
     }
 
     reference operator[](usize idx)
     {
-        sbAssert(idx < m_size);
+        sbAssert(idx < _size);
 
-        return reinterpret_cast<pointer>(&m_data[0])[idx];
+        return reinterpret_cast<pointer>(&_data[0])[idx];
     }
 
     const_reference operator[](usize idx) const
     {
-        sbAssert(idx < m_size);
+        sbAssert(idx < _size);
 
-        return reinterpret_cast<const_pointer>(&m_data[0])[idx];
+        return reinterpret_cast<const_pointer>(&_data[0])[idx];
     }
 
 private:
     using StorageType = typename sbstd::aligned_storage<sizeof(value_type), alignof(value_type)>::type;
 
-    StorageType m_data[CAPACITY];
-    size_type m_size;
+    StorageType _data[CAPACITY];
+    size_type _size;
 };
 
 template <typename TType, usize CAPACITY>

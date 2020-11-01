@@ -27,8 +27,8 @@ TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
         {
             auto mem_arena = test_alloc.allocate(1);
             REQUIRE(!mem_arena.isEmpty());
-            REQUIRE((uptr)mem_arena.m_ptr == idx);
-            REQUIRE(test_alloc.owns(mem_arena.m_ptr));
+            REQUIRE((uptr)mem_arena.data == idx);
+            REQUIRE(test_alloc.owns(mem_arena.data));
         }
 
         REQUIRE(test_alloc.allocate(1).isEmpty());
@@ -49,8 +49,8 @@ TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
         {
             auto mem_arena = test_alloc.allocate(1);
             REQUIRE(!mem_arena.isEmpty());
-            REQUIRE((uptr)mem_arena.m_ptr == idx*ALIGNMENT_4B);
-            REQUIRE(test_alloc.owns(mem_arena.m_ptr));
+            REQUIRE((uptr)mem_arena.data == idx*ALIGNMENT_4B);
+            REQUIRE(test_alloc.owns(mem_arena.data));
         }
 
         REQUIRE(test_alloc.allocate(1).isEmpty());
@@ -67,8 +67,8 @@ TEST_CASE("Incremetal Allocator aligned allocate", "[incremental_allocator]")
         {
             auto mem_arena = test_alloc.allocate(1, ALIGNMENT_4B);
             REQUIRE(!mem_arena.isEmpty());
-            REQUIRE((uptr)mem_arena.m_ptr == idx*ALIGNMENT_4B);
-            REQUIRE(test_alloc.owns(mem_arena.m_ptr));
+            REQUIRE((uptr)mem_arena.data == idx*ALIGNMENT_4B);
+            REQUIRE(test_alloc.owns(mem_arena.data));
         }
 
         REQUIRE(test_alloc.allocate(1).isEmpty());

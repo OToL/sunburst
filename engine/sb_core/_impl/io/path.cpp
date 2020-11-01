@@ -4,8 +4,6 @@
 #include <sb_core/string/string_utility.h>
 #include <sb_core/core.h>
 
-#include <sb_std/algorithm>
-
 constexpr char const * INVALID_LOGICAL_PATH_SEPARATOR = "\\";
 
 sb::b8 sb::isVFSPathValid(char const * vfs_path)

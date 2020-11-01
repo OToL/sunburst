@@ -9,8 +9,8 @@ class TestAllocator final : public IAllocator
 public:
     struct Stats
     {
-        size_t m_alloc_count = 0U;
-        size_t m_allocated_byte = 0U;
+        size_t _alloc_count = 0U;
+        size_t _allocated_byte = 0U;
     };
 
     TestAllocator() = default;
@@ -31,24 +31,24 @@ public:
 
     Stats getStats() const
     {
-        return m_stats;
+        return _stats;
     }
 
 private:
     struct AllocDesc
     {
         AllocDesc(void * mem_ptr, size_t size)
-            : m_mem(mem_ptr)
-            , m_size(size)
+            : _mem(mem_ptr)
+            , size(size)
         {
         }
 
-        void * m_mem = nullptr;
-        size_t m_size = 0ULL;
+        void * _mem = nullptr;
+        size_t size = 0ULL;
     };
 
-    Stats m_stats;
-    DArray<AllocDesc> m_allocs;
+    Stats _stats;
+    DArray<AllocDesc> _allocs;
 };
 
 } // namespace sb

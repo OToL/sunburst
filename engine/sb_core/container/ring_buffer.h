@@ -1,14 +1,14 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/memory/allocator/global_heap_allocator.h>
 #include <sb_core/error.h>
+#include <sb_core/memory/allocator/container_allocator.h>
 
 #include <sb_std/type_traits>
 
 namespace sb {
 
-template <typename TType, typename TAllocator = GlobalHeapAllocator>
+template <typename TType, typename TAllocator = ContainerAllocator>
 class RingBuffer
 {
 public:
@@ -24,7 +24,7 @@ public:
     {
         sbAssert(0 != _capacity);
 
-        _data = (ValueType *)_alloc.allocate(capacity * sizeof(ValueType), alignOf<ValueType>()).m_ptr;
+        _data = (ValueType *)_alloc.allocate(capacity * sizeof(ValueType), alignOf<ValueType>()).data;
         sbAssert(nullptr != _data);
     }
 
@@ -37,7 +37,7 @@ public:
     {
         sbAssert(0 != _capacity);
 
-        _data = (ValueType *)_alloc.allocate(capacity * sizeof(ValueType), alignOf<ValueType>()).m_ptr;
+        _data = (ValueType *)_alloc.allocate(capacity * sizeof(ValueType), alignOf<ValueType>()).data;
         sbAssert(nullptr != _data);
     }
 

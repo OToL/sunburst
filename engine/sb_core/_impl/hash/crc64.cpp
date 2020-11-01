@@ -1,7 +1,5 @@
 #include <sb_core/hash/crc.h>
 
-#include <sb_std/cstring>
-
 static sb::u64 const CRC64_TAB[256] = {
     0x0000000000000000ULL, 0x42f0e1eba9ea3693ULL, 0x85e1c3d753d46d26ULL, 0xc711223cfa3e5bb5ULL, 0x493366450e42ecdfULL,
     0x0bc387aea7a8da4cULL, 0xccd2a5925d9681f9ULL, 0x8e224479f47cb76aULL, 0x9266cc8a1c85d9beULL, 0xd0962d61b56fef2dULL,

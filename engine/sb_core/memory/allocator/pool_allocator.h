@@ -51,7 +51,7 @@ public:
         MemoryArena mem_arena = BaseClass::getArena();
         if (!mem_arena.isEmpty())
         {
-            _mem_provider.deallocate(mem_arena.m_ptr);
+            _mem_provider.deallocate(mem_arena.data);
         }
     }
 

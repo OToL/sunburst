@@ -35,41 +35,41 @@ protected:
 
         Impl(pointer begin, pointer storage_end, TAllocator const & alloc)
             : BaseClass(alloc)
-            , m_begin(begin)
-            , m_end(begin)
-            , m_storage_end(storage_end)
+            , _begin(begin)
+            , _end(begin)
+            , _storage_end(storage_end)
         {
         }
 
         Impl(pointer begin, pointer storage_end)
             : BaseClass()
-            , m_begin(begin)
-            , m_end(begin)
-            , m_storage_end(storage_end)
+            , _begin(begin)
+            , _end(begin)
+            , _storage_end(storage_end)
         {
         }
 
         void reset()
         {
-            m_begin = nullptr;
-            m_end = nullptr;
-            m_storage_end = nullptr;
+            _begin = nullptr;
+            _end = nullptr;
+            _storage_end = nullptr;
         }
 
         void init(pointer begin, pointer storage_end, TAllocator const & alloc)
         {
-            m_begin = begin;
-            m_end = begin;
-            m_storage_end = storage_end;
+            _begin = begin;
+            _end = begin;
+            _storage_end = storage_end;
 
             get_allocator() = alloc;
         }
 
         void init(pointer begin, pointer storage_end)
         {
-            m_begin = begin;
-            m_end = begin;
-            m_storage_end = storage_end;
+            _begin = begin;
+            _end = begin;
+            _storage_end = storage_end;
         }
 
         void setAllocator(TAllocator const & alloc)
@@ -87,9 +87,9 @@ protected:
             return *this;
         }
 
-        pointer m_begin = nullptr;
-        pointer m_end = nullptr;
-        pointer m_storage_end = nullptr;
+        pointer _begin = nullptr;
+        pointer _end = nullptr;
+        pointer _storage_end = nullptr;
     };
 };
 } // namespace sb::internal

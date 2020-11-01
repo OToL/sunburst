@@ -8,34 +8,34 @@ namespace sb {
 static TestObjectCnt::Stats gs_stats;
 
 TestObjectCnt::TestObjectCnt()
-    : m_valid(true)
-    , m_id(0U)
+    : _valid(true)
+    , _id(0U)
 {
     ++gs_stats.valid_obj_cnt;
     ++gs_stats.obj_cnt;
 }
 
 TestObjectCnt::TestObjectCnt(usize id)
-    : m_valid(true)
-    , m_id(id)
+    : _valid(true)
+    , _id(id)
 {
     ++gs_stats.obj_cnt;
     ++gs_stats.valid_obj_cnt;
 }
 
 TestObjectCnt::TestObjectCnt(TestObjectCnt && src)
-    : m_valid(true)
-    , m_id(src.m_id)
+    : _valid(true)
+    , _id(src._id)
 {
-    sbAssert(src.m_valid);
+    sbAssert(src._valid);
     ++gs_stats.obj_cnt;
 
-    src.m_valid = false;
+    src._valid = false;
 }
 
 TestObjectCnt::TestObjectCnt(TestObjectCnt const & src)
-    : m_valid(true)
-    , m_id(src.m_id)
+    : _valid(true)
+    , _id(src._id)
 {
     ++gs_stats.obj_cnt;
     ++gs_stats.valid_obj_cnt;
@@ -43,30 +43,30 @@ TestObjectCnt::TestObjectCnt(TestObjectCnt const & src)
 
 TestObjectCnt & TestObjectCnt::operator=(TestObjectCnt const & src)
 {
-    sbAssert(m_valid && src.m_valid);
+    sbAssert(_valid && src._valid);
 
-    m_id = src.m_id;
+    _id = src._id;
 
     return *this;
 }
 
 TestObjectCnt & TestObjectCnt::operator=(TestObjectCnt && src)
 {
-    sbAssert(src.m_valid);
+    sbAssert(src._valid);
 
-    m_id = src.m_id;
+    _id = src._id;
 
-    if (m_valid)
+    if (_valid)
     {
         sbAssert(0 < gs_stats.valid_obj_cnt);
         --gs_stats.valid_obj_cnt;
     }
     else
     {
-        m_valid = true;
+        _valid = true;
     }
 
-    src.m_valid = false;
+    src._valid = false;
 
     return *this;
 }
@@ -76,7 +76,7 @@ TestObjectCnt::~TestObjectCnt()
     sbAssert(0 < gs_stats.obj_cnt);
     --gs_stats.obj_cnt;
 
-    if (m_valid)
+    if (_valid)
     {
         sbAssert(0 < gs_stats.valid_obj_cnt);
         --gs_stats.valid_obj_cnt;

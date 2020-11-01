@@ -9,7 +9,6 @@ namespace sb {
 class ContainerAllocator
 {
 public:
-
     ContainerAllocator() = default;
 
     MemoryArena allocate(usize const size);
@@ -20,7 +19,7 @@ public:
 
     void deallocate(MemoryArena arena)
     {
-        deallocate(arena.m_ptr);
+        deallocate(arena.data);
     }
 
     b8 owns(void const * ptr) const;

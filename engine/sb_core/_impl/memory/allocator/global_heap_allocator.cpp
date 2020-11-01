@@ -1,8 +1,6 @@
 #include <sb_core/memory/allocator/global_heap_allocator.h>
 #include <sb_core/memory/global_heap.h>
 #include <sb_core/memory/memory.h>
-#include <sb_core/error.h>
-#include <sb_core/core.h>
 
 sb::MemoryArena sb::GlobalHeapAllocator::allocate(usize const size)
 {

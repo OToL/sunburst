@@ -11,6 +11,8 @@ enum Alignment : usize
     ALIGNMENT_4B = 4,
     ALIGNMENT_8B = 8,
     ALIGNMENT_16B = 16,
+    ALIGNMENT_32B = 16,
+    ALIGNMENT_64B = 16,
     ALIGNMENT_128B = 128,
 
     ALIGNMENT_DEFAULT = ALIGNMENT_8B
@@ -38,6 +40,8 @@ void zeroStruct(T (&objPtr)[COUNT])
 
 [[noreturn]] void notifyOOM(usize requestedSize, char const * message);
 
+// @todo: not sure to like it ... we should use alignof directly in the code
+// and make sure Alignment covers all possible values
 template <typename TType>
 constexpr inline Alignment alignOf()
 {

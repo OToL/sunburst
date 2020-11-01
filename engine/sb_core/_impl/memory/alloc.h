@@ -24,7 +24,7 @@ TType * newImpl(THeap & heap, TArgs &&... args)
 
     if (!arena.isEmpty())
     {
-        return ::new (arena.m_ptr) TType(sbstd::forward<TArgs &&>(args)...);
+        return ::new (arena.data) TType(sbstd::forward<TArgs &&>(args)...);
     }
 
     return nullptr;

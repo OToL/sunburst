@@ -4,7 +4,6 @@
 #include <sb_core/core.h>
 
 #include <sb_std/span>
-#include <sb_std/string_view>
 
 namespace sb {
 

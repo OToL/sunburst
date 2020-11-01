@@ -2,6 +2,7 @@
 
 #include <sb_core/core.h>
 
+// @todo: move to another header
 #include <sb_std/inplace_function>
 
 namespace sb {

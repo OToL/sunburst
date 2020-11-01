@@ -13,7 +13,6 @@ namespace sb {
 
 class IFileSystemLayer;
 
-// @todo: Review the different ways to open/create files vs fopen options
 struct VirtualFileSystem
 {
     using LayerName = HashStr;
@@ -21,8 +20,8 @@ struct VirtualFileSystem
     struct LayerInitDesc
     {
         LayerName name;
-        FixString<VFS_PATH_MAX_LEN + 1> vfs_path;
-        FixString<LOCAL_PATH_MAX_LEN + 1> local_path;
+        FString<VFS_PATH_MAX_LEN + 1> vfs_path;
+        FString<LOCAL_PATH_MAX_LEN + 1> local_path;
     };
 
     struct InitDesc

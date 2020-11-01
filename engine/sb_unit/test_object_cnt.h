@@ -18,21 +18,21 @@ public:
     struct CompEqual
     {
         CompEqual(usize id)
-            : m_id(id)
+            : _id(id)
         {
         }
 
         CompEqual(TestObjectCnt const & obj)
-            : m_id(obj.getId())
+            : _id(obj.getId())
         {
         }
 
         bool operator()(TestObjectCnt const & obj) const
         {
-            return m_id == obj.getId();
+            return _id == obj.getId();
         }
 
-        usize m_id = 0U;
+        usize _id = 0U;
     };
 
     TestObjectCnt();
@@ -51,12 +51,12 @@ public:
 
     ValueType getId() const
     {
-        return m_id;
+        return _id;
     }
 
     void setId(ValueType id)
     {
-        m_id = id;
+        _id = id;
     }
 
     static Stats getStats();
@@ -68,8 +68,8 @@ public:
     static bool areSequencial(sbstd::span<TestObjectCnt> objects, ValueType start_id = 0U);
 
 private:
-    b8 m_valid;
-    ValueType m_id;
+    b8 _valid;
+    ValueType _id;
 };
 
 bool operator==(TestObjectCnt const & lval, TestObjectCnt::ValueType rval);

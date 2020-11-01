@@ -24,8 +24,8 @@ TEST_CASE("STL Allocator Wrapper", "[stl_allocator]")
 
         sbstd::copy(sbstd::begin(array_test), sbstd::end(array_test), back_inserter(vector_test));
 
-        REQUIRE(test_alloc.getStats().m_allocated_byte != 0U);
-        REQUIRE(test_alloc.getStats().m_allocated_byte >= sizeof(array_test));
+        REQUIRE(test_alloc.getStats()._allocated_byte != 0U);
+        REQUIRE(test_alloc.getStats()._allocated_byte >= sizeof(array_test));
 
         for (u32 idx = 0 ; idx != sbstd::size(array_test) ; ++idx)
         {
@@ -34,8 +34,8 @@ TEST_CASE("STL Allocator Wrapper", "[stl_allocator]")
         }
     }
 
-    REQUIRE(test_alloc.getStats().m_alloc_count == 0U);
-    REQUIRE(test_alloc.getStats().m_allocated_byte == 0U);
+    REQUIRE(test_alloc.getStats()._alloc_count == 0U);
+    REQUIRE(test_alloc.getStats()._allocated_byte == 0U);
 }
 
 #include <catch2/test_epilog.h>

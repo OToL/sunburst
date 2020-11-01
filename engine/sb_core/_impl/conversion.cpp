@@ -5,8 +5,6 @@
 
 #include <sb_std/charconv>
 #include <sb_std/span>
-#include <sb_std/algorithm>
-#include <sb_std/utility>
 
 sb::usize sb::internal::stringToCharBuffer(char const * src, sbstd::span<char> dst)
 {
@@ -20,7 +18,7 @@ sb::usize sb::internal::decimalToString(T src, sbstd::span<char> dest)
 
     if (res.ec == sbstd::errc{})
     {
-        auto const len = numericConv<usize>(sbstd::distance(dest.data(), res.ptr));
+        auto const len = numericConv<usize>(res.ptr - dest.data());
 
         if (0 != len)
         {

@@ -73,7 +73,7 @@ public:
     [[nodiscard]] pointer allocate(size_type nb, void const * /*hint*/)
     {
         if (nullptr != m_alloc)
-            return allocate(nb).m_ptr;
+            return allocate(nb).data;
 
         return nullptr;
     }
@@ -81,7 +81,7 @@ public:
     [[nodiscard]] pointer allocate(size_type nb)
     {
         if (nullptr != m_alloc)
-            return (pointer)m_alloc->allocate(nb * sizeof(T), alignOf<T>()).m_ptr;
+            return (pointer)m_alloc->allocate(nb * sizeof(T), alignOf<T>()).data;
 
         return nullptr;
     }

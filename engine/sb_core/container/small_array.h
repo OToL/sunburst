@@ -1,11 +1,11 @@
 #pragma once
 
+#include <sb_core/core.h>
 #include <sb_core/conversion.h>
 #include <sb_core/error.h>
 #include <sb_core/memory/memory.h>
-#include <sb_core/_impl/container/small_array_base.h>
 #include <sb_core/memory/allocator/container_allocator.h>
-#include <sb_core/core.h>
+#include <sb_core/_impl/container/small_array_base.h>
 
 #include <sb_std/algorithm>
 #include <sb_std/iterator>
@@ -39,75 +39,74 @@ public:
     using allocator_type = TAllocator;
 
     SmallArray()
-        : SmallArray(reinterpret_cast<pointer>(&m_buffer[0]))
+        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]))
     {
     }
 
     explicit SmallArray(allocator_type const & alloc)
-        : SmallArray(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
+        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
     }
 
     explicit SmallArray(size_type count, allocator_type const & alloc = allocator_type())
-        : SmallArray(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
+        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
         buyMore(count);
 
-        sbstd::uninitialized_default_construct(m_impl.m_begin, m_impl.m_end);
+        sbstd::uninitialized_default_construct(_impl._begin, _impl._end);
     }
 
     SmallArray(size_type count, value_type const & value, allocator_type const & alloc = allocator_type())
-        : SmallArray(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
+        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
         buyMore(count);
 
-        sbstd::uninitialized_fill(m_impl.m_begin, m_impl.m_end, value);
+        sbstd::uninitialized_fill(_impl._begin, _impl._end, value);
     }
 
     template <class TIterator>
     SmallArray(TIterator first, TIterator last, allocator_type const & alloc = allocator_type())
-        : SmallArray(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
+        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
         buyMore(numericConv<size_type>(last - first));
 
-        sbstd::uninitialized_copy(first, last, m_impl.m_begin);
+        sbstd::uninitialized_copy(first, last, _impl._begin);
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
     SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src)
-        : SmallArray(reinterpret_cast<pointer>(&m_buffer[0]), src.m_impl.get_allocator())
+        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), src._impl.get_allocator())
     {
         buyMore(src.size());
 
-        sbstd::uninitialized_copy(sbstd::begin(src), sbstd::end(src), m_impl.m_begin);
+        sbstd::uninitialized_copy(sbstd::begin(src), sbstd::end(src), _impl._begin);
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
     SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src, allocator_type const & alloc)
-        : SmallArray(reinterpret_cast<pointer>(&m_buffer[0]), alloc)
+        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
         buyMore(src.size());
 
-        sbstd::uninitialized_copy(sbstd::begin(src), sbstd::end(src), m_impl.m_begin);
+        sbstd::uninitialized_copy(sbstd::begin(src), sbstd::end(src), _impl._begin);
     }
 
     template <usize BASE_CAPACITY_SRC>
     SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TAllocator> && src)
-        : m_impl(src.m_impl.get_allocator())
+        : _impl(src._impl.get_allocator())
     {
         if (!src.isSmallStorage() && (src.size() > BASE_CAPACITY))
         {
-            sbstd::swap(m_impl.m_begin, src.m_impl.m_begin);
-            sbstd::swap(m_impl.m_end, src.m_impl.m_end);
-            sbstd::swap(m_impl.m_storage_end, src.m_impl.m_storage_end);
+            sbstd::swap(_impl._begin, src._impl._begin);
+            sbstd::swap(_impl._end, src._impl._end);
+            sbstd::swap(_impl._storage_end, src._impl._storage_end);
         }
         else
         {
-            m_impl.init(reinterpret_cast<pointer>(&m_buffer[0]),
-                        reinterpret_cast<pointer>(&m_buffer[0]) + BASE_CAPACITY);
+            _impl.init(reinterpret_cast<pointer>(&_buffer[0]), reinterpret_cast<pointer>(&_buffer[0]) + BASE_CAPACITY);
 
             buyMore(src.size());
-            sbstd::uninitialized_move(sbstd::begin(src), sbstd::end(src), m_impl.m_begin);
+            sbstd::uninitialized_move(sbstd::begin(src), sbstd::end(src), _impl._begin);
 
             src.clear();
         }
@@ -115,21 +114,20 @@ public:
 
     template <usize BASE_CAPACITY_SRC>
     SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TAllocator> && src, allocator_type const & alloc)
-        : m_impl(alloc)
+        : _impl(alloc)
     {
         if (!src.isSmallStorage() && (src.size() > BASE_CAPACITY))
         {
-            sbstd::swap(m_impl.m_begin, src.m_impl.m_begin);
-            sbstd::swap(m_impl.m_end, src.m_impl.m_end);
-            sbstd::swap(m_impl.m_storage_end, src.m_impl.m_storage_end);
+            sbstd::swap(_impl._begin, src._impl._begin);
+            sbstd::swap(_impl._end, src._impl._end);
+            sbstd::swap(_impl._storage_end, src._impl._storage_end);
         }
         else
         {
-            m_impl.init(reinterpret_cast<pointer>(&m_buffer[0]),
-                        reinterpret_cast<pointer>(&m_buffer[0]) + BASE_CAPACITY);
+            _impl.init(reinterpret_cast<pointer>(&_buffer[0]), reinterpret_cast<pointer>(&_buffer[0]) + BASE_CAPACITY);
 
             buyMore(src.size());
-            sbstd::uninitialized_move(sbstd::begin(src), sbstd::end(src), m_impl.m_begin);
+            sbstd::uninitialized_move(sbstd::begin(src), sbstd::end(src), _impl._begin);
 
             src.clear();
         }
@@ -141,7 +139,7 @@ public:
 
         if (!isSmallStorage())
         {
-            m_impl.deallocate(MemoryArena{m_impl.m_begin, (size_type)(m_impl.m_storage_end - m_impl.m_begin)});
+            _impl.deallocate(MemoryArena{_impl._begin, (size_type)(_impl._storage_end - _impl._begin)});
         }
     }
 
@@ -150,10 +148,10 @@ public:
     {
         if (!isSmallStorage() && !src.isSmallStorage())
         {
-            sbstd::swap(m_impl.m_begin, src.m_impl.m_begin);
-            sbstd::swap(m_impl.m_end, src.m_impl.m_end);
-            sbstd::swap(m_impl.m_storage_end, src.m_impl.m_storage_end);
-            sbstd::swap(m_impl.get_allocator(), src.m_impl.get_allocator());
+            sbstd::swap(_impl._begin, src._impl._begin);
+            sbstd::swap(_impl._end, src._impl._end);
+            sbstd::swap(_impl._storage_end, src._impl._storage_end);
+            sbstd::swap(_impl.get_allocator(), src._impl.get_allocator());
         }
         else
         {
@@ -163,152 +161,154 @@ public:
 
             if ((src_size <= capacity()) && (dst_size <= src.capacity()))
             {
-                sbstd::swap_ranges(m_impl.m_begin, m_impl.m_begin + common_size, src.m_impl.m_begin);
+                sbstd::swap_ranges(_impl._begin, _impl._begin + common_size, src._impl._begin);
 
                 if (src_size > dst_size)
                 {
-                    sbstd::uninitialized_move(src.m_impl.m_begin + common_size, src.m_impl.m_end, m_impl.m_end);
-                    sbstd::destroy(src.m_impl.m_begin + common_size, src.m_impl.m_end);
+                    sbstd::uninitialized_move(src._impl._begin + common_size, src._impl._end, _impl._end);
+                    sbstd::destroy(src._impl._begin + common_size, src._impl._end);
                 }
                 else if (dst_size > src_size)
                 {
-                    sbstd::uninitialized_move(m_impl.m_begin + common_size, m_impl.m_end, src.m_impl.m_end);
-                    sbstd::destroy(m_impl.m_begin + common_size, m_impl.m_end);
+                    sbstd::uninitialized_move(_impl._begin + common_size, _impl._end, src._impl._end);
+                    sbstd::destroy(_impl._begin + common_size, _impl._end);
                 }
 
-                m_impl.m_end = m_impl.m_begin + src_size;
-                src.m_impl.m_end = src.m_impl.m_begin + dst_size;
+                _impl._end = _impl._begin + src_size;
+                src._impl._end = src._impl._begin + dst_size;
 
-                sbstd::swap(m_impl.get_allocator(), src.m_impl.get_allocator());
+                sbstd::swap(_impl.get_allocator(), src._impl.get_allocator());
             }
             else if (src_size > capacity())
             {
                 size_type const new_dst_capacity = computeCapacity(src_size);
-                TType * const new_dst_data = (TType *)m_impl.allocate(new_dst_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
+                TType * const new_dst_data =
+                    (TType *)_impl.allocate(new_dst_capacity * sizeof(value_type), alignOf<value_type>()).data;
                 sbAssert(nullptr != new_dst_data);
 
-                sbstd::uninitialized_move(src.m_impl.m_begin, src.m_impl.m_end, new_dst_data);
-                sbstd::move(m_impl.m_begin, m_impl.m_end, src.m_impl.m_begin);
-                sbstd::destroy(m_impl.m_begin, m_impl.m_end);
-                sbstd::destroy(src.m_impl.m_begin + dst_size, src.m_impl.m_end);
+                sbstd::uninitialized_move(src._impl._begin, src._impl._end, new_dst_data);
+                sbstd::move(_impl._begin, _impl._end, src._impl._begin);
+                sbstd::destroy(_impl._begin, _impl._end);
+                sbstd::destroy(src._impl._begin + dst_size, src._impl._end);
 
                 if (!isSmallStorage())
                 {
-                    m_impl.deallocate({m_impl.m_begin, dst_size});
+                    _impl.deallocate({_impl._begin, dst_size});
                 }
 
-                m_impl.m_begin = new_dst_data;
-                m_impl.m_end = m_impl.m_begin + src_size;
-                m_impl.m_storage_end = m_impl.m_begin + new_dst_capacity;
+                _impl._begin = new_dst_data;
+                _impl._end = _impl._begin + src_size;
+                _impl._storage_end = _impl._begin + new_dst_capacity;
 
-                src.m_impl.m_end = src.m_impl.m_begin + dst_size;
+                src._impl._end = src._impl._begin + dst_size;
             }
             else
             {
                 size_type const new_src_capacity = computeCapacity(dst_size);
-                TType * const new_src_data = (TType *)src.m_impl.allocate(new_src_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
+                TType * const new_src_data =
+                    (TType *)src._impl.allocate(new_src_capacity * sizeof(value_type), alignOf<value_type>()).data;
                 sbAssert(nullptr != new_src_data);
 
-                sbstd::uninitialized_move(m_impl.m_begin, m_impl.m_end, new_src_data);
-                sbstd::move(src.m_impl.m_begin, src.m_impl.m_end, m_impl.m_begin);
-                sbstd::destroy(src.m_impl.m_begin, src.m_impl.m_end);
-                sbstd::destroy(m_impl.m_begin + src_size, m_impl.m_end);
+                sbstd::uninitialized_move(_impl._begin, _impl._end, new_src_data);
+                sbstd::move(src._impl._begin, src._impl._end, _impl._begin);
+                sbstd::destroy(src._impl._begin, src._impl._end);
+                sbstd::destroy(_impl._begin + src_size, _impl._end);
 
                 if (!src.isSmallStorage())
                 {
-                    src.m_impl.deallocate({src.m_impl.m_begin, src_size});
+                    src._impl.deallocate({src._impl._begin, src_size});
                 }
 
-                src.m_impl.m_begin = new_src_data;
-                src.m_impl.m_end = src.m_impl.m_begin + dst_size;
-                src.m_impl.m_storage_end = src.m_impl.m_begin + new_src_capacity;
+                src._impl._begin = new_src_data;
+                src._impl._end = src._impl._begin + dst_size;
+                src._impl._storage_end = src._impl._begin + new_src_capacity;
 
-                m_impl.m_end = m_impl.m_begin + src_size;
+                _impl._end = _impl._begin + src_size;
             }
         }
     }
 
     b8 empty() const
     {
-        return (m_impl.m_begin == m_impl.m_end);
+        return (_impl._begin == _impl._end);
     }
 
     size_type size() const
     {
-        return (size_type)(m_impl.m_end - m_impl.m_begin);
+        return (size_type)(_impl._end - _impl._begin);
     }
 
     const_iterator cbegin() const
     {
-        return m_impl.m_begin;
+        return _impl._begin;
     }
 
     const_iterator begin() const
     {
-        return m_impl.m_begin;
+        return _impl._begin;
     }
 
     iterator begin()
     {
-        return m_impl.m_begin;
+        return _impl._begin;
     }
 
     const_iterator cend() const
     {
-        return m_impl.m_end;
+        return _impl._end;
     }
 
     const_iterator end() const
     {
-        return m_impl.m_end;
+        return _impl._end;
     }
 
     iterator end()
     {
-        return m_impl.m_end;
+        return _impl._end;
     }
 
     const_pointer data() const
     {
-        return m_impl.m_begin;
+        return _impl._begin;
     }
 
     pointer data()
     {
-        return m_impl.m_begin;
+        return _impl._begin;
     }
 
     reference front()
     {
         sbAssert(!empty());
 
-        return *m_impl.m_begin;
+        return *_impl._begin;
     }
 
     const_reference front() const
     {
         sbAssert(!empty());
 
-        return *m_impl.m_begin;
+        return *_impl._begin;
     }
 
     reference back()
     {
         sbAssert(!empty());
 
-        return *(m_impl.m_end - 1);
+        return *(_impl._end - 1);
     }
 
     const_reference back() const
     {
         sbAssert(!empty());
 
-        return *(m_impl.m_end - 1);
+        return *(_impl._end - 1);
     }
 
     size_type capacity() const
     {
-        return (size_type)(m_impl.m_storage_end - m_impl.m_begin);
+        return (size_type)(_impl._storage_end - _impl._begin);
     }
 
     constexpr size_type max_size() const
@@ -330,15 +330,15 @@ public:
 
         if (curr_size > count)
         {
-            sbstd::destroy(m_impl.m_begin + count, m_impl.m_end);
-            m_impl.m_end = m_impl.m_begin + count;
+            sbstd::destroy(_impl._begin + count, _impl._end);
+            _impl._end = _impl._begin + count;
         }
         else if (curr_size < count)
         {
             size_type const size_diff = (size_type)(count - curr_size);
 
             buyMore(size_diff);
-            std::uninitialized_default_construct(m_impl.m_begin + curr_size, m_impl.m_end);
+            std::uninitialized_default_construct(_impl._begin + curr_size, _impl._end);
         }
     }
 
@@ -348,15 +348,15 @@ public:
 
         if (curr_size > count)
         {
-            sbstd::destroy(m_impl.m_begin + count, m_impl.m_end);
-            m_impl.m_end = m_impl.m_begin + count;
+            sbstd::destroy(_impl._begin + count, _impl._end);
+            _impl._end = _impl._begin + count;
         }
         else if (curr_size < count)
         {
             size_type const size_diff = (size_type)(count - curr_size);
 
             buyMore(size_diff);
-            std::uninitialized_fill(m_impl.m_begin + curr_size, m_impl.m_end, value);
+            std::uninitialized_fill(_impl._begin + curr_size, _impl._end, value);
         }
     }
 
@@ -364,7 +364,7 @@ public:
     {
         buyMore(1);
 
-        new (m_impl.m_end - 1) value_type(value);
+        new (_impl._end - 1) value_type(value);
 
         return;
     }
@@ -373,7 +373,7 @@ public:
     {
         buyMore(1);
 
-        new (m_impl.m_end - 1) value_type(sbstd::move(value));
+        new (_impl._end - 1) value_type(sbstd::move(value));
 
         return;
     }
@@ -383,57 +383,57 @@ public:
     {
         buyMore(1);
 
-        new (m_impl.m_end - 1) TType(sbstd::forward<TArgs>(args)...);
+        new (_impl._end - 1) TType(sbstd::forward<TArgs>(args)...);
 
-        return *m_impl.m_begin;
+        return *_impl._begin;
     }
 
     void pop_back()
     {
         sbAssert(!empty());
 
-        sbstd::destroy_at(m_impl.m_end - 1);
-        --m_impl.m_end;
+        sbstd::destroy_at(_impl._end - 1);
+        --_impl._end;
     }
 
     void clear()
     {
-        sbstd::destroy(m_impl.m_begin, m_impl.m_end);
+        sbstd::destroy(_impl._begin, _impl._end);
 
-        m_impl.m_end = m_impl.m_begin;
+        _impl._end = _impl._begin;
     }
 
     allocator_type get_allocator() const
     {
-        return (allocator_type const &)m_impl;
+        return (allocator_type const &)_impl;
     }
 
     reference at(size_type idx)
     {
         sbAssert(idx < size());
 
-        return *(m_impl.m_begin + idx);
+        return *(_impl._begin + idx);
     }
 
     const_reference at(size_type idx) const
     {
         sbAssert(idx < size());
 
-        return *(m_impl.m_begin + idx);
+        return *(_impl._begin + idx);
     }
 
     reference operator[](size_type idx)
     {
         sbAssert(idx < size());
 
-        return *(m_impl.m_begin + idx);
+        return *(_impl._begin + idx);
     }
 
     const_reference operator[](size_type idx) const
     {
         sbAssert(idx < size());
 
-        return *(m_impl.m_begin + idx);
+        return *(_impl._begin + idx);
     }
 
     SmallArray & operator=(SmallArray const & src)
@@ -485,26 +485,27 @@ public:
             {
                 if (new_capacity <= BASE_CAPACITY)
                 {
-                    sbstd::uninitialized_move(m_impl.m_begin, m_impl.m_end, reinterpret_cast<pointer>(&m_buffer[0]));
-                    sbstd::destroy(m_impl.m_begin, m_impl.m_end);
-                    m_impl.deallocate({m_impl.m_begin, curr_capacity});
+                    sbstd::uninitialized_move(_impl._begin, _impl._end, reinterpret_cast<pointer>(&_buffer[0]));
+                    sbstd::destroy(_impl._begin, _impl._end);
+                    _impl.deallocate({_impl._begin, curr_capacity});
 
-                    m_impl.m_begin = reinterpret_cast<pointer>(&m_buffer[0]);
+                    _impl._begin = reinterpret_cast<pointer>(&_buffer[0]);
                 }
                 else
                 {
-                    pointer const new_data = (TType *)m_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
+                    pointer const new_data =
+                        (TType *)_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).data;
                     sbAssert(nullptr != new_data);
 
-                    sbstd::uninitialized_move(m_impl.m_begin, m_impl.m_end, new_data);
-                    sbstd::destroy(m_impl.m_begin, m_impl.m_end);
-                    m_impl.deallocate({m_impl.m_begin, curr_capacity});
+                    sbstd::uninitialized_move(_impl._begin, _impl._end, new_data);
+                    sbstd::destroy(_impl._begin, _impl._end);
+                    _impl.deallocate({_impl._begin, curr_capacity});
 
-                    m_impl.m_begin = new_data;
+                    _impl._begin = new_data;
                 }
 
-                m_impl.m_end = m_impl.m_begin + new_capacity;
-                m_impl.m_storage_end = m_impl.m_end;
+                _impl._end = _impl._begin + new_capacity;
+                _impl._storage_end = _impl._end;
             }
         }
     }
@@ -517,35 +518,36 @@ public:
 
         if (src_size <= curr_size)
         {
-            sbstd::copy(src_begin, src_end, m_impl.m_begin);
-            sbstd::destroy(m_impl.m_begin + src_size, end());
+            sbstd::copy(src_begin, src_end, _impl._begin);
+            sbstd::destroy(_impl._begin + src_size, end());
 
-            m_impl.m_end = m_impl.m_begin + src_size;
+            _impl._end = _impl._begin + src_size;
         }
         else if (src_size > capacity())
         {
             auto const new_capacity = computeCapacity(src_size);
-            pointer const new_data = (TType *)m_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
+            pointer const new_data =
+                (TType *)_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).data;
             sbAssert(nullptr != new_data);
 
             sbstd::uninitialized_copy(src_begin, src_end, new_data);
-            sbstd::destroy(m_impl.m_begin, m_impl.m_end);
+            sbstd::destroy(_impl._begin, _impl._end);
 
             if (!isSmallStorage())
             {
-                m_impl.deallocate({m_impl.m_begin, curr_size});
+                _impl.deallocate({_impl._begin, curr_size});
             }
 
-            m_impl.m_begin = new_data;
-            m_impl.m_end = new_data + src_size;
-            m_impl.m_storage_end = new_data + new_capacity;
+            _impl._begin = new_data;
+            _impl._end = new_data + src_size;
+            _impl._storage_end = new_data + new_capacity;
         }
         else
         {
-            sbstd::copy(src_begin, src_begin + curr_size, m_impl.m_begin);
-            sbstd::uninitialized_copy(src_begin + curr_size, src_end, m_impl.m_end);
+            sbstd::copy(src_begin, src_begin + curr_size, _impl._begin);
+            sbstd::uninitialized_copy(src_begin + curr_size, src_end, _impl._end);
 
-            m_impl.m_end = m_impl.m_begin + src_size;
+            _impl._end = _impl._begin + src_size;
         }
     }
 
@@ -555,35 +557,36 @@ public:
 
         if (count <= curr_size)
         {
-            sbstd::fill(m_impl.m_begin, m_impl.m_begin + count, value);
-            sbstd::destroy(m_impl.m_begin + count, m_impl.m_end);
+            sbstd::fill(_impl._begin, _impl._begin + count, value);
+            sbstd::destroy(_impl._begin + count, _impl._end);
 
-            m_impl.m_end = m_impl.m_begin + count;
+            _impl._end = _impl._begin + count;
         }
         else if (count > capacity())
         {
             auto const new_capacity = computeCapacity(count);
-            pointer const new_data = (TType *)m_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
+            pointer const new_data =
+                (TType *)_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).data;
             sbAssert(nullptr != new_data);
 
             sbstd::uninitialized_fill(new_data, new_data + count, value);
-            sbstd::destroy(m_impl.m_begin, m_impl.m_end);
+            sbstd::destroy(_impl._begin, _impl._end);
 
             if (!isSmallStorage())
             {
-                m_impl.deallocate({m_impl.m_begin, curr_size});
+                _impl.deallocate({_impl._begin, curr_size});
             }
 
-            m_impl.m_begin = new_data;
-            m_impl.m_end = new_data + count;
-            m_impl.m_storage_end = new_data + new_capacity;
+            _impl._begin = new_data;
+            _impl._end = new_data + count;
+            _impl._storage_end = new_data + new_capacity;
         }
         else
         {
-            sbstd::fill(m_impl.m_begin, m_impl.m_end, value);
-            sbstd::uninitialized_fill(m_impl.m_end, m_impl.m_begin + count, value);
+            sbstd::fill(_impl._begin, _impl._end, value);
+            sbstd::uninitialized_fill(_impl._end, _impl._begin + count, value);
 
-            m_impl.m_end = m_impl.m_begin + count;
+            _impl._end = _impl._begin + count;
         }
     }
 
@@ -591,27 +594,27 @@ public:
 
     bool isSmallStorage() const
     {
-        return (m_impl.m_begin == reinterpret_cast<const_pointer>(&m_buffer[0]));
+        return (_impl._begin == reinterpret_cast<const_pointer>(&_buffer[0]));
     }
 
     allocator_type & get_allocator_ref()
     {
-        return m_impl.get_allocator();
+        return _impl.get_allocator();
     }
 
     allocator_type const & get_allocator_ref() const
     {
-        return m_impl.get_allocator();
+        return _impl.get_allocator();
     }
 
 private:
     SmallArray(pointer begin, allocator_type const & alloc)
-        : m_impl(begin, begin + BASE_CAPACITY, alloc)
+        : _impl(begin, begin + BASE_CAPACITY, alloc)
     {
     }
 
     SmallArray(pointer begin)
-        : m_impl(begin, begin + BASE_CAPACITY)
+        : _impl(begin, begin + BASE_CAPACITY)
     {
     }
 
@@ -640,20 +643,20 @@ private:
         size_type const curr_capacity = capacity();
         size_type const curr_size = size();
 
-        pointer const new_data = (TType *)m_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).m_ptr;
+        pointer const new_data = (TType *)_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).data;
         sbAssert(nullptr != new_data);
 
-        sbstd::uninitialized_move(m_impl.m_begin, m_impl.m_end, new_data);
-        sbstd::destroy(m_impl.m_begin, m_impl.m_end);
+        sbstd::uninitialized_move(_impl._begin, _impl._end, new_data);
+        sbstd::destroy(_impl._begin, _impl._end);
 
         if (!isSmallStorage())
         {
-            m_impl.deallocate({m_impl.m_begin, curr_capacity});
+            _impl.deallocate({_impl._begin, curr_capacity});
         }
 
-        m_impl.m_end = new_data + curr_size;
-        m_impl.m_begin = new_data;
-        m_impl.m_storage_end = m_impl.m_begin + new_capacity;
+        _impl._end = new_data + curr_size;
+        _impl._begin = new_data;
+        _impl._storage_end = _impl._begin + new_capacity;
     }
 
     void buyMore(size_type cnt)
@@ -663,19 +666,19 @@ private:
 
         if ((curr_size + cnt) <= curr_capacity)
         {
-            m_impl.m_end += cnt;
+            _impl._end += cnt;
         }
         else
         {
             extendStorage(computeCapacity(size() + cnt));
-            m_impl.m_end += cnt;
+            _impl._end += cnt;
         }
     }
 
     static constexpr usize BASE_CAPACITY_BYTES = BASE_CAPACITY * sizeof(TType);
 
-    Impl m_impl;
-    alignas(value_type) u8 m_buffer[BASE_CAPACITY_BYTES];
+    Impl _impl;
+    alignas(value_type) u8 _buffer[BASE_CAPACITY_BYTES];
 };
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>

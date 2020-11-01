@@ -95,8 +95,8 @@ TEST_CASE("RingBuffer ctor", "[ring_buffer]")
     REQUIRE(ring_buffer.size() == 0U);
     REQUIRE(ring_buffer.capacity() == TEST_RING_BUFFER_CAPACITY);
     REQUIRE(TestObjectCnt::getStats() == 0U);
-    REQUIRE(alloc_stats.getStats().m_alloc_count == 1U);
-    REQUIRE(alloc_stats.getStats().m_allocated_byte != 0U);
+    REQUIRE(alloc_stats.getStats()._alloc_count == 1U);
+    REQUIRE(alloc_stats.getStats()._allocated_byte != 0U);
 }
 
 TEST_CASE("RingBuffer put_overflow", "[ring_buffer]")

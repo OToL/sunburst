@@ -6,7 +6,7 @@ namespace sb {
 
 struct MemoryTag
 {
-    char const * tag;
+    char const * value;
 };
 
 constexpr MemoryTag operator"" _mt(char const * str, usize /*len*/)

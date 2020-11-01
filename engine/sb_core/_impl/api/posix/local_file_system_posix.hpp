@@ -4,7 +4,6 @@
 #include <sb_core/conversion.h>
 #include <sb_core/io/io.h>
 #include <sb_core/string/fix_string.h>
-#include <sb_core/enum.h>
 #include <sb_core/_impl/io/local_file_system.h>
 
 #include <sb_std/cstdio>

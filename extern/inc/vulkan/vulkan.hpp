@@ -218,16 +218,16 @@ namespace VULKAN_HPP_NAMESPACE
   class Optional
   {
   public:
-    Optional(RefType & reference) { m_ptr = &reference; }
-    Optional(RefType * ptr) { m_ptr = ptr; }
-    Optional(std::nullptr_t) { m_ptr = nullptr; }
+    Optional(RefType & reference) { data = &reference; }
+    Optional(RefType * ptr) { data = ptr; }
+    Optional(std::nullptr_t) { data = nullptr; }
 
-    operator RefType*() const { return m_ptr; }
-    RefType const* operator->() const { return m_ptr; }
-    explicit operator bool() const { return !!m_ptr; }
+    operator RefType*() const { return data; }
+    RefType const* operator->() const { return data; }
+    explicit operator bool() const { return !!data; }
 
   private:
-    RefType *m_ptr;
+    RefType *data;
   };
 
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
@@ -237,68 +237,68 @@ namespace VULKAN_HPP_NAMESPACE
   public:
     ArrayProxy(std::nullptr_t)
       : m_count(0)
-      , m_ptr(nullptr)
+      , data(nullptr)
     {}
 
     ArrayProxy(T & ptr)
       : m_count(1)
-      , m_ptr(&ptr)
+      , data(&ptr)
     {}
 
     ArrayProxy(uint32_t count, T * ptr)
       : m_count(count)
-      , m_ptr(ptr)
+      , data(ptr)
     {}
 
     template <size_t N>
     ArrayProxy(std::array<typename std::remove_const<T>::type, N> & data)
       : m_count(N)
-      , m_ptr(data.data())
+      , data(data.data())
     {}
 
     template <size_t N>
     ArrayProxy(std::array<typename std::remove_const<T>::type, N> const& data)
       : m_count(N)
-      , m_ptr(data.data())
+      , data(data.data())
     {}
 
     template <class Allocator = std::allocator<typename std::remove_const<T>::type>>
     ArrayProxy(std::vector<typename std::remove_const<T>::type, Allocator> & data)
       : m_count(static_cast<uint32_t>(data.size()))
-      , m_ptr(data.data())
+      , data(data.data())
     {}
 
     template <class Allocator = std::allocator<typename std::remove_const<T>::type>>
     ArrayProxy(std::vector<typename std::remove_const<T>::type, Allocator> const& data)
       : m_count(static_cast<uint32_t>(data.size()))
-      , m_ptr(data.data())
+      , data(data.data())
     {}
 
     ArrayProxy(std::initializer_list<T> const& data)
       : m_count(static_cast<uint32_t>(data.end() - data.begin()))
-      , m_ptr(data.begin())
+      , data(data.begin())
     {}
 
     const T * begin() const
     {
-      return m_ptr;
+      return data;
     }
 
     const T * end() const
     {
-      return m_ptr + m_count;
+      return data + m_count;
     }
 
     const T & front() const
     {
-      assert(m_count && m_ptr);
-      return *m_ptr;
+      assert(m_count && data);
+      return *data;
     }
 
     const T & back() const
     {
-      assert(m_count && m_ptr);
-      return *(m_ptr + m_count - 1);
+      assert(m_count && data);
+      return *(data + m_count - 1);
     }
 
     bool empty() const
@@ -313,12 +313,12 @@ namespace VULKAN_HPP_NAMESPACE
 
     T * data() const
     {
-      return m_ptr;
+      return data;
     }
 
   private:
     uint32_t  m_count;
-    T *       m_ptr;
+    T *       data;
   };
 #endif
 

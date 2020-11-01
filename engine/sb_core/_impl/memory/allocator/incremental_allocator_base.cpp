@@ -5,7 +5,7 @@
 void sb::IncrementalAllocatorBase::init(MemoryArena arena, Alignment default_align)
 {
     _arena = arena;
-    _top = reinterpret_cast<u8 *>(_arena.m_ptr);
+    _top = reinterpret_cast<u8 *>(_arena.data);
     _default_alignment = default_align;
 }
 
@@ -68,5 +68,5 @@ sb::b8 sb::IncrementalAllocatorBase::owns(void const * ptr) const
 
 void sb::IncrementalAllocatorBase::deallocateAll()
 {
-    _top = static_cast<u8 *>(_arena.m_ptr);
+    _top = static_cast<u8 *>(_arena.data);
 }

@@ -9,7 +9,7 @@ sb::MemoryArenaAllocator::MemoryArenaAllocator(MemoryArena arena)
 
 sb::MemoryArena sb::MemoryArenaAllocator::allocate(usize const size)
 {
-    if ((size != 0U) && !_empty && !_arena.isEmpty() && (size <= _arena.m_size))
+    if ((size != 0U) && !_empty && !_arena.isEmpty() && (size <= _arena.size))
     {
         _empty = true;
         return _arena;
@@ -20,14 +20,14 @@ sb::MemoryArena sb::MemoryArenaAllocator::allocate(usize const size)
 
 sb::MemoryArena sb::MemoryArenaAllocator::allocate(usize const size, Alignment const alignment)
 {
-    if ((size != 0U) && !_empty && !_arena.isEmpty() && (size <= _arena.m_size))
+    if ((size != 0U) && !_empty && !_arena.isEmpty() && (size <= _arena.size))
     {
-        u8 * base_mem_ptr = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(_arena.m_ptr), alignment));
+        u8 * base_mem_ptr = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(_arena.data), alignment));
 
         if (_arena.isInRange(base_mem_ptr, size))
         {
             _empty = true;
-            return {base_mem_ptr, _arena.m_size - (base_mem_ptr - reinterpret_cast<u8 *>(_arena.m_ptr))};
+            return {base_mem_ptr, _arena.size - (base_mem_ptr - reinterpret_cast<u8 *>(_arena.data))};
         }
     }
 

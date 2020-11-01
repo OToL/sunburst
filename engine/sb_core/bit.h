@@ -87,5 +87,5 @@ inline constexpr b8 isAlignedTo(T val, usize alignment)
 #elif defined(SB_PLATFORM_LINUX)
 #    include "_impl/api/linux/bit_linux.h"
 #else
-#    error "Unsupported compiler"
+#    error "Unsupported platform"
 #endif

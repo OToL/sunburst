@@ -108,12 +108,12 @@ TEST_F(MEMORY_OPERATOR, NEW_DELETE_ALLOCATOR)
 
     EXPECT_NE(test_obj, nullptr);
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 1U);
-    EXPECT_EQ(test_allocator.getStats().m_alloc_count, 1U);
+    EXPECT_EQ(test_allocator.getStats()._alloc_count, 1U);
     EXPECT_TRUE(isAlignedTo(test_obj, GLOBAL_HEAP_MIN_ALIGNMENT));
 
     sbDelete(test_obj, test_allocator);
 
-    EXPECT_EQ(test_allocator.getStats().m_alloc_count, 0U);
+    EXPECT_EQ(test_allocator.getStats()._alloc_count, 0U);
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0U);
 }
 
@@ -125,12 +125,12 @@ TEST_F(MEMORY_OPERATOR, NEW_DELETE_ARRAY_ALLOCATOR)
 
     EXPECT_NE(test_obj, nullptr);
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 10U);
-    EXPECT_EQ(test_allocator.getStats().m_alloc_count, 1U);
+    EXPECT_EQ(test_allocator.getStats()._alloc_count, 1U);
     EXPECT_TRUE(isAlignedTo(test_obj, GLOBAL_HEAP_MIN_ALIGNMENT));
 
     sbDeleteArray(test_obj, test_allocator);
 
-    EXPECT_EQ(test_allocator.getStats().m_alloc_count, 0U);
+    EXPECT_EQ(test_allocator.getStats()._alloc_count, 0U);
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0U);
 }
 
@@ -146,12 +146,12 @@ TEST_F(MEMORY_OPERATOR, NEW_DELETE_ALLOCATOR_ALIGNED)
 
     EXPECT_NE(test_obj, nullptr);
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 1U);
-    EXPECT_EQ(test_allocator.getStats().m_alloc_count, 1U);
+    EXPECT_EQ(test_allocator.getStats()._alloc_count, 1U);
     EXPECT_TRUE(isAlignedTo(test_obj, 128));
 
     sbDelete(test_obj, test_allocator);
 
-    EXPECT_EQ(test_allocator.getStats().m_alloc_count, 0U);
+    EXPECT_EQ(test_allocator.getStats()._alloc_count, 0U);
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0U);
 }
 
@@ -167,12 +167,12 @@ TEST_F(MEMORY_OPERATOR, NEW_DELETE_ARRAY_ALLOCATOR_ALIGNED)
 
     EXPECT_NE(test_obj, nullptr);
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 10U);
-    EXPECT_EQ(test_allocator.getStats().m_alloc_count, 1U);
+    EXPECT_EQ(test_allocator.getStats()._alloc_count, 1U);
     EXPECT_TRUE(isAlignedTo(test_obj, 128));
 
     sbDeleteArray(test_obj, test_allocator);
 
-    EXPECT_EQ(test_allocator.getStats().m_alloc_count, 0U);
+    EXPECT_EQ(test_allocator.getStats()._alloc_count, 0U);
     EXPECT_EQ(gtestx::ObjectTracker::getStats().m_alive_obj_count, 0U);
 }
 
@@ -188,12 +188,12 @@ TEST_F(MEMORY_OPERATOR, NEW_DELETE_ARRAY_TIVIAL)
     TrivialType * array_obj = sbNewArray(TrivialType, test_allocator)[10];
 
     EXPECT_NE(array_obj, nullptr);
-    EXPECT_EQ(test_allocator.getStats().m_alloc_count, 1U);
-    EXPECT_EQ(test_allocator.getStats().m_allocated_byte, 10U * sizeof(TrivialType));
+    EXPECT_EQ(test_allocator.getStats()._alloc_count, 1U);
+    EXPECT_EQ(test_allocator.getStats()._allocated_byte, 10U * sizeof(TrivialType));
     EXPECT_TRUE(isAlignedTo(array_obj, alignof(TrivialType)));
 
     sbDeleteArray(array_obj, test_allocator);
 
-    EXPECT_EQ(test_allocator.getStats().m_alloc_count, 0U);
-    EXPECT_EQ(test_allocator.getStats().m_allocated_byte, 0U);
+    EXPECT_EQ(test_allocator.getStats()._alloc_count, 0U);
+    EXPECT_EQ(test_allocator.getStats()._allocated_byte, 0U);
 }

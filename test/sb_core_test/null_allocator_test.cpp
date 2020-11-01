@@ -11,7 +11,7 @@ TEST_CASE("Null Allocator allocate", "[null_allocator]")
     MemoryArena mem_arena = test_alloc.allocate(1);
 
     REQUIRE(mem_arena.isEmpty());
-    REQUIRE(!test_alloc.owns(mem_arena.m_ptr));
+    REQUIRE(!test_alloc.owns(mem_arena.data));
 }
 
 TEST_CASE("Null Allocator aligned allocate", "[null_allocator]")
@@ -20,7 +20,7 @@ TEST_CASE("Null Allocator aligned allocate", "[null_allocator]")
     MemoryArena mem_arena = test_alloc.allocate(1, ALIGNMENT_16B);
 
     REQUIRE(mem_arena.isEmpty());
-    REQUIRE(!test_alloc.owns(mem_arena.m_ptr));
+    REQUIRE(!test_alloc.owns(mem_arena.data));
 }
 
 #include <catch2/test_epilog.h>

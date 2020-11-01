@@ -207,7 +207,7 @@ static int gs_global_var;
 
 struct MemberVariable
 {
-    int m_size; 
+    int size; 
     static int ms_y;
 };
 ```

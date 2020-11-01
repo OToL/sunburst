@@ -1,7 +1,7 @@
 #pragma once
 
-#include <sb_core/io/io.h>
 #include <sb_core/core.h>
+#include <sb_core/io/io.h>
 #include "io.h"
 
 namespace sb::internal {

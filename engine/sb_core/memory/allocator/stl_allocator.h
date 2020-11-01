@@ -56,11 +56,11 @@ public:
     {
         if constexpr (ALIGNMENT_DEFAULT <= alignof(T))
         {
-            return (pointer)getGlobalHeap().allocate(nb * sizeof(T)).m_ptr;
+            return (pointer)getGlobalHeap().allocate(nb * sizeof(T)).data;
         }
         else
         {
-            return (pointer)getGlobalHeap().allocate(nb * sizeof(T), alignOf<T>()).m_ptr;
+            return (pointer)getGlobalHeap().allocate(nb * sizeof(T), alignOf<T>()).data;
         }
     }
 
