@@ -16,8 +16,8 @@ typedef usize (*FmtFwCallCB)(void const *, sbstd::span<char>);
 
 struct FmtArg
 {
-    void const * _value;
-    FmtFwCallCB _fmt_cb;
+    void const * value;
+    FmtFwCallCB fmt_cb;
 };
 
 inline void expandFmtArgs(sbstd::span<FmtArg>) { }
@@ -67,8 +67,8 @@ inline void expandFmtArgs(sbstd::span<FmtArg> argList, T const & arg, TArgs &&..
 
     using TypeDesc = FmtArgDesc<T>;
 
-    arg_desc._value = TypeDesc::storeValue(arg);
-    arg_desc._fmt_cb = [](void const * arg_value, sbstd::span<char> dest) {
+    arg_desc.value = TypeDesc::storeValue(arg);
+    arg_desc.fmt_cb = [](void const * arg_value, sbstd::span<char> dest) {
         return stringConvT(TypeDesc::extractValue(arg_value), dest);
     };
 

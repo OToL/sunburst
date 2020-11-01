@@ -9,8 +9,8 @@ class TestAllocator final : public IAllocator
 public:
     struct Stats
     {
-        size_t _alloc_count = 0U;
-        size_t _allocated_byte = 0U;
+        size_t alloc_count = 0U;
+        size_t allocated_byte = 0U;
     };
 
     TestAllocator() = default;
@@ -38,12 +38,12 @@ private:
     struct AllocDesc
     {
         AllocDesc(void * mem_ptr, size_t size)
-            : _mem(mem_ptr)
+            : mem(mem_ptr)
             , size(size)
         {
         }
 
-        void * _mem = nullptr;
+        void * mem = nullptr;
         size_t size = 0ULL;
     };
 

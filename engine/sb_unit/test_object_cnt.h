@@ -17,22 +17,22 @@ public:
 
     struct CompEqual
     {
-        CompEqual(usize id)
-            : _id(id)
+        CompEqual(usize val)
+            : id(val)
         {
         }
 
         CompEqual(TestObjectCnt const & obj)
-            : _id(obj.getId())
+            : id(obj.getId())
         {
         }
 
         bool operator()(TestObjectCnt const & obj) const
         {
-            return _id == obj.getId();
+            return id == obj.getId();
         }
 
-        usize _id = 0U;
+        usize id = 0U;
     };
 
     TestObjectCnt();

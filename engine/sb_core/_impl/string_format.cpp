@@ -79,8 +79,8 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
                         }
                     }
 
-                    copied_bytes += args[(u32)arg_idx]._fmt_cb(
-                        args[(u32)arg_idx]._value, sbstd::span<char>{dest_iter, dest_capacity - copied_bytes});
+                    copied_bytes += args[(u32)arg_idx].fmt_cb(
+                        args[(u32)arg_idx].value, sbstd::span<char>{dest_iter, dest_capacity - copied_bytes});
                     dest_iter = dest_buffer.data() + copied_bytes;
 
                     continue;
