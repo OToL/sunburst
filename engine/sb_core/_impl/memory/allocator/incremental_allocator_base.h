@@ -12,7 +12,7 @@ class IncrementalAllocatorBase : public IAllocator
 
 protected:
     IncrementalAllocatorBase();
-    ~IncrementalAllocatorBase() = default;
+    ~IncrementalAllocatorBase() override = default;
 
     void init(MemoryArena arena, Alignment default_align);
 

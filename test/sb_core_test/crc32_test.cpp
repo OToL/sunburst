@@ -2,8 +2,8 @@
 
 #include <sb_std/iterator>
 
-#include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
+#include <catch2/xcatch.hpp>
 
 using namespace sb;
 

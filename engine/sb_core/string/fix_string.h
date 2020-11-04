@@ -106,8 +106,7 @@ public:
 
     FixString & append(TChar const * str)
     {
-        sbstd::strncat(_data, str, CAPACITY - 1);
-        _data[CAPACITY - 1] = TChar{};
+        strCatT(_data, _len, CAPACITY, str);
 
         // TODO: implement my own strncat which returns the numbers of copied character
         _len = sbstd::strlen(_data);

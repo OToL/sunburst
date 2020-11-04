@@ -69,7 +69,7 @@ public:
     {
         sbAssert(CAPACITY != _size, "Static vector capacity exceeded");
 
-        new (&_data[_size]) value_type{value};
+        new (end()) value_type{value};
         ++_size;
     }
 
@@ -77,7 +77,7 @@ public:
     {
         sbAssert(CAPACITY != _size, "Static vector capacity exceeded");
 
-        new (&_data[_size]) value_type{sbstd::move(value)};
+        new (end()) value_type{sbstd::move(value)};
         ++_size;
     }
 
@@ -85,7 +85,7 @@ public:
     {
         sbAssert(0 != _size, "You cannot pop item from empty static vector");
 
-        ((reference)_data[_size]).~value_type();
+        (reinterpret_cast<pointer>(&_data[0]) + _size - 1)->~value_type();
         --_size;
     }
 
@@ -94,7 +94,7 @@ public:
     {
         sbAssert(CAPACITY != _size, "Static vector capacity exceeded");
 
-        new (&_data[_size]) value_type{sbstd::forward<TArgs>(args)...};
+        new (end()) value_type{sbstd::forward<TArgs>(args)...};
         ++_size;
 
         return back();
@@ -104,14 +104,14 @@ public:
     {
         sbAssert(0 != _size);
 
-        return ((reference)_data[_size - 1]);
+        return *(reinterpret_cast<pointer>(&_data[0]) + _size - 1);
     }
 
     const_reference back() const
     {
         sbAssert(0 != _size);
 
-        return ((const_reference)&_data[_size - 1]);
+        return *(reinterpret_cast<const_pointer>(&_data[0]) + _size - 1);
     }
 
     iterator erase(iterator pos)
@@ -181,9 +181,9 @@ public:
     }
 
 private:
-    using StorageType = typename sbstd::aligned_storage<sizeof(value_type), alignof(value_type)>::type;
+    static constexpr usize BASE_CAPACITY_BYTES = CAPACITY * sizeof(value_type);
 
-    StorageType _data[CAPACITY];
+    alignas(value_type) u8 _data[BASE_CAPACITY_BYTES];
     size_type _size;
 };
 

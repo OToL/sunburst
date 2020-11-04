@@ -6,8 +6,8 @@
 #include <sb_std/algorithm>
 #include <sb_std/iterator>
 
-#include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
+#include <catch2/xcatch.hpp>
 
 using namespace sb;
 
@@ -24,16 +24,6 @@ void FillTestFArrayPush(TestFArrayPOD & test_array)
     for (usize idx = 0; idx != test_array.capacity(); ++idx)
     {
         test_array.push_back(idx);
-    }
-
-    REQUIRE(test_array.size() == test_array.capacity());
-}
-
-void FillTestFArrayEmplace(TestFArrayPOD & test_array)
-{
-    for (usize idx = 0; idx != test_array.capacity(); ++idx)
-    {
-        test_array.emplace_back(idx);
     }
 
     REQUIRE(test_array.size() == test_array.capacity());

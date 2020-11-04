@@ -136,11 +136,6 @@ bool operator==(TestObjectCnt::Stats const & stats, usize val)
     return (stats.obj_cnt == val) && (stats.valid_obj_cnt == val);
 }
 
-bool operator==(usize val, TestObjectCnt::Stats const & stats)
-{
-    return operator==(stats, val);
-}
-
 bool operator==(TestObjectCnt const & val1, TestObjectCnt const & val2)
 {
     return val1.getId() == val2.getId();

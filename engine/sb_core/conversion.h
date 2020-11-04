@@ -32,7 +32,8 @@ inline usize stringConvT(TSrc && src, sbstd::span<char> dest)
     }
     else
     {
-        static_assert(false, "Unhandled string conversion");
+        // static_assert(false, "Unhandled string conversion");
+        return 0U;
     }
 }
 

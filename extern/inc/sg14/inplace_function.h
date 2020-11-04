@@ -31,7 +31,7 @@
 #include <functional>
 
 #ifndef SG14_INPLACE_FUNCTION_THROW
-#define SG14_INPLACE_FUNCTION_THROW(x) throw (x)
+#define SG14_INPLACE_FUNCTION_THROW(x) 
 #endif
 
 namespace stdext {

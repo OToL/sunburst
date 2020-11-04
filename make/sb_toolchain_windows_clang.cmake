@@ -16,32 +16,34 @@ function(sb_set_target_properties BASE_TARGET_NAME)
     target_compile_definitions(${BASE_TARGET_NAME}_public 
         INTERFACE 
             SB_COMPILER_CLANG
-            SB_PLATFORM_WINDOWS
-            _HAS_EXCEPTIONS=0)
+            SB_PLATFORM_WINDOWS)
+    target_compile_options(${BASE_TARGET_NAME}_public
+        INTERFACE
+            -fno-exceptions
+            -Wno-deprecated-declarations)
 
 endfunction()
 
 function(sb_set_target_warnings BASE_TARGET_NAME)
-    # set(WARNING_IGNORE_LIST 
-    #     /wd4068 # Unknown pragma
-    #     /wd5045 # Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
-    #     /wd4996 # A function, class member, variable, or typedef that's marked deprecated
-    #     /wd4514 # 'function' : unreferenced inline function has been remove
-    #     /wd4710 # 'function' : function not inline
-    #     /wd4625 # 'derived class' : copy constructor was implicitly defined as deleted because a base class copy constructor is inaccessible or deleted
-    #     /wd4521 # 'class' : multiple copy constructors specified
-    #     /wd4626 # 'derived class' : assignment operator was implicitly defined as deleted because a base class assignment operator is inaccessible or deleted
-    #     /wd4820 # 'bytes' bytes padding added after construct 'member_name'
-    #     /wd4868 # compiler may not enforce left-to-right evaluation order in braced initializer list
-    #     /wd4866 # compiler may not enforce left-to-right evaluation order for call to ''
-    #     /wd4577 # 'noexcept' used with no exception handling mode specified; termination on exception is not guaranteed. Specify /EHsc
-    #     )
+    set(WARNING_IGNORE_LIST 
+        -Wno-c++98-compat
+        -Wno-c++98-compat-pedantic
+        -Wno-old-style-cast
+        -Wno-gnu-zero-variadic-macro-arguments
+        -Wno-extra-semi-stmt
+        -Wno-sign-conversion
+        -Wno-exit-time-destructors
+        -Wno-reserved-id-macro
+        -Wno-global-constructors
+        -Wno-missing-prototypes
+        -Wno-nonportable-system-include-path
+    )
 
-    # if(SB_WARNINGS_AS_ERRORS)
-    #     list(APPEND CONDITIONAL_OPTIONS "/WX")
-    # endif()
+    if(SB_WARNINGS_AS_ERRORS)
+        list(APPEND CONDITIONAL_OPTIONS "-Werror")
+    endif()
 
-    # target_compile_options(${BASE_TARGET_NAME}_private 
-    #     INTERFACE 
-    #         /Wall /permissive- ${WARNING_IGNORE_LIST} ${CONDITIONAL_OPTIONS})
+    target_compile_options(${BASE_TARGET_NAME}_private 
+        INTERFACE 
+            -Wall -Wextra -Weverything -pedantic ${WARNING_IGNORE_LIST} ${CONDITIONAL_OPTIONS})
 endfunction()

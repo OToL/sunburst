@@ -190,12 +190,12 @@ public:
     bool empty() const
     {
         return (_head == _tail) && (_full == 0);
-    };
+    }
 
     bool full() const
     {
         return (_full != 0);
-    };
+    }
 
     usize capacity() const
     {

@@ -2,8 +2,8 @@
 #include <sb_core/memory/allocator/memory_arena_allocator.h>
 #include <sb_core/memory/memory.h>
 
-#include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
+#include <catch2/xcatch.hpp>
 
 using namespace sb;
 
@@ -21,7 +21,7 @@ TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
 {   
     SECTION("Packed alignment")
     {
-        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY, ALIGNMENT_1B);
+        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY, ALIGNMENT_1B);
 
         for (usize idx = 0; idx != TEST_BACKSTORE_CAPACITY; ++idx)
         {
@@ -36,14 +36,14 @@ TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
 
     SECTION("Null alloc")
     {   
-        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
+        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
 
         REQUIRE(test_alloc.allocate(0).isEmpty());
     }
 
     SECTION("Default aligmnent")
     {
-        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY, ALIGNMENT_4B);
+        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY, ALIGNMENT_4B);
 
         for (usize idx = 0; idx != (TEST_BACKSTORE_CAPACITY/ALIGNMENT_4B + 1); ++idx)
         {
@@ -61,7 +61,7 @@ TEST_CASE("Incremetal Allocator aligned allocate", "[incremental_allocator]")
 {   
     SECTION("Alloc")
     {    
-        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
+        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
 
         for (usize idx = 0; idx != (TEST_BACKSTORE_CAPACITY/ALIGNMENT_4B + 1); ++idx)
         {
@@ -76,7 +76,7 @@ TEST_CASE("Incremetal Allocator aligned allocate", "[incremental_allocator]")
 
     SECTION("Null alloc")
     {   
-        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
+        IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
 
         REQUIRE(test_alloc.allocate(0, ALIGNMENT_4B).isEmpty());
     }
@@ -85,7 +85,7 @@ TEST_CASE("Incremetal Allocator aligned allocate", "[incremental_allocator]")
 
 TEST_CASE("Incremetal Allocator deallocate all", "[incremental_allocator]")
 {
-    IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{0U, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
+    IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY}, TEST_BACKSTORE_CAPACITY);
     MemoryArena mem_arena;
     usize alloc_count_1 = 0U;
     usize alloc_count_2 = 0U;

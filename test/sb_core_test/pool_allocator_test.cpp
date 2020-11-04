@@ -4,8 +4,8 @@
 
 #include <sb_std/algorithm>
 
-#include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
+#include <catch2/xcatch.hpp>
 
 using namespace sb;
 
@@ -17,8 +17,6 @@ struct TestPoolObj
     alignas(TEST_OBJECT_ALIGNMENT) u64 m_data;
 };
 static_assert(sizeof(TestPoolObj) == TEST_OBJECT_ALIGNMENT);
-
-constexpr usize TEST_POOL_CAPACITY = TEST_OBJECT_COUNT * sizeof(TestPoolObj);
 
 using TestObjectArray = TestPoolObj [TEST_OBJECT_COUNT];
 using TestPoolAllocator = PoolAllocator<MemoryArenaAllocator>;

@@ -19,7 +19,7 @@ protected:
 
     PoolAllocatorBase();
 
-    ~PoolAllocatorBase() = default;
+    ~PoolAllocatorBase() override = default;
 
     void init(MemoryArena arena, usize block_size, Alignment default_align);
 

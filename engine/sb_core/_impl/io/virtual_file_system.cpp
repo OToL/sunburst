@@ -44,8 +44,10 @@ class VirtualFileSystemImpl
     };
     static_assert(sizeof(FileHdlHelper) == sizeof(FileHdl));
 
-    VirtualFileSystemImpl(VirtualFileSystem const &) = delete;
-    VirtualFileSystemImpl(VirtualFileSystem &&) = delete;
+    VirtualFileSystemImpl(VirtualFileSystemImpl const &) = delete;
+    VirtualFileSystemImpl(VirtualFileSystemImpl &&) = delete;
+    VirtualFileSystemImpl & operator=(VirtualFileSystemImpl const &) = delete;
+    VirtualFileSystemImpl & operator=(VirtualFileSystemImpl &&) = delete;
 
 public:
     LayerDesc * findLayer(VFS::LayerName layer_id)

@@ -14,8 +14,6 @@ namespace SB_STD_NS {
     SB_SRC_STD_USE(is_unsigned_v);
     SB_SRC_STD_USE(is_trivial);
     SB_SRC_STD_USE(is_trivial_v);
-    SB_SRC_STD_USE(is_pod);
-    SB_SRC_STD_USE(is_pod_v);
     SB_SRC_STD_USE(false_type);
     SB_SRC_STD_USE(true_type);
     SB_SRC_STD_USE(underlying_type);

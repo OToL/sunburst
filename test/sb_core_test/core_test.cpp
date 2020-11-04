@@ -1,7 +1,7 @@
 #include <sb_core/core.h>
 
-#include <catch2/xcatch.hpp>
 #include <catch2/test_prolog.h>
+#include <catch2/xcatch.hpp>
 
 using namespace sb; 
 

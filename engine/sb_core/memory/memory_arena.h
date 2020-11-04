@@ -8,9 +8,10 @@ namespace sb {
 struct MemoryArena
 {
     // @todo: change to free function
-    b8 isInRange(void const * ptr, size_t _size) const
+    b8 isInRange(void const * ptr, size_t data_size) const
     {
-        return ((data <= ptr) && ((static_cast<u8 const *>(data) + _size) >= (static_cast<u8 const *>(ptr) + size)));
+        return ((data <= ptr) &&
+                ((static_cast<u8 const *>(data) + size) >= (static_cast<u8 const *>(ptr) + data_size)));
     }
 
     // @todo: change to free function

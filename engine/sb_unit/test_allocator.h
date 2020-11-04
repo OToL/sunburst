@@ -15,7 +15,7 @@ public:
 
     TestAllocator() = default;
 
-    ~TestAllocator();
+    ~TestAllocator() override;
 
     usize getAlignment() const;
 
@@ -27,7 +27,7 @@ public:
 
     void deallocate(MemoryArena arena) override;
 
-    bool owns(void const * ptr) const;
+    bool owns(void const * ptr) const override;
 
     Stats getStats() const
     {
@@ -37,9 +37,9 @@ public:
 private:
     struct AllocDesc
     {
-        AllocDesc(void * mem_ptr, size_t size)
+        AllocDesc(void * mem_ptr, size_t data_size)
             : mem(mem_ptr)
-            , size(size)
+            , size(data_size)
         {
         }
 

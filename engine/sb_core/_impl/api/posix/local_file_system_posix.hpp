@@ -17,7 +17,15 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileRead(char const * path,
         flags.push_back('b');
     }
 
-    return {(void *)fopen(path, flags.data())};
+    FILE * hdl;
+    auto const res = fopen_s(&hdl, path, flags.data());
+
+    if (sbExpect(0 == res))
+    {
+        return {(void *)hdl};
+    }
+
+    return {};
 }
 
 sb::internal::LayerFileHdl sb::internal::platformOpenFileReadWrite(char const * path, FileWriteMode mode,
@@ -45,7 +53,15 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileReadWrite(char const * 
 
     flags.push_back('x');
 
-    return {(void *)fopen(path, flags.c_str())};
+    FILE * hdl;
+    auto const res = fopen_s(&hdl, path, flags.data());
+
+    if (sbExpect(0 == res))
+    {
+        return {(void *)hdl};
+    }
+
+    return {};
 }
 
 sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
@@ -72,7 +88,15 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path
 
     flags.push_back('x');
 
-    return {(void *)fopen(path, flags.c_str())};
+    FILE * hdl;
+    auto const res = fopen_s(&hdl, path, flags.data());
+
+    if (sbExpect(0 == res))
+    {
+        return {(void *)hdl};
+    }
+
+    return {};
 }
 
 sb::internal::LayerFileHdl sb::internal::platformCreateFileWrite(char const * path, FileFormat fmt)
@@ -84,7 +108,15 @@ sb::internal::LayerFileHdl sb::internal::platformCreateFileWrite(char const * pa
         flags.push_back('b');
     }
 
-    return {(void *)fopen(path, flags.c_str())};
+    FILE * hdl;
+    auto const res = fopen_s(&hdl, path, flags.data());
+
+    if (sbExpect(0 == res))
+    {
+        return {(void *)hdl};
+    }
+
+    return {};
 }
 
 sb::internal::LayerFileHdl sb::internal::platformCreateFileReadWrite(char const * path, FileFormat fmt)
@@ -96,7 +128,15 @@ sb::internal::LayerFileHdl sb::internal::platformCreateFileReadWrite(char const 
         flags.push_back('b');
     }
 
-    return {(void *)fopen(path, flags.c_str())};
+    FILE * hdl;
+    auto const res = fopen_s(&hdl, path, flags.data());
+
+    if (sbExpect(0 == res))
+    {
+        return {(void *)hdl};
+    }
+
+    return {};
 }
 
 void sb::internal::platformCloseFile(LayerFileHdl hdl)

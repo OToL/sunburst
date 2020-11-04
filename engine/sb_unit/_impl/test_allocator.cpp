@@ -29,8 +29,8 @@ sb::MemoryArena TestAllocator::allocate(size_t const size)
         ++_stats.alloc_count;
 
         auto const alloc_desc = sbstd::find_if(begin(_allocs), end(_allocs), [mem_arena](AllocDesc const & val) {
-            return (val.mem <= mem_arena.data) && (reinterpret_cast<uintptr_t>(mem_arena.data) <=
-                                                      (reinterpret_cast<uintptr_t>(val.mem) + val.size));
+            return (val.mem <= mem_arena.data) &&
+                   (reinterpret_cast<uintptr_t>(mem_arena.data) <= (reinterpret_cast<uintptr_t>(val.mem) + val.size));
         });
         sbAssert(alloc_desc == end(_allocs));
         _allocs.emplace_back(mem_arena.data, size);
@@ -49,8 +49,8 @@ sb::MemoryArena TestAllocator::allocate(size_t const size, sb::Alignment alignme
         ++_stats.alloc_count;
 
         auto const alloc_desc = sbstd::find_if(begin(_allocs), end(_allocs), [mem_arena](AllocDesc const & val) {
-            return (val.mem <= mem_arena.data) && (reinterpret_cast<uintptr_t>(mem_arena.data) <=
-                                                      (reinterpret_cast<uintptr_t>(val.mem) + val.size));
+            return (val.mem <= mem_arena.data) &&
+                   (reinterpret_cast<uintptr_t>(mem_arena.data) <= (reinterpret_cast<uintptr_t>(val.mem) + val.size));
         });
         sbAssert(alloc_desc == end(_allocs));
         _allocs.emplace_back(mem_arena.data, size);
