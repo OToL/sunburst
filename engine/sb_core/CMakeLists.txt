@@ -28,6 +28,6 @@ add_library(sb::core ALIAS sb_core)
 
 target_link_libraries(sb_core 
     PRIVATE
-        sb::cxx_properties_private
+        sb::cxx_common_private
     PUBLIC
-        sb::cxx_properties_public)
+        sb::cxx_common_public)

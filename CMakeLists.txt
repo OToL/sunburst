@@ -9,29 +9,27 @@ else()
 endif()
 
 # Global options
-OPTION(SB_ENABLE_TESTS "Enable unit tests executable targets" ON)
-OPTION(SB_WARNINGS_AS_ERRORS "Treat compilation warnings as errors" ON)
+OPTION(SB_ENABLE_UNITTEST "Enable unit tests executable targets" ON)
+OPTION(SB_ENABLE_WARNING_AS_ERROR "Treat compilation warnings as errors" ON)
 
 # Custom cmake helpers
 include(make/sb_utility.cmake)
 
-# Utility target providing common settings such as c++ standard version, inclusion paths, compilation warnings, etc. 
-add_library(sb_cxx_properties_public INTERFACE)
-add_library(sb_cxx_properties_private INTERFACE)
-add_library(sb::cxx_properties_public ALIAS sb_cxx_properties_public)
-add_library(sb::cxx_properties_private ALIAS sb_cxx_properties_private)
+# Utility targets providing common settings such as c++ standard version, inclusion paths, compilation warnings, etc. 
+add_library(sb_cxx_common_public INTERFACE)
+add_library(sb_cxx_common_private INTERFACE)
+add_library(sb::cxx_common_public ALIAS sb_cxx_common_public)
+add_library(sb::cxx_common_private ALIAS sb_cxx_common_private)
 
 include(make/sb_environment.cmake)
-include(make/sb_platform.cmake)
-
 sb_setup_environment(${CMAKE_CURRENT_LIST_DIR})
+
+include(make/sb_platform.cmake)
 sb_setup_platform()
 
 include(make/sb_toolchain.cmake)
-
-sb_setup_toolchain()
-sb_set_target_properties(sb_cxx_properties)
-sb_set_target_warnings(sb_cxx_properties)
+sb_setup_toolchain_warnings(sb_cxx_common)
+sb_setup_toolchain_properties(sb_cxx_common)
 
 include(make/sb_extern.cmake)
 sb_setup_extern()
@@ -39,7 +37,7 @@ sb_setup_extern()
 add_subdirectory("engine")
 add_subdirectory("sample")
 
-if(SB_ENABLE_TESTS)
+if(SB_ENABLE_UNITTEST)
     enable_testing()
     add_subdirectory("test")
 endif()

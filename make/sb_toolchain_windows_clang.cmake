@@ -1,8 +1,4 @@
-function(sb_setup_toolchain)
-
-endfunction()
-
-function(sb_set_target_properties BASE_TARGET_NAME)
+function(sb_setup_toolchain_properties BASE_TARGET_NAME)
 
     if(SB_TARGET_CPU_ARCH_64B) 
         target_compile_definitions(${BASE_TARGET_NAME}_public 
@@ -16,7 +12,8 @@ function(sb_set_target_properties BASE_TARGET_NAME)
     target_compile_definitions(${BASE_TARGET_NAME}_public 
         INTERFACE 
             SB_COMPILER_CLANG
-            SB_PLATFORM_WINDOWS)
+            SB_PLATFORM_WINDOWS
+            _ITERATOR_DEBUG_LEVEL=0)
     target_compile_options(${BASE_TARGET_NAME}_public
         INTERFACE
             -fno-exceptions
@@ -24,26 +21,38 @@ function(sb_set_target_properties BASE_TARGET_NAME)
 
 endfunction()
 
-function(sb_set_target_warnings BASE_TARGET_NAME)
+function(sb_setup_toolchain_warnings BASE_TARGET_NAME)
     set(WARNING_IGNORE_LIST 
+        -Wno-sign-conversion
+        -Wno-reserved-id-macro
+        -Wno-extra-semi-stmt
+        -Wno-old-style-cast
+        -Wno-nonportable-system-include-path
         -Wno-c++98-compat
         -Wno-c++98-compat-pedantic
-        -Wno-old-style-cast
         -Wno-gnu-zero-variadic-macro-arguments
-        -Wno-extra-semi-stmt
-        -Wno-sign-conversion
         -Wno-exit-time-destructors
-        -Wno-reserved-id-macro
         -Wno-global-constructors
         -Wno-missing-prototypes
-        -Wno-nonportable-system-include-path
     )
 
-    if(SB_WARNINGS_AS_ERRORS)
+    if(SB_ENABLE_WARNING_AS_ERROR)
         list(APPEND CONDITIONAL_OPTIONS "-Werror")
     endif()
 
     target_compile_options(${BASE_TARGET_NAME}_private 
         INTERFACE 
-            -Wall -Wextra -Weverything -pedantic ${WARNING_IGNORE_LIST} ${CONDITIONAL_OPTIONS})
+            -Wall -Wextra -Weverything -pedantic -fsanitize=undefined ${WARNING_IGNORE_LIST} ${CONDITIONAL_OPTIONS})
+    target_link_options(${BASE_TARGET_NAME}_private 
+        INTERFACE 
+            -fsanitize=undefined)
+    target_link_libraries(${BASE_TARGET_NAME}_private 
+        INTERFACE 
+            clang_rt.asan_dynamic-x86_64.lib)
+endfunction()
+
+function(sb_setup_toolchain BASE_TARGET_NAME)
+
+
+
 endfunction()

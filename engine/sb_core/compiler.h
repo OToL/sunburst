@@ -18,10 +18,6 @@
 
 #define __sb_restrict __sb_restrict_internal
 
-#ifdef __cpp_exceptions
-#    error "Exceptions must be disabled"
-#endif
-
 namespace sb {
 
 void debugBreak();

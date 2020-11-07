@@ -29,7 +29,7 @@ add_executable(sb_core_test
 
 target_link_libraries(sb_core_test
     PRIVATE    
-        sb::cxx_properties_private
+        sb::cxx_common_private
         sb::core
         sb::unit)
 

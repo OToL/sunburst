@@ -7,8 +7,8 @@ add_library(sb::unit ALIAS unit)
 
 target_link_libraries(unit 
     PRIVATE
-        sb::cxx_properties_private
+        sb::cxx_common_private
     PUBLIC
         sbext::catch
         sb::core
-        sb::cxx_properties_public)
+        sb::cxx_common_public)
