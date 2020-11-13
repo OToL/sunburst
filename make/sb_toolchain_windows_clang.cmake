@@ -1,3 +1,7 @@
+function(sb_setup_toolchain)
+
+endfunction()
+
 function(sb_setup_toolchain_properties BASE_TARGET_NAME)
 
     if(SB_TARGET_CPU_ARCH_64B) 

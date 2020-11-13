@@ -33,6 +33,7 @@ include(make/sb_extern.cmake)
 sb_setup_extern()
 
 include(make/sb_toolchain.cmake)
+sb_setup_toolchain()
 sb_setup_toolchain_warnings(sb_cxx_common)
 sb_setup_toolchain_sanitizers(sb_cxx_common)
 sb_setup_toolchain_properties(sb_cxx_common)

@@ -1,3 +1,16 @@
+function(sb_setup_toolchain)
+    # Patch default CMAKE_CXX_FLAGS
+    # @todo: we could maybe use CMAKE_CXX_FLAGS_INIT set from toolchain initcache
+    set(PATCHED_CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG}")
+
+    if (SB_ENABLE_SANITIZER_ADDRESS)
+        # /RTCx is not compatible with -fsanitize 
+        string(REGEX REPLACE "/RTC[1csu]*" "" PATCHED_CMAKE_CXX_FLAGS_DEBUG "${PATCHED_CMAKE_CXX_FLAGS_DEBUG}")
+    endif()
+
+    set(CMAKE_CXX_FLAGS_DEBUG "${PATCHED_CMAKE_CXX_FLAGS_DEBUG}" PARENT_SCOPE)
+endfunction()
+
 function(sb_setup_toolchain_properties BASE_TARGET_NAME)
 
     if(SB_TARGET_CPU_ARCH_64B) 
@@ -18,10 +31,10 @@ endfunction()
 function(sb_setup_toolchain_warnings BASE_TARGET_NAME)
     set(WARNING_IGNORE_LIST 
         /wd4068 # Unknown pragma
-        /wd5045 # Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
         /wd4514 # 'function' : unreferenced inline function has been remove
         /wd4710 # 'function' : function not inline
         /wd4820 # 'bytes' bytes padding added after construct 'member_name'
+        /wd5045 # Compiler will insert Spectre mitigation for memory load if /Qspectre switch specified
         )
 
     if(SB_ENABLE_WARNING_AS_ERROR)
@@ -34,5 +47,25 @@ function(sb_setup_toolchain_warnings BASE_TARGET_NAME)
 endfunction()
 
 function(sb_setup_toolchain_sanitizers BASE_TARGET_NAME)
+
+    if(SB_ENABLE_SANITIZER_ADDRESS)
+        list(APPEND SANITIZERS_LIST "address")
+    endif()
+
+    if(SANITIZERS_LIST)
+        if(NOT TARGET sbext::asan)
+            message(FATAL_ERROR "Address Sanitizer is not available on '${SB_TARGET_PLATFORM_ID}'")
+        endif()
+    
+        list(JOIN SANITIZERS_LIST "," SANITIZERS_PARAM) 
+
+        target_compile_options(${BASE_TARGET_NAME}_private 
+            INTERFACE
+                /fsanitize=${SANITIZERS_PARAM})
+
+        target_link_libraries(${BASE_TARGET_NAME}_public
+            INTERFACE
+                sbext::asan)
+    endif()
 
 endfunction()

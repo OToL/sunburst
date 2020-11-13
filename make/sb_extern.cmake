@@ -30,4 +30,18 @@ function(sb_setup_extern)
 
     set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT}/lib/cmake/Catch2" PARENT_SCOPE)
 
+    if(SB_TARGET_PLATFORM_ID STREQUAL "windows")
+        if(SB_TOOLCHAIN_ID STREQUAL "msvc")
+            add_library(sbext::asan SHARED IMPORTED)
+            set_target_properties(sbext::asan 
+                PROPERTIES 
+                    IMPORTED_LOCATION ${SB_EXTERN_BIN_DIR_PATH}/clang_rt.asan_dynamic-x86_64.dll
+                    IMPORTED_IMPLIB ${SB_EXTERN_LIB_DIR_PATH}/stub.lib)
+            target_link_options(sbext::asan
+                INTERFACE
+                    /wholearchive:${SB_EXTERN_LIB_DIR_PATH}/clang_rt.asan_dynamic-x86_64.lib 
+                    /wholearchive:${SB_EXTERN_LIB_DIR_PATH}/clang_rt.asan_dynamic_runtime_thunk-x86_64.lib)
+        endif()
+    endif()
+
 endfunction()
