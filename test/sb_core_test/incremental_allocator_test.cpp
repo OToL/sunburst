@@ -25,7 +25,8 @@ TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
 
         for (usize idx = 0; idx != TEST_BACKSTORE_CAPACITY; ++idx)
         {
-            auto mem_arena = test_alloc.allocate(1);
+            auto const mem_arena = test_alloc.allocate(1);
+
             REQUIRE(!mem_arena.isEmpty());
             REQUIRE((uptr)mem_arena.data == idx);
             REQUIRE(test_alloc.owns(mem_arena.data));

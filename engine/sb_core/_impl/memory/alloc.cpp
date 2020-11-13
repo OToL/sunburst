@@ -8,7 +8,7 @@ void * operator new(sb::usize byte_count)
     return sb::getGlobalHeap().allocate(byte_count).data;
 }
 
-void * operator new(sb::usize byte_count, sbstd::nothrow_t const &) noexcept
+void * operator new[](sb::usize byte_count)
 {
     return sb::getGlobalHeap().allocate(byte_count).data;
 }
@@ -23,7 +23,7 @@ void * operator new[](sb::usize byte_count, sbstd::align_val_t alignment)
     return sb::getGlobalHeap().allocate(byte_count, (sb::Alignment)alignment).data;
 }
 
-void * operator new[](sb::usize byte_count)
+void * operator new(sb::usize byte_count, sbstd::nothrow_t const &) noexcept
 {
     return sb::getGlobalHeap().allocate(byte_count).data;
 }
@@ -31,6 +31,16 @@ void * operator new[](sb::usize byte_count)
 void * operator new[](sb::usize byte_count, sbstd::nothrow_t const &) noexcept
 {
     return sb::getGlobalHeap().allocate(byte_count).data;
+}
+
+void * operator new(sb::usize byte_count, sbstd::align_val_t alignment, sbstd::nothrow_t const &) noexcept
+{
+    return sb::getGlobalHeap().allocate(byte_count, (sb::Alignment)alignment).data;
+}
+
+void * operator new[](sb::usize byte_count, sbstd::align_val_t alignment, sbstd::nothrow_t const &) noexcept
+{
+    return sb::getGlobalHeap().allocate(byte_count, (sb::Alignment)alignment).data;
 }
 
 void operator delete(void * ptr) noexcept
@@ -41,23 +51,7 @@ void operator delete(void * ptr) noexcept
     }
 }
 
-void operator delete(void * ptr, sbstd::nothrow_t const &) noexcept
-{
-    if (nullptr != ptr)
-    {
-        sb::getGlobalHeap().deallocate(ptr);
-    }
-}
-
 void operator delete[](void * ptr) noexcept
-{
-    if (nullptr != ptr)
-    {
-        sb::getGlobalHeap().deallocate(ptr);
-    }
-}
-
-void operator delete[](void * ptr, sbstd::nothrow_t const &) noexcept
 {
     if (nullptr != ptr)
     {
@@ -74,6 +68,70 @@ void operator delete(void * ptr, sbstd::align_val_t) noexcept
 }
 
 void operator delete[](void * ptr, sbstd::align_val_t) noexcept
+{
+    if (nullptr != ptr)
+    {
+        sb::getGlobalHeap().deallocate(ptr);
+    }
+}
+
+void operator delete(void * ptr, sb::usize) noexcept
+{
+    if (nullptr != ptr)
+    {
+        sb::getGlobalHeap().deallocate(ptr);
+    }
+}
+
+void operator delete[](void * ptr, sb::usize) noexcept
+{
+    if (nullptr != ptr)
+    {
+        sb::getGlobalHeap().deallocate(ptr);
+    }
+}
+
+void operator delete(void * ptr, sb::usize, sbstd::align_val_t) noexcept
+{
+    if (nullptr != ptr)
+    {
+        sb::getGlobalHeap().deallocate(ptr);
+    }
+}
+
+void operator delete[](void * ptr, sb::usize, sbstd::align_val_t) noexcept
+{
+    if (nullptr != ptr)
+    {
+        sb::getGlobalHeap().deallocate(ptr);
+    }
+}
+
+void operator delete(void * ptr, const sbstd::nothrow_t &) noexcept
+{
+    if (nullptr != ptr)
+    {
+        sb::getGlobalHeap().deallocate(ptr);
+    }
+}
+
+void operator delete[](void * ptr, const sbstd::nothrow_t &) noexcept
+{
+    if (nullptr != ptr)
+    {
+        sb::getGlobalHeap().deallocate(ptr);
+    }
+}
+
+void operator delete(void * ptr, sbstd::align_val_t, const sbstd::nothrow_t &) noexcept
+{
+    if (nullptr != ptr)
+    {
+        sb::getGlobalHeap().deallocate(ptr);
+    }
+}
+
+void operator delete[](void * ptr, sbstd::align_val_t, const sbstd::nothrow_t &) noexcept
 {
     if (nullptr != ptr)
     {

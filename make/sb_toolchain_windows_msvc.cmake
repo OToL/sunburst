@@ -12,9 +12,7 @@ function(sb_setup_toolchain_properties BASE_TARGET_NAME)
     target_compile_definitions(${BASE_TARGET_NAME}_public 
         INTERFACE 
             SB_COMPILER_MSVC 
-            SB_PLATFORM_WINDOWS
-            _HAS_EXCEPTIONS=0)
-
+            SB_PLATFORM_WINDOWS)
 endfunction()
 
 function(sb_setup_toolchain_warnings BASE_TARGET_NAME)
@@ -33,4 +31,8 @@ function(sb_setup_toolchain_warnings BASE_TARGET_NAME)
     target_compile_options(${BASE_TARGET_NAME}_private 
         INTERFACE 
             /Wall /permissive- ${WARNING_IGNORE_LIST} ${CONDITIONAL_OPTIONS})
+endfunction()
+
+function(sb_setup_toolchain_sanitizers BASE_TARGET_NAME)
+
 endfunction()

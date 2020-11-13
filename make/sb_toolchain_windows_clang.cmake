@@ -12,8 +12,7 @@ function(sb_setup_toolchain_properties BASE_TARGET_NAME)
     target_compile_definitions(${BASE_TARGET_NAME}_public 
         INTERFACE 
             SB_COMPILER_CLANG
-            SB_PLATFORM_WINDOWS
-            _ITERATOR_DEBUG_LEVEL=0)
+            SB_PLATFORM_WINDOWS)
     target_compile_options(${BASE_TARGET_NAME}_public
         INTERFACE
             -fno-exceptions
@@ -34,7 +33,11 @@ function(sb_setup_toolchain_warnings BASE_TARGET_NAME)
         -Wno-exit-time-destructors
         -Wno-global-constructors
         -Wno-missing-prototypes
-    )
+        
+        # catch2
+        -Wno-suggest-destructor-override
+        -Wno-newline-eof
+        -Wno-inconsistent-missing-destructor-override)
 
     if(SB_ENABLE_WARNING_AS_ERROR)
         list(APPEND CONDITIONAL_OPTIONS "-Werror")
@@ -42,17 +45,9 @@ function(sb_setup_toolchain_warnings BASE_TARGET_NAME)
 
     target_compile_options(${BASE_TARGET_NAME}_private 
         INTERFACE 
-            -Wall -Wextra -Weverything -pedantic -fsanitize=undefined ${WARNING_IGNORE_LIST} ${CONDITIONAL_OPTIONS})
-    target_link_options(${BASE_TARGET_NAME}_private 
-        INTERFACE 
-            -fsanitize=undefined)
-    target_link_libraries(${BASE_TARGET_NAME}_private 
-        INTERFACE 
-            clang_rt.asan_dynamic-x86_64.lib)
+            -Wall -Wextra -Weverything -pedantic ${WARNING_IGNORE_LIST} ${CONDITIONAL_OPTIONS})
 endfunction()
 
-function(sb_setup_toolchain BASE_TARGET_NAME)
-
-
+function(sb_setup_toolchain_sanitizers BASE_TARGET_NAME)
 
 endfunction()

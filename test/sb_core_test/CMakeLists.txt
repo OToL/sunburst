@@ -1,4 +1,4 @@
-include(${SB_CATCH_CMAKE_DIR_PATH}/catch.cmake) 
+include(${SB_CATCH_CMAKE_DIR_PATH}/catch.cmake)
 
 add_executable(sb_core_test
     core_test.cpp
@@ -32,6 +32,8 @@ target_link_libraries(sb_core_test
         sb::cxx_common_private
         sb::core
         sb::unit)
+
+sb_copy_target_shared_dependencies(sb_core_test)
 
 catch_discover_tests(
     sb_core_test

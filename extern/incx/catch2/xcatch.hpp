@@ -5,9 +5,6 @@
 #pragma warning(disable:4365)
 #pragma warning(disable:4571)
 #pragma warning(disable:5039)
-#pragma warning(disable:4583)
-#pragma warning(disable:4616)
-#pragma warning(disable:5204)
 
 #include <catch2/catch.hpp>
 
