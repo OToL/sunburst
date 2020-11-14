@@ -23,3 +23,5 @@ namespace sb {
 void debugBreak();
 
 }
+
+#define sbStaticUnreachable(msg) sbStaticUnreachableInternal(msg)

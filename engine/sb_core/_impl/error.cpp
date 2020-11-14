@@ -4,6 +4,7 @@
 #include <sb_core/error.h>
 #include <sb_core/log.h>
 #include <sb_core/enum.h>
+#include <sb_core/hook.h>
 
 #if sbIsEnabled(ERROR_FACILITY)
 

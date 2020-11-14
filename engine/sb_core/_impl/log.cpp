@@ -1,6 +1,7 @@
 #include <sb_core/log.h>
 #include <sb_core/os.h>
 #include <sb_core/error.h>
+#include <sb_core/hook.h>
 #include <sb_core/string/string_format.h>
 
 #include <sb_std/iterator>

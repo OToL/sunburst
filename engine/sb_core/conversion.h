@@ -1,6 +1,7 @@
 #pragma once
 
 #include <sb_core/core.h>
+#include <sb_core/compiler.h>
 
 #include <sb_std/span>
 #include <sb_std/type_traits>
@@ -32,7 +33,7 @@ inline usize stringConvT(TSrc && src, sbstd::span<char> dest)
     }
     else
     {
-        // static_assert(false, "Unhandled string conversion");
+        sbStaticUnreachable("Unsupported conversion");
         return 0U;
     }
 }

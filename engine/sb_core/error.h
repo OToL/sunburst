@@ -2,9 +2,6 @@
 
 #include <sb_core/core.h>
 
-// @todo: move to another header
-#include <sb_std/inplace_function>
-
 namespace sb {
 
 enum class ErrorLevel : u8
@@ -14,11 +11,6 @@ enum class ErrorLevel : u8
              // bugs, etc.)
     NOTICE // The error has been properly handled
 };
-
-using ErrorHandler =
-    sbstdx::inplace_function<void(ErrorLevel type, char const * file, u32 const line, char const * msg)>;
-
-void setErrorHandler(ErrorHandler const & hdl);
 
 } // namespace sb
 
