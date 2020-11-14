@@ -26,21 +26,21 @@ def ExecuteClangFormatOnDir(clang_format, dir_path):
 
 if __name__ == "__main__":
 
-    optParser = OptionParser()
+    opt_parser = OptionParser()
 
-    optParser.add_option("-i", "--input", action="store",
+    opt_parser.add_option("-i", "--input", action="store",
                          type="string", help="Input path to format", dest="input_path")
 
-    optParser.add_option("-e", "--engine", action="store_true",
+    opt_parser.add_option("-e", "--engine", action="store_true",
                          help="Format all engine sources", dest="format_engine")
 
-    optParser.add_option("-t", "--test", action="store_true",
+    opt_parser.add_option("-t", "--test", action="store_true",
                          help="Format all test sources", dest="format_test")
 
-    optParser.add_option("-s", "--sample", action="store_true",
+    opt_parser.add_option("-s", "--sample", action="store_true",
                         help="Format all sample sources", dest="format_sample")
 
-    (options, args) = optParser.parse_args()
+    (options, args) = opt_parser.parse_args()
 
     clang_format_path = os.path.join(host.GetUtlBinDirPath(), host.GetExeFileName("clang-format"))
 
