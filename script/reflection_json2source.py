@@ -79,6 +79,7 @@ def ReadJsonData(jsonFilePath):
 
     return jsonObj
 
+# @todo: put somewhere in common
 def arg2ListCB(option, opt, value, parser):
 
     setattr(parser.values, option.dest, value.split(','))

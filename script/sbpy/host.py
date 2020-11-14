@@ -50,3 +50,12 @@ def GetUtlBinDirPath():
 def GetEngineSrcDirPath():
 
     return os.path.join(os.path.dirname(__file__), "..", "..", "engine")
+
+def GetSampleSrcDirPath():
+
+    return os.path.join(os.path.dirname(__file__), "..", "..", "sample")
+
+def GetTestSrcDirPath():
+
+    return os.path.join(os.path.dirname(__file__), "..", "..", "test")
+    
