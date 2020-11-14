@@ -85,7 +85,6 @@ TEST_CASE("FixString assign FixString exceeded", "[fix_string]")
     REQUIRE_FALSE(testStr2.empty());
     REQUIRE(2U == testStr2.length());
     REQUIRE_THAT(testStr2.c_str(), Catch::Matchers::Equals("He"));
-
 }
 
 TEST_CASE("FixString concat raw string", "[fix_string]")

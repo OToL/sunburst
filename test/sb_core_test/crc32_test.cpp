@@ -16,7 +16,7 @@ static u32 const CRC32_STR_TEST_HASH = 0xc7c7535eU;
 TEST_CASE("Null CRC32", "[crc32]")
 {
     REQUIRE(0U == computeCRC32(sbstd::span<u8>{}));
-    REQUIRE(0U == computeCRC32({(u8 const *) "Hello", 0}));
+    REQUIRE(0U == computeCRC32({(u8 const *)"Hello", 0}));
     REQUIRE(0U == computeCRC32(""));
 }
 

@@ -103,7 +103,7 @@ TEST_CASE("String format numeric arguments", "[string_format]")
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("-10"));
-        REQUIRE(byte_cnt== 3U);
+        REQUIRE(byte_cnt == 3U);
     }
 
     SECTION("u16 argument")

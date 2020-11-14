@@ -51,7 +51,7 @@ void FillTestFArrayEmplace(TestFArray & test_array)
     REQUIRE(TestObjectCnt::getStats() == test_array.capacity());
 }
 
-}
+} // namespace
 
 TEST_CASE("FArray POD default ctor", "[fix_array]")
 {
@@ -163,7 +163,8 @@ TEST_CASE("FArray erase middle element", "[fix_array]")
         REQUIRE(TestObjectCnt::getStats() == (test_array.capacity() - 1));
 
         REQUIRE(sbstd::equal(begin(test_array), begin(test_array) + ERASE_OFFSET, sbstd::begin(TEST_FARRAY_REF)));
-        REQUIRE(sbstd::equal(begin(test_array) + ERASE_OFFSET, end(test_array), sbstd::begin(TEST_FARRAY_REF) + ERASE_OFFSET + 1));
+        REQUIRE(sbstd::equal(begin(test_array) + ERASE_OFFSET, end(test_array),
+                             sbstd::begin(TEST_FARRAY_REF) + ERASE_OFFSET + 1));
     }
 
     REQUIRE(TestObjectCnt::getStats() == 0ULL);
@@ -172,7 +173,7 @@ TEST_CASE("FArray erase middle element", "[fix_array]")
 TEST_CASE("FArray aligned storage", "[fix_array]")
 {
 #pragma warning(push)
-#pragma warning(disable:4324)
+#pragma warning(disable : 4324)
     struct alignas(32) AlignedType
     {
         u32 value;

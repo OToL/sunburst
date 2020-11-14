@@ -4,7 +4,7 @@
 #include <catch2/xcatch.hpp>
 
 using namespace sb;
- 
+
 static constexpr char const * const HASH_STR_TEST_STRING = "Hello Hash";
 
 TEST_CASE("Hash64Str default ctor", "[hash64_str]")
@@ -49,7 +49,7 @@ TEST_CASE("Hash64Str constexpr check", "[hash64_str]")
 
 TEST_CASE("Hash64Str literal", "[hash64_str]")
 {
-   STATIC_REQUIRE((computeHash64(HASH_STR_TEST_STRING) == "Hello Hash"_h64s.value));
+    STATIC_REQUIRE((computeHash64(HASH_STR_TEST_STRING) == "Hello Hash"_h64s.value));
 }
 
 #include <catch2/test_epilog.h>

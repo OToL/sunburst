@@ -18,7 +18,7 @@ struct TestPoolObj
 };
 static_assert(sizeof(TestPoolObj) == TEST_OBJECT_ALIGNMENT);
 
-using TestObjectArray = TestPoolObj [TEST_OBJECT_COUNT];
+using TestObjectArray = TestPoolObj[TEST_OBJECT_COUNT];
 using TestPoolAllocator = PoolAllocator<MemoryArenaAllocator>;
 
 TEST_CASE("Pool Allocator empty", "[pool_allocator]")
@@ -44,8 +44,8 @@ TEST_CASE("Pool Allocator edge cases", "[pool_allocator]")
         TestObjectArray testObjectArray;
         TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
 
-        REQUIRE(isEmpty(test_alloc.allocate(sizeof(TestPoolObj)+ 1)));
-        REQUIRE(isEmpty(test_alloc.allocate(sizeof(TestPoolObj)+ 1, TEST_OBJECT_ALIGNMENT)));
+        REQUIRE(isEmpty(test_alloc.allocate(sizeof(TestPoolObj) + 1)));
+        REQUIRE(isEmpty(test_alloc.allocate(sizeof(TestPoolObj) + 1, TEST_OBJECT_ALIGNMENT)));
     }
 
     SECTION("Allocate smaller object")
@@ -76,7 +76,7 @@ TEST_CASE("Pool Allocator consume all", "[pool_allocator]")
         usize alloc_obj_cnt = 0;
         MemoryArena mem_arena;
 
-        do 
+        do
         {
             mem_arena = test_alloc.allocate(sizeof(TestPoolObj));
 
@@ -87,8 +87,7 @@ TEST_CASE("Pool Allocator consume all", "[pool_allocator]")
                 REQUIRE(mem_arena.data == &testObjectArray[alloc_obj_cnt]);
                 ++alloc_obj_cnt;
             }
-        }
-        while (!isEmpty(mem_arena));
+        } while (!isEmpty(mem_arena));
 
         REQUIRE(alloc_obj_cnt == TEST_OBJECT_COUNT);
     }
@@ -101,7 +100,7 @@ TEST_CASE("Pool Allocator consume all", "[pool_allocator]")
         usize alloc_obj_cnt = 0;
         MemoryArena mem_arena;
 
-        do 
+        do
         {
             mem_arena = test_alloc.allocate(sizeof(TestPoolObj), TEST_OBJECT_ALIGNMENT);
 
@@ -112,8 +111,7 @@ TEST_CASE("Pool Allocator consume all", "[pool_allocator]")
                 REQUIRE(mem_arena.data == &testObjectArray[alloc_obj_cnt]);
                 ++alloc_obj_cnt;
             }
-        }
-        while (!isEmpty(mem_arena));
+        } while (!isEmpty(mem_arena));
 
         REQUIRE(alloc_obj_cnt == TEST_OBJECT_COUNT);
     }
@@ -131,7 +129,7 @@ TEST_CASE("Pool Allocator deallocate all", "[pool_allocator]")
         usize alloc_obj_cnt = 0;
         MemoryArena mem_arena;
 
-        do 
+        do
         {
             mem_arena = test_alloc.allocate(sizeof(TestPoolObj));
 
@@ -142,8 +140,7 @@ TEST_CASE("Pool Allocator deallocate all", "[pool_allocator]")
                 REQUIRE(mem_arena.data == &testObjectArray[alloc_obj_cnt]);
                 ++alloc_obj_cnt;
             }
-        }
-        while (!isEmpty(mem_arena));
+        } while (!isEmpty(mem_arena));
 
         REQUIRE(alloc_obj_cnt == TEST_OBJECT_COUNT);
         test_alloc.deallocateAll();

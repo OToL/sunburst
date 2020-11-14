@@ -3,7 +3,7 @@
 #include <catch2/test_prolog.h>
 #include <catch2/xcatch.hpp>
 
-using namespace sb; 
+using namespace sb;
 
 #define SB_CTF_TEST SB_ENABLED
 

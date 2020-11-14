@@ -26,7 +26,7 @@ TEST_CASE("Power of 2 chek", "[bitwise]")
     {
         REQUIRE(!isPowerOf2(3));
     }
-    
+
     SECTION("Power of 2 numbers are power of 2")
     {
         REQUIRE(isPowerOf2(8));
@@ -42,7 +42,7 @@ TEST_CASE("Align a value", "[bitwise]")
         REQUIRE(8U == alignUp(1U, 8U));
         REQUIRE(16U == alignUp(1U, 16U));
     }
-    
+
     SECTION("Aligning a value to itself results to the same value")
     {
         REQUIRE(2U == alignUp(2U, 2U));
@@ -70,7 +70,7 @@ TEST_CASE("Power of 2 rounding", "[bitwise]")
         REQUIRE(nextPowerOf2(2U) == 2U);
         REQUIRE(nextPowerOf2(4U) == 4U);
         REQUIRE(nextPowerOf2(128U) == 128U);
-     
+
         REQUIRE(prevPowerOf2(0U) == 0U);
         REQUIRE(prevPowerOf2(1U) == 1U);
         REQUIRE(prevPowerOf2(2U) == 2U);
@@ -90,7 +90,7 @@ TEST_CASE("Power of 2 rounding", "[bitwise]")
         REQUIRE(prevPowerOf2(3U) == 2U);
         REQUIRE(prevPowerOf2(123U) == 64U);
         REQUIRE(prevPowerOf2(129U) == 128U);
-    } 
+    }
 }
 
 #include <catch2/test_epilog.h>

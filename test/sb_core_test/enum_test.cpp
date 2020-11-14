@@ -10,15 +10,15 @@ enum class TestMask : u8
 {
     VALUE0,
     VALUE1
-}; 
+};
 
 TEST_CASE("Single value mask", "[enum]")
-{   
+{
     REQUIRE(0b01U == makeEnumMaskValue(TestMask::VALUE0));
 }
 
 TEST_CASE("Multi value mask", "[enum]")
-{   
+{
     REQUIRE(makeEnumMaskValue(TestMask::VALUE0, TestMask::VALUE1) == 0b11U);
 }
 
@@ -32,7 +32,8 @@ TEST_CASE("Constexpr masks", "[enum]")
 TEST_CASE("Enum mask", "[enum]")
 {
     STATIC_REQUIRE(hasEnumValues(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0, TestMask::VALUE1));
-    STATIC_REQUIRE(hasAnyEnumValue(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0, TestMask::VALUE1));
+    STATIC_REQUIRE(
+        hasAnyEnumValue(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0, TestMask::VALUE1));
     STATIC_REQUIRE(hasAnyEnumValue(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE1));
     STATIC_REQUIRE(hasAnyEnumValue(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0));
 }

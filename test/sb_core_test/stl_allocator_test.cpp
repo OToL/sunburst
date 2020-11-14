@@ -16,18 +16,18 @@ using namespace sb;
 TEST_CASE("STL Allocator Wrapper", "[stl_allocator]")
 {
     TestAllocator test_alloc;
-    
-    {        
+
+    {
         DArray<u32, STLAllocatorWrapper<u32>> vector_test{STLAllocatorWrapper<u32>{test_alloc}};
 
-        u32 const array_test [] = {0, 1, 2, 3, 4};
+        u32 const array_test[] = {0, 1, 2, 3, 4};
 
         sbstd::copy(sbstd::begin(array_test), sbstd::end(array_test), back_inserter(vector_test));
 
         REQUIRE(test_alloc.getStats().allocated_byte != 0U);
         REQUIRE(test_alloc.getStats().allocated_byte >= sizeof(array_test));
 
-        for (u32 idx = 0 ; idx != sbstd::size(array_test) ; ++idx)
+        for (u32 idx = 0; idx != sbstd::size(array_test); ++idx)
         {
             REQUIRE(array_test[idx] == idx);
             REQUIRE(array_test[idx] == vector_test[idx]);
