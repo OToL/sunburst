@@ -23,7 +23,7 @@ public:
         sbAssert(sizeof(NodeIdx) <= actual_block_size);
 
         auto mem_arena = _mem_provider.allocate(block_count * actual_block_size, default_align);
-        sbAssert(!mem_arena.isEmpty());
+        sbAssert(!isEmpty(mem_arena));
 
         BaseClass::init(mem_arena, actual_block_size, default_align);
     }
@@ -36,7 +36,7 @@ public:
         sbAssert(sizeof(NodeIdx) <= actual_block_size);
 
         auto mem_arena = _mem_provider.allocate(block_count * actual_block_size, default_align);
-        sbAssert(!mem_arena.isEmpty());
+        sbAssert(!isEmpty(mem_arena));
 
         BaseClass::init(mem_arena, actual_block_size, default_align);
     }
@@ -49,7 +49,7 @@ public:
     ~PoolAllocator() override
     {
         MemoryArena mem_arena = BaseClass::getArena();
-        if (!mem_arena.isEmpty())
+        if (!isEmpty(mem_arena))
         {
             _mem_provider.deallocate(mem_arena.data);
         }

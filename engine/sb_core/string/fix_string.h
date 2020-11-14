@@ -8,7 +8,7 @@
 
 namespace sb {
 
-// TODO: Proper character traits
+// @todo: Proper character traits
 template <usize CAPACITY, typename TChar = char>
 class FixString
 {
@@ -108,7 +108,7 @@ public:
     {
         strCatT(_data, _len, CAPACITY, str);
 
-        // TODO: implement my own strncat which returns the numbers of copied character
+        // @todo: implement my own strncat which returns the numbers of copied character
         _len = sbstd::strlen(_data);
 
         return *this;

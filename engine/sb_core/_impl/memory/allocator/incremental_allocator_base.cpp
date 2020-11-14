@@ -18,14 +18,14 @@ sb::IncrementalAllocatorBase::IncrementalAllocatorBase()
 
 sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size)
 {
-    if (_arena.isEmpty() || (size == 0U))
+    if (isEmpty(_arena) || (size == 0U))
     {
         return {};
     }
 
     u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(_top), _default_alignment));
 
-    if (_arena.isInRange(new_top, size))
+    if (isInRange(_arena, new_top, size))
     {
         void * mem_ptr = new_top;
         _top = new_top + size;
@@ -38,14 +38,14 @@ sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size)
 
 sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size, Alignment const alignment)
 {
-    if (_arena.isEmpty() || (size == 0U))
+    if (isEmpty(_arena) || (size == 0U))
     {
         return {};
     }
 
     u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(_top), alignment));
 
-    if (_arena.isInRange(new_top, size))
+    if (isInRange(_arena, new_top, size))
     {
         void * mem_ptr = new_top;
         _top = new_top + size;
@@ -58,12 +58,12 @@ sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size, Alignme
 
 void sb::IncrementalAllocatorBase::deallocate(void * ptr)
 {
-    sbWarn(_arena.isInRange(ptr));
+    sbWarn(isInRange(_arena, ptr));
 }
 
 sb::b8 sb::IncrementalAllocatorBase::owns(void const * ptr) const
 {
-    return _arena.isInRange(ptr);
+    return isInRange(_arena, ptr);
 }
 
 void sb::IncrementalAllocatorBase::deallocateAll()

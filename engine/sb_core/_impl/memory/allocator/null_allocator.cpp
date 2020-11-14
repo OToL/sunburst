@@ -20,7 +20,7 @@ void sb::NullAllocator::deallocate([[maybe_unused]] void * ptr)
 
 void sb::NullAllocator::deallocate(MemoryArena arena)
 {
-    sbWarn(arena.isEmpty());
+    sbWarn(isEmpty(arena));
 }
 
 void sb::NullAllocator::deallocateAll() { }

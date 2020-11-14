@@ -62,7 +62,7 @@ sb::MemoryArena sb::PoolAllocatorBase::allocate(usize const size, [[maybe_unused
 
 void sb::PoolAllocatorBase::deallocate(void * ptr)
 {
-    if (sbExpect(_arena.isInRange(ptr)))
+    if (sbExpect(isInRange(_arena, ptr)))
     {
         auto const ptr_offset = static_cast<u8 *>(ptr) - static_cast<u8 *>(_arena.data);
         sbAssert(0U == (ptr_offset % _actual_block_size));
@@ -85,7 +85,7 @@ void sb::PoolAllocatorBase::deallocate(void * ptr)
 
 sb::b8 sb::PoolAllocatorBase::owns(void const * ptr) const
 {
-    return _arena.isInRange(ptr);
+    return isInRange(_arena, ptr);
 }
 
 void sb::PoolAllocatorBase::deallocateAll()

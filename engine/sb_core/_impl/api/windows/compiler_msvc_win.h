@@ -13,5 +13,4 @@ __forceinline void debugBreak()
 }
 } // namespace sb
 
-#define sbStaticUnreachableInternal(msg)\
-    static_assert(false, msg)
+#define sbStaticUnreachableInternal(msg) static_assert(false, msg)

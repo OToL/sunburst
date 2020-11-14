@@ -22,7 +22,7 @@ TType * newImpl(THeap & heap, TArgs &&... args)
 {
     MemoryArena arena = heap.allocate(sizeof(TType), alignOf<TType>());
 
-    if (!arena.isEmpty())
+    if (!isEmpty(arena))
     {
         return ::new (arena.data) TType(sbstd::forward<TArgs &&>(args)...);
     }

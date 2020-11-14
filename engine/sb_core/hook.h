@@ -16,4 +16,4 @@ using LogHandler =
 void setLogHandler(LogHandler const & hdl);
 void setErrorHandler(ErrorHandler const & hdl);
 
-}
+} // namespace sb

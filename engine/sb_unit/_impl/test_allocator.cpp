@@ -23,7 +23,7 @@ sb::MemoryArena TestAllocator::allocate(size_t const size)
 {
     MemoryArena mem_arena = sb::getGlobalHeap().allocate(size);
 
-    if (!mem_arena.isEmpty())
+    if (!isEmpty(mem_arena))
     {
         _stats.allocated_byte += size;
         ++_stats.alloc_count;
@@ -43,7 +43,7 @@ sb::MemoryArena TestAllocator::allocate(size_t const size, sb::Alignment alignme
 {
     MemoryArena mem_arena = getGlobalHeap().allocate(size, alignment);
 
-    if (!mem_arena.isEmpty())
+    if (!isEmpty(mem_arena))
     {
         _stats.allocated_byte += size;
         ++_stats.alloc_count;

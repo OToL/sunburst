@@ -110,7 +110,7 @@ public:
         MemoryArena arena = file_desc_pool.getArena();
         FileDesc * const file_desc = static_cast<FileDesc *>(arena.data) + helper_hdl.unpacked.hdl;
 
-        sbAssert(arena.isInRange(file_desc));
+        sbAssert(isInRange(arena, file_desc));
         sbAssert(helper_hdl.unpacked.gen == file_desc->gen);
 
         return *file_desc;
@@ -395,7 +395,7 @@ private:
         MemoryArena const arena = file_desc_pool.getArena();
         FileDesc * const file_desc = static_cast<FileDesc *>(arena.data) + helper_hdl.unpacked.hdl;
 
-        sbAssert(arena.isInRange((void *)file_desc));
+        sbAssert(isInRange(arena, (void *)file_desc));
         sbAssert(helper_hdl.unpacked.gen == file_desc->gen);
 
         *file_desc = {};

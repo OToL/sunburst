@@ -36,7 +36,7 @@ public:
     ~IncrementalAllocator() override
     {
         MemoryArena mem_arena = BaseClass::getArena();
-        if (!mem_arena.isEmpty())
+        if (!isEmpty(mem_arena))
         {
             _mem_provider.deallocate(mem_arena.data);
         }
