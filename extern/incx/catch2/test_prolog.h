@@ -9,3 +9,8 @@
 #pragma warning(disable:5219)
 #pragma warning(disable:4623)
 #pragma warning(disable:5027)
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-variable"
+#pragma clang diagnostic ignored "-Wnewline-eof"
+#pragma clang diagnostic ignored "-Winconsistent-missing-destructor-override"

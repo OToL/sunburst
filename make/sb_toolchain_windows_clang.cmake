@@ -35,12 +35,7 @@ function(sb_setup_toolchain_warnings BASE_TARGET_NAME)
         -Wno-gnu-zero-variadic-macro-arguments
         -Wno-exit-time-destructors
         -Wno-global-constructors
-        -Wno-missing-prototypes
-        
-        # catch2
-        -Wno-suggest-destructor-override
-        -Wno-newline-eof
-        -Wno-inconsistent-missing-destructor-override)
+        -Wno-missing-prototypes)
 
     if(SB_ENABLE_WARNING_AS_ERROR)
         list(APPEND CONDITIONAL_OPTIONS "-Werror")
