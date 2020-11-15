@@ -27,7 +27,6 @@ endfunction()
 function(sb_setup_toolchain_warnings BASE_TARGET_NAME)
     set(WARNING_IGNORE_LIST 
         -Wno-sign-conversion
-        -Wno-reserved-id-macro
         -Wno-extra-semi-stmt
         -Wno-old-style-cast
         -Wno-nonportable-system-include-path

@@ -16,7 +16,7 @@
 #    error "Unsupported platform"
 #endif
 
-#define __sb_restrict __sb_restrict_internal
+#define _sb_noalias_ _sb_noalias_internal
 
 namespace sb {
 

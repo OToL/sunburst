@@ -1,6 +1,6 @@
 #pragma once
 
-#define __sb_restrict_internal
+#define _sb_noalias_internal
 
 namespace sb {
 inline void debugBreak()
