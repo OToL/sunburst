@@ -1,6 +1,4 @@
-// @todo: I don't like having this winapi in external
-// it should be in sb_os or _impl/api/windows
-#include <winapi/windows.h>
+#include <sb_core/api/windows/windows.h>
 
 // @todo: use Win32 API (CreateFile, etc.)
 #include <sb_core/_impl/api/posix/local_file_system_posix.hpp>
