@@ -16,7 +16,7 @@
 #    error "Unsupported platform"
 #endif
 
-#define _sb_noalias_ _sb_noalias_internal
+#define sb_noalias sb_noalias_internal
 
 namespace sb {
 

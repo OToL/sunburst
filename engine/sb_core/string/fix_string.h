@@ -132,9 +132,13 @@ public:
         return *this;
     }
 
-    FixString & operator=(FixString const & src)
+    // NOLINTNEXTLINE(bugprone-unhandled-self-assignment)
+    FixString & operator=(FixString const & rhs)
     {
-        _len = strCpyT(_data, src.c_str());
+        if (this != &rhs)
+        {
+            _len = strCpyT(_data, rhs.c_str());
+        }
 
         return *this;
     }

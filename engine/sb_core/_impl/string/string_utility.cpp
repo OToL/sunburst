@@ -1,7 +1,7 @@
 #include <sb_core/string/string_utility.h>
 #include <sb_core/error.h>
 
-char * sb::strCatT(char * _sb_noalias_ dst, usize dst_len, usize dst_capacity, char const * _sb_noalias_ concat)
+char * sb::strCatT(char * sb_noalias dst, usize dst_len, usize dst_capacity, char const * sb_noalias concat)
 {
     sbAssert(dst_len <= dst_capacity);
     sbAssert(dst[dst_len] == 0);
@@ -11,7 +11,7 @@ char * sb::strCatT(char * _sb_noalias_ dst, usize dst_len, usize dst_capacity, c
     return dst;
 }
 
-sb::usize sb::strCpyT(char * _sb_noalias_ output, usize capacity, char const * _sb_noalias_ src)
+sb::usize sb::strCpyT(char * sb_noalias output, usize capacity, char const * sb_noalias src)
 {
     if (0 == capacity)
     {
@@ -19,7 +19,7 @@ sb::usize sb::strCpyT(char * _sb_noalias_ output, usize capacity, char const * _
     }
 
     usize copy_count = 0;
-    char const * _sb_noalias_ srcIter = src;
+    char const * sb_noalias srcIter = src;
 
     do
     {
@@ -36,10 +36,10 @@ sb::usize sb::strCpyT(char * _sb_noalias_ output, usize capacity, char const * _
     return copy_count;
 }
 
-sb::b8 sb::strStartsWith(char const * _sb_noalias_ str, char const * _sb_noalias_ start_str)
+sb::b8 sb::strStartsWith(char const * sb_noalias str, char const * sb_noalias start_str)
 {
-    char const * _sb_noalias_ src_iter = str;
-    char const * _sb_noalias_ start_str_iter = start_str;
+    char const * sb_noalias src_iter = str;
+    char const * sb_noalias start_str_iter = start_str;
 
     while ((*src_iter == *start_str_iter) && ('\0' != *src_iter) && ('\0' != *start_str_iter))
     {

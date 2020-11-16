@@ -436,6 +436,7 @@ public:
         return *(_impl._begin + idx);
     }
 
+    // NOLINTNEXTLINE(bugprone-unhandled-self-assignment)
     SmallArray & operator=(SmallArray const & src)
     {
         if (this != &src)
@@ -454,6 +455,7 @@ public:
         return *this;
     }
 
+    // NOLINTNEXTLINE(bugprone-unhandled-self-assignment)
     SmallArray & operator=(SmallArray && src)
     {
         if (this != &src)

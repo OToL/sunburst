@@ -29,4 +29,4 @@ using b32 = u32;
 #define SB_ENABLED 2
 
 #define sbIsEnabled(feature) (1 == 2 / SB_CTF_##feature)
-#define sbIsEqual(feature, value) ((1 / SB_CTV_##feature + 1) && (SB_CTV_##feature == value))
+#define sbIsEqual(feature, value) ((1 / SB_CTV_##feature + 1) && (SB_CTV_##feature == (value)))

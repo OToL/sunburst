@@ -4,7 +4,7 @@
 #    error "Unsupported compiler"
 #endif
 
-#define _sb_noalias_internal __restrict
+#define sb_noalias_internal __restrict
 
 namespace sb {
 __forceinline void debugBreak()

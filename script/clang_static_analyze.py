@@ -43,7 +43,7 @@ def executeClangCheckOnDir(clang_check_path, database_path, dir_path, excludes):
         file_system.FindFiles( files, dirs=[dir_path], extensions=['.cpp'] )
 
         for file_iter in files:
-            matches = [exclude for exclude in excludes if file_iter.endswith(exclude)]
+            matches = [exclude for exclude in excludes if re.match(exclude, file_iter, re.I) != None]
             if len(matches) == 0:
                 err = executeClangCheckOnFile(clang_check_path, database_path, file_iter)
     else:
