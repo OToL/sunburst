@@ -171,7 +171,7 @@ public:
         {
             TType * curr_tail_ptr = _data + _tail;
 
-            TType const val = *curr_tail_ptr;
+            TType val = *curr_tail_ptr;
 
             if constexpr (!IS_TRIVIAL_VALUE)
             {

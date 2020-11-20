@@ -16,11 +16,15 @@ public:
     using size_type = usize;
     using difference_type = sptrdiff;
 
-protected:
     SmallArrayBase & operator=(SmallArrayBase const &) = delete;
     SmallArrayBase(SmallArrayBase const &) = delete;
 
+protected:
     SmallArrayBase() = default;
+    ~SmallArrayBase() = default;
+
+    SmallArrayBase(SmallArrayBase &&) = default;
+    SmallArrayBase & operator=(SmallArrayBase &&) = default;
 
     struct Impl : public TAllocator
     {

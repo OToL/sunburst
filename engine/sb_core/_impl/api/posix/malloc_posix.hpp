@@ -30,6 +30,7 @@ void * malloc(usize size, Alignment alignment)
     sbAssert((0 != alignment) && sb::isPowerOf2(alignment));
 
     usize const total_size = sizeWithPadding(size, alignment);
+    // NOLINTNEXTLINE(cppcoreguidelines-no-malloc)
     u8 * const mem_ptr = reinterpret_cast<u8 *>(::malloc(total_size));
 
     if (nullptr == mem_ptr)
@@ -58,6 +59,7 @@ void free(void * mem_ptr)
         AllocHeader * const header = dataToHeader(mem_ptr);
         void * const raw_mem_ptr = reinterpret_cast<u8 *>(header) - header->m_offset;
 
+        // NOLINTNEXTLINE(cppcoreguidelines-no-malloc)
         ::free(raw_mem_ptr);
     }
 }

@@ -38,16 +38,19 @@ public:
     using typename BaseClass::value_type;
     using allocator_type = TAllocator;
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     SmallArray()
         : SmallArray(reinterpret_cast<pointer>(&_buffer[0]))
     {
     }
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     explicit SmallArray(allocator_type const & alloc)
         : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
     }
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     explicit SmallArray(size_type count, allocator_type const & alloc = allocator_type())
         : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
@@ -56,6 +59,7 @@ public:
         sbstd::uninitialized_default_construct(_impl._begin, _impl._end);
     }
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     SmallArray(size_type count, value_type const & value, allocator_type const & alloc = allocator_type())
         : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
@@ -65,6 +69,7 @@ public:
     }
 
     template <class TIterator>
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     SmallArray(TIterator first, TIterator last, allocator_type const & alloc = allocator_type())
         : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
@@ -74,6 +79,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src)
         : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), src._impl.get_allocator())
     {
@@ -82,7 +88,17 @@ public:
         sbstd::uninitialized_copy(sbstd::begin(src), sbstd::end(src), _impl._begin);
     }
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+    SmallArray(SmallArray const & src)
+        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), src._impl.get_allocator())
+    {
+        buyMore(src.size());
+
+        sbstd::uninitialized_copy(sbstd::begin(src), sbstd::end(src), _impl._begin);
+    }
+
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src, allocator_type const & alloc)
         : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
@@ -92,6 +108,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC>
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TAllocator> && src)
         : _impl(src._impl.get_allocator())
     {
@@ -112,7 +129,29 @@ public:
         }
     }
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+    SmallArray(SmallArray && src)
+        : _impl(src._impl.get_allocator())
+    {
+        if (!src.isSmallStorage() && (src.size() > BASE_CAPACITY))
+        {
+            sbstd::swap(_impl._begin, src._impl._begin);
+            sbstd::swap(_impl._end, src._impl._end);
+            sbstd::swap(_impl._storage_end, src._impl._storage_end);
+        }
+        else
+        {
+            _impl.init(reinterpret_cast<pointer>(&_buffer[0]), reinterpret_cast<pointer>(&_buffer[0]) + BASE_CAPACITY);
+
+            buyMore(src.size());
+            sbstd::uninitialized_move(sbstd::begin(src), sbstd::end(src), _impl._begin);
+
+            src.clear();
+        }
+    }
+
     template <usize BASE_CAPACITY_SRC>
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TAllocator> && src, allocator_type const & alloc)
         : _impl(alloc)
     {
@@ -182,7 +221,7 @@ public:
             else if (src_size > capacity())
             {
                 size_type const new_dst_capacity = computeCapacity(src_size);
-                TType * const new_dst_data =
+                auto const new_dst_data =
                     (TType *)_impl.allocate(new_dst_capacity * sizeof(value_type), alignOf<value_type>()).data;
                 sbAssert(nullptr != new_dst_data);
 
@@ -205,7 +244,7 @@ public:
             else
             {
                 size_type const new_src_capacity = computeCapacity(dst_size);
-                TType * const new_src_data =
+                auto const new_src_data =
                     (TType *)src._impl.allocate(new_src_capacity * sizeof(value_type), alignOf<value_type>()).data;
                 sbAssert(nullptr != new_src_data);
 
@@ -335,7 +374,7 @@ public:
         }
         else if (curr_size < count)
         {
-            size_type const size_diff = (size_type)(count - curr_size);
+            auto const size_diff = (size_type)(count - curr_size);
 
             buyMore(size_diff);
             std::uninitialized_default_construct(_impl._begin + curr_size, _impl._end);
@@ -353,7 +392,7 @@ public:
         }
         else if (curr_size < count)
         {
-            size_type const size_diff = (size_type)(count - curr_size);
+            auto const size_diff = (size_type)(count - curr_size);
 
             buyMore(size_diff);
             std::uninitialized_fill(_impl._begin + curr_size, _impl._end, value);
@@ -610,11 +649,13 @@ public:
     }
 
 private:
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     SmallArray(pointer begin, allocator_type const & alloc)
         : _impl(begin, begin + BASE_CAPACITY, alloc)
     {
     }
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     SmallArray(pointer begin)
         : _impl(begin, begin + BASE_CAPACITY)
     {

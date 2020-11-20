@@ -67,8 +67,8 @@ void sb::PoolAllocatorBase::deallocate(void * ptr)
         auto const ptr_offset = static_cast<u8 *>(ptr) - static_cast<u8 *>(_arena.data);
         sbAssert(0U == (ptr_offset % _actual_block_size));
 
-        NodeIdx * const dealloc_node = static_cast<NodeIdx *>(ptr);
-        NodeIdx const dealloc_node_idx = numericConv<NodeIdx>(ptr_offset / _actual_block_size);
+        auto const dealloc_node = static_cast<NodeIdx *>(ptr);
+        auto const dealloc_node_idx = numericConv<NodeIdx>(ptr_offset / _actual_block_size);
 
         if (INVALID_NODE_IDX == _free_list_head)
         {

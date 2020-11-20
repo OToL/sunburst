@@ -23,7 +23,7 @@ void sb::internal::logMessage(LogLevel type, char const * file, u32 line, char c
         char tmp_msg[255];
         sb::stringFormat(tmp_msg, "[{}] {}\n", LOG_TYPE_TO_STR[(u8)type], msg);
 
-        outputDebugString(tmp_msg);
+        outputDebugString(&tmp_msg[0]);
     }
 }
 

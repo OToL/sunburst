@@ -6,6 +6,7 @@
 
 namespace sb {
 
+// NOLINTNEXTLINE(cppcoreguidelines-special-member-functions)
 class IAllocator
 {
 public:

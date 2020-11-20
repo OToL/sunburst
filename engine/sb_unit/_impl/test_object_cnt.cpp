@@ -8,24 +8,20 @@ namespace sb {
 static TestObjectCnt::Stats gs_stats;
 
 TestObjectCnt::TestObjectCnt()
-    : _valid(true)
-    , _id(0U)
 {
     ++gs_stats.valid_obj_cnt;
     ++gs_stats.obj_cnt;
 }
 
 TestObjectCnt::TestObjectCnt(usize id)
-    : _valid(true)
-    , _id(id)
+    : _id(id)
 {
     ++gs_stats.obj_cnt;
     ++gs_stats.valid_obj_cnt;
 }
 
 TestObjectCnt::TestObjectCnt(TestObjectCnt && src)
-    : _valid(true)
-    , _id(src._id)
+    : _id(src._id)
 {
     sbAssert(src._valid);
     ++gs_stats.obj_cnt;
@@ -34,8 +30,7 @@ TestObjectCnt::TestObjectCnt(TestObjectCnt && src)
 }
 
 TestObjectCnt::TestObjectCnt(TestObjectCnt const & src)
-    : _valid(true)
-    , _id(src._id)
+    : _id(src._id)
 {
     ++gs_stats.obj_cnt;
     ++gs_stats.valid_obj_cnt;

@@ -1,11 +1,6 @@
 #include <sb_core/memory/allocator/container_allocator_wrapper.h>
 #include <sb_core/memory/allocator/allocator.h>
 
-sb::ContainerAllocatorWrapper::ContainerAllocatorWrapper()
-    : _alloc(nullptr)
-{
-}
-
 sb::ContainerAllocatorWrapper::ContainerAllocatorWrapper(IAllocator * alloc)
     : _alloc(alloc)
 {

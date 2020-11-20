@@ -25,7 +25,7 @@ void reportError(ErrorLevel type, char const * const file, u32 const line, char 
     char fmt_msg[255];
     sb::stringFormat(fmt_msg, msg, sbstd::forward<TArgs>(args)...);
 
-    reportError(type, file, line, fmt_msg);
+    reportError(type, file, line, &fmt_msg[0]);
 }
 
 } // namespace sb::internal

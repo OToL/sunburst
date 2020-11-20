@@ -10,11 +10,9 @@ class AllocatorWrapper final : public IAllocator
     sbBaseClass(IAllocator);
 
 public:
-    AllocatorWrapper();
+    AllocatorWrapper() = default;
     AllocatorWrapper(IAllocator * alloc);
     AllocatorWrapper(IAllocator & alloc);
-
-    ~AllocatorWrapper() override = default;
 
     MemoryArena allocate(usize const size) override;
 
@@ -27,7 +25,7 @@ public:
     b8 owns(void const * ptr) const override;
 
 private:
-    IAllocator * _alloc;
+    IAllocator * _alloc = nullptr;
 };
 
 } // namespace sb

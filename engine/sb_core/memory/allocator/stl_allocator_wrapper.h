@@ -29,17 +29,20 @@ public:
     template <class U>
     struct rebind
     {
-        typedef STLAllocatorWrapper<U> other;
+        using other = STLAllocatorWrapper<U>;
     };
 
-    constexpr STLAllocatorWrapper()
-        : m_alloc(nullptr)
-    {
-    }
+    constexpr STLAllocatorWrapper() = default;
 
     constexpr STLAllocatorWrapper(STLAllocatorWrapper const & src)
         : m_alloc(src.m_alloc)
     {
+    }
+
+    constexpr STLAllocatorWrapper(STLAllocatorWrapper && src)
+        : m_alloc(src.m_alloc)
+    {
+        src.m_alloc = nullptr;
     }
 
     constexpr STLAllocatorWrapper(allocator_type src_alloc)
@@ -59,6 +62,27 @@ public:
     }
 
     ~STLAllocatorWrapper() = default;
+
+    STLAllocatorWrapper & operator=(STLAllocatorWrapper const & src)
+    {
+        if (this != src)
+        {
+            m_alloc = src.m_alloc;
+        }
+
+        return *this;
+    }
+
+    STLAllocatorWrapper & operator=(STLAllocatorWrapper && src)
+    {
+        if (this != src)
+        {
+            m_alloc = src.m_alloc;
+            src.m_alloc = nullptr;
+        }
+
+        return *this;
+    }
 
     pointer address(reference x) const
     {
@@ -114,7 +138,7 @@ public:
     }
 
 private:
-    allocator_type m_alloc;
+    allocator_type m_alloc = nullptr;
 };
 
 } // namespace sb

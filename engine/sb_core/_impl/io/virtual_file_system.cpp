@@ -44,12 +44,12 @@ class VirtualFileSystemImpl
     };
     static_assert(sizeof(FileHdlHelper) == sizeof(FileHdl));
 
+public:
     VirtualFileSystemImpl(VirtualFileSystemImpl const &) = delete;
     VirtualFileSystemImpl(VirtualFileSystemImpl &&) = delete;
     VirtualFileSystemImpl & operator=(VirtualFileSystemImpl const &) = delete;
     VirtualFileSystemImpl & operator=(VirtualFileSystemImpl &&) = delete;
 
-public:
     LayerDesc * findLayer(VFS::LayerName layer_id)
     {
         auto const layer_iter = sbstd::find_if(
@@ -173,7 +173,7 @@ public:
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
 
-                if (internal::platformFileExists(local_file_path))
+                if (internal::platformFileExists(&local_file_path[0]))
                 {
                     return true;
                 }
@@ -188,7 +188,7 @@ public:
     {
         strCpyT(local_file_path, layer_desc.local_path.c_str());
         concatLocalPath(local_file_path, layer_desc.local_path.length(), file_path + layer_desc.vfs_path.length());
-        normalizeLocalPath(local_file_path);
+        normalizeLocalPath(&local_file_path[0]);
     }
 
     FileHdl openFileRead(char const * path, FileFormat fmt)
@@ -200,7 +200,7 @@ public:
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
 
-                auto const local_file_hdl = internal::platformOpenFileRead(local_file_path, fmt);
+                auto const local_file_hdl = internal::platformOpenFileRead(&local_file_path[0], fmt);
 
                 if (isValid(local_file_hdl))
                 {
@@ -234,7 +234,7 @@ public:
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
 
-                auto const local_file_hdl = internal::platformOpenFileReadWrite(local_file_path, mode, fmt);
+                auto const local_file_hdl = internal::platformOpenFileReadWrite(&local_file_path[0], mode, fmt);
 
                 if (isValid(local_file_hdl))
                 {
@@ -269,7 +269,7 @@ public:
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
 
-                auto const local_file_hdl = internal::platformOpenFileWrite(local_file_path, mode, fmt);
+                auto const local_file_hdl = internal::platformOpenFileWrite(&local_file_path[0], mode, fmt);
 
                 if (isValid(local_file_hdl))
                 {
@@ -303,7 +303,7 @@ public:
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
 
-                auto const local_file_hdl = internal::platformCreateFileReadWrite(local_file_path, fmt);
+                auto const local_file_hdl = internal::platformCreateFileReadWrite(&local_file_path[0], fmt);
 
                 if (isValid(local_file_hdl))
                 {
@@ -338,7 +338,7 @@ public:
                 char local_file_path[LOCAL_PATH_MAX_LEN + 1];
                 buildLocalFilePath(local_file_path, layer_desc, path);
 
-                auto const local_file_hdl = internal::platformCreateFileWrite(local_file_path, fmt);
+                auto const local_file_hdl = internal::platformCreateFileWrite(&local_file_path[0], fmt);
 
                 if (isValid(local_file_hdl))
                 {
@@ -375,7 +375,7 @@ private:
             *file_desc = {props, layer_hdl, ++curr_file_gen};
 
             MemoryArena arena = file_desc_pool.getArena();
-            FileDesc * const base_obj = static_cast<FileDesc *>(arena.data);
+            auto const base_obj = static_cast<FileDesc *>(arena.data);
 
             FileHdlHelper const helper_hdl = {
                 .unpacked = {numericConv<u16>(sbstd::distance(base_obj, file_desc)), numericConv<u16>(file_desc->gen)}};

@@ -74,7 +74,7 @@ TEST_CASE("Pool Allocator consume all", "[pool_allocator]")
         TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
 
         usize alloc_obj_cnt = 0;
-        MemoryArena mem_arena;
+        MemoryArena mem_arena = {};
 
         do
         {
@@ -98,7 +98,7 @@ TEST_CASE("Pool Allocator consume all", "[pool_allocator]")
         TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
 
         usize alloc_obj_cnt = 0;
-        MemoryArena mem_arena;
+        MemoryArena mem_arena = {};
 
         do
         {
@@ -127,7 +127,7 @@ TEST_CASE("Pool Allocator deallocate all", "[pool_allocator]")
     while (0 != test_iter_count)
     {
         usize alloc_obj_cnt = 0;
-        MemoryArena mem_arena;
+        MemoryArena mem_arena = {};
 
         do
         {

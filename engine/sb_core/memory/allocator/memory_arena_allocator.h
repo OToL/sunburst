@@ -16,7 +16,7 @@ public:
 
     template <typename T, usize COUNT>
     MemoryArenaAllocator(T (&data)[COUNT])
-        : _arena({data, sizeof(T) * COUNT})
+        : _arena({&data[0], sizeof(T) * COUNT})
     {
     }
 

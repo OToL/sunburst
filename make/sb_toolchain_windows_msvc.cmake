@@ -54,7 +54,7 @@ function(sb_setup_toolchain_sanitizers BASE_TARGET_NAME)
 
     if(SANITIZERS_LIST)
         if(NOT TARGET sbext::asan)
-            message(FATAL_ERROR "Address Sanitizer is not available on '${SB_TARGET_PLATFORM_ID}'")
+            message(FATAL_ERROR "Address sanitizers has not been properly setup")
         endif()
     
         list(JOIN SANITIZERS_LIST "," SANITIZERS_PARAM) 

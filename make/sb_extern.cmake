@@ -41,6 +41,8 @@ function(sb_setup_extern)
                 INTERFACE
                     /wholearchive:${SB_EXTERN_LIB_DIR_PATH}/clang_rt.asan_dynamic-x86_64.lib 
                     /wholearchive:${SB_EXTERN_LIB_DIR_PATH}/clang_rt.asan_dynamic_runtime_thunk-x86_64.lib)
+        else()
+            message(STATUS "Sanitizers are not available with toolchain '${SB_TOOLCHAIN_ID}'")
         endif()
     endif()
 

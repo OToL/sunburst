@@ -27,7 +27,7 @@ public:
     template <class U>
     struct rebind
     {
-        typedef STLAllocator<U> other;
+        using other = STLAllocator<U>;
     };
 
     constexpr STLAllocator() = default;

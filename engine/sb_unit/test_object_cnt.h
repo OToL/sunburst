@@ -68,8 +68,8 @@ public:
     static bool areSequencial(sbstd::span<TestObjectCnt> objects, ValueType start_id = 0U);
 
 private:
-    b8 _valid;
-    ValueType _id;
+    b8 _valid = true;
+    ValueType _id = 0ULL;
 };
 
 bool operator==(TestObjectCnt const & lval, TestObjectCnt::ValueType rval);

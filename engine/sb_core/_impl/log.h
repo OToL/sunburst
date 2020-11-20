@@ -42,7 +42,7 @@ struct LogFilter
             char fmt_msg[255];
             stringFormat(fmt_msg, sizeof(fmt_msg), msg, sbstd::forward<TArgs>(args)...);
 
-            internal::logMessage(lvl, file, line, fmt_msg);
+            internal::logMessage(lvl, file, line, &fmt_msg[0]);
         }
     }
 };

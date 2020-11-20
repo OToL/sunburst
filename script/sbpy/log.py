@@ -29,11 +29,15 @@ class Logger:
         if "code" in kargs:
            errorCode = kargs["code"] 
 
+        message = msg
+        if len(args) != 0:
+            message = msg.format(*args)
+
         {
             Level.LOG: lambda x,y: self.logMsg(x),
             Level.ERROR: lambda x, y: self.logError(x, y),
             Level.FATAL_ERROR: lambda x, y: self.logFatalError(x, y) 
-        }[level](msg.format(args), errorCode)
+        }[level](message, errorCode)
 
     def ErrorCode(self):
         return self.m_ErrorCode

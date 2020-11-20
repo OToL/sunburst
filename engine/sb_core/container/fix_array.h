@@ -13,6 +13,7 @@ namespace sb {
 // @todo: try_emplace
 // @todo: try_pushback
 template <typename TType, usize CAPACITY>
+// NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
 class FixArray
 {
 public:
@@ -25,13 +26,13 @@ public:
     using const_iterator = TType const *;
     using size_type = usize;
 
-    FixArray()
-        : _size(0)
-    {
-    }
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+    FixArray() = default;
 
-    FixArray & operator=(FixArray const &) = delete;
     FixArray(FixArray const &) = delete;
+    FixArray(FixArray &&) = delete;
+    FixArray & operator=(FixArray const &) = delete;
+    FixArray & operator=(FixArray &&) = delete;
 
     ~FixArray()
     {
@@ -50,7 +51,7 @@ public:
 
     void clear()
     {
-        pointer const iter = reinterpret_cast<pointer>(&_data[0]);
+        auto const iter = reinterpret_cast<pointer>(&_data[0]);
 
         for (usize idx = 0; idx != _size; ++idx)
         {
@@ -184,7 +185,7 @@ private:
     static constexpr usize BASE_CAPACITY_BYTES = CAPACITY * sizeof(value_type);
 
     alignas(value_type) u8 _data[BASE_CAPACITY_BYTES];
-    size_type _size;
+    size_type _size = 0ULL;
 };
 
 template <typename TType, usize CAPACITY>

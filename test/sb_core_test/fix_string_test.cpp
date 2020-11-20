@@ -26,7 +26,7 @@ TEST_CASE("FixString ctor raw string", "[fix_string]")
 TEST_CASE("FixString copy ctor", "[fix_string]")
 {
     FixString<10> testStr("Hello");
-    FixString<10> testStr2(testStr);
+    FixString<10> testStr2(testStr); // NOLINT(performance-unnecessary-copy-initialization)
 
     REQUIRE_FALSE(testStr2.empty());
     REQUIRE(testStr2.length() == 5U);

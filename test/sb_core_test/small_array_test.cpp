@@ -22,6 +22,11 @@ public:
         TestObjectCnt::resetStats();
     }
 
+    SArrayFixture(SArrayFixture const &) = default;
+    SArrayFixture(SArrayFixture &&) = default;
+    SArrayFixture & operator=(SArrayFixture const &) = default;
+    SArrayFixture & operator=(SArrayFixture &&) = default;
+
     ~SArrayFixture()
     {
         REQUIRE(TestObjectCnt::getStats() == 0U);

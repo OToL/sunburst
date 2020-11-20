@@ -11,11 +11,11 @@ namespace sb {
 // @todo: implement buffered input/output
 class FileStream
 {
-    FileStream(FileStream const &) = delete;
-    FileStream & operator=(FileStream const &) = delete;
-
 public:
     FileStream() = default;
+
+    FileStream(FileStream const &) = delete;
+    FileStream & operator=(FileStream const &) = delete;
 
     explicit FileStream(FileHdl hdl)
         : _hdl(hdl)

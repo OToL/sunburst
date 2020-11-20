@@ -13,6 +13,7 @@ OPTION(SB_ENABLE_UNITTEST "Enable unit tests executable targets" ON)
 OPTION(SB_ENABLE_WARNING_AS_ERROR "Treat compilation warnings as errors" ON)
 OPTION(SB_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" OFF)
 OPTION(SB_ENABLE_SANITIZER_UNDEFINED_BEHAVIOR "Enable undefined behavior sanitizer" OFF)
+OPTION(SB_ENABLE_CLANG_TIDY "Enable clang tidy static analyzer" OFF)
 
 # Custom cmake helpers
 include(make/sb_utility.cmake)
@@ -28,6 +29,8 @@ sb_setup_environment(${CMAKE_CURRENT_LIST_DIR})
 
 include(make/sb_platform.cmake)
 sb_setup_platform()
+
+include(make/sb_static_analyzer.cmake)
 
 include(make/sb_extern.cmake)
 sb_setup_extern()

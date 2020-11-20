@@ -7,7 +7,7 @@
 
 using namespace sb;
 
-static char STRCPYT_TEST_SRC[] = "Hello World";
+static char const STRCPYT_TEST_SRC[] = "Hello World";
 static const usize STRCPYT_TEST_LEN = sbstd::size(STRCPYT_TEST_SRC) - 1;
 static const usize STRCPYT_TEST_CAPACITY = sbstd::size(STRCPYT_TEST_SRC);
 
@@ -18,7 +18,7 @@ TEST_CASE("strCpyT", "[string_utility]")
         char buffer[20];
         memset(&buffer[0], 0xFF, sbstd::size(buffer));
 
-        auto const copy_cnt = strCpyT(buffer, STRCPYT_TEST_SRC);
+        auto const copy_cnt = strCpyT(buffer, &STRCPYT_TEST_SRC[0]);
 
         REQUIRE(copy_cnt == STRCPYT_TEST_LEN);
         REQUIRE('\xFF' == buffer[STRCPYT_TEST_LEN + 1]);
@@ -28,7 +28,7 @@ TEST_CASE("strCpyT", "[string_utility]")
     {
         char buffer[STRCPYT_TEST_CAPACITY];
 
-        auto const copy_cnt = strCpyT(buffer, STRCPYT_TEST_SRC);
+        auto const copy_cnt = strCpyT(buffer, &STRCPYT_TEST_SRC[0]);
 
         REQUIRE(copy_cnt == STRCPYT_TEST_LEN);
     }
@@ -37,7 +37,7 @@ TEST_CASE("strCpyT", "[string_utility]")
     {
         char buffer[STRCPYT_TEST_CAPACITY - 1];
 
-        usize const copy_cnt = strCpyT(buffer, STRCPYT_TEST_SRC);
+        usize const copy_cnt = strCpyT(buffer, &STRCPYT_TEST_SRC[0]);
 
         REQUIRE(copy_cnt == STRCPYT_TEST_LEN - 1);
         REQUIRE_THAT(buffer, Catch::Equals("Hello Worl"));

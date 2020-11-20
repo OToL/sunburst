@@ -1,10 +1,5 @@
 #include <sb_core/memory/allocator/allocator_wrapper.h>
 
-sb::AllocatorWrapper::AllocatorWrapper()
-    : _alloc(nullptr)
-{
-}
-
 sb::AllocatorWrapper::AllocatorWrapper(IAllocator * alloc)
     : _alloc(alloc)
 {

@@ -14,7 +14,7 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
         char * dest_iter = dest_buffer.data();
         sbAssert(nullptr != dest_iter);
 
-        usize const dest_capacity = numericConv<usize>(dest_buffer.size());
+        auto const dest_capacity = numericConv<usize>(dest_buffer.size());
 
         char const * format_iter = format;
         s32 lastParamIdx = 0;

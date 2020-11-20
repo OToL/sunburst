@@ -43,7 +43,18 @@ public:
         _len = strCpyT(_data, src.c_str());
     }
 
-    ~FixString() { }
+    template <usize SRC_CAPACITY>
+    FixString(FixString<SRC_CAPACITY, TChar> && src)
+    {
+        _len = strCpyT(_data, src.c_str());
+    }
+
+    FixString(FixString && src)
+    {
+        _len = strCpyT(_data, src.c_str());
+    }
+
+    ~FixString() = default;
 
     usize capacity() const
     {
@@ -78,7 +89,7 @@ public:
     {
         sbWarn(0 != _len)
 
-            TChar backChar = TChar{};
+            auto backChar = TChar{};
 
         if (0 != _len)
         {
@@ -106,22 +117,22 @@ public:
 
     FixString & append(TChar const * str)
     {
-        strCatT(_data, _len, CAPACITY, str);
+        strCatT(&_data[0], _len, CAPACITY, str);
 
         // @todo: implement my own strncat which returns the numbers of copied character
-        _len = sbstd::strlen(_data);
+        _len = sbstd::strlen(&_data[0]);
 
         return *this;
     }
 
     TChar const * c_str() const
     {
-        return _data;
+        return &_data[0];
     }
 
     TChar * data()
     {
-        return _data;
+        return &_data[0];
     }
 
     template <usize SRC_CAPACITY>
@@ -133,11 +144,30 @@ public:
     }
 
     // NOLINTNEXTLINE(bugprone-unhandled-self-assignment)
-    FixString & operator=(FixString const & rhs)
+    FixString & operator=(FixString const & src)
     {
-        if (this != &rhs)
+        if (this != &src)
         {
-            _len = strCpyT(_data, rhs.c_str());
+            _len = strCpyT(_data, src.c_str());
+        }
+
+        return *this;
+    }
+
+    template <usize SRC_CAPACITY>
+    FixString & operator=(FixString<SRC_CAPACITY, TChar> && src)
+    {
+        _len = strCpyT(_data, src.c_str());
+
+        return *this;
+    }
+
+    // NOLINTNEXTLINE(bugprone-unhandled-self-assignment)
+    FixString & operator=(FixString && src)
+    {
+        if (this != &src)
+        {
+            _len = strCpyT(_data, src.c_str());
         }
 
         return *this;
@@ -163,7 +193,7 @@ public:
 
 private:
     TChar _data[CAPACITY];
-    usize _len;
+    usize _len = 0ULL;
 };
 
 template <usize CAPACITY, typename TChar = char>

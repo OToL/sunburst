@@ -25,7 +25,7 @@ void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::u32 co
     {
         case sb::ErrorLevel::CRITICAL:
         {
-            sbLogE(fmt_msg);
+            sbLogE(&fmt_msg[0]);
 
             break;
         }
@@ -33,7 +33,7 @@ void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::u32 co
         case sb::ErrorLevel::WARNING:
         case sb::ErrorLevel::NOTICE:
         {
-            sbLogW(fmt_msg);
+            sbLogW(&fmt_msg[0]);
 
             break;
         }
@@ -78,7 +78,7 @@ void sb::internal::reportNotImplemented(ErrorLevel type, char const * const file
 {
     char msg_fmt[255];
     sb::stringFormat(msg_fmt, "Not implemented: '{}'", msg);
-    reportError(type, file, line, msg_fmt);
+    reportError(type, file, line, &msg_fmt[0]);
 }
 
 void sb::setErrorHandler(ErrorHandler const & hdl)

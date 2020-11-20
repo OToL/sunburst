@@ -12,7 +12,7 @@ inline usize fmtArgFwCall(void const * value, sbstd::span<char> dest_buffer)
     return fmtArg(*reinterpret_cast<T *>(value), dest_buffer);
 }
 
-typedef usize (*FmtFwCallCB)(void const *, sbstd::span<char>);
+using FmtFwCallCB = usize (*)(void const *, sbstd::span<char>);
 
 struct FmtArg
 {
@@ -67,6 +67,7 @@ inline void expandFmtArgs(sbstd::span<FmtArg> argList, T const & arg, TArgs &&..
 
     using TypeDesc = FmtArgDesc<T>;
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
     arg_desc.value = TypeDesc::storeValue(arg);
     arg_desc.fmt_cb = [](void const * arg_value, sbstd::span<char> dest) {
         return stringConvT(TypeDesc::extractValue(arg_value), dest);
@@ -91,6 +92,7 @@ inline sb::usize sb::stringFormat(sbstd::span<char> dest_buffer, char const * co
     internal::FmtArg arg_list[sizeof...(TArgs)];
     expandFmtArgs(arg_list, args...);
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
     return internal::stringFormat(dest_buffer, format, {arg_list, sizeof...(TArgs)});
 }
 

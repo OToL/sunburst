@@ -69,7 +69,11 @@ if __name__ == "__main__":
     opt_parser.add_option("-t", "--test", action="store_true",
                          help="Analyze all test sources", dest="analyze_test")
 
-    opt_parser.add_option("-x", "--exclude", type="string", action='callback', callback=arg2ListCB, help="Suffixes to exclude", dest="excludes")
+    opt_parser.add_option("-x", "--exclude", type="string", action='callback', callback=arg2ListCB, 
+                        help="Suffixes to exclude", dest="excludes")
+
+    opt_parser.add_option("-i", "--input", action="store", type="string", 
+                        help="Input path to format", dest="input_path")
 
     (options, args) = opt_parser.parse_args()
 
@@ -86,6 +90,14 @@ if __name__ == "__main__":
             executeClangCheckOnDir(clang_check_path, options.database_path, host.GetSampleSrcDirPath(), excludes)
         if options.analyze_test :
             executeClangCheckOnDir(clang_check_path, options.database_path, host.GetTestSrcDirPath(), excludes)
+        if (not options.input_path is None):
+            if os.path.exists(options.input_path):
+                if os.path.isfile(options.input_path):
+                    executeClangCheckOnFile(clang_check_path, options.database_path, options.input_path)
+                else:
+                    log.LOG(log.Level.ERROR, "{} is not a supported input path".format(options.input_path))
+            else:
+                log.LOG(log.Level.ERROR, "{} does not exist".format(options.input_path))
     else:
         log.LOG(log.Level.ERROR, "Cannot find clang-check executable: {}".format(clang_check_path))
 

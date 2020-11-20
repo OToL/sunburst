@@ -11,11 +11,9 @@ class IAllocator;
 class ContainerAllocatorWrapper
 {
 public:
-    ContainerAllocatorWrapper();
+    ContainerAllocatorWrapper() = default;
     ContainerAllocatorWrapper(IAllocator * alloc);
     ContainerAllocatorWrapper(IAllocator & alloc);
-
-    ~ContainerAllocatorWrapper() = default;
 
     MemoryArena allocate(usize const size);
 
@@ -28,7 +26,7 @@ public:
     b8 owns(void const * ptr) const;
 
 private:
-    IAllocator * _alloc;
+    IAllocator * _alloc = nullptr;
 };
 
 } // namespace sb

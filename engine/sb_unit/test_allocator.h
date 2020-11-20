@@ -14,8 +14,12 @@ public:
     };
 
     TestAllocator() = default;
-
     ~TestAllocator() override;
+
+    TestAllocator(TestAllocator const &) = delete;
+    TestAllocator(TestAllocator &&) = delete;
+    TestAllocator & operator=(TestAllocator const &) = delete;
+    TestAllocator & operator=(TestAllocator &&) = delete;
 
     usize getAlignment() const;
 

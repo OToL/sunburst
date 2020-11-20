@@ -17,7 +17,7 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileRead(char const * path,
         flags.push_back('b');
     }
 
-    FILE * hdl;
+    FILE * hdl = nullptr;
     auto const res = fopen_s(&hdl, path, flags.data());
 
     if (sbExpect(0 == res))
@@ -53,7 +53,7 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileReadWrite(char const * 
 
     flags.push_back('x');
 
-    FILE * hdl;
+    FILE * hdl = nullptr;
     auto const res = fopen_s(&hdl, path, flags.data());
 
     if (sbExpect(0 == res))
@@ -88,7 +88,7 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path
 
     flags.push_back('x');
 
-    FILE * hdl;
+    FILE * hdl = nullptr;
     auto const res = fopen_s(&hdl, path, flags.data());
 
     if (sbExpect(0 == res))
@@ -108,7 +108,7 @@ sb::internal::LayerFileHdl sb::internal::platformCreateFileWrite(char const * pa
         flags.push_back('b');
     }
 
-    FILE * hdl;
+    FILE * hdl = nullptr;
     auto const res = fopen_s(&hdl, path, flags.data());
 
     if (sbExpect(0 == res))
@@ -128,7 +128,7 @@ sb::internal::LayerFileHdl sb::internal::platformCreateFileReadWrite(char const 
         flags.push_back('b');
     }
 
-    FILE * hdl;
+    FILE * hdl = nullptr;
     auto const res = fopen_s(&hdl, path, flags.data());
 
     if (sbExpect(0 == res))
@@ -143,21 +143,21 @@ void sb::internal::platformCloseFile(LayerFileHdl hdl)
 {
     sbAssert(nullptr != hdl.value);
 
-    fclose((FILE *)hdl.value);
+    fclose(reinterpret_cast<FILE *>(hdl.value));
 }
 
 sb::FileSize sb::internal::platformReadFile(LayerFileHdl hdl, u8 * buffer, FileSize count)
 {
     sbAssert(nullptr != hdl.value);
 
-    return numericConv<FileSize>(fread((void *)buffer, 1, (usize)count, (FILE *)hdl.value));
+    return numericConv<FileSize>(fread((void *)buffer, 1, (usize)count, reinterpret_cast<FILE *>(hdl.value)));
 }
 
 sb::FileSize sb::internal::platformWriteFile(LayerFileHdl hdl, u8 const * buffer, FileSize count)
 {
     sbAssert(nullptr != hdl.value);
 
-    return numericConv<FileSize>(fwrite((void *)buffer, 1, (usize)count, (FILE *)hdl.value));
+    return numericConv<FileSize>(fwrite((void *)buffer, 1, (usize)count, reinterpret_cast<FILE *>(hdl.value)));
 }
 
 // @todo: could be optimized

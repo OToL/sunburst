@@ -28,6 +28,8 @@ public:
     {
     }
 
+    ~ObjectPoolAllocator() override = default;
+
     ObjectPoolAllocator & operator=(ObjectPoolAllocator const &) = delete;
     ObjectPoolAllocator & operator=(ObjectPoolAllocator &&) = delete;
     ObjectPoolAllocator(ObjectPoolAllocator const &) = delete;
