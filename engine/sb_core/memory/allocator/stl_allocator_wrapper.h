@@ -35,29 +35,29 @@ public:
     constexpr STLAllocatorWrapper() = default;
 
     constexpr STLAllocatorWrapper(STLAllocatorWrapper const & src)
-        : m_alloc(src.m_alloc)
+        : _alloc(src._alloc)
     {
     }
 
     constexpr STLAllocatorWrapper(STLAllocatorWrapper && src)
-        : m_alloc(src.m_alloc)
+        : _alloc(src._alloc)
     {
-        src.m_alloc = nullptr;
+        src._alloc = nullptr;
     }
 
     constexpr STLAllocatorWrapper(allocator_type src_alloc)
-        : m_alloc(src_alloc)
+        : _alloc(src_alloc)
     {
     }
 
     constexpr STLAllocatorWrapper(allocator_type_reference src_alloc)
-        : m_alloc(&src_alloc)
+        : _alloc(&src_alloc)
     {
     }
 
     template <typename U>
     constexpr STLAllocatorWrapper(STLAllocatorWrapper<U> const & src)
-        : m_alloc(src.get())
+        : _alloc(src.get())
     {
     }
 
@@ -67,7 +67,7 @@ public:
     {
         if (this != src)
         {
-            m_alloc = src.m_alloc;
+            _alloc = src._alloc;
         }
 
         return *this;
@@ -77,8 +77,8 @@ public:
     {
         if (this != src)
         {
-            m_alloc = src.m_alloc;
-            src.m_alloc = nullptr;
+            _alloc = src._alloc;
+            src._alloc = nullptr;
         }
 
         return *this;
@@ -96,7 +96,7 @@ public:
 
     [[nodiscard]] pointer allocate(size_type nb, void const * /*hint*/)
     {
-        if (nullptr != m_alloc)
+        if (nullptr != _alloc)
             return allocate(nb).data;
 
         return nullptr;
@@ -104,15 +104,15 @@ public:
 
     [[nodiscard]] pointer allocate(size_type nb)
     {
-        if (nullptr != m_alloc)
-            return (pointer)m_alloc->allocate(nb * sizeof(T), alignOf<T>()).data;
+        if (nullptr != _alloc)
+            return (pointer)_alloc->allocate(nb * sizeof(T), alignOf<T>()).data;
 
         return nullptr;
     }
 
     void deallocate(pointer data, size_type /*nb*/)
     {
-        m_alloc->deallocate((void *)data);
+        _alloc->deallocate((void *)data);
     }
 
     size_type max_size() const
@@ -134,11 +134,11 @@ public:
 
     allocator_type get() const
     {
-        return m_alloc;
+        return _alloc;
     }
 
 private:
-    allocator_type m_alloc = nullptr;
+    allocator_type _alloc = nullptr;
 };
 
 } // namespace sb

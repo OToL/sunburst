@@ -11,7 +11,7 @@ usize const SYS_MALLOC_DEFAULT_ALIGNMENT = sizeof(void *);
 struct AllocHeader
 {
     usize size;
-    usize m_offset;
+    usize offset;
 };
 
 static inline usize sizeWithPadding(usize size, Alignment align)
@@ -42,7 +42,7 @@ void * malloc(usize size, Alignment alignment)
 
     AllocHeader * const header = dataToHeader(aligned_mem_ptr);
     header->size = size;
-    header->m_offset = sb::numericConv<u16>(uptr(header) - uptr(mem_ptr));
+    header->offset = sb::numericConv<u16>(uptr(header) - uptr(mem_ptr));
 
     return aligned_mem_ptr;
 }
@@ -57,7 +57,7 @@ void free(void * mem_ptr)
     if (nullptr != mem_ptr)
     {
         AllocHeader * const header = dataToHeader(mem_ptr);
-        void * const raw_mem_ptr = reinterpret_cast<u8 *>(header) - header->m_offset;
+        void * const raw_mem_ptr = reinterpret_cast<u8 *>(header) - header->offset;
 
         // NOLINTNEXTLINE(cppcoreguidelines-no-malloc)
         ::free(raw_mem_ptr);
