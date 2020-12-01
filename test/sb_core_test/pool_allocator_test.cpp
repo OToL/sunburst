@@ -33,7 +33,7 @@ TEST_CASE("Pool Allocator empty", "[pool_allocator]")
     SECTION("Aligned allocate")
     {
         TestPoolAllocator test_alloc;
-        REQUIRE(isEmpty(test_alloc.allocate(sizeof(TestPoolObj), TEST_OBJECT_ALIGNMENT)));
+        REQUIRE(isEmpty(test_alloc.allocate(TEST_OBJECT_ALIGNMENT, sizeof(TestPoolObj))));
     }
 }
 
@@ -45,7 +45,7 @@ TEST_CASE("Pool Allocator edge cases", "[pool_allocator]")
         TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
 
         REQUIRE(isEmpty(test_alloc.allocate(sizeof(TestPoolObj) + 1)));
-        REQUIRE(isEmpty(test_alloc.allocate(sizeof(TestPoolObj) + 1, TEST_OBJECT_ALIGNMENT)));
+        REQUIRE(isEmpty(test_alloc.allocate(TEST_OBJECT_ALIGNMENT, sizeof(TestPoolObj) + 1)));
     }
 
     SECTION("Allocate smaller object")
@@ -62,7 +62,7 @@ TEST_CASE("Pool Allocator edge cases", "[pool_allocator]")
         TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
 
         REQUIRE(ALIGNMENT_128B > TEST_OBJECT_ALIGNMENT);
-        REQUIRE(isEmpty(test_alloc.allocate(sizeof(TestPoolObj), ALIGNMENT_128B)));
+        REQUIRE(isEmpty(test_alloc.allocate(ALIGNMENT_128B, sizeof(TestPoolObj))));
     }
 }
 
@@ -102,7 +102,7 @@ TEST_CASE("Pool Allocator consume all", "[pool_allocator]")
 
         do
         {
-            mem_arena = test_alloc.allocate(sizeof(TestPoolObj), TEST_OBJECT_ALIGNMENT);
+            mem_arena = test_alloc.allocate(TEST_OBJECT_ALIGNMENT, sizeof(TestPoolObj));
 
             if (!isEmpty(mem_arena))
             {

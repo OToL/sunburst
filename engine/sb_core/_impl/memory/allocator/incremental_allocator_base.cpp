@@ -36,7 +36,7 @@ sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size)
     return {};
 }
 
-sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size, Alignment const alignment)
+sb::MemoryArena sb::IncrementalAllocatorBase::allocate(Alignment const alignment, usize const size)
 {
     if (isEmpty(_arena) || (size == 0U))
     {

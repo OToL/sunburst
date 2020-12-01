@@ -14,7 +14,7 @@ public:
 
     virtual MemoryArena allocate(usize const size) = 0;
 
-    virtual MemoryArena allocate(usize const size, Alignment const alignment) = 0;
+    virtual MemoryArena allocate(Alignment const alignment, usize const size) = 0;
 
     virtual void deallocate(void * ptr) = 0;
 

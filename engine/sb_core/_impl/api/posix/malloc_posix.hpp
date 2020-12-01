@@ -1,3 +1,5 @@
+#include <sb_core/_impl/memory/malloc_platform.h>
+#include <sb_core/_impl/memory/malloc.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/core.h>
 #include <sb_core/error.h>
@@ -14,7 +16,7 @@ struct AllocHeader
     usize offset;
 };
 
-static inline usize sizeWithPadding(usize size, Alignment align)
+static inline usize sizeWithPadding(usize size, usize align)
 {
     return (align <= SYS_MALLOC_DEFAULT_ALIGNMENT) ? (size + alignUp(sizeof(AllocHeader), align))
                                                    : (size + align + sizeof(AllocHeader));
@@ -25,7 +27,7 @@ static inline AllocHeader * dataToHeader(void * dataPtr)
     return static_cast<AllocHeader *>(dataPtr) - 1;
 }
 
-void * malloc(usize size, Alignment alignment)
+void * platformMalloc(usize alignment, usize size)
 {
     sbAssert((0 != alignment) && sb::isPowerOf2(alignment));
 
@@ -47,12 +49,12 @@ void * malloc(usize size, Alignment alignment)
     return aligned_mem_ptr;
 }
 
-void * malloc(usize size)
+void * platformMalloc(usize size)
 {
-    return ::sb::internal::malloc(size, ALIGNMENT_DEFAULT);
+    return ::sb::internal::malloc(ALIGNMENT_DEFAULT, size);
 }
 
-void free(void * mem_ptr)
+void platformFree(void * mem_ptr)
 {
     if (nullptr != mem_ptr)
     {
@@ -64,7 +66,7 @@ void free(void * mem_ptr)
     }
 }
 
-usize mallocUsableSize(void * mem_ptr)
+usize platformMallocUsableSize(void * mem_ptr)
 {
     AllocHeader * const header = dataToHeader(mem_ptr);
     return header->size;

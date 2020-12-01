@@ -40,9 +40,9 @@ public:
         return _allocator.allocate(size);
     }
 
-    MemoryArena allocate(usize const size, Alignment const alignment) override
+    MemoryArena allocate(Alignment const alignment, usize const size) override
     {
-        return _allocator.allocate(size, alignment);
+        return _allocator.allocate(alignment, size);
     }
 
     void deallocate(void * ptr) override

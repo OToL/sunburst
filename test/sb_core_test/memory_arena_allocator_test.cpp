@@ -10,7 +10,7 @@ TEST_CASE("Memory Arena Allocator empty", "[memory_arena_allocator]")
     MemoryArenaAllocator alloc;
 
     REQUIRE(isEmpty(alloc.allocate(1)));
-    REQUIRE(isEmpty(alloc.allocate(1, ALIGNMENT_8B)));
+    REQUIRE(isEmpty(alloc.allocate(ALIGNMENT_8B, 1)));
 }
 
 TEST_CASE("Memory Arena Allocator init", "[memory_arena_allocator]")
@@ -42,7 +42,7 @@ TEST_CASE("Memory Arena Allocator aligned allocate", "[memory_arena_allocator]")
     {
         MemoryArenaAllocator alloc(my_array);
 
-        MemoryArena arena = alloc.allocate(alloc.getArena().size, ALIGNMENT_8B);
+        MemoryArena arena = alloc.allocate(ALIGNMENT_8B, alloc.getArena().size);
         REQUIRE(arena.size == sizeof(my_array));
         REQUIRE(arena.data == &my_array[0]);
         REQUIRE(isEmpty(alloc.allocate(1)));
@@ -52,7 +52,7 @@ TEST_CASE("Memory Arena Allocator aligned allocate", "[memory_arena_allocator]")
     {
         MemoryArenaAllocator alloc(my_array);
 
-        MemoryArena arena = alloc.allocate(4, ALIGNMENT_8B);
+        MemoryArena arena = alloc.allocate(ALIGNMENT_8B, 4);
         REQUIRE(arena.size == sizeof(my_array));
         REQUIRE(arena.data == &my_array[0]);
         REQUIRE(isEmpty(alloc.allocate(1)));
@@ -62,7 +62,7 @@ TEST_CASE("Memory Arena Allocator aligned allocate", "[memory_arena_allocator]")
     {
         MemoryArenaAllocator alloc(my_array);
 
-        MemoryArena arena = alloc.allocate(alloc.getArena().size + 1, ALIGNMENT_8B);
+        MemoryArena arena = alloc.allocate(ALIGNMENT_8B, alloc.getArena().size + 1);
         REQUIRE(isEmpty(arena));
         REQUIRE(!isEmpty(alloc.allocate(alloc.getArena().size)));
     }
@@ -71,10 +71,10 @@ TEST_CASE("Memory Arena Allocator aligned allocate", "[memory_arena_allocator]")
     {
         MemoryArenaAllocator alloc(MemoryArena{reinterpret_cast<void *>(8), 8});
 
-        MemoryArena arena = alloc.allocate(8, ALIGNMENT_16B);
+        MemoryArena arena = alloc.allocate(ALIGNMENT_16B, 8);
         REQUIRE(isEmpty(arena));
 
-        arena = alloc.allocate(8, ALIGNMENT_8B);
+        arena = alloc.allocate(ALIGNMENT_8B, 8);
         REQUIRE(!isEmpty(arena));
     }
 
@@ -82,13 +82,13 @@ TEST_CASE("Memory Arena Allocator aligned allocate", "[memory_arena_allocator]")
     {
         MemoryArenaAllocator alloc(my_array);
 
-        MemoryArena arena = alloc.allocate(4, ALIGNMENT_8B);
+        MemoryArena arena = alloc.allocate(ALIGNMENT_8B, 4);
         REQUIRE(arena.size == sizeof(my_array));
         REQUIRE(arena.data == &my_array[0]);
         REQUIRE(isEmpty(alloc.allocate(1)));
 
         alloc.deallocateAll();
-        arena = alloc.allocate(4, ALIGNMENT_8B);
+        arena = alloc.allocate(ALIGNMENT_8B, 4);
         REQUIRE(arena.size == sizeof(my_array));
         REQUIRE(arena.data == &my_array[0]);
     }
@@ -97,7 +97,7 @@ TEST_CASE("Memory Arena Allocator aligned allocate", "[memory_arena_allocator]")
     {
         MemoryArenaAllocator alloc{};
 
-        REQUIRE(isEmpty(alloc.allocate(1, ALIGNMENT_1B)));
+        REQUIRE(isEmpty(alloc.allocate(ALIGNMENT_1B, 1)));
     }
 }
 

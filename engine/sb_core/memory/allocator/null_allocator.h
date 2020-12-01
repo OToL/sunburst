@@ -21,7 +21,7 @@ public:
 
     MemoryArena allocate(usize const) override;
 
-    MemoryArena allocate(usize const, Alignment const) override;
+    MemoryArena allocate(Alignment const, usize const) override;
 
     void deallocate(void * ptr) override;
 

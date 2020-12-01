@@ -39,13 +39,14 @@ sb::MemoryArena TestAllocator::allocate(size_t const size)
     return mem_arena;
 }
 
-sb::MemoryArena TestAllocator::allocate(size_t const size, sb::Alignment alignment)
+sb::MemoryArena TestAllocator::allocate(sb::Alignment alignment, size_t const size)
 {
-    MemoryArena mem_arena = getGlobalHeap().allocate(size, alignment);
+    MemoryArena mem_arena = getGlobalHeap().allocate(alignment, size);
 
     if (!isEmpty(mem_arena))
     {
-        _stats.allocated_byte += size;
+        // @todo: we habe to do this because malloc does not return the MemArena of the proper capacity
+        _stats.allocated_byte += getGlobalHeap().getBlockSize(mem_arena.data);
         ++_stats.alloc_count;
 
         auto const alloc_desc = sbstd::find_if(begin(_allocs), end(_allocs), [mem_arena](AllocDesc const & val) {

@@ -3,12 +3,62 @@
 #include <catch2/test_prolog.h>
 #include <catch2/xcatch.hpp>
 
+#include <map>
+#include <iterator>
+#include <sb_core/error.h>
+
 using namespace sb;
 
 TEST_CASE("Power of 2 chek", "[bitwise]")
 {
     SECTION("0 is a power of 2")
     {
+        std::map<size_t, size_t> my_map;
+
+        auto res = my_map.emplace(10, 100);
+        sbAssert(res.second);
+
+        res = my_map.emplace(0, 5);
+        sbAssert(res.second);
+
+        [[maybe_unused]] auto hbound = my_map.upper_bound(5);
+
+        size_t base_addr = 5;
+        size_t my_size = 5;
+
+        auto lower_addr_iter = hbound;
+
+        if (hbound != my_map.begin())
+        {
+            lower_addr_iter--;
+
+            if ((lower_addr_iter->first + lower_addr_iter->second) == base_addr)
+            {
+                lower_addr_iter->second += my_size;
+            }
+            else
+            {
+                lower_addr_iter = my_map.emplace_hint(lower_addr_iter, base_addr, my_size);
+            }
+        }
+        else
+        {
+            lower_addr_iter = my_map.emplace(base_addr, my_size).first;
+        }
+
+        if ((lower_addr_iter->first + lower_addr_iter->second) == hbound->first)
+        {
+            lower_addr_iter->second += hbound->second;
+            my_map.erase(hbound);
+        }
+
+        if ((base_addr + my_size) == hbound->first)
+        {
+            my_size += hbound->second;
+            my_map.erase(hbound);
+            my_map.emplace(base_addr, my_size);
+        }
+
         REQUIRE(isPowerOf2(0));
     }
 

@@ -8,7 +8,7 @@ sb::MemoryArena sb::NullAllocator::allocate(usize const)
     return {};
 }
 
-sb::MemoryArena sb::NullAllocator::allocate(usize const, Alignment const)
+sb::MemoryArena sb::NullAllocator::allocate(Alignment const, usize const)
 {
     return {};
 }

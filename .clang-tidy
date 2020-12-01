@@ -1,6 +1,6 @@
 {
   "Checks": "bugprone-*,cppcoreguidelines-*,performance-*,clang-diagnostic-*,modernize-*,-performance-noexcept-move-constructor,-cppcoreguidelines-pro-type-vararg, -cppcoreguidelines-pro-type-union-access,-cppcoreguidelines-owning-memory,-cppcoreguidelines-avoid-non-const-global-variables,-cppcoreguidelines-avoid-magic-numbers,-cppcoreguidelines-macro-usage,-cppcoreguidelines-avoid-c-arrays,-cppcoreguidelines-pro-type-reinterpret-cast,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-bounds-constant-array-index,-modernize-use-trailing-return-type,-modernize-use-nodiscard,-modernize-avoid-c-arrays,-modernize-pass-by-value"
-  "HeaderFilterRegex" : "/sunburst/(engine|test|sample)",
+  "HeaderFilterRegex": "/sunburst/(engine|test|sample)",
   "InheritParentConfig": false,
-  "WarningsAsErrors": true,
+  "WarningsAsErrors": false,
 }

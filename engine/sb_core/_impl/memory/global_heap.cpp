@@ -7,9 +7,9 @@ sb::MemoryArena sb::GlobalHeap::allocate(usize const size)
     return {internal::malloc(size), size};
 }
 
-sb::MemoryArena sb::GlobalHeap::allocate(usize const size, Alignment const alignment)
+sb::MemoryArena sb::GlobalHeap::allocate(Alignment const alignment, usize const size)
 {
-    return {internal::malloc(size, alignment), size};
+    return {internal::malloc(alignment, size), size};
 }
 
 void sb::GlobalHeap::deallocate(void * ptr)

@@ -18,7 +18,7 @@ sb::MemoryArena sb::MemoryArenaAllocator::allocate(usize const size)
     return {};
 }
 
-sb::MemoryArena sb::MemoryArenaAllocator::allocate(usize const size, Alignment const alignment)
+sb::MemoryArena sb::MemoryArenaAllocator::allocate(Alignment const alignment, usize const size)
 {
     if ((size != 0U) && !_empty && !sb::isEmpty(_arena) && (size <= _arena.size))
     {

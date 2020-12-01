@@ -4,9 +4,9 @@
 
 namespace sb {
 
-inline u32 countLeadingZeros(u32 val);
+inline s32 countLeadingZeros(u32 val);
 
-inline u32 countLeadingZeros(u64 val);
+inline s32 countLeadingZeros(u64 val);
 
 // returns true for 'val = 0' to avoid a branch
 template <typename T>

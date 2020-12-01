@@ -24,6 +24,7 @@ add_executable(sb_core_test
     pool_allocator_test.cpp
     global_heap_allocator_test.cpp
     stl_allocator_test.cpp
+    ${SB_ENGINE_MEMORY_HOOK_FILE_PATH}
 )
 
 target_link_libraries(sb_core_test

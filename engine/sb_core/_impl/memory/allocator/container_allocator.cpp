@@ -7,9 +7,9 @@ sb::MemoryArena sb::ContainerAllocator::allocate(usize const size)
     return GHEAP.allocate(size);
 }
 
-sb::MemoryArena sb::ContainerAllocator::allocate(usize const size, Alignment const alignment)
+sb::MemoryArena sb::ContainerAllocator::allocate(Alignment const alignment, usize const size)
 {
-    return GHEAP.allocate(size, alignment);
+    return GHEAP.allocate(alignment, size);
 }
 
 void sb::ContainerAllocator::deallocate(void * ptr)

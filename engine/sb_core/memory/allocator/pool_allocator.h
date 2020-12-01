@@ -22,7 +22,7 @@ public:
         auto actual_block_size = alignUp(block_size, default_align);
         sbAssert(sizeof(NodeIdx) <= actual_block_size);
 
-        auto mem_arena = _mem_provider.allocate(block_count * actual_block_size, default_align);
+        auto mem_arena = _mem_provider.allocate(default_align, block_count * actual_block_size);
         sbAssert(!isEmpty(mem_arena));
 
         BaseClass::init(mem_arena, actual_block_size, default_align);
@@ -35,7 +35,7 @@ public:
         auto actual_block_size = alignUp(block_size, default_align);
         sbAssert(sizeof(NodeIdx) <= actual_block_size);
 
-        auto mem_arena = _mem_provider.allocate(block_count * actual_block_size, default_align);
+        auto mem_arena = _mem_provider.allocate(default_align, block_count * actual_block_size);
         sbAssert(!isEmpty(mem_arena));
 
         BaseClass::init(mem_arena, actual_block_size, default_align);

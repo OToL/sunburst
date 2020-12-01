@@ -7,9 +7,9 @@ sb::MemoryArena sb::GlobalHeapAllocator::allocate(usize const size)
     return GHEAP.allocate(size);
 }
 
-sb::MemoryArena sb::GlobalHeapAllocator::allocate(usize const size, Alignment const alignment)
+sb::MemoryArena sb::GlobalHeapAllocator::allocate(Alignment const alignment, usize const size)
 {
-    return GHEAP.allocate(size, alignment);
+    return GHEAP.allocate(alignment, size);
 }
 
 void sb::GlobalHeapAllocator::deallocate(void * ptr)

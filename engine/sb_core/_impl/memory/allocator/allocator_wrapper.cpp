@@ -20,11 +20,11 @@ sb::MemoryArena sb::AllocatorWrapper::allocate(usize const size)
     return {};
 }
 
-sb::MemoryArena sb::AllocatorWrapper::allocate(usize const size, Alignment const alignment)
+sb::MemoryArena sb::AllocatorWrapper::allocate(Alignment const alignment, usize const size)
 {
     if (nullptr != _alloc)
     {
-        return _alloc->allocate(size, alignment);
+        return _alloc->allocate(alignment, size);
     }
 
     return {};

@@ -60,7 +60,7 @@ public:
         }
         else
         {
-            return (pointer)getGlobalHeap().allocate(nb * sizeof(T), alignOf<T>()).data;
+            return (pointer)getGlobalHeap().allocate(alignOf<T>(), nb * sizeof(T)).data;
         }
     }
 

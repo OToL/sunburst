@@ -20,7 +20,7 @@ void free(void * memPtr);
 template <typename TType, typename THeap, typename... TArgs>
 TType * newImpl(THeap & heap, TArgs &&... args)
 {
-    MemoryArena arena = heap.allocate(sizeof(TType), alignOf<TType>());
+    MemoryArena arena = heap.allocate(alignOf<TType>(), sizeof(TType));
 
     if (!isEmpty(arena))
     {

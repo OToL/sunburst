@@ -50,7 +50,7 @@ sb::MemoryArena sb::PoolAllocatorBase::allocate(usize const size)
     return {};
 }
 
-sb::MemoryArena sb::PoolAllocatorBase::allocate(usize const size, [[maybe_unused]] Alignment const alignment)
+sb::MemoryArena sb::PoolAllocatorBase::allocate([[maybe_unused]] Alignment const alignment, usize const size)
 {
     if (alignment <= _default_alignment)
     {

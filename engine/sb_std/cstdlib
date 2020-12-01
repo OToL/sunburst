@@ -8,5 +8,7 @@ namespace SB_STD_NS {
 
       SB_SRC_STD_USE(exit);
       SB_SRC_STD_USE(atoi);
+      SB_SRC_STD_USE(malloc);
+      SB_SRC_STD_USE(free);
 
 }

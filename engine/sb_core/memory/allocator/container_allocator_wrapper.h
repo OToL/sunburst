@@ -17,7 +17,7 @@ public:
 
     MemoryArena allocate(usize const size);
 
-    MemoryArena allocate(usize const size, Alignment const alignment);
+    MemoryArena allocate(Alignment const alignment, usize const size);
 
     void deallocate(void * ptr);
 

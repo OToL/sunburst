@@ -15,12 +15,12 @@ void * operator new[](sb::usize byte_count)
 
 void * operator new(sb::usize byte_count, sbstd::align_val_t alignment)
 {
-    return sb::getGlobalHeap().allocate(byte_count, (sb::Alignment)alignment).data;
+    return sb::getGlobalHeap().allocate(static_cast<sb::Alignment>(alignment), byte_count).data;
 }
 
 void * operator new[](sb::usize byte_count, sbstd::align_val_t alignment)
 {
-    return sb::getGlobalHeap().allocate(byte_count, (sb::Alignment)alignment).data;
+    return sb::getGlobalHeap().allocate(static_cast<sb::Alignment>(alignment), byte_count).data;
 }
 
 void * operator new(sb::usize byte_count, sbstd::nothrow_t const &) noexcept
@@ -35,12 +35,12 @@ void * operator new[](sb::usize byte_count, sbstd::nothrow_t const &) noexcept
 
 void * operator new(sb::usize byte_count, sbstd::align_val_t alignment, sbstd::nothrow_t const &) noexcept
 {
-    return sb::getGlobalHeap().allocate(byte_count, (sb::Alignment)alignment).data;
+    return sb::getGlobalHeap().allocate(static_cast<sb::Alignment>(alignment), byte_count).data;
 }
 
 void * operator new[](sb::usize byte_count, sbstd::align_val_t alignment, sbstd::nothrow_t const &) noexcept
 {
-    return sb::getGlobalHeap().allocate(byte_count, (sb::Alignment)alignment).data;
+    return sb::getGlobalHeap().allocate(static_cast<sb::Alignment>(alignment), byte_count).data;
 }
 
 void operator delete(void * ptr) noexcept

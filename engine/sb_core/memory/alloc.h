@@ -2,7 +2,7 @@
 
 #include <sb_std/new>
 
-#define sbMalloc(heap, size, ...) heap.allocate(size, ##__VA_ARGS__)
+#define sbMalloc(heap, ...) heap.allocate(__VA_ARGS__)
 #define sbMallocUsabeSize(heap, ptr) heap.getBlockSize(ptr)
 #define sbFree(heap, ptr) heap.deallocate(ptr)
 

@@ -18,7 +18,7 @@ public:
         : BaseClass()
         , _mem_provider(mem_provider)
     {
-        BaseClass::init(_mem_provider.allocate(capacity, default_align), default_align);
+        BaseClass::init(_mem_provider.allocate(default_align, capacity), default_align);
     }
 
     IncrementalAllocator(usize capacity, Alignment default_align = ALIGNMENT_DEFAULT)

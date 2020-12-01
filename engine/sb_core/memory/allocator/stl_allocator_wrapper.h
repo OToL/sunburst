@@ -105,7 +105,7 @@ public:
     [[nodiscard]] pointer allocate(size_type nb)
     {
         if (nullptr != _alloc)
-            return (pointer)_alloc->allocate(nb * sizeof(T), alignOf<T>()).data;
+            return (pointer)_alloc->allocate(alignOf<T>(), nb * sizeof(T)).data;
 
         return nullptr;
     }

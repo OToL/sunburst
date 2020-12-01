@@ -222,7 +222,7 @@ public:
             {
                 size_type const new_dst_capacity = computeCapacity(src_size);
                 auto const new_dst_data =
-                    (TType *)_impl.allocate(new_dst_capacity * sizeof(value_type), alignOf<value_type>()).data;
+                    (TType *)_impl.allocate(alignOf<value_type>(), new_dst_capacity * sizeof(value_type)).data;
                 sbAssert(nullptr != new_dst_data);
 
                 sbstd::uninitialized_move(src._impl._begin, src._impl._end, new_dst_data);
@@ -245,7 +245,7 @@ public:
             {
                 size_type const new_src_capacity = computeCapacity(dst_size);
                 auto const new_src_data =
-                    (TType *)src._impl.allocate(new_src_capacity * sizeof(value_type), alignOf<value_type>()).data;
+                    (TType *)src._impl.allocate(alignOf<value_type>(), new_src_capacity * sizeof(value_type)).data;
                 sbAssert(nullptr != new_src_data);
 
                 sbstd::uninitialized_move(_impl._begin, _impl._end, new_src_data);
@@ -535,7 +535,7 @@ public:
                 else
                 {
                     pointer const new_data =
-                        (TType *)_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).data;
+                        (TType *)_impl.allocate(alignOf<value_type>(), new_capacity * sizeof(value_type)).data;
                     sbAssert(nullptr != new_data);
 
                     sbstd::uninitialized_move(_impl._begin, _impl._end, new_data);
@@ -568,7 +568,7 @@ public:
         {
             auto const new_capacity = computeCapacity(src_size);
             pointer const new_data =
-                (TType *)_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).data;
+                (TType *)_impl.allocate(alignOf<value_type>(), new_capacity * sizeof(value_type)).data;
             sbAssert(nullptr != new_data);
 
             sbstd::uninitialized_copy(src_begin, src_end, new_data);
@@ -607,7 +607,7 @@ public:
         {
             auto const new_capacity = computeCapacity(count);
             pointer const new_data =
-                (TType *)_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).data;
+                (TType *)_impl.allocate(alignOf<value_type>(), new_capacity * sizeof(value_type)).data;
             sbAssert(nullptr != new_data);
 
             sbstd::uninitialized_fill(new_data, new_data + count, value);
@@ -686,7 +686,7 @@ private:
         size_type const curr_capacity = capacity();
         size_type const curr_size = size();
 
-        pointer const new_data = (TType *)_impl.allocate(new_capacity * sizeof(value_type), alignOf<value_type>()).data;
+        pointer const new_data = (TType *)_impl.allocate(alignOf<value_type>(), new_capacity * sizeof(value_type)).data;
         sbAssert(nullptr != new_data);
 
         sbstd::uninitialized_move(_impl._begin, _impl._end, new_data);
