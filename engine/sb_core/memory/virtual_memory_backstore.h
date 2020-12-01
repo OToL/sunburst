@@ -14,10 +14,15 @@ namespace sb {
 
 constexpr inline usize MEMORY_PAGE_SIZE = internal::MEMORY_PAGE_SIZE;
 
-MemoryArena allocateVirtualMemory(usize size, char const * client_name);
-MemoryArena reserveVirtualMemory(usize size, char const * client_name);
-MemoryArena mapVirtualMemory(void * base_mem, usize size);
-void unmapVirtualMemory(void * base_mem, usize size);
-void releaseVirtualMemory(void * base_mem, usize size);
+MemoryArena reserveVirtualMemory(usize size, char const * name);
+
+bool mapVirtualMemory(MemoryArena arena);
+bool unmapVirtualMemory(MemoryArena arena);
+
+// reserve + map
+MemoryArena allocateVirtualMemory(usize size, char const * name);
+
+// unmap + release
+bool releaseVirtualMemory(void * base_mem);
 
 } // namespace sb

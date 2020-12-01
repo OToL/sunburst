@@ -1,34 +1,78 @@
 #include <sb_core/memory/virtual_memory_backstore.h>
+#include <sb_core/string/string_format.h>
+#include <sb_core/conversion.h>
 #include <sb_core/error.h>
 #include <sb_core/bit.h>
 
 #include <sb_core/api/windows/windows.h>
-#include <memoryapi.h>
 
-sb::MemoryArena sb::reserveVirtualMemory(usize, char const *)
+sb::MemoryArena sb::reserveVirtualMemory(usize size, [[maybe_unused]] char const * name)
 {
-    // sbAssert(isAlignedTo(size, MEMORY_PAGE_SIZE));
-    // sbAssert((nullptr != client_name) && (0 != client_name[0]));
+    sbAssert(isAlignedTo(size, MEMORY_PAGE_SIZE));
+    sbAssert((nullptr != name) && (0 != name[0]));
 
-    // void * const mem_ptr = VirtualAlloc(0, size, MEM_RESERVE, PAGE_READWRITE);
+    void * const mem_ptr = VirtualAlloc(nullptr, size, MEM_RESERVE, PAGE_READWRITE);
 
-    // if (sbExpect(nullptr != mem_ptr, "Failed to reserve {} bytes for client '{}' with error '{}'", size, client_name,
-    // GetLastError()))
-    // {
-    //     return {mem_ptr, size};
-    // }
+    if (sbExpect(nullptr != mem_ptr, "Failed to reserve {} bytes for client '{}' with error '{}'", size, name,
+                 GetLastError()))
+    {
+        return {mem_ptr, size};
+    }
 
     return {};
 }
 
-sb::MemoryArena sb::mapVirtualMemory(void *, usize)
+bool sb::mapVirtualMemory(MemoryArena arena)
 {
-    // sbAssert(nullptr != base_mem);
+    sbAssert(isValid(arena));
+    sbAssert(isAlignedTo(arena.data, MEMORY_PAGE_SIZE));
 
-    // return {VirtualAlloc(0, size, MEM_COMMIT, PAGE_READWRITE), size};
-    return {};
+    if (sbExpect(nullptr != VirtualAlloc(arena.data, arena.size, MEM_COMMIT, PAGE_READWRITE),
+                 "Failed to reserve {} bytes with error '{}'", arena.size, GetLastError()))
+    {
+        return true;
+    }
+
+    return false;
 }
 
-void sb::unmapVirtualMemory([[maybe_unused]] void * base_mem, [[maybe_unused]] usize size) { }
+bool sb::unmapVirtualMemory(MemoryArena arena)
+{
+    sbAssert(isValid(arena));
 
-void sb::releaseVirtualMemory([[maybe_unused]] void * base_mem, [[maybe_unused]] usize size) { }
+    if (sbExpect(VirtualFree(arena.data, arena.size, MEM_DECOMMIT), "Failed to unmap {} bytes with error '{}'",
+                 arena.size, GetLastError()))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool sb::releaseVirtualMemory(void * base_mem)
+{
+    sbAssert(nullptr != base_mem);
+
+    if (sbExpect(VirtualFree(base_mem, 0, MEM_RELEASE), "Failed to release memory with error '{}'", GetLastError()))
+    {
+        return true;
+    }
+
+    return false;
+}
+
+sb::MemoryArena sb::allocateVirtualMemory(usize size, char const * name)
+{
+    sbAssert(isAlignedTo(size, MEMORY_PAGE_SIZE));
+    sbAssert((nullptr != name) && (0 != name[0]));
+
+    void * const mem_ptr = VirtualAlloc(nullptr, size, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+
+    if (sbExpect(nullptr != mem_ptr, "Failed to reserve {} bytes for client '{}' with error '{}'", size, name,
+                 GetLastError()))
+    {
+        return {mem_ptr, size};
+    }
+
+    return {};
+}

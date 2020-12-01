@@ -51,3 +51,4 @@ template sb::usize sb::internal::decimalToString<sb::u64>(u64 src, sbstd::span<c
 template sb::usize sb::internal::decimalToString<sb::u32>(u32 src, sbstd::span<char> dest);
 template sb::usize sb::internal::decimalToString<sb::u16>(u16 src, sbstd::span<char> dest);
 template sb::usize sb::internal::decimalToString<sb::u8>(u8 src, sbstd::span<char> dest);
+template sb::usize sb::internal::decimalToString<unsigned long>(unsigned long src, sbstd::span<char> dest);

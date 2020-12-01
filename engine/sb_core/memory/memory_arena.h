@@ -26,4 +26,9 @@ constexpr inline b8 isEmpty(MemoryArena arena)
     return (0U == arena.size);
 }
 
+constexpr inline b8 isValid(MemoryArena arena)
+{
+    return !isEmpty(arena) && (nullptr != arena.data);
+}
+
 } // namespace sb

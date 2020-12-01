@@ -16,5 +16,6 @@ extern template usize decimalToString<u32>(u32 src, sbstd::span<char> dest);
 extern template usize decimalToString<u16>(u16 src, sbstd::span<char> dest);
 extern template usize decimalToString<u8>(u8 src, sbstd::span<char> dest);
 extern template usize decimalToString<usize>(usize src, sbstd::span<char> dest);
+extern template usize decimalToString<unsigned long>(unsigned long src, sbstd::span<char> dest);
 
 } // namespace sb::internal
