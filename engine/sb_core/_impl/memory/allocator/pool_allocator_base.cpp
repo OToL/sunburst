@@ -1,6 +1,6 @@
 #include "pool_allocator_base.h"
 #include <sb_core/conversion.h>
-#include <sb_core/error.h>
+#include <sb_core/error/error.h>
 
 void sb::PoolAllocatorBase::initFreeList()
 {

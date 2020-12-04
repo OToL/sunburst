@@ -3,6 +3,7 @@ include(${SB_CATCH_CMAKE_DIR_PATH}/catch.cmake)
 add_executable(sb_core_test
     core_test.cpp
     bit_test.cpp
+    status_test.cpp
     conversion_test.cpp
     crc32_test.cpp
     crc64_test.cpp

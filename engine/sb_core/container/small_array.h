@@ -2,7 +2,7 @@
 
 #include <sb_core/core.h>
 #include <sb_core/conversion.h>
-#include <sb_core/error.h>
+#include <sb_core/error/error.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/allocator/container_allocator.h>
 #include <sb_core/_impl/container/small_array_base.h>

@@ -5,7 +5,7 @@
 
 #include <map>
 #include <iterator>
-#include <sb_core/error.h>
+#include <sb_core/error/error.h>
 
 #include <sb_core/memory/virtual_memory_backstore.h>
 

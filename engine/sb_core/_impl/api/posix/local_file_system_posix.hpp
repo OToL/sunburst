@@ -1,6 +1,6 @@
 #include <sb_core/core.h>
 #include <sb_core/string/string_format.h>
-#include <sb_core/error.h>
+#include <sb_core/error/error.h>
 #include <sb_core/conversion.h>
 #include <sb_core/io/io.h>
 #include <sb_core/string/fix_string.h>

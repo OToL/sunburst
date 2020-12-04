@@ -21,7 +21,8 @@ add_library(sb_core STATIC
     _impl/string_format.cpp
     _impl/log.cpp
     _impl/conversion.cpp
-    _impl/error.cpp
+    _impl/error/error.cpp
+    _impl/error/status_code.cpp
     _impl/hash/crc32.cpp
     _impl/hash/crc64.cpp
     _impl/io/file_stream.cpp

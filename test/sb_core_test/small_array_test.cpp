@@ -5,7 +5,7 @@
 #include <sb_core/memory/allocator/allocator_wrapper.h>
 #include <sb_core/memory/allocator/container_allocator_wrapper.h>
 #include <sb_core/memory/global_heap.h>
-#include <sb_core/error.h>
+#include <sb_core/error/error.h>
 
 #include <sb_std/limits>
 

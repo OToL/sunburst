@@ -25,4 +25,4 @@ enum class ErrorLevel : u8
 #define sbExpect(cond, ...) sbExpectInternal(cond, ##__VA_ARGS__)
 #define sbDontExpect(cond, ...) sbDontExpectInternal(cond, ##__VA_ARGS__)
 
-#include "_impl/error.h"
+#include <sb_core/_impl/error/error.h>

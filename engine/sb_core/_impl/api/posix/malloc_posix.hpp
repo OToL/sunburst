@@ -2,7 +2,7 @@
 #include <sb_core/_impl/memory/malloc.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/core.h>
-#include <sb_core/error.h>
+#include <sb_core/error/error.h>
 #include <sb_core/bit.h>
 #include <sb_core/conversion.h>
 

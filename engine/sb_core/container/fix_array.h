@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/error.h>
+#include <sb_core/error/error.h>
 
 #include <sb_std/type_traits>
 #include <sb_std/utility>

@@ -1,6 +1,6 @@
 #include <sb_core/io/file_stream.h>
 #include <sb_core/io/virtual_file_system.h>
-#include <sb_core/error.h>
+#include <sb_core/error/error.h>
 
 sb::FileStream & sb::FileStream::operator=(FileStream && src)
 {

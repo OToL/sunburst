@@ -1,6 +1,6 @@
 #include <sb_core/memory/allocator/memory_arena_allocator.h>
 #include <sb_core/bit.h>
-#include <sb_core/error.h>
+#include <sb_core/error/error.h>
 
 sb::MemoryArenaAllocator::MemoryArenaAllocator(MemoryArena arena)
     : _arena(arena)

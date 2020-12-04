@@ -1,7 +1,7 @@
 #include <sb_core/memory/virtual_memory_backstore.h>
 #include <sb_core/string/string_format.h>
 #include <sb_core/conversion.h>
-#include <sb_core/error.h>
+#include <sb_core/error/error.h>
 #include <sb_core/bit.h>
 
 #include <sb_core/api/windows/windows.h>

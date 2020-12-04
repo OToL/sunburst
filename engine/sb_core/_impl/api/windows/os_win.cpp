@@ -1,10 +1,11 @@
 #include <sb_core/os.h>
-#include <sb_core/error.h>
+#include <sb_core/error/error.h>
 #include <sb_core/conversion.h>
 
 #include <sb_std/cstdio>
 
 #include <direct.h>
+#include <sb_core/api/windows/windows.h>
 
 char * sb::getWorkingDirectory(sbstd::span<char> buffer)
 {
@@ -15,5 +16,5 @@ char * sb::getWorkingDirectory(sbstd::span<char> buffer)
 
 void sb::outputDebugString(char const * msg)
 {
-    fputs(msg, stdout);
+    OutputDebugString(msg);
 }
