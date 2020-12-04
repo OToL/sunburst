@@ -40,6 +40,7 @@ add_library(sb_core STATIC
     _impl/memory/memory.cpp
     _impl/memory/malloc.cpp
     _impl/memory/alloc.cpp
+    _impl/api/rpmalloc/rpmalloc_wrap.cpp
     _impl/api/${SB_TARGET_PLATFORM_ID}/virtual_memory_backstore_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
     _impl/api/${SB_TARGET_PLATFORM_ID}/os_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
     _impl/api/${SB_TARGET_PLATFORM_ID}/local_file_system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
