@@ -4,12 +4,12 @@
 
 sb::MemoryArena sb::GlobalHeap::allocate(usize const size)
 {
-    return {internal::malloc(size), size};
+    return internal::malloc(size);
 }
 
 sb::MemoryArena sb::GlobalHeap::allocate(Alignment const alignment, usize const size)
 {
-    return {internal::malloc(alignment, size), size};
+    return internal::malloc(alignment, size);
 }
 
 void sb::GlobalHeap::deallocate(void * ptr)

@@ -27,7 +27,7 @@ static inline AllocHeader * dataToHeader(void * dataPtr)
     return static_cast<AllocHeader *>(dataPtr) - 1;
 }
 
-void * platformMalloc(usize alignment, usize size)
+sb::MemoryArena platformMalloc(usize alignment, usize size)
 {
     sbAssert((0 != alignment) && sb::isPowerOf2(alignment));
 
@@ -37,7 +37,7 @@ void * platformMalloc(usize alignment, usize size)
 
     if (nullptr == mem_ptr)
     {
-        notifyOOM(size, "malloc OOM");
+        return {};
     }
 
     void * const aligned_mem_ptr = reinterpret_cast<void *>(alignUp(usize(mem_ptr + sizeof(AllocHeader)), alignment));
@@ -46,10 +46,10 @@ void * platformMalloc(usize alignment, usize size)
     header->size = size;
     header->offset = sb::numericConv<u16>(uptr(header) - uptr(mem_ptr));
 
-    return aligned_mem_ptr;
+    return {aligned_mem_ptr, size};
 }
 
-void * platformMalloc(usize size)
+sb::MemoryArena platformMalloc(usize size)
 {
     return ::sb::internal::malloc(ALIGNMENT_DEFAULT, size);
 }

@@ -12,14 +12,28 @@ void sb::internal::mallocTerminate()
     sbMallocWrapTerminate();
 }
 
-void * sb::internal::malloc(usize size)
+sb::MemoryArena sb::internal::malloc(usize size)
 {
-    return sbMallocWrapAlloc(size);
+    void * const mem_ptr = sbMallocWrapAlloc(size);
+
+    if (nullptr != mem_ptr)
+    {
+        return {mem_ptr, size};
+    }
+
+    notifyOOM(size, "aligned malloc OOM");
 }
 
-void * sb::internal::malloc(Alignment alignment, usize size)
+sb::MemoryArena sb::internal::malloc(Alignment alignment, usize size)
 {
-    return sbMallocWrapAlignedAlloc(getEnumValue(alignment), size);
+    void * const mem_ptr = sbMallocWrapAlignedAlloc(getEnumValue(alignment), size);
+
+    if (nullptr != mem_ptr)
+    {
+        return {mem_ptr, size};
+    }
+
+    notifyOOM(size, "aligned malloc OOM");
 }
 
 sb::usize sb::internal::mallocUsableSize(void * memPtr)
