@@ -1,3 +1,6 @@
 [submodule "sample/sb_playground"]
 	path = sample/sb_playground
 	url = https://github.com/OToL/sb_playground
+[submodule "sample/sb_vk_basic"]
+	path = sample/sb_vk_basic
+	url = https://github.com/OToL/sb_vk_basic.git
