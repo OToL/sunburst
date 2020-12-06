@@ -1,7 +1,7 @@
 #pragma once
 
 #include "io.h"
-#include "file_hdl.h"
+#include "file.h"
 #include <sb_core/hash/hash_str.h>
 #include <sb_core/string/fix_string.h>
 
@@ -34,23 +34,23 @@ struct VirtualFileSystem
 
     static b8 fileExists(char const * path);
 
-    static FileHdl openFile(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
-                            FileFormat fmt = FileFormat::BIN, bool create_if_not_exist = false);
-    static FileHdl openFileWrite(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
-                                 FileFormat fmt = FileFormat::BIN, bool create_if_not_exist = false);
-    static FileHdl openFileRead(char const * path, FileFormat fmt = FileFormat::BIN);
+    static File openFile(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
+                         FileFormat fmt = FileFormat::BIN, bool create_if_not_exist = false);
+    static File openFileWrite(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
+                              FileFormat fmt = FileFormat::BIN, bool create_if_not_exist = false);
+    static File openFileRead(char const * path, FileFormat fmt = FileFormat::BIN);
 
     // Overwite file if exists
-    static FileHdl createFile(char const * path, FileFormat fmt = FileFormat::BIN);
-    static FileHdl createFileWrite(char const * path, FileFormat fmt = FileFormat::BIN);
+    static File createFile(char const * path, FileFormat fmt = FileFormat::BIN);
+    static File createFileWrite(char const * path, FileFormat fmt = FileFormat::BIN);
 
-    static void closeFile(FileHdl hdl);
+    static void closeFile(File hdl);
 
-    static FileSize readFile(FileHdl hdl, sbstd::span<u8> buffer, FileSize cnt = -1);
-    static FileSize writeFile(FileHdl hdl, sbstd::span<u8 const> buffer, FileSize cnt = -1);
+    static FileSize readFile(File hdl, sbstd::span<u8> buffer, FileSize cnt = -1);
+    static FileSize writeFile(File hdl, sbstd::span<u8 const> buffer, FileSize cnt = -1);
 
-    static FileSize getFileLength(FileHdl hdl);
-    static FileProps getFileProps(FileHdl hdl);
+    static FileSize getFileLength(File hdl);
+    static FileProps getFileProps(File hdl);
 };
 
 using VFS = VirtualFileSystem;

@@ -10,9 +10,9 @@ struct Status
     char const * message;
 };
 
-inline b8 isOk(Status status)
+inline b8 status_isOk(Status status)
 {
     return status.code == StatusCode::OK;
 }
 
-}
+} // namespace sb

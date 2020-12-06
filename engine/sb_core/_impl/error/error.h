@@ -29,14 +29,16 @@ void reportError(ErrorLevel type, char const * const file, u32 const line, char 
     reportError(type, file, line, &fmt_msg[0]);
 }
 
-void reportNotImplemented(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code, char const * msg);
+void reportNotImplemented(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code,
+                          char const * msg);
 
 void reportError(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code, char const * msg);
 
 void reportError(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code);
 
 template <typename... TArgs>
-void reportError(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code, char const * msg, TArgs... args)
+void reportError(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code, char const * msg,
+                 TArgs... args)
 {
     char fmt_msg[255];
     sb::stringFormat(fmt_msg, msg, sbstd::forward<TArgs>(args)...);

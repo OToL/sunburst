@@ -6,7 +6,7 @@
 
 #define sb_noalias_internal __restrict
 
-namespace sb {  
+namespace sb {
 __forceinline void debugBreak()
 {
     __debugbreak();

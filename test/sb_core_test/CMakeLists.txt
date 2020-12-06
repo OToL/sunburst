@@ -15,7 +15,7 @@ add_executable(sb_core_test
     small_array_test.cpp
     string_utility_test.cpp
     string_format_test.cpp
-    file_hdl_test.cpp
+    file_test.cpp
     fix_array_test.cpp
     ring_buffer_Test.cpp
     fix_string_test.cpp

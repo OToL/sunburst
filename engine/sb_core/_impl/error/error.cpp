@@ -16,10 +16,11 @@ static sb::ErrorHandler g_error_hdl;
 static constexpr char const * ERROR_DEFAULT_MSG[] = {"Critical error detected", "Unhandled error detected",
                                                      "Non fatal error detected"};
 
-void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::u32 const line, sb::StatusCode status_code, char const * msg)
+void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::u32 const line, sb::StatusCode status_code,
+                        char const * msg)
 {
     char fmt_msg[255];
-    sb::stringFormat(fmt_msg, "{} ({}, {})\n\tStatus: {}", msg, file, line, getAsString(status_code));
+    sb::stringFormat(fmt_msg, "{} ({}, {})\n\tStatus: {}", msg, file, line, statuscode_getValueName(status_code));
 
     switch (type)
     {
@@ -55,14 +56,16 @@ void sb::internal::reportNotImplemented(ErrorLevel type, char const * const file
     reportNotImplemented(type, file, line, StatusCode::UNKNOWN, msg);
 }
 
-void sb::internal::reportNotImplemented(ErrorLevel type, char const * const file, u32 const line, [[maybe_unused]] StatusCode stastus_code, char const * msg)
+void sb::internal::reportNotImplemented(ErrorLevel type, char const * const file, u32 const line,
+                                        [[maybe_unused]] StatusCode stastus_code, char const * msg)
 {
     char msg_fmt[255];
     sb::stringFormat(msg_fmt, "Not implemented: '{}'", msg);
     reportError(type, file, line, &msg_fmt[0]);
 }
 
-void sb::internal::reportError(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code, char const * msg)
+void sb::internal::reportError(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code,
+                               char const * msg)
 {
     if (nullptr != g_error_hdl)
     {
@@ -70,7 +73,7 @@ void sb::internal::reportError(ErrorLevel type, char const * const file, u32 con
     }
     else
     {
-        logDefaultErrorMsg(type, file, line, stastus_code ,msg);
+        logDefaultErrorMsg(type, file, line, stastus_code, msg);
     }
 
     if (ErrorLevel::CRITICAL == type)

@@ -33,16 +33,16 @@ requires sbstdx::are_same_v<TEnum, TEnums...> inline constexpr EnumMask<TEnum> m
 }
 
 template <typename TEnum, typename... TEnums>
-requires sbstdx::are_same_v<TEnum, TEnums...> inline constexpr bool hasEnumValues(EnumMask<TEnum> enum_mask,
-                                                                                  TEnums... values)
+requires sbstdx::are_same_v<TEnum, TEnums...> inline constexpr bool enummask_hasValues(EnumMask<TEnum> enum_mask,
+                                                                                       TEnums... values)
 {
     typename EnumMask<TEnum>::ValueType const mask_value = makeEnumMaskValue(values...);
     return mask_value == (enum_mask.value & mask_value);
 }
 
 template <typename TEnum, typename... TEnums>
-requires sbstdx::are_same_v<TEnum, TEnums...> inline constexpr bool hasAnyEnumValue(EnumMask<TEnum> enum_mask,
-                                                                                    TEnums... values)
+requires sbstdx::are_same_v<TEnum, TEnums...> inline constexpr bool enummask_hasAnyValue(EnumMask<TEnum> enum_mask,
+                                                                                         TEnums... values)
 {
     return 0 != (enum_mask.value & makeEnumMaskValue(values...));
 }

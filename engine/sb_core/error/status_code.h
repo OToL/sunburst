@@ -25,6 +25,6 @@ enum class StatusCode : u32
     UNKNOWN
 };
 
-char const * getAsString(StatusCode status_code);
+char const * statuscode_getValueName(StatusCode status_code);
 
-}
+} // namespace sb

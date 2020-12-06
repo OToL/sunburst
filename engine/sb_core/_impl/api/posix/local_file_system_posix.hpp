@@ -8,7 +8,7 @@
 
 #include <sb_std/cstdio>
 
-sb::internal::LayerFileHdl sb::internal::platformOpenFileRead(char const * path, FileFormat fmt)
+sb::internal::LayerFile sb::internal::platformOpenFileRead(char const * path, FileFormat fmt)
 {
     FixString<3> flags{"r"};
 
@@ -28,8 +28,7 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileRead(char const * path,
     return {};
 }
 
-sb::internal::LayerFileHdl sb::internal::platformOpenFileReadWrite(char const * path, FileWriteMode mode,
-                                                                   FileFormat fmt)
+sb::internal::LayerFile sb::internal::platformOpenFileReadWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
     FixString<5> flags;
 
@@ -64,7 +63,7 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileReadWrite(char const * 
     return {};
 }
 
-sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
+sb::internal::LayerFile sb::internal::platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
     FixString<5> flags;
 
@@ -99,7 +98,7 @@ sb::internal::LayerFileHdl sb::internal::platformOpenFileWrite(char const * path
     return {};
 }
 
-sb::internal::LayerFileHdl sb::internal::platformCreateFileWrite(char const * path, FileFormat fmt)
+sb::internal::LayerFile sb::internal::platformCreateFileWrite(char const * path, FileFormat fmt)
 {
     FixString<3> flags{"w"};
 
@@ -119,7 +118,7 @@ sb::internal::LayerFileHdl sb::internal::platformCreateFileWrite(char const * pa
     return {};
 }
 
-sb::internal::LayerFileHdl sb::internal::platformCreateFileReadWrite(char const * path, FileFormat fmt)
+sb::internal::LayerFile sb::internal::platformCreateFileReadWrite(char const * path, FileFormat fmt)
 {
     FixString<3> flags{"w+"};
 
@@ -139,21 +138,21 @@ sb::internal::LayerFileHdl sb::internal::platformCreateFileReadWrite(char const 
     return {};
 }
 
-void sb::internal::platformCloseFile(LayerFileHdl hdl)
+void sb::internal::platformCloseFile(LayerFile hdl)
 {
     sbAssert(nullptr != hdl.value);
 
     fclose(reinterpret_cast<FILE *>(hdl.value));
 }
 
-sb::FileSize sb::internal::platformReadFile(LayerFileHdl hdl, u8 * buffer, FileSize count)
+sb::FileSize sb::internal::platformReadFile(LayerFile hdl, u8 * buffer, FileSize count)
 {
     sbAssert(nullptr != hdl.value);
 
     return numericConv<FileSize>(fread((void *)buffer, 1, (usize)count, reinterpret_cast<FILE *>(hdl.value)));
 }
 
-sb::FileSize sb::internal::platformWriteFile(LayerFileHdl hdl, u8 const * buffer, FileSize count)
+sb::FileSize sb::internal::platformWriteFile(LayerFile hdl, u8 const * buffer, FileSize count)
 {
     sbAssert(nullptr != hdl.value);
 
@@ -161,7 +160,7 @@ sb::FileSize sb::internal::platformWriteFile(LayerFileHdl hdl, u8 const * buffer
 }
 
 // @todo: could be optimized
-sb::FileSize sb::internal::platformFileLength(LayerFileHdl hdl)
+sb::FileSize sb::internal::platformFileLength(LayerFile hdl)
 {
     sbAssert(nullptr != hdl.value);
 

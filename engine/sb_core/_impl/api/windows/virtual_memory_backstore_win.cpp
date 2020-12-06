@@ -24,7 +24,7 @@ sb::MemoryArena sb::reserveVirtualMemory(usize size, [[maybe_unused]] char const
 
 bool sb::mapVirtualMemory(MemoryArena arena)
 {
-    sbAssert(isValid(arena));
+    sbAssert(memarena_isValid(arena));
     sbAssert(isAlignedTo(arena.data, MEMORY_PAGE_SIZE));
 
     if (sbExpect(nullptr != VirtualAlloc(arena.data, arena.size, MEM_COMMIT, PAGE_READWRITE),
@@ -38,7 +38,7 @@ bool sb::mapVirtualMemory(MemoryArena arena)
 
 bool sb::unmapVirtualMemory(MemoryArena arena)
 {
-    sbAssert(isValid(arena));
+    sbAssert(memarena_isValid(arena));
 
     if (sbExpect(VirtualFree(arena.data, arena.size, MEM_DECOMMIT), "Failed to unmap {} bytes with error '{}'",
                  arena.size, GetLastError()))

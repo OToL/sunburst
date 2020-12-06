@@ -2,12 +2,12 @@
 
 namespace sb::internal {
 
-struct LayerFileHdl
+struct LayerFile
 {
     void * value;
 };
 
-inline b8 isValid(LayerFileHdl hdl)
+inline b8 layerfile_isValid(LayerFile hdl)
 {
     return nullptr != hdl.value;
 }

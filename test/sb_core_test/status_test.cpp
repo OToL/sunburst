@@ -9,7 +9,7 @@ TEST_CASE("Default Status is ok", "[status]")
 {
     Status status = {};
 
-    REQUIRE(isOk(status));
+    REQUIRE(status_isOk(status));
 }
 
 #include <catch2/test_epilog.h>

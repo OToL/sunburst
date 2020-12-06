@@ -8,8 +8,8 @@
 
 namespace sb {
 
-using ErrorHandler =
-    sbstdx::inplace_function<void(ErrorLevel type, char const * file, u32 const line, StatusCode status_code, char const * msg)>;
+using ErrorHandler = sbstdx::inplace_function<void(ErrorLevel type, char const * file, u32 const line,
+                                                   StatusCode status_code, char const * msg)>;
 
 using LogHandler =
     sbstdx::inplace_function<void(LogLevel lvl, char const * const file, u32 const line, char const * const msg)>;

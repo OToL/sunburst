@@ -26,14 +26,14 @@ TEST_CASE("Pool Allocator empty", "[pool_allocator]")
     SECTION("Allocate")
     {
         TestPoolAllocator test_alloc;
-        REQUIRE(isEmpty(test_alloc.allocate()));
-        REQUIRE(isEmpty(test_alloc.allocate(sizeof(TestPoolObj))));
+        REQUIRE(memarena_isEmpty(test_alloc.allocate()));
+        REQUIRE(memarena_isEmpty(test_alloc.allocate(sizeof(TestPoolObj))));
     }
 
     SECTION("Aligned allocate")
     {
         TestPoolAllocator test_alloc;
-        REQUIRE(isEmpty(test_alloc.allocate(TEST_OBJECT_ALIGNMENT, sizeof(TestPoolObj))));
+        REQUIRE(memarena_isEmpty(test_alloc.allocate(TEST_OBJECT_ALIGNMENT, sizeof(TestPoolObj))));
     }
 }
 
@@ -44,8 +44,8 @@ TEST_CASE("Pool Allocator edge cases", "[pool_allocator]")
         TestObjectArray testObjectArray;
         TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
 
-        REQUIRE(isEmpty(test_alloc.allocate(sizeof(TestPoolObj) + 1)));
-        REQUIRE(isEmpty(test_alloc.allocate(TEST_OBJECT_ALIGNMENT, sizeof(TestPoolObj) + 1)));
+        REQUIRE(memarena_isEmpty(test_alloc.allocate(sizeof(TestPoolObj) + 1)));
+        REQUIRE(memarena_isEmpty(test_alloc.allocate(TEST_OBJECT_ALIGNMENT, sizeof(TestPoolObj) + 1)));
     }
 
     SECTION("Allocate smaller object")
@@ -62,7 +62,7 @@ TEST_CASE("Pool Allocator edge cases", "[pool_allocator]")
         TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
 
         REQUIRE(ALIGNMENT_128B > TEST_OBJECT_ALIGNMENT);
-        REQUIRE(isEmpty(test_alloc.allocate(ALIGNMENT_128B, sizeof(TestPoolObj))));
+        REQUIRE(memarena_isEmpty(test_alloc.allocate(ALIGNMENT_128B, sizeof(TestPoolObj))));
     }
 }
 
@@ -80,14 +80,14 @@ TEST_CASE("Pool Allocator consume all", "[pool_allocator]")
         {
             mem_arena = test_alloc.allocate(sizeof(TestPoolObj));
 
-            if (!isEmpty(mem_arena))
+            if (!memarena_isEmpty(mem_arena))
             {
                 REQUIRE(mem_arena.size == sizeof(TestPoolObj));
                 REQUIRE(test_alloc.owns(mem_arena.data));
                 REQUIRE(mem_arena.data == &testObjectArray[alloc_obj_cnt]);
                 ++alloc_obj_cnt;
             }
-        } while (!isEmpty(mem_arena));
+        } while (!memarena_isEmpty(mem_arena));
 
         REQUIRE(alloc_obj_cnt == TEST_OBJECT_COUNT);
     }
@@ -104,14 +104,14 @@ TEST_CASE("Pool Allocator consume all", "[pool_allocator]")
         {
             mem_arena = test_alloc.allocate(TEST_OBJECT_ALIGNMENT, sizeof(TestPoolObj));
 
-            if (!isEmpty(mem_arena))
+            if (!memarena_isEmpty(mem_arena))
             {
                 REQUIRE(mem_arena.size == sizeof(TestPoolObj));
                 REQUIRE(test_alloc.owns(mem_arena.data));
                 REQUIRE(mem_arena.data == &testObjectArray[alloc_obj_cnt]);
                 ++alloc_obj_cnt;
             }
-        } while (!isEmpty(mem_arena));
+        } while (!memarena_isEmpty(mem_arena));
 
         REQUIRE(alloc_obj_cnt == TEST_OBJECT_COUNT);
     }
@@ -133,14 +133,14 @@ TEST_CASE("Pool Allocator deallocate all", "[pool_allocator]")
         {
             mem_arena = test_alloc.allocate(sizeof(TestPoolObj));
 
-            if (!isEmpty(mem_arena))
+            if (!memarena_isEmpty(mem_arena))
             {
                 REQUIRE(mem_arena.size == sizeof(TestPoolObj));
                 REQUIRE(test_alloc.owns(mem_arena.data));
                 REQUIRE(mem_arena.data == &testObjectArray[alloc_obj_cnt]);
                 ++alloc_obj_cnt;
             }
-        } while (!isEmpty(mem_arena));
+        } while (!memarena_isEmpty(mem_arena));
 
         REQUIRE(alloc_obj_cnt == TEST_OBJECT_COUNT);
         test_alloc.deallocateAll();
@@ -170,7 +170,7 @@ TEST_CASE("Pool Allocator deallocate", "[pool_allocator]")
         {
             auto const mem_arena = test_alloc.allocate(sizeof(TestPoolObj));
 
-            REQUIRE(!isEmpty(mem_arena));
+            REQUIRE(!memarena_isEmpty(mem_arena));
             REQUIRE(test_alloc.owns(mem_arena.data));
             REQUIRE(end(alloc_objs) == sbstd::find(begin(alloc_objs), end(alloc_objs), mem_arena.data));
 

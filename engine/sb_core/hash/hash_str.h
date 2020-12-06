@@ -54,6 +54,11 @@ constexpr HashStr makeHashStr(char const * str, usize len)
     return {computeHash64({str, len})};
 }
 
+constexpr b32 hashstr_isValid(HashStr hash_val)
+{
+    return (hash_val.value != 0);
+}
+
 } // namespace sb
 
 #else
