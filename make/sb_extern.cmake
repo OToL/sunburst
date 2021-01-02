@@ -15,11 +15,37 @@ function(sb_setup_extern)
     conan_cmake_run(
         REQUIRES
             catch2/2.11.3
+            glm/0.9.9.8
+            stb/20200203
+            glfw/3.3.2 
+            tinyobjloader/1.0.6
         BASIC_SETUP
             CMAKE_TARGETS) 
     conan_load_buildinfo()
 
     sb_alias_conan_target(catch2 catch)
+    
+    sb_alias_conan_target(tinyobjloader tinyobjloader)
+    target_compile_definitions(CONAN_PKG::tinyobjloader
+        INTERFACE 
+            TINYOBJLOADER_IMPLEMENTATION)
+    
+    sb_alias_conan_target(glfw glfw)
+    target_compile_definitions(CONAN_PKG::glfw
+        INTERFACE 
+            GLFW_INCLUDE_VULKAN)    
+        
+    sb_alias_conan_target(stb stb)
+    target_compile_definitions(CONAN_PKG::stb
+        INTERFACE
+            STB_IMAGE_IMPLEMENTATION) 
+    
+    sb_alias_conan_target(glm glm)
+    target_compile_definitions(CONAN_PKG::glm 
+        INTERFACE
+            GLM_FORCE_RADIANS
+            GLM_FORCE_DEPTH_ZERO_TO_ONE
+            GLM_FORCE_DEFAULT_ALIGNED_GENTYPES)
 
     # Visual Studio supports multiple configurations at once and catch2 cmake files are separated
     if(CONAN_CMAKE_MULTI)
