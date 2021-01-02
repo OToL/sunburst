@@ -17,6 +17,11 @@ void sb::GlobalHeap::deallocate(void * ptr)
     internal::free(ptr);
 }
 
+void sb::GlobalHeap::deallocate(MemoryArena arena)
+{
+    internal::free(arena.data);
+}
+
 sb::b8 sb::GlobalHeap::owns(void const *) const
 {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay)

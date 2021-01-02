@@ -13,6 +13,7 @@ namespace SB_STD_NS {
 	SB_SRC_STD_USE(random_access_iterator_tag);
     SB_SRC_STD_USE(back_inserter);
     SB_SRC_STD_USE(size);
+    SB_SRC_STD_USE(data);
 
     template <typename T>
     using iterator_tag_t = typename sbstd::iterator_traits<T>::iterator_category;

@@ -9,7 +9,7 @@
 
 namespace sb::internal {
 
-static inline sb::LogLevel gs_log_min_level = sb::LogLevel::DEBUG;
+static inline sb::LogLevel gs_log_min_level = sb::LogLevel::DIAGNOSTIC;
 static inline sb::b8 gs_log_quiet = false;
 
 template <typename... TArgs>

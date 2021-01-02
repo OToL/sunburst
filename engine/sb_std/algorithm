@@ -19,5 +19,7 @@ namespace SB_STD_NS {
     SB_SRC_STD_USE(max);
     SB_SRC_STD_USE(move);
     SB_SRC_STD_USE(replace);
+    SB_SRC_STD_USE(sort);
+    SB_SRC_STD_USE(uninitialized_fill);
 
 }

@@ -8,6 +8,8 @@
 #include <sb_core/container/fix_array.h>
 #include <sb_core/string/string_utility.h>
 #include <sb_core/enum.h>
+#include <sb_core/string/string_format.h>
+#include <sb_core/log.h>
 
 #include <sb_std/algorithm>
 #include <sb_std/xutility>
@@ -67,7 +69,7 @@ public:
 
         for (auto & layer_desc : layers_desc)
         {
-            if (!(sbExpect(hashstr_isValid(layer_desc.name), "VFS layer must have a valid name") &&
+            if (!(sbExpect(hstr_isValid(layer_desc.name), "VFS layer must have a valid name") &&
                   sbExpect(nullptr == findLayer(layer_desc.name), "VFS layer already registered with the same name") &&
                   sbExpect(isVFSPathValid(layer_desc.vfs_path.c_str()), "Invalid layer VFS path")))
             {
@@ -132,7 +134,7 @@ public:
     {
         auto const & desc = getFileDesc(hdl);
 
-        if (sbExpect(enummask_hasValues(desc.props.access, FileAccess::READ)))
+        if (sbExpect(enummask_checkValues(desc.props.access, FileAccess::READ)))
         {
             return internal::platformReadFile(desc.hdl, buffer, cnt);
         }
@@ -144,7 +146,7 @@ public:
     {
         auto const & desc = getFileDesc(hdl);
 
-        if (sbExpect(enummask_hasValues(desc.props.access, FileAccess::WRITE)))
+        if (sbExpect(enummask_checkValues(desc.props.access, FileAccess::WRITE)))
         {
             return internal::platformWriteFile(desc.hdl, buffer, cnt);
         }
@@ -560,4 +562,38 @@ sb::b8 sb::VirtualFileSystem::fileExists(char const * path)
     sbAssert(nullptr != g_vfs);
 
     return g_vfs->fileExists(path);
+}
+
+sbstd::span<sb::u8> sb::VirtualFileSystem::readFile(char const * path, IAllocator & alloc, FileFormat fmt)
+{
+    auto const fd = openFileRead(path, fmt);
+    if (!file_isValid(fd))
+    {
+        sbLogW("Failed to open '{}'", path);
+        return {};
+    }
+
+    auto const file_size = getFileLength(fd);
+    if (0 >= file_size)
+    {
+        sbLogW("Failed to read '{}' content", path);
+        closeFile(fd);
+        return {};
+    }
+
+    sb::MemoryArena const arena = alloc.allocate(numericConv<usize>(file_size));
+    if (!memarena_isValid(arena))
+    {
+        sbLogW("Failed to allocate memory to back '{}' content", path);
+        closeFile(fd);
+        return {};
+    }
+
+    sbstd::span<u8> const file_content((u8 *)arena.data, arena.size);
+    auto const read_cnt = readFile(fd, file_content);
+    sbWarn(numericConv<usize>(read_cnt) == file_content.size());
+
+    closeFile(fd);
+
+    return file_content;
 }

@@ -28,7 +28,7 @@ constexpr Hash64Str makeHash64Str(char const * str, usize len)
     return {computeHash64({str, len})};
 }
 
-constexpr b32 hash64str_isValid(Hash64Str hash_val)
+constexpr b32 h64str_isValid(Hash64Str hash_val)
 {
     return (hash_val.value != 0);
 }

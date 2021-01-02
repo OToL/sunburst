@@ -17,6 +17,7 @@
 #endif
 
 #define sb_noalias sb_noalias_internal
+#define sb_nobreak
 
 namespace sb {
 

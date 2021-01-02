@@ -28,7 +28,7 @@ constexpr Hash32Str makeHash32Str(char const * str, usize len)
     return {computeHash32({str, len})};
 }
 
-constexpr b8 hash32str_isValid(Hash32Str hash_val)
+constexpr b8 h32str_isValid(Hash32Str hash_val)
 {
     return (hash_val.value != 0);
 }

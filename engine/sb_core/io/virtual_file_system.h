@@ -11,7 +11,7 @@
 
 namespace sb {
 
-class IFileSystemLayer;
+class IAllocator;
 
 struct VirtualFileSystem
 {
@@ -51,6 +51,8 @@ struct VirtualFileSystem
 
     static FileSize getFileLength(File hdl);
     static FileProps getFileProps(File hdl);
+
+    static sbstd::span<u8> readFile(char const * path, IAllocator & alloc, FileFormat fmt = FileFormat::BIN);
 };
 
 using VFS = VirtualFileSystem;

@@ -3,10 +3,11 @@
 #include <sb_core/core.h>
 #include <sb_core/memory/memory_arena.h>
 #include <sb_core/memory/memory.h>
+#include "allocator/allocator.h"
 
 namespace sb {
 
-class GlobalHeap
+class GlobalHeap final : public IAllocator
 {
     GlobalHeap() = default;
     ~GlobalHeap() = default;
@@ -19,11 +20,11 @@ public:
     GlobalHeap & operator=(GlobalHeap const &) = delete;
     GlobalHeap & operator=(GlobalHeap &&) = delete;
 
-    MemoryArena allocate(usize const size);
+    MemoryArena allocate(usize const size) override;
+    MemoryArena allocate(Alignment const alignment, usize const size) override;
 
-    MemoryArena allocate(Alignment const alignment, usize const size);
-
-    void deallocate(void * ptr);
+    void deallocate(void * ptr) override;
+    void deallocate(MemoryArena arena) override;
 
     b8 owns(void const * ptr) const;
 

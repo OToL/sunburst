@@ -5,6 +5,7 @@
 
 #include <sb_std/type_traits>
 #include <sb_std/utility>
+#include <sb_std/algorithm>
 
 namespace sb {
 
@@ -28,6 +29,15 @@ public:
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     FixArray() = default;
+
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
+    FixArray(size_type count, value_type const & value)
+    {
+        sbAssert(count <= CAPACITY);
+
+        sbstd::uninitialized_fill((pointer)_data, ((pointer)_data) + count, value);
+        _size = count;
+    }
 
     FixArray(FixArray const &) = delete;
     FixArray(FixArray &&) = delete;

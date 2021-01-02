@@ -81,7 +81,7 @@ usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbs
 template <typename... TArgs>
 inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args)
 {
-    return sb::stringFormat({dest_buffer, (sptrdiff)capacity}, format, sbstd::forward<TArgs>(args)...);
+    return sb::stringFormat({dest_buffer, capacity}, format, sbstd::forward<TArgs>(args)...);
 }
 
 } // namespace sb::internal
