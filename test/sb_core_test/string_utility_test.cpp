@@ -2,8 +2,8 @@
 
 #include <sb_std/iterator>
 
-#include <catch2/test_prolog.h>
-#include <catch2/xcatch.hpp>
+#include <sb_core/extern_prolog.h>
+#include <catch2/catch.hpp>
 
 using namespace sb;
 
@@ -62,4 +62,4 @@ TEST_CASE("strStartsWith", "[string_utility]")
     }
 }
 
-#include <catch2/test_epilog.h>
+#include <sb_core/extern_epilog.h>

@@ -72,10 +72,5 @@ function(sb_setup_extern)
         endif()
     endif()
 
-    if(SB_TOOLCHAIN_ID STREQUAL "msvc")
-        set(SB_EXTERN_SOURCES_COMPILATION_WARNINGS "/wd4255 /wd5220 /wd4365 /wd5039 /wd4430 /wd4668" PARENT_SCOPE)
-    elseif(SB_TOOLCHAIN_ID STREQUAL "clang")
-        set(SB_EXTERN_SOURCES_COMPILATION_WARNINGS "-Wno-reserved-id-macro -Wno-static-in-inline" PARENT_SCOPE)
-    endif()
 
 endfunction()

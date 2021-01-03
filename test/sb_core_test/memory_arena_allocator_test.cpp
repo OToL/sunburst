@@ -1,7 +1,7 @@
 #include <sb_core/memory/allocator/memory_arena_allocator.h>
 
-#include <catch2/test_prolog.h>
-#include <catch2/xcatch.hpp>
+#include <sb_core/extern_prolog.h>
+#include <catch2/catch.hpp>
 
 using namespace sb;
 
@@ -170,4 +170,4 @@ TEST_CASE("Memory Arena Allocator owns", "[memory_arena_allocator]")
     REQUIRE(!alloc.owns(&my_array[0] + sizeof(my_array)));
 }
 
-#include <catch2/test_epilog.h>
+#include <sb_core/extern_epilog.h>

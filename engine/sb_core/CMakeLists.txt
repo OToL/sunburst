@@ -1,22 +1,9 @@
-# sb_core external sources
-add_library(sb_core_extern
-    OBJECT
-        _impl/api/rpmalloc/rpmalloc.c)
+if(SB_TOOLCHAIN_ID STREQUAL "msvc")
+    set(SB_RPMALLOC_WARNINGS "/wd4255 /wd5220 /wd4365 /wd5039 /wd4430 /wd4668")
+elseif(SB_TOOLCHAIN_ID STREQUAL "clang")
+    set(SB_RPMALLOC_WARNINGS "-Wno-reserved-id-macro -Wno-static-in-inline")
+endif()
 
-set_source_files_properties(_impl/api/rpmalloc/rpmalloc.c 
-    PROPERTIES 
-        COMPILE_FLAGS ${SB_EXTERN_SOURCES_COMPILATION_WARNINGS})
-
-target_link_libraries(sb_core_extern
-    PRIVATE
-        sb::cxx_common_public)
-
-set_target_properties(sb_core_extern
-    PROPERTIES
-        CXX_CLANG_TIDY ""
-        C_CLANG_TIDY "")
-
-# sb_core
 add_library(sb_core STATIC
     _impl/string_format.cpp
     _impl/log.cpp
@@ -42,11 +29,17 @@ add_library(sb_core STATIC
     _impl/memory/malloc.cpp
     _impl/memory/alloc.cpp
     _impl/api/rpmalloc/rpmalloc_wrap.cpp
+    _impl/api/rpmalloc/rpmalloc.c
     _impl/api/${SB_TARGET_PLATFORM_ID}/virtual_memory_backstore_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
     _impl/api/${SB_TARGET_PLATFORM_ID}/os_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
     _impl/api/${SB_TARGET_PLATFORM_ID}/local_file_system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
-    _impl/api/${SB_TARGET_PLATFORM_ID}/malloc_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
-    $<TARGET_OBJECTS:sb_core_extern>)
+    _impl/api/${SB_TARGET_PLATFORM_ID}/malloc_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp)
+
+set_source_files_properties(_impl/api/rpmalloc/rpmalloc.c 
+    PROPERTIES 
+        COMPILE_FLAGS ${SB_RPMALLOC_WARNINGS}
+        CXX_CLANG_TIDY ""
+        C_CLANG_TIDY "")
 
 add_library(sb::core ALIAS sb_core)
 

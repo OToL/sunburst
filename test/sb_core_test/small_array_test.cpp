@@ -9,8 +9,8 @@
 
 #include <sb_std/limits>
 
-#include <catch2/test_prolog.h>
-#include <catch2/xcatch.hpp>
+#include <sb_core/extern_prolog.h>
+#include <catch2/catch.hpp>
 
 using namespace sb;
 
@@ -1394,4 +1394,4 @@ TEST_CASE_METHOD(SArrayFixture, "SArray without allocator has not overhead", "[s
     // STATIC_REQUIRE(sizeof(SArray<b8, sizeof(void *)>) == 4 * sizeof(void *));
 }
 
-#include <catch2/test_epilog.h>
+#include <sb_core/extern_epilog.h>

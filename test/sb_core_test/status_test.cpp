@@ -1,7 +1,7 @@
 #include <sb_core/error/status.h>
 
-#include <catch2/test_prolog.h>
-#include <catch2/xcatch.hpp>
+#include <sb_core/extern_prolog.h>
+#include <catch2/catch.hpp>
 
 using namespace sb;
 
@@ -12,4 +12,4 @@ TEST_CASE("Default Status is ok", "[status]")
     REQUIRE(status_isOk(status));
 }
 
-#include <catch2/test_epilog.h>
+#include <sb_core/extern_epilog.h>
