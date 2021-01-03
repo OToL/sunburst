@@ -1,6 +1,6 @@
 #include <sb_core/hash/hash32_str.h>
 
-#include <sb_core/extern_prolog.h>
+#include <extern_prolog.h>
 #include <catch2/catch.hpp>
 
 using namespace sb;
@@ -52,4 +52,4 @@ TEST_CASE("Hash32Str literal", "[hash32_str]")
     STATIC_REQUIRE((computeHash32(HASH_STR_TEST_STRING) == "Hello Hash"_h32s.value));
 }
 
-#include <sb_core/extern_epilog.h>
+#include <extern_epilog.h>

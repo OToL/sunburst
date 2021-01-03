@@ -1,6 +1,6 @@
 #include <sb_core/memory/allocator/null_allocator.h>
 
-#include <sb_core/extern_prolog.h>
+#include <extern_prolog.h>
 #include <catch2/catch.hpp>
 
 using namespace sb;
@@ -23,4 +23,4 @@ TEST_CASE("Null Allocator aligned allocate", "[null_allocator]")
     REQUIRE(!test_alloc.owns(mem_arena.data));
 }
 
-#include <sb_core/extern_epilog.h>
+#include <extern_epilog.h>

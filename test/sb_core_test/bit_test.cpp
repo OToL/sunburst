@@ -1,6 +1,6 @@
 #include <sb_core/bit.h>
 
-#include <sb_core/extern_prolog.h>
+#include <extern_prolog.h>
 #include <catch2/catch.hpp>
 
 #include <map>
@@ -99,4 +99,4 @@ TEST_CASE("Power of 2 rounding", "[bitwise]")
     }
 }
 
-#include <sb_core/extern_epilog.h>
+#include <extern_epilog.h>

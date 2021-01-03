@@ -8,7 +8,7 @@
 
 #include <sb_std/algorithm>
 
-#include <sb_core/extern_prolog.h>
+#include <extern_prolog.h>
 #include <catch2/catch.hpp>
 
 using namespace sb;
@@ -38,7 +38,7 @@ TEST_CASE("STL Allocator Wrapper", "[stl_allocator]")
     REQUIRE(test_alloc.getStats().allocated_byte == 0U);
 }
 
-#include <sb_core/extern_epilog.h>
+#include <extern_epilog.h>
 
 #if 0
 

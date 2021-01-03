@@ -2,7 +2,7 @@
 
 #include <sb_std/iterator>
 
-#include <sb_core/extern_prolog.h>
+#include <extern_prolog.h>
 #include <catch2/catch.hpp>
 
 using namespace sb;
@@ -34,4 +34,4 @@ TEST_CASE("String CRC32 hash", "[crc32]")
     REQUIRE(CRC32_STR_TEST_HASH == test_crc);
 }
 
-#include <sb_core/extern_epilog.h>
+#include <extern_epilog.h>

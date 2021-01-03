@@ -1,7 +1,7 @@
 
 #include <sb_core/io/file.h>
 
-#include <sb_core/extern_prolog.h>
+#include <extern_prolog.h>
 #include <catch2/catch.hpp>
 
 using namespace sb;
@@ -23,4 +23,4 @@ TEST_CASE("File compare", "[file]")
     REQUIRE(hdl1 != hdl2);
 }
 
-#include <sb_core/extern_epilog.h>
+#include <extern_epilog.h>

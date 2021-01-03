@@ -1,7 +1,7 @@
 #include <sb_core/string/string_format.h>
 #include <sb_std/iterator>
 
-#include <sb_core/extern_prolog.h>
+#include <extern_prolog.h>
 #include <catch2/catch.hpp>
 
 using namespace sb;
@@ -161,4 +161,4 @@ TEST_CASE("String format numeric arguments", "[string_format]")
     }
 }
 
-#include <sb_core/extern_epilog.h>
+#include <extern_epilog.h>

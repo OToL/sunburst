@@ -4,7 +4,7 @@
 #include <sb_std/xutility>
 #include <sb_std/iterator>
 
-#include <sb_core/extern_prolog.h>
+#include <extern_prolog.h>
 #include <catch2/catch.hpp>
 
 using namespace sb;
@@ -36,4 +36,4 @@ TEST_CASE("String FNV64 hash", "[fnv64]")
     REQUIRE(FNV64_STR_TEST_HASH == fnv_val);
 }
 
-#include <sb_core/extern_epilog.h>
+#include <extern_epilog.h>

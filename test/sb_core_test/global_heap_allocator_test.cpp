@@ -1,7 +1,7 @@
 #include <sb_core/memory/allocator/global_heap_allocator.h>
 #include <sb_core/bit.h>
 
-#include <sb_core/extern_prolog.h>
+#include <extern_prolog.h>
 #include <catch2/catch.hpp>
 
 using namespace sb;
@@ -34,4 +34,4 @@ TEST_CASE("Global Heap Allocator default alignment", "[global_heap_allocator]")
     REQUIRE(GlobalHeapAllocator{}.getAlignment() == ALIGNMENT_DEFAULT);
 }
 
-#include <sb_core/extern_epilog.h>
+#include <extern_epilog.h>

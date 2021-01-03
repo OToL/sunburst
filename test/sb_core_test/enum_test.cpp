@@ -1,7 +1,7 @@
 #include <sb_core/enum.h>
 #include <sb_core/core.h>
 
-#include <sb_core/extern_prolog.h>
+#include <extern_prolog.h>
 #include <catch2/catch.hpp>
 
 using namespace sb;
@@ -39,4 +39,4 @@ TEST_CASE("Enum mask", "[enum]")
     STATIC_REQUIRE(enummask_checkAnyValue(makeEnumMask(TestMask::VALUE0, TestMask::VALUE1), TestMask::VALUE0));
 }
 
-#include <sb_core/extern_epilog.h>
+#include <extern_epilog.h>
