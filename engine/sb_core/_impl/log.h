@@ -5,11 +5,11 @@
 
 #include <sb_std/utility>
 
-#if sbIsEnabled(LOG_FACILITY)
+#if sb_ctf_enabled(LOG_FACILITY)
 
 namespace sb::internal {
 
-static inline sb::LogLevel gs_log_min_level = sb::LogLevel::DIAGNOSTIC;
+static inline sb::LogLevel gs_log_min_level = sb::LogLevel::DEBUG;
 static inline sb::b8 gs_log_quiet = false;
 
 template <typename... TArgs>
@@ -55,14 +55,14 @@ struct LogFilter<false>
 
 } // namespace sb::internal
 
-#    define sbLogImpl(lvl, file, line, msg, ...)                                                                       \
+#    define sb_log_internal(lvl, file, line, msg, ...)                                                                       \
         (!::sb::internal::gs_log_quiet && ((::sb::u8)lvl) <= ((::sb::u8)sb::internal::gs_log_min_level)) &&            \
-            (::sb::internal::LogFilter<sbIsEnabled(LOG_FACILITY)>::logMessage(lvl, file, line, msg, ##__VA_ARGS__),    \
+            (::sb::internal::LogFilter<sb_ctf_enabled(LOG_FACILITY)>::logMessage(lvl, file, line, msg, ##__VA_ARGS__),    \
              true)
 
 #else
 
-#    define sbLogImpl(type, file, line, msg, ...)`
+#    define sb_log_internal(type, file, line, msg, ...)`
 
 namespace sb::internal {
 inline void setLogQuiet(b8) { }

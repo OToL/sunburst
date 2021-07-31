@@ -9,11 +9,11 @@ namespace sb {
 template <typename TObject, typename TMemProvider>
 class ObjectPoolAllocator final : public IAllocator
 {
-    sbBaseClass(PoolAllocator<TMemProvider>);
+    sb_base(PoolAllocator<TMemProvider>);
 
 public:
     ObjectPoolAllocator()
-        : BaseClass()
+        : Base()
     {
     }
 

@@ -4,19 +4,19 @@
 
 namespace sb {
 
-inline s32 countLeadingZeros(u32 val);
+inline i32 countLeadingZeros(u32 val);
 
-inline s32 countLeadingZeros(u64 val);
+inline i32 countLeadingZeros(u64 val);
 
 // returns true for 'val = 0' to avoid a branch
 template <typename T>
-inline constexpr bool isPowerOf2(T val)
+inline constexpr b8 isPowerOf2(T val)
 {
     return (0 == ((val - 1) & val));
 }
 
 // http://asawicki.info/news_1688_operations_on_power_of_two_numbers.html
-inline u32 nextPowerOf2(u32 val)
+inline u32 getNextPowerOf2(u32 val)
 {
     val--;
     val |= val >> 1;
@@ -29,7 +29,7 @@ inline u32 nextPowerOf2(u32 val)
     return val;
 }
 
-inline u64 nextPowerOf2(u64 val)
+inline u64 getNextPowerOf2(u64 val)
 {
     val--;
     val |= val >> 1;
@@ -43,7 +43,7 @@ inline u64 nextPowerOf2(u64 val)
     return val;
 }
 
-inline u32 prevPowerOf2(u32 val)
+inline u32 getPreviousPowerOf2(u32 val)
 {
     val |= val >> 1;
     val |= val >> 2;
@@ -55,7 +55,7 @@ inline u32 prevPowerOf2(u32 val)
     return val;
 }
 
-inline u64 prevPowerOf2(u64 val)
+inline u64 getPreviousPowerOf2(u64 val)
 {
     val |= val >> 1;
     val |= val >> 2;
@@ -83,9 +83,9 @@ inline constexpr b8 isAlignedTo(T val, usize alignment)
 } // namespace sb
 
 #if defined(SB_PLATFORM_WINDOWS)
-#    include "_impl/api/windows/bit_win.h"
+#    include "_impl/api/windows/bit_utility_win.h"
 #elif defined(SB_PLATFORM_LINUX)
-#    include "_impl/api/linux/bit_linux.h"
+#    include "_impl/api/linux/bit_utility_linux.h"
 #else
 #    error "Unsupported platform"
 #endif

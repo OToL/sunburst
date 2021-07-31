@@ -80,14 +80,14 @@ public:
     TChar operator[](usize idx) const
     {
         // Accessing the null terminator is a valid operation
-        sbAssert(idx <= _len);
+        sb_assert(idx <= _len);
 
         return _data[idx];
     }
 
     TChar back() const
     {
-        sbWarn(0 != _len)
+        sb_warning(0 != _len)
 
             auto backChar = TChar{};
 
@@ -101,7 +101,7 @@ public:
 
     bool push_back(TChar c)
     {
-        sbWarn(_len != (CAPACITY - 1))
+        sb_warning(_len != (CAPACITY - 1))
 
             if (_len != (CAPACITY - 1))
         {

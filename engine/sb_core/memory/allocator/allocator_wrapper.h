@@ -7,7 +7,7 @@ namespace sb {
 
 class AllocatorWrapper final : public IAllocator
 {
-    sbBaseClass(IAllocator);
+    sb_base(IAllocator);
 
 public:
     AllocatorWrapper() = default;

@@ -11,15 +11,16 @@
 
 namespace sb {
 
+// Truncate integral value
 template <typename TDst, typename TSrc>
-inline constexpr TDst numericConv(TSrc && src)
+inline constexpr TDst truncValue(TSrc && src)
 {
     return static_cast<TDst>(src);
 }
 
 // Ensures null termination
 template <typename TSrc>
-inline usize stringConvT(TSrc && src, sbstd::span<char> dest)
+inline usize convertToString(TSrc && src, sbstd::span<char> dest)
 {
     using DecayedType = sbstd::decay_t<TSrc>;
 
@@ -33,9 +34,15 @@ inline usize stringConvT(TSrc && src, sbstd::span<char> dest)
     }
     else
     {
-        sbStaticUnreachable("Unsupported conversion");
+        sb_static_unreachable_code("Unsupported conversion");
         return 0U;
     }
+}
+
+template <typename TEnum>
+inline constexpr auto getUnderlyingValue(TEnum val)
+{
+    return (sbstd::underlying_type_t<TEnum>)val;
 }
 
 } // namespace sb

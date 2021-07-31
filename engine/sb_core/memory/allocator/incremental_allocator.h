@@ -9,23 +9,23 @@ namespace sb {
 template <typename TMemProvider>
 class IncrementalAllocator final : public IncrementalAllocatorBase
 {
-    sbBaseClass(IncrementalAllocatorBase);
+    sb_base(IncrementalAllocatorBase);
 
 public:
     IncrementalAllocator() = default;
 
     IncrementalAllocator(TMemProvider const & mem_provider, usize capacity, Alignment default_align = ALIGNMENT_DEFAULT)
-        : BaseClass()
+        : Base()
         , _mem_provider(mem_provider)
     {
-        BaseClass::init(_mem_provider.allocate(default_align, capacity), default_align);
+        Base::init(_mem_provider.allocate(default_align, capacity), default_align);
     }
 
     IncrementalAllocator(usize capacity, Alignment default_align = ALIGNMENT_DEFAULT)
-        : BaseClass()
+        : Base()
         , _mem_provider()
     {
-        BaseClass::init(_mem_provider.allocate(capacity, default_align));
+        Base::init(_mem_provider.allocate(capacity, default_align));
     }
 
     IncrementalAllocator & operator=(IncrementalAllocator const &) = delete;
@@ -35,19 +35,19 @@ public:
 
     ~IncrementalAllocator() override
     {
-        MemoryArena mem_arena = BaseClass::getArena();
-        if (!memarena_isEmpty(mem_arena))
+        MemoryArena mem_arena = Base::getArena();
+        if (!memory_arena::isEmpty(mem_arena))
         {
             _mem_provider.deallocate(mem_arena.data);
         }
     }
 
-    using BaseClass::allocate;
-    using BaseClass::deallocate;
-    using BaseClass::owns;
+    using Base::allocate;
+    using Base::deallocate;
+    using Base::owns;
 
-    using BaseClass::deallocateAll;
-    using BaseClass::getAlignment;
+    using Base::deallocateAll;
+    using Base::getAlignment;
 
     TMemProvider const & getProvider() const
     {

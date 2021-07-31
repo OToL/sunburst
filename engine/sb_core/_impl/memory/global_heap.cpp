@@ -25,7 +25,7 @@ void sb::GlobalHeap::deallocate(MemoryArena arena)
 sb::b8 sb::GlobalHeap::owns(void const *) const
 {
     // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
-    sbNotImplemented(__FUNCTION__);
+    sb_not_implemented(__FUNCTION__);
 
     return false;
 }

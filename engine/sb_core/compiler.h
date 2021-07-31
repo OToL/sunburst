@@ -17,12 +17,8 @@
 #endif
 
 #define sb_noalias sb_noalias_internal
-#define sb_nobreak
 
-namespace sb {
-
-void debugBreak();
-
-}
-
-#define sbStaticUnreachable(msg) sbStaticUnreachableInternal(msg)
+#define sb_nobreak()
+#define sb_debug_break() sb_debug_break_internal
+#define sb_unreacheable_code() sb_debug_break()
+#define sb_static_unreachable_code(msg) sb_static_unreachable_code_internal(msg)

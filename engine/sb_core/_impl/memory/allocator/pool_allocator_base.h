@@ -9,10 +9,10 @@ namespace sb {
 
 class PoolAllocatorBase : public IAllocator
 {
-    sbBaseClass(IAllocator);
+    sb_base(IAllocator);
 
 protected:
-    using NodeIdx = s32;
+    using NodeIdx = i32;
     static constexpr NodeIdx INVALID_NODE_IDX = -1;
 
     void initFreeList();

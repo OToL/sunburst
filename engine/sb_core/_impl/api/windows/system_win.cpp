@@ -1,4 +1,4 @@
-#include <sb_core/os.h>
+#include <sb_core/system.h>
 #include <sb_core/error/error.h>
 #include <sb_core/conversion.h>
 
@@ -9,9 +9,9 @@
 
 char * sb::getWorkingDirectory(sbstd::span<char> buffer)
 {
-    sbAssert(!buffer.empty());
+    sb_assert(!buffer.empty());
 
-    return _getcwd(buffer.data(), numericConv<int>(buffer.size_bytes()));
+    return _getcwd(buffer.data(), truncValue<int>(buffer.size_bytes()));
 }
 
 void sb::outputDebugString(char const * msg)

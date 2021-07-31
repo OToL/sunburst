@@ -1,9 +1,9 @@
 #include <sb_core/_impl/config.h>
-#include <sb_core/error/status.h>
+#include <sb_core/error/error_code.h>
 
 #include <sb_std/utility>
 
-#if sbIsEnabled(ERROR_FACILITY)
+#if sb_ctf_enabled(ERROR_FACILITY)
 
 #    include <sb_std/span>
 
@@ -29,15 +29,15 @@ void reportError(ErrorLevel type, char const * const file, u32 const line, char 
     reportError(type, file, line, &fmt_msg[0]);
 }
 
-void reportNotImplemented(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code,
+void reportNotImplemented(ErrorLevel type, char const * const file, u32 const line, ErrorCode stastus_code,
                           char const * msg);
 
-void reportError(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code, char const * msg);
+void reportError(ErrorLevel type, char const * const file, u32 const line, ErrorCode stastus_code, char const * msg);
 
-void reportError(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code);
+void reportError(ErrorLevel type, char const * const file, u32 const line, ErrorCode stastus_code);
 
 template <typename... TArgs>
-void reportError(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code, char const * msg,
+void reportError(ErrorLevel type, char const * const file, u32 const line, ErrorCode stastus_code, char const * msg,
                  TArgs... args)
 {
     char fmt_msg[255];
@@ -48,33 +48,33 @@ void reportError(ErrorLevel type, char const * const file, u32 const line, Statu
 
 } // namespace sb::internal
 
-#    define sbAssertInternal(cond, ...)                                                                                \
+#    define sb_assert_internal(cond, ...)                                                                                \
         if (!(cond))                                                                                                   \
         {                                                                                                              \
             sb::internal::reportError(sb::ErrorLevel::CRITICAL, __FILE__, __LINE__, ##__VA_ARGS__);                    \
         }
 
-#    define sbWarnInternal(cond, ...)                                                                                  \
+#    define sb_warning_internal(cond, ...)                                                                                  \
         if (!(cond))                                                                                                   \
         {                                                                                                              \
             sb::internal::reportError(sb::ErrorLevel::WARNING, __FILE__, __LINE__, ##__VA_ARGS__);                     \
         }
 
-#    define sbExpectInternal(cond, ...)                                                                                \
+#    define sb_expected_internal(cond, ...)                                                                                \
         ((cond) || (sb::internal::reportError(sb::ErrorLevel::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__), false))
 
-#    define sbDontExpectInternal(cond, ...)                                                                            \
+#    define sb_not_expected_internal(cond, ...)                                                                            \
         ((cond) && (sb::internal::reportError(sb::ErrorLevel::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__), true))
 
-#    define sbNotImplementedInternal(str)                                                                              \
-        sb::internal::reportNotImplemented(sb::ErrorLevel::WARNING, __FILE__, __LINE__, str)
+#    define sb_not_implemented_internal(str)                                                                              \
+        sb::internal::reportNotImplemented(sb::ErrorLevel::WARNING, __FILE__, __LINE__, sb::ErrorCode::UNIMPLEMENTED, str)
 
 #else
 
-#    define sbAssertInternal(cond, ...)
-#    define sbWarnInternal(cond, ...)
-#    define sbExpectInternal(cond, ...) (cond)
-#    define sbDontExpectInternal(cond, ...) !(cond)
-#    define sbNotImplementedInternal(str)
+#    define sb_assert_internal(cond, ...)
+#    define sb_warning_internal(cond, ...)
+#    define sb_expected_internal(cond, ...) (cond)
+#    define sb_not_expected_internal(cond, ...) !(cond)
+#    define sb_not_implemented_internal(str)
 
 #endif

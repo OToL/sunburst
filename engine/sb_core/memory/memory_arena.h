@@ -10,25 +10,26 @@ struct MemoryArena
     usize size;
 };
 
-constexpr inline b8 memarena_isInRange(MemoryArena arena, void const * ptr, size_t data_size)
-{
-    return ((arena.data <= ptr) &&
-            ((static_cast<u8 const *>(arena.data) + arena.size) >= (static_cast<u8 const *>(ptr) + data_size)));
-}
+namespace memory_arena {
+    constexpr inline b8 isInRange(MemoryArena arena, void const * ptr, size_t data_size)
+    {
+        return ((arena.data <= ptr) &&
+                ((static_cast<u8 const *>(arena.data) + arena.size) >= (static_cast<u8 const *>(ptr) + data_size)));
+    }
 
-constexpr inline b8 memarena_isInRange(MemoryArena arena, void const * ptr)
-{
-    return ((arena.data <= ptr) && ((static_cast<u8 const *>(arena.data) + arena.size) > ptr));
-}
+    constexpr inline b8 isInRange(MemoryArena arena, void const * ptr)
+    {
+        return ((arena.data <= ptr) && ((static_cast<u8 const *>(arena.data) + arena.size) > ptr));
+    }
 
-constexpr inline b8 memarena_isEmpty(MemoryArena arena)
-{
-    return (0U == arena.size);
-}
+    constexpr inline b8 isEmpty(MemoryArena arena)
+    {
+        return (0U == arena.size);
+    }
 
-constexpr inline b8 memarena_isValid(MemoryArena arena)
-{
-    return !memarena_isEmpty(arena) && (nullptr != arena.data);
-}
-
+    constexpr inline b8 isValid(MemoryArena arena)
+    {
+        return !isEmpty(arena) && (nullptr != arena.data);
+    }
+} // namespace memory_arena
 } // namespace sb

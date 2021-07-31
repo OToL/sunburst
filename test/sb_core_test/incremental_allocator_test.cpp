@@ -14,7 +14,7 @@ TEST_CASE("Incremetal Allocator null", "[incremental_allocator]")
 {
     IncrementalAllocator<MemoryArenaAllocator> test_alloc;
 
-    REQUIRE(memarena_isEmpty(test_alloc.allocate(1)));
+    REQUIRE(memory_arena::isEmpty(test_alloc.allocate(1)));
 }
 
 TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
@@ -28,12 +28,12 @@ TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
         {
             auto const mem_arena = test_alloc.allocate(1);
 
-            REQUIRE(!memarena_isEmpty(mem_arena));
+            REQUIRE(!memory_arena::isEmpty(mem_arena));
             REQUIRE(reinterpret_cast<uptr>(mem_arena.data) == idx);
             REQUIRE(test_alloc.owns(mem_arena.data));
         }
 
-        REQUIRE(memarena_isEmpty(test_alloc.allocate(1)));
+        REQUIRE(memory_arena::isEmpty(test_alloc.allocate(1)));
     }
 
     SECTION("Null alloc")
@@ -41,7 +41,7 @@ TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
         IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY},
                                                               TEST_BACKSTORE_CAPACITY);
 
-        REQUIRE(memarena_isEmpty(test_alloc.allocate(0)));
+        REQUIRE(memory_arena::isEmpty(test_alloc.allocate(0)));
     }
 
     SECTION("Default aligmnent")
@@ -52,12 +52,12 @@ TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
         for (usize idx = 0; idx != (TEST_BACKSTORE_CAPACITY / ALIGNMENT_4B + 1); ++idx)
         {
             auto mem_arena = test_alloc.allocate(1);
-            REQUIRE(!memarena_isEmpty(mem_arena));
+            REQUIRE(!memory_arena::isEmpty(mem_arena));
             REQUIRE(reinterpret_cast<uptr>(mem_arena.data) == idx * ALIGNMENT_4B);
             REQUIRE(test_alloc.owns(mem_arena.data));
         }
 
-        REQUIRE(memarena_isEmpty(test_alloc.allocate(1)));
+        REQUIRE(memory_arena::isEmpty(test_alloc.allocate(1)));
     }
 }
 
@@ -71,12 +71,12 @@ TEST_CASE("Incremetal Allocator aligned allocate", "[incremental_allocator]")
         for (usize idx = 0; idx != (TEST_BACKSTORE_CAPACITY / ALIGNMENT_4B + 1); ++idx)
         {
             auto mem_arena = test_alloc.allocate(ALIGNMENT_4B, 1);
-            REQUIRE(!memarena_isEmpty(mem_arena));
+            REQUIRE(!memory_arena::isEmpty(mem_arena));
             REQUIRE(reinterpret_cast<uptr>(mem_arena.data) == idx * ALIGNMENT_4B);
             REQUIRE(test_alloc.owns(mem_arena.data));
         }
 
-        REQUIRE(memarena_isEmpty(test_alloc.allocate(1)));
+        REQUIRE(memory_arena::isEmpty(test_alloc.allocate(1)));
     }
 
     SECTION("Null alloc")
@@ -84,7 +84,7 @@ TEST_CASE("Incremetal Allocator aligned allocate", "[incremental_allocator]")
         IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY},
                                                               TEST_BACKSTORE_CAPACITY);
 
-        REQUIRE(memarena_isEmpty(test_alloc.allocate(ALIGNMENT_4B, 0)));
+        REQUIRE(memory_arena::isEmpty(test_alloc.allocate(ALIGNMENT_4B, 0)));
     }
 }
 
@@ -99,22 +99,22 @@ TEST_CASE("Incremetal Allocator deallocate all", "[incremental_allocator]")
     do
     {
         mem_arena = test_alloc.allocate(1);
-        if (!memarena_isEmpty(mem_arena))
+        if (!memory_arena::isEmpty(mem_arena))
         {
             ++alloc_count_1;
         }
-    } while (!memarena_isEmpty(mem_arena));
+    } while (!memory_arena::isEmpty(mem_arena));
 
     test_alloc.deallocateAll();
 
     do
     {
         mem_arena = test_alloc.allocate(1);
-        if (!memarena_isEmpty(mem_arena))
+        if (!memory_arena::isEmpty(mem_arena))
         {
             ++alloc_count_2;
         }
-    } while (!memarena_isEmpty(mem_arena));
+    } while (!memory_arena::isEmpty(mem_arena));
 
     REQUIRE(alloc_count_1 != 0U);
     REQUIRE(alloc_count_1 == alloc_count_2);

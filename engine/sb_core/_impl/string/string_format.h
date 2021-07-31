@@ -70,7 +70,7 @@ inline void expandFmtArgs(sbstd::span<FmtArg> argList, T const & arg, TArgs &&..
     // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
     arg_desc.value = TypeDesc::storeValue(arg);
     arg_desc.fmt_cb = [](void const * arg_value, sbstd::span<char> dest) {
-        return stringConvT(TypeDesc::extractValue(arg_value), dest);
+        return convertToString(TypeDesc::extractValue(arg_value), dest);
     };
 
     expandFmtArgs(argList.subspan(1), args...);

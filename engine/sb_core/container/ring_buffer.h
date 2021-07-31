@@ -22,10 +22,10 @@ public:
         , _capacity(capacity)
         , _full(0)
     {
-        sbAssert(0 != _capacity);
+        sb_assert(0 != _capacity);
 
         _data = (ValueType *)_alloc.allocate(alignOf<ValueType>(), capacity * sizeof(ValueType)).data;
-        sbAssert(nullptr != _data);
+        sb_assert(nullptr != _data);
     }
 
     RingBuffer(usize capacity)
@@ -35,10 +35,10 @@ public:
         , _capacity(capacity)
         , _full(0)
     {
-        sbAssert(0 != _capacity);
+        sb_assert(0 != _capacity);
 
         _data = (ValueType *)_alloc.allocate(alignOf<ValueType>(), capacity * sizeof(ValueType)).data;
-        sbAssert(nullptr != _data);
+        sb_assert(nullptr != _data);
     }
 
     RingBuffer & operator=(RingBuffer const &) = delete;

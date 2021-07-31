@@ -4,7 +4,7 @@
 
 void sb::PoolAllocatorBase::initFreeList()
 {
-    s32 const block_cnt = numericConv<NodeIdx>(_arena.size / _actual_block_size);
+    i32 const block_cnt = truncValue<NodeIdx>(_arena.size / _actual_block_size);
 
     u8 * node_iter = static_cast<u8 *>(_arena.data);
 
@@ -62,13 +62,13 @@ sb::MemoryArena sb::PoolAllocatorBase::allocate([[maybe_unused]] Alignment const
 
 void sb::PoolAllocatorBase::deallocate(void * ptr)
 {
-    if (sbExpect(memarena_isInRange(_arena, ptr)))
+    if (sb_expected(memory_arena::isInRange(_arena, ptr)))
     {
         auto const ptr_offset = static_cast<u8 *>(ptr) - static_cast<u8 *>(_arena.data);
-        sbAssert(0U == (ptr_offset % _actual_block_size));
+        sb_assert(0U == (ptr_offset % _actual_block_size));
 
         auto const dealloc_node = static_cast<NodeIdx *>(ptr);
-        auto const dealloc_node_idx = numericConv<NodeIdx>(ptr_offset / _actual_block_size);
+        auto const dealloc_node_idx = truncValue<NodeIdx>(ptr_offset / _actual_block_size);
 
         if (INVALID_NODE_IDX == _free_list_head)
         {
@@ -85,7 +85,7 @@ void sb::PoolAllocatorBase::deallocate(void * ptr)
 
 sb::b8 sb::PoolAllocatorBase::owns(void const * ptr) const
 {
-    return memarena_isInRange(_arena, ptr);
+    return memory_arena::isInRange(_arena, ptr);
 }
 
 void sb::PoolAllocatorBase::deallocateAll()

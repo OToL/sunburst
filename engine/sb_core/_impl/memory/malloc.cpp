@@ -1,6 +1,6 @@
 #include "malloc_wrap.h"
 #include "malloc.h"
-#include <sb_core/enum.h>
+#include <sb_core/conversion.h>
 
 void sb::internal::mallocInitialize()
 {
@@ -26,7 +26,7 @@ sb::MemoryArena sb::internal::malloc(usize size)
 
 sb::MemoryArena sb::internal::malloc(Alignment alignment, usize size)
 {
-    void * const mem_ptr = sbMallocWrapAlignedAlloc(getEnumValue(alignment), size);
+    void * const mem_ptr = sbMallocWrapAlignedAlloc(getUnderlyingValue(alignment), size);
 
     if (nullptr != mem_ptr)
     {

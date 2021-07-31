@@ -14,7 +14,7 @@ public:
     using iterator = TType *;
     using const_iterator = TType const *;
     using size_type = usize;
-    using difference_type = sptrdiff;
+    using difference_type = iptrdiff;
 
     SmallArrayBase & operator=(SmallArrayBase const &) = delete;
     SmallArrayBase(SmallArrayBase const &) = delete;
@@ -28,17 +28,17 @@ protected:
 
     struct Impl : public TAllocator
     {
-        sbBaseClass(TAllocator);
+        sb_base(TAllocator);
 
         Impl() = default;
 
         Impl(TAllocator const & alloc)
-            : BaseClass(alloc)
+            : Base(alloc)
         {
         }
 
         Impl(pointer begin, pointer storage_end, TAllocator const & alloc)
-            : BaseClass(alloc)
+            : Base(alloc)
             , _begin(begin)
             , _end(begin)
             , _storage_end(storage_end)
@@ -46,7 +46,7 @@ protected:
         }
 
         Impl(pointer begin, pointer storage_end)
-            : BaseClass()
+            : Base()
             , _begin(begin)
             , _end(begin)
             , _storage_end(storage_end)
@@ -78,7 +78,7 @@ protected:
 
         void setAllocator(TAllocator const & alloc)
         {
-            *((BaseClass *)this) = alloc;
+            *((Base *)this) = alloc;
         }
 
         TAllocator & get_allocator()

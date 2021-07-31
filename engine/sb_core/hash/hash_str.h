@@ -4,7 +4,7 @@
 
 #include <sb_core/_impl/config.h>
 
-#if sbIsEqual(HASH_SIZE, SB_HASH_SIZE_32BIT)
+#if sb_ctf_equal(HASH_SIZE, 32BIT)
 
 #    include "hash32_str.h"
 
@@ -18,19 +18,16 @@ constexpr HashStr operator"" _hs(char const * str, usize len)
     return {computeHash32({str, len})};
 }
 
-constexpr HashStr makeHashStr(char const * str)
-{
-    return {computeHash32(str)};
-}
+namespace hash_str {
 
-constexpr HashStr makeHashStr(char const * str, usize len)
-{
-    return {computeHash32({str, len})};
-}
+    using hash32_str::make;
+    using hash32_str::isValid;
+
+} // namespace hash_str
 
 } // namespace sb
 
-#elif sbIsEqual(HASH_SIZE, SB_HASH_SIZE_64BIT)
+#elif sb_ctf_equal(HASH_SIZE, 64BIT)
 
 #    include "hash64_str.h"
 
@@ -44,20 +41,11 @@ constexpr HashStr operator"" _hs(char const * str, usize len)
     return {computeHash64({str, len})};
 }
 
-constexpr HashStr makeHashStr(char const * str)
-{
-    return {computeHash64(str)};
-}
+namespace hash_str {
 
-constexpr HashStr makeHashStr(char const * str, usize len)
-{
-    return {computeHash64({str, len})};
-}
-
-constexpr b32 hstr_isValid(HashStr hash_val)
-{
-    return (hash_val.value != 0);
-}
+    using hash64_str::make;
+    using hash64_str::isValid;
+} // namespace hash_str
 
 } // namespace sb
 

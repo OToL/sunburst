@@ -8,7 +8,7 @@ namespace sb {
 
 class NullAllocator final : public IAllocator
 {
-    sbBaseClass(IAllocator);
+    sb_base(IAllocator);
 
 public:
     struct InitParams

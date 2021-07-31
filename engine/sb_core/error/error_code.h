@@ -4,7 +4,7 @@
 
 namespace sb {
 
-enum class StatusCode : u32
+enum class ErrorCode : u32
 {
     OK,
     CANCELLED,
@@ -25,6 +25,6 @@ enum class StatusCode : u32
     UNKNOWN
 };
 
-char const * statuscode_getValueName(StatusCode status_code);
+char const * errorcode_getAsString(ErrorCode status_code);
 
 } // namespace sb

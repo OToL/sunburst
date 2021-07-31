@@ -23,7 +23,7 @@ TestObjectCnt::TestObjectCnt(usize id)
 TestObjectCnt::TestObjectCnt(TestObjectCnt && src)
     : _id(src._id)
 {
-    sbAssert(src._valid);
+    sb_assert(src._valid);
     ++gs_stats.obj_cnt;
 
     src._valid = false;
@@ -38,7 +38,7 @@ TestObjectCnt::TestObjectCnt(TestObjectCnt const & src)
 
 TestObjectCnt & TestObjectCnt::operator=(TestObjectCnt const & src)
 {
-    sbAssert(_valid && src._valid);
+    sb_assert(_valid && src._valid);
 
     _id = src._id;
 
@@ -47,13 +47,13 @@ TestObjectCnt & TestObjectCnt::operator=(TestObjectCnt const & src)
 
 TestObjectCnt & TestObjectCnt::operator=(TestObjectCnt && src)
 {
-    sbAssert(src._valid);
+    sb_assert(src._valid);
 
     _id = src._id;
 
     if (_valid)
     {
-        sbAssert(0 < gs_stats.valid_obj_cnt);
+        sb_assert(0 < gs_stats.valid_obj_cnt);
         --gs_stats.valid_obj_cnt;
     }
     else
@@ -68,12 +68,12 @@ TestObjectCnt & TestObjectCnt::operator=(TestObjectCnt && src)
 
 TestObjectCnt::~TestObjectCnt()
 {
-    sbAssert(0 < gs_stats.obj_cnt);
+    sb_assert(0 < gs_stats.obj_cnt);
     --gs_stats.obj_cnt;
 
     if (_valid)
     {
-        sbAssert(0 < gs_stats.valid_obj_cnt);
+        sb_assert(0 < gs_stats.valid_obj_cnt);
         --gs_stats.valid_obj_cnt;
     }
 }

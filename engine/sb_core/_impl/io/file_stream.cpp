@@ -20,21 +20,21 @@ sb::FileStream::~FileStream()
 
 sb::FileSize sb::FileStream::read(sbstd::span<u8> buffer, FileSize cnt)
 {
-    sbAssert(sb::file_isValid(_hdl));
+    sb_assert(sb::file_isValid(_hdl));
 
     return VFS::readFile(_hdl, buffer, cnt);
 }
 
 sb::FileSize sb::FileStream::write(sbstd::span<u8 const> buffer, FileSize cnt)
 {
-    sbAssert(sb::file_isValid(_hdl));
+    sb_assert(sb::file_isValid(_hdl));
 
     return VFS::writeFile(_hdl, buffer, cnt);
 }
 
 sb::FileSize sb::FileStream::getLength() const
 {
-    sbAssert(sb::file_isValid(_hdl));
+    sb_assert(sb::file_isValid(_hdl));
 
     return VFS::getFileLength(_hdl);
 }

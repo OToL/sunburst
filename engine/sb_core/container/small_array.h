@@ -17,25 +17,25 @@ namespace sb {
 template <typename TType, usize BASE_CAPACITY, typename TAllocator = ContainerAllocator>
 class SmallArray : public internal::SmallArrayBase<TType, TAllocator>
 {
-    sbBaseClass(internal::SmallArrayBase<TType, TAllocator>);
+    sb_base(internal::SmallArrayBase<TType, TAllocator>);
 
     template <typename, usize, typename>
     friend class SmallArray;
 
-    using Impl = typename BaseClass::Impl;
+    using Impl = typename Base::Impl;
 
-    static constexpr usize BITS_PER_WORD = static_cast<usize>(sizeof(typename BaseClass::size_type) * 8);
+    static constexpr usize BITS_PER_WORD = static_cast<usize>(sizeof(typename Base::size_type) * 8);
 
 public:
-    using typename BaseClass::const_iterator;
-    using typename BaseClass::const_pointer;
-    using typename BaseClass::const_reference;
-    using typename BaseClass::difference_type;
-    using typename BaseClass::iterator;
-    using typename BaseClass::pointer;
-    using typename BaseClass::reference;
-    using typename BaseClass::size_type;
-    using typename BaseClass::value_type;
+    using typename Base::const_iterator;
+    using typename Base::const_pointer;
+    using typename Base::const_reference;
+    using typename Base::difference_type;
+    using typename Base::iterator;
+    using typename Base::pointer;
+    using typename Base::reference;
+    using typename Base::size_type;
+    using typename Base::value_type;
     using allocator_type = TAllocator;
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
@@ -73,7 +73,7 @@ public:
     SmallArray(TIterator first, TIterator last, allocator_type const & alloc = allocator_type())
         : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
-        buyMore(numericConv<size_type>(last - first));
+        buyMore(truncValue<size_type>(last - first));
 
         sbstd::uninitialized_copy(first, last, _impl._begin);
     }
@@ -223,7 +223,7 @@ public:
                 size_type const new_dst_capacity = computeCapacity(src_size);
                 auto const new_dst_data =
                     (TType *)_impl.allocate(alignOf<value_type>(), new_dst_capacity * sizeof(value_type)).data;
-                sbAssert(nullptr != new_dst_data);
+                sb_assert(nullptr != new_dst_data);
 
                 sbstd::uninitialized_move(src._impl._begin, src._impl._end, new_dst_data);
                 sbstd::move(_impl._begin, _impl._end, src._impl._begin);
@@ -246,7 +246,7 @@ public:
                 size_type const new_src_capacity = computeCapacity(dst_size);
                 auto const new_src_data =
                     (TType *)src._impl.allocate(alignOf<value_type>(), new_src_capacity * sizeof(value_type)).data;
-                sbAssert(nullptr != new_src_data);
+                sb_assert(nullptr != new_src_data);
 
                 sbstd::uninitialized_move(_impl._begin, _impl._end, new_src_data);
                 sbstd::move(src._impl._begin, src._impl._end, _impl._begin);
@@ -319,28 +319,28 @@ public:
 
     reference front()
     {
-        sbAssert(!empty());
+        sb_assert(!empty());
 
         return *_impl._begin;
     }
 
     const_reference front() const
     {
-        sbAssert(!empty());
+        sb_assert(!empty());
 
         return *_impl._begin;
     }
 
     reference back()
     {
-        sbAssert(!empty());
+        sb_assert(!empty());
 
         return *(_impl._end - 1);
     }
 
     const_reference back() const
     {
-        sbAssert(!empty());
+        sb_assert(!empty());
 
         return *(_impl._end - 1);
     }
@@ -429,7 +429,7 @@ public:
 
     void pop_back()
     {
-        sbAssert(!empty());
+        sb_assert(!empty());
 
         sbstd::destroy_at(_impl._end - 1);
         --_impl._end;
@@ -449,28 +449,28 @@ public:
 
     reference at(size_type idx)
     {
-        sbAssert(idx < size());
+        sb_assert(idx < size());
 
         return *(_impl._begin + idx);
     }
 
     const_reference at(size_type idx) const
     {
-        sbAssert(idx < size());
+        sb_assert(idx < size());
 
         return *(_impl._begin + idx);
     }
 
     reference operator[](size_type idx)
     {
-        sbAssert(idx < size());
+        sb_assert(idx < size());
 
         return *(_impl._begin + idx);
     }
 
     const_reference operator[](size_type idx) const
     {
-        sbAssert(idx < size());
+        sb_assert(idx < size());
 
         return *(_impl._begin + idx);
     }
@@ -536,7 +536,7 @@ public:
                 {
                     pointer const new_data =
                         (TType *)_impl.allocate(alignOf<value_type>(), new_capacity * sizeof(value_type)).data;
-                    sbAssert(nullptr != new_data);
+                    sb_assert(nullptr != new_data);
 
                     sbstd::uninitialized_move(_impl._begin, _impl._end, new_data);
                     sbstd::destroy(_impl._begin, _impl._end);
@@ -569,7 +569,7 @@ public:
             auto const new_capacity = computeCapacity(src_size);
             pointer const new_data =
                 (TType *)_impl.allocate(alignOf<value_type>(), new_capacity * sizeof(value_type)).data;
-            sbAssert(nullptr != new_data);
+            sb_assert(nullptr != new_data);
 
             sbstd::uninitialized_copy(src_begin, src_end, new_data);
             sbstd::destroy(_impl._begin, _impl._end);
@@ -608,7 +608,7 @@ public:
             auto const new_capacity = computeCapacity(count);
             pointer const new_data =
                 (TType *)_impl.allocate(alignOf<value_type>(), new_capacity * sizeof(value_type)).data;
-            sbAssert(nullptr != new_data);
+            sb_assert(nullptr != new_data);
 
             sbstd::uninitialized_fill(new_data, new_data + count, value);
             sbstd::destroy(_impl._begin, _impl._end);
@@ -669,7 +669,7 @@ private:
     size_type computeCapacity(size_type new_size) const
     {
         size_type const ms = max_size();
-        sbAssert(new_size <= ms);
+        sb_assert(new_size <= ms);
 
         size_type const curr_cap = capacity();
 
@@ -687,7 +687,7 @@ private:
         size_type const curr_size = size();
 
         pointer const new_data = (TType *)_impl.allocate(alignOf<value_type>(), new_capacity * sizeof(value_type)).data;
-        sbAssert(nullptr != new_data);
+        sb_assert(nullptr != new_data);
 
         sbstd::uninitialized_move(_impl._begin, _impl._end, new_data);
         sbstd::destroy(_impl._begin, _impl._end);

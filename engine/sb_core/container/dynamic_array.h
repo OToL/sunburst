@@ -1,5 +1,4 @@
 #pragma once
-
 #include <sb_core/memory/allocator/stl_allocator.h>
 
 #include <sb_std/_impl/vector>

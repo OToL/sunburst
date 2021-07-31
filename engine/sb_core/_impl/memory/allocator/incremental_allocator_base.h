@@ -8,7 +8,7 @@ namespace sb {
 
 class IncrementalAllocatorBase : public IAllocator
 {
-    sbBaseClass(IAllocator);
+    sb_base(IAllocator);
 
 protected:
     IncrementalAllocatorBase();

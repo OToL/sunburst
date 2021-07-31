@@ -97,9 +97,9 @@ TEST_CASE("String format numeric arguments", "[string_format]")
         REQUIRE(byte_cnt == 2U);
     }
 
-    SECTION("s8 argument")
+    SECTION("i8 argument")
     {
-        s8 const value = -10;
+        i8 const value = -10;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("-10"));
@@ -115,9 +115,9 @@ TEST_CASE("String format numeric arguments", "[string_format]")
         REQUIRE(byte_cnt == 3U);
     }
 
-    SECTION("s16 argument")
+    SECTION("i16 argument")
     {
-        s16 const value = -512;
+        i16 const value = -512;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("-512"));
@@ -133,9 +133,9 @@ TEST_CASE("String format numeric arguments", "[string_format]")
         REQUIRE(byte_cnt == 8U);
     }
 
-    SECTION("s32 argument")
+    SECTION("i32 argument")
     {
-        s32 const value = -16777215;
+        i32 const value = -16777215;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("-16777215"));
@@ -151,9 +151,9 @@ TEST_CASE("String format numeric arguments", "[string_format]")
         REQUIRE(byte_cnt == 13U);
     }
 
-    SECTION("s64 argument")
+    SECTION("i64 argument")
     {
-        s64 const value = -1099511627775;
+        i64 const value = -1099511627775;
         usize const byte_cnt = stringFormat(test, "{}", value);
 
         REQUIRE_THAT(test, Catch::Equals("-1099511627775"));

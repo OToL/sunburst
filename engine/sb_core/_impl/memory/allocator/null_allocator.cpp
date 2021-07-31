@@ -15,12 +15,12 @@ sb::MemoryArena sb::NullAllocator::allocate(Alignment const, usize const)
 
 void sb::NullAllocator::deallocate([[maybe_unused]] void * ptr)
 {
-    sbWarn(nullptr == ptr);
+    sb_warning(nullptr == ptr);
 }
 
 void sb::NullAllocator::deallocate(MemoryArena arena)
 {
-    sbWarn(memarena_isEmpty(arena));
+    sb_warning(memory_arena::isEmpty(arena));
 }
 
 void sb::NullAllocator::deallocateAll() { }

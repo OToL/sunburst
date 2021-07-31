@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sb_core/os.h>
+#include <sb_core/system.h>
 #include <sb_core/memory/global_heap.h>
 #include <sb_core/memory/memory.h>
 
@@ -20,7 +20,7 @@ public:
     using reference = T &;
     using const_reference = T const &;
     using size_type = usize;
-    using difference_type = sptrdiff;
+    using difference_type = iptrdiff;
     using propagate_on_container_move_assignment = sbstd::true_type;
     using is_always_equal = sbstd::true_type;
 

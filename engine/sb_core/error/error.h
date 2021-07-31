@@ -15,14 +15,14 @@ enum class ErrorLevel : u8
 } // namespace sb
 
 // ErrorLevel::CRITICAL
-#define sbAssert(cond, ...) sbAssertInternal(cond, ##__VA_ARGS__)
+#define sb_assert(cond, ...) sb_assert_internal(cond, ##__VA_ARGS__)
 
 // ErrorLevel::WARNING
-#define sbWarn(cond, ...) sbWarnInternal(cond, ##__VA_ARGS__)
-#define sbNotImplemented(str) sbNotImplementedInternal(str)
+#define sb_warning(cond, ...) sb_warning_internal(cond, ##__VA_ARGS__)
+#define sb_not_implemented(str) sb_not_implemented_internal(str)
 
 // ErrorLevel::NOTICE
-#define sbExpect(cond, ...) sbExpectInternal(cond, ##__VA_ARGS__)
-#define sbDontExpect(cond, ...) sbDontExpectInternal(cond, ##__VA_ARGS__)
+#define sb_expected(cond, ...) sb_expected_internal(cond, ##__VA_ARGS__)
+#define sb_not_expected(cond, ...) sb_not_expected_internal(cond, ##__VA_ARGS__)
 
 #include <sb_core/_impl/error/error.h>

@@ -1,4 +1,4 @@
-#include <sb_core/bit.h>
+#include <sb_core/bit_utility.h>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
@@ -71,31 +71,31 @@ TEST_CASE("Power of 2 rounding", "[bitwise]")
 {
     SECTION("Rounding a power of 2 results to the same value")
     {
-        REQUIRE(nextPowerOf2(0U) == 0U);
-        REQUIRE(nextPowerOf2(1U) == 1U);
-        REQUIRE(nextPowerOf2(2U) == 2U);
-        REQUIRE(nextPowerOf2(4U) == 4U);
-        REQUIRE(nextPowerOf2(128U) == 128U);
+        REQUIRE(getNextPowerOf2(0U) == 0U);
+        REQUIRE(getNextPowerOf2(1U) == 1U);
+        REQUIRE(getNextPowerOf2(2U) == 2U);
+        REQUIRE(getNextPowerOf2(4U) == 4U);
+        REQUIRE(getNextPowerOf2(128U) == 128U);
 
-        REQUIRE(prevPowerOf2(0U) == 0U);
-        REQUIRE(prevPowerOf2(1U) == 1U);
-        REQUIRE(prevPowerOf2(2U) == 2U);
-        REQUIRE(prevPowerOf2(4U) == 4U);
-        REQUIRE(prevPowerOf2(128U) == 128U);
+        REQUIRE(getPreviousPowerOf2(0U) == 0U);
+        REQUIRE(getPreviousPowerOf2(1U) == 1U);
+        REQUIRE(getPreviousPowerOf2(2U) == 2U);
+        REQUIRE(getPreviousPowerOf2(4U) == 4U);
+        REQUIRE(getPreviousPowerOf2(128U) == 128U);
     }
 
     SECTION("Rounding to next power of 2")
     {
-        REQUIRE(nextPowerOf2(3U) == 4U);
-        REQUIRE(nextPowerOf2(123U) == 128U);
-        REQUIRE(nextPowerOf2(129U) == 256U);
+        REQUIRE(getNextPowerOf2(3U) == 4U);
+        REQUIRE(getNextPowerOf2(123U) == 128U);
+        REQUIRE(getNextPowerOf2(129U) == 256U);
     }
 
     SECTION("Rounding to previous power of 2")
     {
-        REQUIRE(prevPowerOf2(3U) == 2U);
-        REQUIRE(prevPowerOf2(123U) == 64U);
-        REQUIRE(prevPowerOf2(129U) == 128U);
+        REQUIRE(getPreviousPowerOf2(3U) == 2U);
+        REQUIRE(getPreviousPowerOf2(123U) == 64U);
+        REQUIRE(getPreviousPowerOf2(129U) == 128U);
     }
 }
 

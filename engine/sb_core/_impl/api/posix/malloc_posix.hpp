@@ -3,7 +3,7 @@
 #include <sb_core/memory/memory.h>
 #include <sb_core/core.h>
 #include <sb_core/error/error.h>
-#include <sb_core/bit.h>
+#include <sb_core/bit_utility.h>
 #include <sb_core/conversion.h>
 
 namespace sb::internal {
@@ -29,7 +29,7 @@ static inline AllocHeader * dataToHeader(void * dataPtr)
 
 sb::MemoryArena platformMalloc(usize alignment, usize size)
 {
-    sbAssert((0 != alignment) && sb::isPowerOf2(alignment));
+    sb_assert((0 != alignment) && sb::isPowerOf2(alignment));
 
     usize const total_size = sizeWithPadding(size, alignment);
     // NOLINTNEXTLINE(cppcoreguidelines-no-malloc)
@@ -44,7 +44,7 @@ sb::MemoryArena platformMalloc(usize alignment, usize size)
 
     AllocHeader * const header = dataToHeader(aligned_mem_ptr);
     header->size = size;
-    header->offset = sb::numericConv<u16>(uptr(header) - uptr(mem_ptr));
+    header->offset = sb::truncValue<u16>(uptr(header) - uptr(mem_ptr));
 
     return {aligned_mem_ptr, size};
 }

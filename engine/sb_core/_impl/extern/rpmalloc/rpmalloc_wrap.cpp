@@ -36,7 +36,7 @@ void sb::initializeRPmalloc()
                              .enable_huge_pages = 0};
 
     [[maybe_unused]] int const res = rpmalloc_initialize_config(&cfg);
-    sbAssert(0 == res);
+    sb_assert(0 == res);
 }
 
 void sb::finalizeRPmalloc()

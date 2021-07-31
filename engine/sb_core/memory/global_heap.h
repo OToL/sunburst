@@ -34,8 +34,6 @@ public:
     }
 
     usize getBlockSize(void * ptr) const;
-
-private:
 };
 
 GlobalHeap & getGlobalHeap();

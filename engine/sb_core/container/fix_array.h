@@ -33,7 +33,7 @@ public:
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
     FixArray(size_type count, value_type const & value)
     {
-        sbAssert(count <= CAPACITY);
+        sb_assert(count <= CAPACITY);
 
         sbstd::uninitialized_fill((pointer)_data, ((pointer)_data) + count, value);
         _size = count;
@@ -78,7 +78,7 @@ public:
 
     void push_back(const_reference value)
     {
-        sbAssert(CAPACITY != _size, "Static vector capacity exceeded");
+        sb_assert(CAPACITY != _size, "Static vector capacity exceeded");
 
         new (end()) value_type{value};
         ++_size;
@@ -86,7 +86,7 @@ public:
 
     void push_back(value_type && value)
     {
-        sbAssert(CAPACITY != _size, "Static vector capacity exceeded");
+        sb_assert(CAPACITY != _size, "Static vector capacity exceeded");
 
         new (end()) value_type{sbstd::move(value)};
         ++_size;
@@ -94,7 +94,7 @@ public:
 
     void pop_back()
     {
-        sbAssert(0 != _size, "You cannot pop item from empty static vector");
+        sb_assert(0 != _size, "You cannot pop item from empty static vector");
 
         (reinterpret_cast<pointer>(&_data[0]) + _size - 1)->~value_type();
         --_size;
@@ -103,7 +103,7 @@ public:
     template <class... TArgs>
     reference emplace_back(TArgs &&... args)
     {
-        sbAssert(CAPACITY != _size, "Static vector capacity exceeded");
+        sb_assert(CAPACITY != _size, "Static vector capacity exceeded");
 
         new (end()) value_type{sbstd::forward<TArgs>(args)...};
         ++_size;
@@ -113,21 +113,21 @@ public:
 
     reference back()
     {
-        sbAssert(0 != _size);
+        sb_assert(0 != _size);
 
         return *(reinterpret_cast<pointer>(&_data[0]) + _size - 1);
     }
 
     const_reference back() const
     {
-        sbAssert(0 != _size);
+        sb_assert(0 != _size);
 
         return *(reinterpret_cast<const_pointer>(&_data[0]) + _size - 1);
     }
 
     iterator erase(iterator pos)
     {
-        sbAssert((begin() <= pos) && (pos < end()));
+        sb_assert((begin() <= pos) && (pos < end()));
 
         pointer item2Rem = pos;
         const_pointer const endItem = end();
@@ -179,14 +179,14 @@ public:
 
     reference operator[](usize idx)
     {
-        sbAssert(idx < _size);
+        sb_assert(idx < _size);
 
         return reinterpret_cast<pointer>(&_data[0])[idx];
     }
 
     const_reference operator[](usize idx) const
     {
-        sbAssert(idx < _size);
+        sb_assert(idx < _size);
 
         return reinterpret_cast<const_pointer>(&_data[0])[idx];
     }

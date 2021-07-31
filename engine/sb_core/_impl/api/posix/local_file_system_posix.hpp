@@ -20,7 +20,7 @@ sb::internal::LayerFile sb::internal::platformOpenFileRead(char const * path, Fi
     FILE * hdl = nullptr;
     auto const res = fopen_s(&hdl, path, flags.data());
 
-    if (sbExpect(0 == res))
+    if (sb_expected(0 == res))
     {
         return {(void *)hdl};
     }
@@ -42,7 +42,7 @@ sb::internal::LayerFile sb::internal::platformOpenFileReadWrite(char const * pat
     }
     else
     {
-        sbWarn(false, "Unhandled write mode {}", getEnumValue(mode));
+        sb_warning(false, "Unhandled write mode {}", getUnderlyingValue(mode));
     }
 
     if (fmt == FileFormat::BIN)
@@ -55,7 +55,7 @@ sb::internal::LayerFile sb::internal::platformOpenFileReadWrite(char const * pat
     FILE * hdl = nullptr;
     auto const res = fopen_s(&hdl, path, flags.data());
 
-    if (sbExpect(0 == res))
+    if (sb_expected(0 == res))
     {
         return {(void *)hdl};
     }
@@ -77,7 +77,7 @@ sb::internal::LayerFile sb::internal::platformOpenFileWrite(char const * path, F
     }
     else
     {
-        sbWarn(false, "Unhandled write mode {}", getEnumValue(mode));
+        sb_warning(false, "Unhandled write mode {}", getUnderlyingValue(mode));
     }
 
     if (fmt == FileFormat::BIN)
@@ -90,7 +90,7 @@ sb::internal::LayerFile sb::internal::platformOpenFileWrite(char const * path, F
     FILE * hdl = nullptr;
     auto const res = fopen_s(&hdl, path, flags.data());
 
-    if (sbExpect(0 == res))
+    if (sb_expected(0 == res))
     {
         return {(void *)hdl};
     }
@@ -110,7 +110,7 @@ sb::internal::LayerFile sb::internal::platformCreateFileWrite(char const * path,
     FILE * hdl = nullptr;
     auto const res = fopen_s(&hdl, path, flags.data());
 
-    if (sbExpect(0 == res))
+    if (sb_expected(0 == res))
     {
         return {(void *)hdl};
     }
@@ -130,7 +130,7 @@ sb::internal::LayerFile sb::internal::platformCreateFileReadWrite(char const * p
     FILE * hdl = nullptr;
     auto const res = fopen_s(&hdl, path, flags.data());
 
-    if (sbExpect(0 == res))
+    if (sb_expected(0 == res))
     {
         return {(void *)hdl};
     }
@@ -140,35 +140,35 @@ sb::internal::LayerFile sb::internal::platformCreateFileReadWrite(char const * p
 
 void sb::internal::platformCloseFile(LayerFile hdl)
 {
-    sbAssert(nullptr != hdl.value);
+    sb_assert(nullptr != hdl.value);
 
     fclose(reinterpret_cast<FILE *>(hdl.value));
 }
 
 sb::FileSize sb::internal::platformReadFile(LayerFile hdl, u8 * buffer, FileSize count)
 {
-    sbAssert(nullptr != hdl.value);
+    sb_assert(nullptr != hdl.value);
 
-    return numericConv<FileSize>(fread((void *)buffer, 1, (usize)count, reinterpret_cast<FILE *>(hdl.value)));
+    return truncValue<FileSize>(fread((void *)buffer, 1, (usize)count, reinterpret_cast<FILE *>(hdl.value)));
 }
 
 sb::FileSize sb::internal::platformWriteFile(LayerFile hdl, u8 const * buffer, FileSize count)
 {
-    sbAssert(nullptr != hdl.value);
+    sb_assert(nullptr != hdl.value);
 
-    return numericConv<FileSize>(fwrite((void *)buffer, 1, (usize)count, reinterpret_cast<FILE *>(hdl.value)));
+    return truncValue<FileSize>(fwrite((void *)buffer, 1, (usize)count, reinterpret_cast<FILE *>(hdl.value)));
 }
 
 // @todo: could be optimized
 sb::FileSize sb::internal::platformFileLength(LayerFile hdl)
 {
-    sbAssert(nullptr != hdl.value);
+    sb_assert(nullptr != hdl.value);
 
     FILE * const actual_hdl = reinterpret_cast<FILE *>(hdl.value);
 
     auto const curr_pos = ftell(actual_hdl);
 
-    if (sbDontExpect(0 != fseek(actual_hdl, 0, SEEK_END)))
+    if (sb_not_expected(0 != fseek(actual_hdl, 0, SEEK_END)))
     {
         return 0;
     }
@@ -176,7 +176,7 @@ sb::FileSize sb::internal::platformFileLength(LayerFile hdl)
     auto const file_len = ftell(actual_hdl);
 
     [[maybe_unused]] int const res = fseek(actual_hdl, curr_pos, SEEK_SET);
-    sbAssert(res == 0);
+    sb_assert(res == 0);
 
     return file_len;
 }

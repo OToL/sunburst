@@ -1,8 +1,8 @@
-#include <sb_core/error/status_code.h>
+#include <sb_core/error/error_code.h>
 #include <sb_core/error/error.h>
-#include <sb_core/enum.h>
+#include <sb_core/conversion.h>
 
-constexpr char const * STATUS_CODE_NAMES[] = {"OK",
+constexpr char const * ERROR_CODE_TO_STRING[] = {"OK",
                                               "CANCELLED",
                                               "INVALID_ARGUMENT",
                                               "DEADLINE_EXCEEDED",
@@ -20,9 +20,9 @@ constexpr char const * STATUS_CODE_NAMES[] = {"OK",
                                               "DATA_LOSS",
                                               "UNKNOWN"};
 
-char const * sb::statuscode_getValueName(StatusCode status_code)
+char const * sb::errorcode_getAsString(ErrorCode status_code)
 {
-    sbAssert(getEnumValue(status_code) < sizeof(STATUS_CODE_NAMES));
+    sb_assert(getUnderlyingValue(status_code) < sizeof(ERROR_CODE_TO_STRING));
 
-    return STATUS_CODE_NAMES[getEnumValue(status_code)];
+    return ERROR_CODE_TO_STRING[getUnderlyingValue(status_code)];
 }

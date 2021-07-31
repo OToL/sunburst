@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/bit.h>
+#include <sb_core/bit_utility.h>
 #include <sb_core/conversion.h>
 #include <sb_core/error/error.h>
 #include <sb_core/_impl/memory/allocator/pool_allocator_base.h>
@@ -11,7 +11,7 @@ namespace sb {
 template <typename TMemProvider>
 class PoolAllocator final : public PoolAllocatorBase
 {
-    sbBaseClass(PoolAllocatorBase);
+    sb_base(PoolAllocatorBase);
 
 public:
     PoolAllocator() = default;
@@ -20,12 +20,12 @@ public:
         : _mem_provider()
     {
         auto actual_block_size = alignUp(block_size, default_align);
-        sbAssert(sizeof(NodeIdx) <= actual_block_size);
+        sb_assert(sizeof(NodeIdx) <= actual_block_size);
 
         auto mem_arena = _mem_provider.allocate(default_align, block_count * actual_block_size);
-        sbAssert(!memarena_isEmpty(mem_arena));
+        sb_assert(!memory_arena::isEmpty(mem_arena));
 
-        BaseClass::init(mem_arena, actual_block_size, default_align);
+        Base::init(mem_arena, actual_block_size, default_align);
     }
 
     PoolAllocator(TMemProvider const & mem_provider, usize block_size, usize block_count,
@@ -33,12 +33,12 @@ public:
         : _mem_provider(mem_provider)
     {
         auto actual_block_size = alignUp(block_size, default_align);
-        sbAssert(sizeof(NodeIdx) <= actual_block_size);
+        sb_assert(sizeof(NodeIdx) <= actual_block_size);
 
         auto mem_arena = _mem_provider.allocate(default_align, block_count * actual_block_size);
-        sbAssert(!memarena_isEmpty(mem_arena));
+        sb_assert(!memory_arena::isEmpty(mem_arena));
 
-        BaseClass::init(mem_arena, actual_block_size, default_align);
+        Base::init(mem_arena, actual_block_size, default_align);
     }
 
     PoolAllocator & operator=(PoolAllocator const &) = delete;
@@ -48,20 +48,20 @@ public:
 
     ~PoolAllocator() override
     {
-        MemoryArena mem_arena = BaseClass::getArena();
-        if (!memarena_isEmpty(mem_arena))
+        MemoryArena mem_arena = Base::getArena();
+        if (!memory_arena::isEmpty(mem_arena))
         {
             _mem_provider.deallocate(mem_arena.data);
         }
     }
 
-    using BaseClass::allocate;
-    using BaseClass::deallocate;
-    using BaseClass::owns;
+    using Base::allocate;
+    using Base::deallocate;
+    using Base::owns;
 
-    using BaseClass::deallocateAll;
-    using BaseClass::getAlignment;
-    using BaseClass::getArena;
+    using Base::deallocateAll;
+    using Base::getAlignment;
+    using Base::getArena;
 
 private:
     TMemProvider _mem_provider;

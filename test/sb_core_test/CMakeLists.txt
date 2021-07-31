@@ -2,12 +2,10 @@ include(${SB_CATCH_CMAKE_DIR_PATH}/catch.cmake)
 
 add_executable(sb_core_test
     core_test.cpp
-    bit_test.cpp
-    status_test.cpp
+    bit_utility_test.cpp
     conversion_test.cpp
     crc32_test.cpp
     crc64_test.cpp
-    enum_test.cpp
     fnv1a32_test.cpp
     fnv1a64_test.cpp
     hash64_str_test.cpp

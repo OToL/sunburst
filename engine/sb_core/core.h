@@ -5,16 +5,16 @@
 
 namespace sb {
 
+using i8 = int8_t;
 using u8 = uint8_t;
-using s8 = int8_t;
-using s16 = int16_t;
+using i16 = int16_t;
 using u16 = uint16_t;
-using s32 = int32_t;
+using i32 = int32_t;
 using u32 = uint32_t;
+using i64 = int64_t;
 using u64 = uint64_t;
-using s64 = int64_t;
 using uptr = uintptr_t;
-using sptrdiff = ptrdiff_t;
+using iptrdiff = ptrdiff_t;
 using usize = size_t;
 using f32 = float;
 using f64 = double;
@@ -23,10 +23,11 @@ using b32 = u32;
 
 } // namespace sb
 
-#define sbBaseClass(...) using BaseClass = __VA_ARGS__
+// Compile Time Feature ak CTF
+#define SB_CTF_DISABLED 1
+#define SB_CTF_ENABLED 2
 
-#define SB_DISABLED 1
-#define SB_ENABLED 2
+#define sb_ctf_enabled(feature) (1 == 2 / SB_CTF_##feature)
+#define sb_ctf_equal(value_name, value) (SB_CTF_##value_name == SB_CTF_##value_name##_##value)
 
-#define sbIsEnabled(feature) (1 == 2 / SB_CTF_##feature)
-#define sbIsEqual(feature, value) ((1 / SB_CTV_##feature + 1) && (SB_CTV_##feature == (value)))
+#define sb_base(...) using Base = __VA_ARGS__

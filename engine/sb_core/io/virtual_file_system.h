@@ -13,11 +13,15 @@ namespace sb {
 
 class IAllocator;
 
+namespace internal {
+    class VirtualFileSystemImpl;
+}
+
 struct VirtualFileSystem
 {
     using LayerName = HashStr;
 
-    struct LayerInitDesc
+    struct LayerDesc
     {
         LayerName name;
         FString<VFS_PATH_MAX_LEN + 1> vfs_path;
@@ -26,33 +30,39 @@ struct VirtualFileSystem
 
     struct InitDesc
     {
-        sbstd::span<LayerInitDesc> layers;
+        sbstd::span<LayerDesc> layers;
     };
 
-    static b8 initialize(InitDesc const & init);
-    static b8 terminate();
+    b8 initialize(InitDesc const & init);
+    b8 terminate();
 
-    static b8 fileExists(char const * path);
+    b8 fileExists(char const * path);
 
-    static File openFile(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
-                         FileFormat fmt = FileFormat::BIN, bool create_if_not_exist = false);
-    static File openFileWrite(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
-                              FileFormat fmt = FileFormat::BIN, bool create_if_not_exist = false);
-    static File openFileRead(char const * path, FileFormat fmt = FileFormat::BIN);
+    File openFile(char const * path, FileWriteMode mode = FileWriteMode::APPEND, FileFormat fmt = FileFormat::BIN,
+                  bool create_if_not_exist = false);
+    File openFileWrite(char const * path, FileWriteMode mode = FileWriteMode::APPEND, FileFormat fmt = FileFormat::BIN,
+                       bool create_if_not_exist = false);
+    File openFileRead(char const * path, FileFormat fmt = FileFormat::BIN);
 
-    // Overwite file if exists
-    static File createFile(char const * path, FileFormat fmt = FileFormat::BIN);
-    static File createFileWrite(char const * path, FileFormat fmt = FileFormat::BIN);
+    File createFile(char const * path, FileFormat fmt = FileFormat::BIN);
+    File createFileWrite(char const * path, FileFormat fmt = FileFormat::BIN);
 
-    static void closeFile(File hdl);
+    void closeFile(File hdl);
 
-    static FileSize readFile(File hdl, sbstd::span<u8> buffer, FileSize cnt = -1);
-    static FileSize writeFile(File hdl, sbstd::span<u8 const> buffer, FileSize cnt = -1);
+    FileSize readFile(File hdl, sbstd::span<u8> buffer, FileSize cnt = -1);
+    FileSize writeFile(File hdl, sbstd::span<u8 const> buffer, FileSize cnt = -1);
 
-    static FileSize getFileLength(File hdl);
-    static FileProps getFileProps(File hdl);
+    FileSize getFileLength(File hdl);
+    FileProps getFileProps(File hdl);
 
-    static sbstd::span<u8> readFile(char const * path, IAllocator & alloc, FileFormat fmt = FileFormat::BIN);
+    sbstd::span<u8> readFile(char const * path, IAllocator & alloc, FileFormat fmt = FileFormat::BIN);
+
+    static b8 createDefault(InitDesc const & init);
+    static b8 destroyDefault();
+    static VirtualFileSystem * getDefault();
+
+private:
+    internal::VirtualFileSystemImpl * _impl;
 };
 
 using VFS = VirtualFileSystem;

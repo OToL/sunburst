@@ -1,4 +1,4 @@
-#include <sb_core/os.h>
+#include <sb_core/system.h>
 #include <sb_core/error/error.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/global_heap.h>
@@ -11,7 +11,7 @@ namespace sb {
 
 TestAllocator::~TestAllocator()
 {
-    sbAssert(_allocs.empty());
+    sb_assert(_allocs.empty());
 }
 
 usize TestAllocator::getAlignment() const
@@ -23,7 +23,7 @@ sb::MemoryArena TestAllocator::allocate(size_t const size)
 {
     MemoryArena mem_arena = sb::getGlobalHeap().allocate(size);
 
-    if (!memarena_isEmpty(mem_arena))
+    if (!memory_arena::isEmpty(mem_arena))
     {
         _stats.allocated_byte += size;
         ++_stats.alloc_count;
@@ -32,7 +32,7 @@ sb::MemoryArena TestAllocator::allocate(size_t const size)
             return (val.mem <= mem_arena.data) &&
                    (reinterpret_cast<uintptr_t>(mem_arena.data) <= (reinterpret_cast<uintptr_t>(val.mem) + val.size));
         });
-        sbAssert(alloc_desc == end(_allocs));
+        sb_assert(alloc_desc == end(_allocs));
         _allocs.emplace_back(mem_arena.data, size);
     }
 
@@ -43,7 +43,7 @@ sb::MemoryArena TestAllocator::allocate(sb::Alignment alignment, size_t const si
 {
     MemoryArena mem_arena = getGlobalHeap().allocate(alignment, size);
 
-    if (!memarena_isEmpty(mem_arena))
+    if (!memory_arena::isEmpty(mem_arena))
     {
         // @todo: we habe to do this because malloc does not return the MemArena of the proper capacity
         _stats.allocated_byte += getGlobalHeap().getBlockSize(mem_arena.data);
@@ -53,7 +53,7 @@ sb::MemoryArena TestAllocator::allocate(sb::Alignment alignment, size_t const si
             return (val.mem <= mem_arena.data) &&
                    (reinterpret_cast<uintptr_t>(mem_arena.data) <= (reinterpret_cast<uintptr_t>(val.mem) + val.size));
         });
-        sbAssert(alloc_desc == end(_allocs));
+        sb_assert(alloc_desc == end(_allocs));
         _allocs.emplace_back(mem_arena.data, size);
     }
 
@@ -76,7 +76,7 @@ void TestAllocator::deallocate(void * ptr)
 
         auto const alloc_desc =
             sbstd::find_if(begin(_allocs), end(_allocs), [ptr](AllocDesc const & val) { return val.mem == ptr; });
-        sbAssert(alloc_desc != end(_allocs));
+        sb_assert(alloc_desc != end(_allocs));
         _allocs.erase(alloc_desc);
     }
 

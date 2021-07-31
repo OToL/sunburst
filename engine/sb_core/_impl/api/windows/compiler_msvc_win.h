@@ -5,12 +5,6 @@
 #endif
 
 #define sb_noalias_internal __restrict
+#define sb_debug_break_internal __debugbreak()
 
-namespace sb {
-__forceinline void debugBreak()
-{
-    __debugbreak();
-}
-} // namespace sb
-
-#define sbStaticUnreachableInternal(msg) static_assert(false, msg)
+#define sb_static_unreachable_code_internal(msg) static_assert(false, msg)

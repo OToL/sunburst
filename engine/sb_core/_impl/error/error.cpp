@@ -3,30 +3,30 @@
 #include <sb_core/string/string_format.h>
 #include <sb_core/error/error.h>
 #include <sb_core/log.h>
-#include <sb_core/enum.h>
+#include <sb_core/conversion.h>
 #include <sb_core/hook.h>
 
-#if sbIsEnabled(ERROR_FACILITY)
+#if sb_ctf_enabled(ERROR_FACILITY)
 
 #    include <sb_std/cassert>
 #    include <sb_std/cstdio>
 
-static sb::ErrorHandler g_error_hdl;
+static sb::ErrorHook g_error_hdl;
 
 static constexpr char const * ERROR_DEFAULT_MSG[] = {"Critical error detected", "Unhandled error detected",
                                                      "Non fatal error detected"};
 
-void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::u32 const line, sb::StatusCode status_code,
+void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::u32 const line, sb::ErrorCode status_code,
                         char const * msg)
 {
     char fmt_msg[255];
-    sb::stringFormat(fmt_msg, "{} ({}, {})\n\tStatus: {}", msg, file, line, statuscode_getValueName(status_code));
+    sb::stringFormat(fmt_msg, "{} ({}, {})\n\tError: {}", msg, file, line, errorcode_getAsString(status_code));
 
     switch (type)
     {
         case sb::ErrorLevel::CRITICAL:
         {
-            sbLogE(&fmt_msg[0]);
+            sb_log_error(&fmt_msg[0]);
 
             break;
         }
@@ -34,7 +34,7 @@ void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::u32 co
         case sb::ErrorLevel::WARNING:
         case sb::ErrorLevel::NOTICE:
         {
-            sbLogW(&fmt_msg[0]);
+            sb_log_warning(&fmt_msg[0]);
 
             break;
         }
@@ -43,28 +43,28 @@ void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::u32 co
 
 void sb::internal::reportError(ErrorLevel type, char const * const file, u32 const line, char const * msg)
 {
-    reportError(type, file, line, StatusCode::UNKNOWN, msg);
+    reportError(type, file, line, ErrorCode::UNKNOWN, msg);
 }
 
 void sb::internal::reportError(ErrorLevel type, char const * const file, u32 const line)
 {
-    reportError(type, file, line, StatusCode::UNKNOWN);
+    reportError(type, file, line, ErrorCode::UNKNOWN);
 }
 
 void sb::internal::reportNotImplemented(ErrorLevel type, char const * const file, u32 const line, char const * msg)
 {
-    reportNotImplemented(type, file, line, StatusCode::UNKNOWN, msg);
+    reportNotImplemented(type, file, line, ErrorCode::UNKNOWN, msg);
 }
 
 void sb::internal::reportNotImplemented(ErrorLevel type, char const * const file, u32 const line,
-                                        [[maybe_unused]] StatusCode stastus_code, char const * msg)
+                                        [[maybe_unused]] ErrorCode stastus_code, char const * msg)
 {
     char msg_fmt[255];
     sb::stringFormat(msg_fmt, "Not implemented: '{}'", msg);
     reportError(type, file, line, &msg_fmt[0]);
 }
 
-void sb::internal::reportError(ErrorLevel type, char const * const file, u32 const line, StatusCode stastus_code,
+void sb::internal::reportError(ErrorLevel type, char const * const file, u32 const line, ErrorCode stastus_code,
                                char const * msg)
 {
     if (nullptr != g_error_hdl)
@@ -78,11 +78,11 @@ void sb::internal::reportError(ErrorLevel type, char const * const file, u32 con
 
     if (ErrorLevel::CRITICAL == type)
     {
-        sb::debugBreak();
+        sb_debug_break();
     }
 }
 
-void sb::internal::reportError(ErrorLevel type, char const * const file, u32 const line, StatusCode status_code)
+void sb::internal::reportError(ErrorLevel type, char const * const file, u32 const line, ErrorCode status_code)
 {
     if (nullptr != g_error_hdl)
     {
@@ -90,16 +90,16 @@ void sb::internal::reportError(ErrorLevel type, char const * const file, u32 con
     }
     else
     {
-        logDefaultErrorMsg(type, file, line, status_code, ERROR_DEFAULT_MSG[getEnumValue(type)]);
+        logDefaultErrorMsg(type, file, line, status_code, ERROR_DEFAULT_MSG[getUnderlyingValue(type)]);
     }
 
     if ((ErrorLevel::CRITICAL == type) || (ErrorLevel::WARNING == type))
     {
-        sb::debugBreak();
+        sb_debug_break();
     }
 }
 
-void sb::setErrorHandler(ErrorHandler const & hdl)
+void sb::setErrorHook(ErrorHook const & hdl)
 {
     g_error_hdl = hdl;
 }

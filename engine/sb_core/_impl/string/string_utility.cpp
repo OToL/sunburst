@@ -3,8 +3,8 @@
 
 char * sb::strCatT(char * sb_noalias dst, usize dst_len, usize dst_capacity, char const * sb_noalias concat)
 {
-    sbAssert(dst_len <= dst_capacity);
-    sbAssert(dst[dst_len] == 0);
+    sb_assert(dst_len <= dst_capacity);
+    sb_assert(dst[dst_len] == 0);
 
     strCpyT(dst + dst_len, dst_capacity - dst_len, concat);
 

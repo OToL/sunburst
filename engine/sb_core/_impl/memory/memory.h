@@ -9,20 +9,12 @@
 
 namespace sb::internal {
 
-void * malloc(usize size);
-
-void * malloc(usize size, Alignment alignment);
-
-usize mallocUsableSize(void * memPtr);
-
-void free(void * memPtr);
-
 template <typename TType, typename THeap, typename... TArgs>
 TType * newImpl(THeap & heap, TArgs &&... args)
 {
     MemoryArena arena = heap.allocate(alignOf<TType>(), sizeof(TType));
 
-    if (!memarena_isEmpty(arena))
+    if (!memory_arena::isEmpty(arena))
     {
         return ::new (arena.data) TType(sbstd::forward<TArgs &&>(args)...);
     }

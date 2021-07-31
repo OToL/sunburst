@@ -1,6 +1,6 @@
 #include "incremental_allocator_base.h"
 #include <sb_core/error/error.h>
-#include <sb_core/bit.h>
+#include <sb_core/bit_utility.h>
 
 void sb::IncrementalAllocatorBase::init(MemoryArena arena, Alignment default_align)
 {
@@ -18,14 +18,14 @@ sb::IncrementalAllocatorBase::IncrementalAllocatorBase()
 
 sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size)
 {
-    if (memarena_isEmpty(_arena) || (size == 0U))
+    if (memory_arena::isEmpty(_arena) || (size == 0U))
     {
         return {};
     }
 
     u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(_top), _default_alignment));
 
-    if (memarena_isInRange(_arena, new_top, size))
+    if (memory_arena::isInRange(_arena, new_top, size))
     {
         void * mem_ptr = new_top;
         _top = new_top + size;
@@ -38,14 +38,14 @@ sb::MemoryArena sb::IncrementalAllocatorBase::allocate(usize const size)
 
 sb::MemoryArena sb::IncrementalAllocatorBase::allocate(Alignment const alignment, usize const size)
 {
-    if (memarena_isEmpty(_arena) || (size == 0U))
+    if (memory_arena::isEmpty(_arena) || (size == 0U))
     {
         return {};
     }
 
     u8 * new_top = reinterpret_cast<u8 *>(alignUp(reinterpret_cast<uptr>(_top), alignment));
 
-    if (memarena_isInRange(_arena, new_top, size))
+    if (memory_arena::isInRange(_arena, new_top, size))
     {
         void * mem_ptr = new_top;
         _top = new_top + size;
@@ -58,12 +58,12 @@ sb::MemoryArena sb::IncrementalAllocatorBase::allocate(Alignment const alignment
 
 void sb::IncrementalAllocatorBase::deallocate(void * ptr)
 {
-    sbWarn(memarena_isInRange(_arena, ptr));
+    sb_warning(memory_arena::isInRange(_arena, ptr));
 }
 
 sb::b8 sb::IncrementalAllocatorBase::owns(void const * ptr) const
 {
-    return memarena_isInRange(_arena, ptr);
+    return memory_arena::isInRange(_arena, ptr);
 }
 
 void sb::IncrementalAllocatorBase::deallocateAll()
