@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sb_core/system.h>
+#include <sb_core/system/system.h>
 #include <sb_core/memory/global_heap.h>
 #include <sb_core/memory/memory.h>
 
@@ -54,13 +54,13 @@ public:
 
     [[nodiscard]] pointer allocate(size_type nb)
     {
-        if constexpr (ALIGNMENT_DEFAULT <= alignof(T))
+        if constexpr (DEFAULT_MEMORY_ALIGNMENT <= alignof(T))
         {
             return (pointer)getGlobalHeap().allocate(nb * sizeof(T)).data;
         }
         else
         {
-            return (pointer)getGlobalHeap().allocate(alignOf<T>(), nb * sizeof(T)).data;
+            return (pointer)getGlobalHeap().allocate(alignof(T), nb * sizeof(T)).data;
         }
     }
 

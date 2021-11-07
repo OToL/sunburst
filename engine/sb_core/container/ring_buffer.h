@@ -2,6 +2,7 @@
 
 #include <sb_core/core.h>
 #include <sb_core/error/error.h>
+#include <sb_core/memory/utility.h>
 #include <sb_core/memory/allocator/container_allocator.h>
 
 #include <sb_std/type_traits>
@@ -24,7 +25,7 @@ public:
     {
         sb_assert(0 != _capacity);
 
-        _data = (ValueType *)_alloc.allocate(alignOf<ValueType>(), capacity * sizeof(ValueType)).data;
+        _data = (ValueType *)_alloc.allocate(alignof(ValueType), capacity * sizeof(ValueType)).data;
         sb_assert(nullptr != _data);
     }
 
@@ -37,7 +38,7 @@ public:
     {
         sb_assert(0 != _capacity);
 
-        _data = (ValueType *)_alloc.allocate(alignOf<ValueType>(), capacity * sizeof(ValueType)).data;
+        _data = (ValueType *)_alloc.allocate(alignof(ValueType), capacity * sizeof(ValueType)).data;
         sb_assert(nullptr != _data);
     }
 

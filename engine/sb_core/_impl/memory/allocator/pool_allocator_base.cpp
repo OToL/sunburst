@@ -1,10 +1,10 @@
 #include "pool_allocator_base.h"
-#include <sb_core/conversion.h>
+#include <sb_core/cast.h>
 #include <sb_core/error/error.h>
 
 void sb::PoolAllocatorBase::initFreeList()
 {
-    i32 const block_cnt = truncValue<NodeIdx>(_arena.size / _actual_block_size);
+    i32 const block_cnt = integral_cast<NodeIdx>(_arena.size / _actual_block_size);
 
     u8 * node_iter = static_cast<u8 *>(_arena.data);
 
@@ -20,7 +20,7 @@ void sb::PoolAllocatorBase::initFreeList()
 
 sb::PoolAllocatorBase::PoolAllocatorBase()
     : _arena()
-    , _default_alignment(ALIGNMENT_DEFAULT)
+    , _default_alignment(DEFAULT_MEMORY_ALIGNMENT)
     , _actual_block_size(0U)
     , _free_list_head(INVALID_NODE_IDX)
 {
@@ -28,7 +28,7 @@ sb::PoolAllocatorBase::PoolAllocatorBase()
 
 void sb::PoolAllocatorBase::init(MemoryArena arena, usize block_size, [[maybe_unused]] Alignment default_align)
 {
-    _default_alignment = ALIGNMENT_DEFAULT;
+    _default_alignment = DEFAULT_MEMORY_ALIGNMENT;
     _actual_block_size = block_size;
     _arena = arena;
 
@@ -62,13 +62,13 @@ sb::MemoryArena sb::PoolAllocatorBase::allocate([[maybe_unused]] Alignment const
 
 void sb::PoolAllocatorBase::deallocate(void * ptr)
 {
-    if (sb_expected(memory_arena::isInRange(_arena, ptr)))
+    if (sb_expect(memory_arena::isInRange(_arena, ptr)))
     {
         auto const ptr_offset = static_cast<u8 *>(ptr) - static_cast<u8 *>(_arena.data);
         sb_assert(0U == (ptr_offset % _actual_block_size));
 
         auto const dealloc_node = static_cast<NodeIdx *>(ptr);
-        auto const dealloc_node_idx = truncValue<NodeIdx>(ptr_offset / _actual_block_size);
+        auto const dealloc_node_idx = integral_cast<NodeIdx>(ptr_offset / _actual_block_size);
 
         if (INVALID_NODE_IDX == _free_list_head)
         {

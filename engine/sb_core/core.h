@@ -20,6 +20,7 @@ using f32 = float;
 using f64 = double;
 using b8 = bool;
 using b32 = u32;
+using Alignment = usize;
 
 } // namespace sb
 

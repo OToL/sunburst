@@ -13,7 +13,7 @@ static inline sb::LogLevel gs_log_min_level = sb::LogLevel::DEBUG;
 static inline sb::b8 gs_log_quiet = false;
 
 template <typename... TArgs>
-usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args);
+usize formatString(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args);
 
 inline void setLogQuiet(b8 quiet)
 {
@@ -40,7 +40,7 @@ struct LogFilter
         else
         {
             char fmt_msg[255];
-            stringFormat(fmt_msg, sizeof(fmt_msg), msg, sbstd::forward<TArgs>(args)...);
+            formatString(fmt_msg, sizeof(fmt_msg), msg, sbstd::forward<TArgs>(args)...);
 
             internal::logMessage(lvl, file, line, &fmt_msg[0]);
         }

@@ -1,7 +1,7 @@
-#include <sb_core/api/windows/windows.h>
+#include <sb_core/system/windows/windows.h>
 
 // @todo: use Win32 API (CreateFile, etc.)
-#include <sb_core/_impl/api/posix/local_file_system_posix.hpp>
+#include "local_file_system_posix.hpp"
 
 sb::b8 sb::internal::platformFileExists(char const * path)
 {

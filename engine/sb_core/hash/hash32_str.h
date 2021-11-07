@@ -6,14 +6,14 @@
 
 namespace sb {
 
-struct Hash32Str
-{
-    using ValueType = u32;
-
-    u32 value;
-};
-
 namespace hash32_str {
+
+    struct Hash32Str
+    {
+        using ValueType = u32;
+
+        u32 value;
+    };
 
     constexpr Hash32Str make(char const * str)
     {
@@ -32,6 +32,8 @@ namespace hash32_str {
 
 } // namespace hash32str
 
+using hash32_str::Hash32Str;
+
 constexpr b8 operator==(Hash32Str lval, Hash32Str rval)
 {
     return (lval.value == rval.value);
@@ -48,3 +50,4 @@ constexpr Hash32Str operator"" _h32s(char const * str, usize len)
 }
 
 } // namespace sb
+

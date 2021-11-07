@@ -18,12 +18,12 @@ public:
     }
 
     ObjectPoolAllocator(usize obj_count)
-        : _allocator(sizeof(TObject), obj_count, alignOf<TObject>())
+        : _allocator(sizeof(TObject), obj_count, alignof(TObject))
     {
     }
 
     ObjectPoolAllocator(TMemProvider const & mem_provider, usize obj_count)
-        : _allocator(mem_provider, sizeof(TObject), obj_count, alignOf<TObject>())
+        : _allocator(mem_provider, sizeof(TObject), obj_count, alignof(TObject))
 
     {
     }

@@ -12,8 +12,8 @@ namespace sb {
 
 /// Returns the number of characters copied without the null terminated character ('\0')
 template <typename... TArgs>
-usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args);
+usize formatString(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args);
 
 } // namespace sb
 
-#include <sb_core/_impl/string/string_format.h>
+#include <sb_core/_impl/string/format.h>

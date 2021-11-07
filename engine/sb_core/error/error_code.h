@@ -25,6 +25,6 @@ enum class ErrorCode : u32
     UNKNOWN
 };
 
-char const * errorcode_getAsString(ErrorCode status_code);
+char const * toString(ErrorCode status_code);
 
 } // namespace sb

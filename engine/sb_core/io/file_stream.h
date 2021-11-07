@@ -2,7 +2,7 @@
 
 #include <sb_core/core.h>
 #include "io.h"
-#include "file.h"
+#include "file_hdl.h"
 
 #include <sb_std/span>
 
@@ -17,7 +17,7 @@ public:
     FileStream(FileStream const &) = delete;
     FileStream & operator=(FileStream const &) = delete;
 
-    explicit FileStream(File hdl)
+    explicit FileStream(FileHdl hdl)
         : _hdl(hdl)
     {
     }
@@ -34,7 +34,7 @@ public:
 
     b8 isValid() const
     {
-        return sb::file_isValid(_hdl);
+        return file_hdl::isValid(_hdl);
     }
 
     FileSize read(sbstd::span<u8> buffer, FileSize cnt = -1);
@@ -43,12 +43,12 @@ public:
 
     FileSize getLength() const;
 
-    void reset(File hdl = {});
+    void reset(FileHdl hdl = {});
 
-    File swap(File hdl);
+    FileHdl swap(FileHdl hdl);
 
 private:
-    File _hdl;
+    FileHdl _hdl;
 };
 
 } // namespace sb

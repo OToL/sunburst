@@ -7,7 +7,7 @@ endif()
 add_library(sb_core STATIC
     _impl/string_format.cpp
     _impl/log.cpp
-    _impl/conversion.cpp
+    _impl/string/string_conversion.cpp
     _impl/error/error.cpp
     _impl/error/error_code.cpp
     _impl/hash/crc32.cpp
@@ -27,12 +27,13 @@ add_library(sb_core STATIC
     _impl/memory/global_heap.cpp
     _impl/memory/memory.cpp
     _impl/memory/malloc.cpp
+    _impl/memory/memory_utility.cpp
     _impl/extern/rpmalloc/rpmalloc_wrap.cpp
     _impl/extern/rpmalloc/rpmalloc.c
-    _impl/api/${SB_TARGET_PLATFORM_ID}/virtual_memory_backstore_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
-    _impl/api/${SB_TARGET_PLATFORM_ID}/system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
-    _impl/api/${SB_TARGET_PLATFORM_ID}/local_file_system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
-    _impl/api/${SB_TARGET_PLATFORM_ID}/malloc_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp)
+    _impl/memory/virtual_memory_backstore_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
+    _impl/io/local_file_system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
+    _impl/system/system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
+    _impl/memory/malloc_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp)
 
 set_source_files_properties(_impl/extern/rpmalloc/rpmalloc.c 
     PROPERTIES 

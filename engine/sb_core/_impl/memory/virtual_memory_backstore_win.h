@@ -4,6 +4,6 @@
 
 namespace sb::internal {
 
-constexpr inline usize MEMORY_PAGE_SIZE = 4096ULL;
+constexpr inline usize VMEM_PAGE_SIZE = 4096ULL;
 
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #if defined(SB_PLATFORM_WINDOWS)
-#    include <sb_core/_impl/api/windows/virtual_memory_backstore_win.h>
+#    include <sb_core/_impl/memory/virtual_memory_backstore_win.h>
 #else
 #    error "Unsupported platform"
 #endif
@@ -12,17 +12,17 @@
 
 namespace sb {
 
-constexpr inline usize MEMORY_PAGE_SIZE = internal::MEMORY_PAGE_SIZE;
+constexpr inline usize VMEM_PAGE_SIZE = internal::VMEM_PAGE_SIZE;
 
-MemoryArena reserveVirtualMemory(usize size, char const * name);
+MemoryArena reserveVMem(usize size, char const * name);
 
-bool mapVirtualMemory(MemoryArena arena);
-bool unmapVirtualMemory(MemoryArena arena);
+bool mapVMem(MemoryArena arena);
+bool unmapVMem(MemoryArena arena);
 
 // reserve + map
-MemoryArena allocateVirtualMemory(usize size, char const * name);
+MemoryArena allocateVMem(usize size, char const * name);
 
 // unmap + release
-bool releaseVirtualMemory(void * base_mem);
+bool releaseVMem(void * base_mem);
 
 } // namespace sb

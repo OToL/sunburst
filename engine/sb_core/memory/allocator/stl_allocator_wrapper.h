@@ -1,7 +1,8 @@
 #pragma once
 
-#include <sb_core/system.h>
+#include <sb_core/system/system.h>
 #include <sb_core/memory/memory.h>
+#include <sb_core/memory/utility.h>
 #include <sb_core/memory/allocator/allocator.h>
 
 #include <sb_std/type_traits>
@@ -105,7 +106,7 @@ public:
     [[nodiscard]] pointer allocate(size_type nb)
     {
         if (nullptr != _alloc)
-            return (pointer)_alloc->allocate(alignOf<T>(), nb * sizeof(T)).data;
+            return (pointer)_alloc->allocate(alignof(T), nb * sizeof(T)).data;
 
         return nullptr;
     }

@@ -1,14 +1,15 @@
 #include <sb_core/core.h>
-#include <sb_core/conversion.h>
+#include <sb_core/cast.h>
 #include <sb_core/error/error.h>
-#include <sb_core/string/string_utility.h>
+#include <sb_core/string/conversion.h>
+#include <sb_core/string/utility.h>
 
 #include <sb_std/charconv>
 #include <sb_std/span>
 
 sb::usize sb::internal::stringToCharBuffer(char const * src, sbstd::span<char> dst)
 {
-    return sb::strCpyT(dst.data(), truncValue<usize>(dst.size()), src);
+    return sb::strCpyT(dst.data(), integral_cast<usize>(dst.size()), src);
 }
 
 template <typename T>
@@ -18,11 +19,11 @@ sb::usize sb::internal::decimalToString(T src, sbstd::span<char> dest)
 
     if (res.ec == sbstd::errc{})
     {
-        auto const len = truncValue<usize>(res.ptr - dest.data());
+        auto const len = integral_cast<usize>(res.ptr - dest.data());
 
         if (0 != len)
         {
-            if (sb_expected(len < dest.size()))
+            if (sb_expect(len < dest.size()))
             {
                 dest[len] = 0;
             }
@@ -36,7 +37,7 @@ sb::usize sb::internal::decimalToString(T src, sbstd::span<char> dest)
             dest[0] = 0;
         }
 
-        return truncValue<usize>(len);
+        return integral_cast<usize>(len);
     }
 
     return 0;

@@ -1,6 +1,6 @@
 #include "incremental_allocator_base.h"
 #include <sb_core/error/error.h>
-#include <sb_core/bit_utility.h>
+#include <sb_core/bit.h>
 
 void sb::IncrementalAllocatorBase::init(MemoryArena arena, Alignment default_align)
 {
@@ -12,7 +12,7 @@ void sb::IncrementalAllocatorBase::init(MemoryArena arena, Alignment default_ali
 sb::IncrementalAllocatorBase::IncrementalAllocatorBase()
     : _arena()
     , _top(nullptr)
-    , _default_alignment(ALIGNMENT_DEFAULT)
+    , _default_alignment(DEFAULT_MEMORY_ALIGNMENT)
 {
 }
 
@@ -58,7 +58,7 @@ sb::MemoryArena sb::IncrementalAllocatorBase::allocate(Alignment const alignment
 
 void sb::IncrementalAllocatorBase::deallocate(void * ptr)
 {
-    sb_warning(memory_arena::isInRange(_arena, ptr));
+    sb_warn(memory_arena::isInRange(_arena, ptr));
 }
 
 sb::b8 sb::IncrementalAllocatorBase::owns(void const * ptr) const

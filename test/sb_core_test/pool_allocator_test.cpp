@@ -10,7 +10,7 @@
 using namespace sb;
 
 constexpr usize TEST_OBJECT_COUNT = 10;
-constexpr Alignment TEST_OBJECT_ALIGNMENT = ALIGNMENT_DEFAULT;
+constexpr Alignment TEST_OBJECT_ALIGNMENT = DEFAULT_MEMORY_ALIGNMENT;
 
 struct TestPoolObj
 {
@@ -61,8 +61,8 @@ TEST_CASE("Pool Allocator edge cases", "[pool_allocator]")
         TestObjectArray testObjectArray;
         TestPoolAllocator test_alloc({testObjectArray}, sizeof(TestPoolObj), TEST_OBJECT_COUNT);
 
-        REQUIRE(ALIGNMENT_128B > TEST_OBJECT_ALIGNMENT);
-        REQUIRE(memory_arena::isEmpty(test_alloc.allocate(ALIGNMENT_128B, sizeof(TestPoolObj))));
+        REQUIRE(16U > TEST_OBJECT_ALIGNMENT);
+        REQUIRE(memory_arena::isEmpty(test_alloc.allocate(16U, sizeof(TestPoolObj))));
     }
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sb_std/span>
+
 namespace sb::internal {
 
 usize stringToCharBuffer(char const * src, sbstd::span<char> dst);

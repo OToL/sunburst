@@ -33,7 +33,7 @@ public:
 
     constexpr Alignment getAlignment()
     {
-        return ALIGNMENT_DEFAULT;
+        return DEFAULT_MEMORY_ALIGNMENT;
     }
 };
 

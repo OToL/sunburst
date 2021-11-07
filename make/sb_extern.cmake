@@ -48,13 +48,11 @@ function(sb_setup_extern)
             GLM_FORCE_DEFAULT_ALIGNED_GENTYPES)
 
     # Visual Studio supports multiple configurations at once and catch2 cmake files are separated
-    if(CONAN_CMAKE_MULTI)
-        set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT_RELEASE}/lib/cmake/Catch2" PARENT_SCOPE)
-    elseif()
+    #if(CONAN_CMAKE_MULTI)
+        #set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT_RELEASE}/lib/cmake/Catch2" PARENT_SCOPE)
+    #elseif()
         set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT}/lib/cmake/Catch2" PARENT_SCOPE)
-    endif()
-
-    set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT}/lib/cmake/Catch2" PARENT_SCOPE)
+    #endif()
 
     if(SB_TARGET_PLATFORM_ID STREQUAL "windows")
         if(SB_TOOLCHAIN_ID STREQUAL "msvc")

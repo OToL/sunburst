@@ -1,5 +1,5 @@
 #include <sb_core/container/fix_array.h>
-#include <sb_core/bit_utility.h>
+#include <sb_core/bit.h>
 
 #include <sb_unit/test_object_cnt.h>
 

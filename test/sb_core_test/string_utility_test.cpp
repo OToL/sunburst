@@ -1,4 +1,4 @@
-#include <sb_core/string/string_utility.h>
+#include <sb_core/string/utility.h>
 
 #include <sb_std/iterator>
 

@@ -2,8 +2,8 @@ include(${SB_CATCH_CMAKE_DIR_PATH}/catch.cmake)
 
 add_executable(sb_core_test
     core_test.cpp
-    bit_utility_test.cpp
-    conversion_test.cpp
+    bit_test.cpp
+    string_conversion_test.cpp
     crc32_test.cpp
     crc64_test.cpp
     fnv1a32_test.cpp
@@ -13,7 +13,7 @@ add_executable(sb_core_test
     small_array_test.cpp
     string_utility_test.cpp
     string_format_test.cpp
-    file_test.cpp
+    "file_hdl_test.cpp"
     fix_array_test.cpp
     ring_buffer_Test.cpp
     fix_string_test.cpp

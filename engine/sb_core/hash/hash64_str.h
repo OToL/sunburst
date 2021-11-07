@@ -6,14 +6,14 @@
 
 namespace sb {
 
-struct Hash64Str
-{
-    using ValueType = u64;
-
-    ValueType value;
-};
-
 namespace hash64_str {
+
+    struct Hash64Str
+    {
+        using ValueType = u64;
+
+        ValueType value;
+    };
 
     constexpr Hash64Str make(char const * str)
     {
@@ -31,6 +31,8 @@ namespace hash64_str {
     }
 
 } // namespace hash64str
+
+using hash64_str::Hash64Str;
 
 constexpr Hash64Str operator"" _h64s(char const * str, usize len)
 {

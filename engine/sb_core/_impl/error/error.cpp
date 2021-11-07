@@ -1,9 +1,9 @@
 #include <sb_core/core.h>
 #include <sb_core/compiler.h>
-#include <sb_core/string/string_format.h>
+#include <sb_core/string/format.h>
 #include <sb_core/error/error.h>
 #include <sb_core/log.h>
-#include <sb_core/conversion.h>
+#include <sb_core/cast.h>
 #include <sb_core/hook.h>
 
 #if sb_ctf_enabled(ERROR_FACILITY)
@@ -20,7 +20,7 @@ void logDefaultErrorMsg(sb::ErrorLevel type, char const * const file, sb::u32 co
                         char const * msg)
 {
     char fmt_msg[255];
-    sb::stringFormat(fmt_msg, "{} ({}, {})\n\tError: {}", msg, file, line, errorcode_getAsString(status_code));
+    sb::formatString(fmt_msg, "{} ({}, {})\n\tError: {}", msg, file, line, toString(status_code));
 
     switch (type)
     {
@@ -60,7 +60,7 @@ void sb::internal::reportNotImplemented(ErrorLevel type, char const * const file
                                         [[maybe_unused]] ErrorCode stastus_code, char const * msg)
 {
     char msg_fmt[255];
-    sb::stringFormat(msg_fmt, "Not implemented: '{}'", msg);
+    sb::formatString(msg_fmt, "Not implemented: '{}'", msg);
     reportError(type, file, line, &msg_fmt[0]);
 }
 
@@ -90,7 +90,7 @@ void sb::internal::reportError(ErrorLevel type, char const * const file, u32 con
     }
     else
     {
-        logDefaultErrorMsg(type, file, line, status_code, ERROR_DEFAULT_MSG[getUnderlyingValue(type)]);
+        logDefaultErrorMsg(type, file, line, status_code, ERROR_DEFAULT_MSG[integral_cast<>(type)]);
     }
 
     if ((ErrorLevel::CRITICAL == type) || (ErrorLevel::WARNING == type))

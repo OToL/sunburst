@@ -1,8 +1,8 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/bit_utility.h>
-#include <sb_core/conversion.h>
+#include <sb_core/bit.h>
+#include <sb_core/cast.h>
 #include <sb_core/error/error.h>
 #include <sb_core/_impl/memory/allocator/pool_allocator_base.h>
 
@@ -16,7 +16,7 @@ class PoolAllocator final : public PoolAllocatorBase
 public:
     PoolAllocator() = default;
 
-    PoolAllocator(usize block_size, usize block_count, Alignment default_align = ALIGNMENT_DEFAULT)
+    PoolAllocator(usize block_size, usize block_count, Alignment default_align = DEFAULT_MEMORY_ALIGNMENT)
         : _mem_provider()
     {
         auto actual_block_size = alignUp(block_size, default_align);
@@ -29,7 +29,7 @@ public:
     }
 
     PoolAllocator(TMemProvider const & mem_provider, usize block_size, usize block_count,
-                  Alignment default_align = ALIGNMENT_DEFAULT)
+                  Alignment default_align = DEFAULT_MEMORY_ALIGNMENT)
         : _mem_provider(mem_provider)
     {
         auto actual_block_size = alignUp(block_size, default_align);

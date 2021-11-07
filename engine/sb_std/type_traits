@@ -20,6 +20,8 @@ namespace SB_STD_NS {
     SB_SRC_STD_USE(underlying_type_t);
     SB_SRC_STD_USE(is_same);
     SB_SRC_STD_USE(is_same_v);
+    SB_SRC_STD_USE(is_enum);
+    SB_SRC_STD_USE(is_enum_v);
     SB_SRC_STD_USE(integral_constant);
     SB_SRC_STD_USE(remove_cv_t);
     SB_SRC_STD_USE(remove_reference_t);

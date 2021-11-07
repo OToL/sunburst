@@ -2,25 +2,16 @@
 
 #include <sb_core/core.h>
 #include <sb_core/compiler.h>
+#include <sb_core/_impl/string/conversion.h>
 
-#include <sb_std/span>
 #include <sb_std/type_traits>
 #include <sb_std/utility>
 
-#include "_impl/conversion.h"
-
 namespace sb {
-
-// Truncate integral value
-template <typename TDst, typename TSrc>
-inline constexpr TDst truncValue(TSrc && src)
-{
-    return static_cast<TDst>(src);
-}
 
 // Ensures null termination
 template <typename TSrc>
-inline usize convertToString(TSrc && src, sbstd::span<char> dest)
+inline usize toString(TSrc && src, sbstd::span<char> dest)
 {
     using DecayedType = sbstd::decay_t<TSrc>;
 
@@ -37,12 +28,6 @@ inline usize convertToString(TSrc && src, sbstd::span<char> dest)
         sb_static_unreachable_code("Unsupported conversion");
         return 0U;
     }
-}
-
-template <typename TEnum>
-inline constexpr auto getUnderlyingValue(TEnum val)
-{
-    return (sbstd::underlying_type_t<TEnum>)val;
 }
 
 } // namespace sb

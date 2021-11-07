@@ -1,9 +1,9 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/memory/memory_arena.h>
 #include <sb_core/memory/memory.h>
-#include "allocator/allocator.h"
+#include <sb_core/memory/memory_arena.h>
+#include <sb_core/memory/allocator/allocator.h>
 
 namespace sb {
 
@@ -30,7 +30,7 @@ public:
 
     constexpr usize getAlignment() const
     {
-        return ALIGNMENT_DEFAULT;
+        return DEFAULT_MEMORY_ALIGNMENT;
     }
 
     usize getBlockSize(void * ptr) const;

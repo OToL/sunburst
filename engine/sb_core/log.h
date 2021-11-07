@@ -6,12 +6,12 @@ namespace sb {
 
 enum class LogLevel : u8
 {
-    ERROR, // Important message to read & solve e.g. crash, out of memory, etc.
-    WARNING, // Message about a problem which may impact application behavior e.g.
-             // performance hitch, too many alive objects, etc.
-    INFO, // Useful information regarding high level application logic e.g. state
-          // transition, saving, etc.
-    DEBUG // Verbose logging for debug purpose
+    ERROR,      // Important message to read & solve e.g. crash, out of memory, etc.
+    WARNING,    // Message about a problem which may impact application behavior e.g.
+                // performance hitch, too many alive objects, etc.
+    INFO,       // Useful information regarding high level application logic e.g. state
+                // transition, saving, etc.
+    DEBUG       // Verbose logging for debug purpose
 };
 
 void setLogQuiet(b8 quiet);

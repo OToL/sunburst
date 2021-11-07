@@ -4,13 +4,14 @@
 
 namespace sb {
 
-struct MemoryArena
-{
-    void * data;
-    usize size;
-};
-
 namespace memory_arena {
+
+    struct MemoryArena
+    {
+        void * data;
+        usize size;
+    };
+
     constexpr inline b8 isInRange(MemoryArena arena, void const * ptr, size_t data_size)
     {
         return ((arena.data <= ptr) &&
@@ -32,4 +33,7 @@ namespace memory_arena {
         return !isEmpty(arena) && (nullptr != arena.data);
     }
 } // namespace memory_arena
+
+using memory_arena::MemoryArena;
+
 } // namespace sb

@@ -3,8 +3,8 @@
 #include <sb_core/memory/memory.h>
 #include <sb_core/core.h>
 #include <sb_core/error/error.h>
-#include <sb_core/bit_utility.h>
-#include <sb_core/conversion.h>
+#include <sb_core/bit.h>
+#include <sb_core/cast.h>
 
 namespace sb::internal {
 
@@ -44,14 +44,14 @@ sb::MemoryArena platformMalloc(usize alignment, usize size)
 
     AllocHeader * const header = dataToHeader(aligned_mem_ptr);
     header->size = size;
-    header->offset = sb::truncValue<u16>(uptr(header) - uptr(mem_ptr));
+    header->offset = sb::integral_cast<u16>(uptr(header) - uptr(mem_ptr));
 
     return {aligned_mem_ptr, size};
 }
 
 sb::MemoryArena platformMalloc(usize size)
 {
-    return ::sb::internal::malloc(ALIGNMENT_DEFAULT, size);
+    return ::sb::internal::malloc(DEFAULT_MEMORY_ALIGNMENT, size);
 }
 
 void platformFree(void * mem_ptr)

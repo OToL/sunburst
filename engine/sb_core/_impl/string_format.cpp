@@ -1,11 +1,11 @@
-#include <sb_core/string/string_format.h>
-#include <sb_core/string/string_utility.h>
+#include <sb_core/string/format.h>
+#include <sb_core/string/utility.h>
 #include <sb_core/error/error.h>
 
 #include <sb_std/cctype>
 #include <sb_std/type_traits>
 
-sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbstd::span<FmtArg> args)
+sb::usize sb::internal::formatString(sbstd::span<char> dest_buffer, char const * const format, sbstd::span<FmtArg> args)
 {
     usize copied_bytes = 0;
 
@@ -14,7 +14,7 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
         char * dest_iter = dest_buffer.data();
         sb_assert(nullptr != dest_iter);
 
-        auto const dest_capacity = truncValue<usize>(dest_buffer.size());
+        auto const dest_capacity = integral_cast<usize>(dest_buffer.size());
 
         char const * format_iter = format;
         i32 lastParamIdx = 0;
@@ -29,7 +29,7 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
                 {
                     ++format_iter;
                 }
-                else if (sb_not_expected(0 == next_token, "Reached end of format string without finding "
+                else if (sb_dont_expect(0 == next_token, "Reached end of format string without finding "
                                                        "argument closing '}'"))
                 {
                     break;
@@ -43,7 +43,7 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
                     {
                         format_iter += 2;
 
-                        if (sb_expected(-1 != lastParamIdx, "You cannot mix indexed and auto-increment arguments"))
+                        if (sb_expect(-1 != lastParamIdx, "You cannot mix indexed and auto-increment arguments"))
                         {
                             arg_idx = lastParamIdx++;
                         }
@@ -53,10 +53,10 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
                         }
                     }
                     // Argument specification
-                    else if (sb_expected(sbstd::isdigit(next_token), "Only digit is allowed in argument specification") &&
-                             sb_expected(0 >= lastParamIdx, "You cannot mix indexed and auto-increment "
+                    else if (sb_expect(sbstd::isdigit(next_token), "Only digit is allowed in argument specification") &&
+                             sb_expect(0 >= lastParamIdx, "You cannot mix indexed and auto-increment "
                                                          "argument specification") &&
-                             sb_expected('}' == format_iter[2], "Format argument index must be within [0-9] range"))
+                             sb_expect('}' == format_iter[2], "Format argument index must be within [0-9] range"))
                     {
                         arg_idx = next_token - '0';
                         lastParamIdx = -1;
@@ -68,7 +68,7 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
                     {
                         char const * const closing_arg = strchr(format_iter + 1, '}');
 
-                        if (sb_expected(nullptr != closing_arg, "Cannot find closing argument '}'"))
+                        if (sb_expect(nullptr != closing_arg, "Cannot find closing argument '}'"))
                         {
                             format_iter = closing_arg + 1;
                             continue;
@@ -90,7 +90,7 @@ sb::usize sb::internal::stringFormat(sbstd::span<char> dest_buffer, char const *
             {
                 ++format_iter;
 
-                if (sb_not_expected('}' != *format_iter, "'}' found without former '{'"))
+                if (sb_dont_expect('}' != *format_iter, "'}' found without former '{'"))
                 {
                     continue;
                 }

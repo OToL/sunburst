@@ -83,9 +83,9 @@ inline constexpr b8 isAlignedTo(T val, usize alignment)
 } // namespace sb
 
 #if defined(SB_PLATFORM_WINDOWS)
-#    include "_impl/api/windows/bit_utility_win.h"
+#    include "_impl/bit_utility_win.h"
 #elif defined(SB_PLATFORM_LINUX)
-#    include "_impl/api/linux/bit_utility_linux.h"
+#    include "_impl/bit_utility_linux.h"
 #else
 #    error "Unsupported platform"
 #endif

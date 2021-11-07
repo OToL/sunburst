@@ -1,4 +1,4 @@
-#include <sb_core/system.h>
+#include <sb_core/system/system.h>
 #include <sb_core/error/error.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/global_heap.h>
@@ -16,7 +16,7 @@ TestAllocator::~TestAllocator()
 
 usize TestAllocator::getAlignment() const
 {
-    return ALIGNMENT_DEFAULT;
+    return DEFAULT_MEMORY_ALIGNMENT;
 }
 
 sb::MemoryArena TestAllocator::allocate(size_t const size)

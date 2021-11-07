@@ -20,41 +20,41 @@ sb::FileStream::~FileStream()
 
 sb::FileSize sb::FileStream::read(sbstd::span<u8> buffer, FileSize cnt)
 {
-    sb_assert(sb::file_isValid(_hdl));
+    sb_assert(file_hdl::isValid(_hdl));
 
-    return VFS::readFile(_hdl, buffer, cnt);
+    return VFS::getDefault()->readFile(_hdl, buffer, cnt);
 }
 
 sb::FileSize sb::FileStream::write(sbstd::span<u8 const> buffer, FileSize cnt)
 {
-    sb_assert(sb::file_isValid(_hdl));
+    sb_assert(file_hdl::isValid(_hdl));
 
-    return VFS::writeFile(_hdl, buffer, cnt);
+    return VFS::getDefault()->writeFile(_hdl, buffer, cnt);
 }
 
 sb::FileSize sb::FileStream::getLength() const
 {
-    sb_assert(sb::file_isValid(_hdl));
+    sb_assert(file_hdl::isValid(_hdl));
 
-    return VFS::getFileLength(_hdl);
+    return VFS::getDefault()->getFileLength(_hdl);
 }
 
-void sb::FileStream::reset(File hdl)
+void sb::FileStream::reset(FileHdl hdl)
 {
     if (hdl != _hdl)
     {
-        if (sb::file_isValid(_hdl))
+        if (file_hdl::isValid(_hdl))
         {
-            VFS::closeFile(_hdl);
+            VFS::getDefault()->closeFile(_hdl);
         }
 
         _hdl = hdl;
     }
 }
 
-sb::File sb::FileStream::swap(File hdl)
+sb::FileHdl sb::FileStream::swap(FileHdl hdl)
 {
-    File const prev_hdl = _hdl;
+    FileHdl const prev_hdl = _hdl;
     _hdl = hdl;
     return prev_hdl;
 }

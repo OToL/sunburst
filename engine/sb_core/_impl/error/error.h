@@ -9,7 +9,7 @@
 
 namespace sb {
 template <typename... TArgs>
-usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args);
+usize formatString(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args);
 }
 
 namespace sb::internal {
@@ -24,7 +24,7 @@ template <typename... TArgs>
 void reportError(ErrorLevel type, char const * const file, u32 const line, char const * msg, TArgs... args)
 {
     char fmt_msg[255];
-    sb::stringFormat(fmt_msg, msg, sbstd::forward<TArgs>(args)...);
+    sb::formatString(fmt_msg, msg, sbstd::forward<TArgs>(args)...);
 
     reportError(type, file, line, &fmt_msg[0]);
 }
@@ -41,7 +41,7 @@ void reportError(ErrorLevel type, char const * const file, u32 const line, Error
                  TArgs... args)
 {
     char fmt_msg[255];
-    sb::stringFormat(fmt_msg, msg, sbstd::forward<TArgs>(args)...);
+    sb::formatString(fmt_msg, msg, sbstd::forward<TArgs>(args)...);
 
     reportError(type, file, line, stastus_code, &fmt_msg[0]);
 }
@@ -54,16 +54,16 @@ void reportError(ErrorLevel type, char const * const file, u32 const line, Error
             sb::internal::reportError(sb::ErrorLevel::CRITICAL, __FILE__, __LINE__, ##__VA_ARGS__);                    \
         }
 
-#    define sb_warning_internal(cond, ...)                                                                                  \
+#    define sb_warn_internal(cond, ...)                                                                                  \
         if (!(cond))                                                                                                   \
         {                                                                                                              \
             sb::internal::reportError(sb::ErrorLevel::WARNING, __FILE__, __LINE__, ##__VA_ARGS__);                     \
         }
 
-#    define sb_expected_internal(cond, ...)                                                                                \
+#    define sb_expect_internal(cond, ...)                                                                                \
         ((cond) || (sb::internal::reportError(sb::ErrorLevel::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__), false))
 
-#    define sb_not_expected_internal(cond, ...)                                                                            \
+#    define sb_dont_expect_internal(cond, ...)                                                                            \
         ((cond) && (sb::internal::reportError(sb::ErrorLevel::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__), true))
 
 #    define sb_not_implemented_internal(str)                                                                              \
@@ -72,9 +72,9 @@ void reportError(ErrorLevel type, char const * const file, u32 const line, Error
 #else
 
 #    define sb_assert_internal(cond, ...)
-#    define sb_warning_internal(cond, ...)
-#    define sb_expected_internal(cond, ...) (cond)
-#    define sb_not_expected_internal(cond, ...) !(cond)
+#    define sb_warn_internal(cond, ...)
+#    define sb_expect_internal(cond, ...) (cond)
+#    define sb_dont_expect_internal(cond, ...) !(cond)
 #    define sb_not_implemented_internal(str)
 
 #endif

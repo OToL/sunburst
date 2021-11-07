@@ -8,7 +8,7 @@ namespace {
 
 void * rpmallocMap(size_t size, size_t *)
 {
-    return sb::allocateVirtualMemory(size, "rpmalloc").data;
+    return sb::allocateVMem(size, "rpmalloc").data;
 }
 
 void rpmallocUnmmap(void * address, size_t size, size_t, size_t release)
@@ -16,11 +16,11 @@ void rpmallocUnmmap(void * address, size_t size, size_t, size_t release)
     if (release)
     {
         // on most platforms we cannot relase memory in the middle of a previously reserved/mapped area
-        sb::releaseVirtualMemory(address);
+        sb::releaseVMem(address);
     }
     else
     {
-        sb::unmapVirtualMemory({address, size});
+        sb::unmapVMem({address, size});
     }
 }
 
@@ -30,8 +30,8 @@ void sb::initializeRPmalloc()
 {
     rpmalloc_config_t cfg = {.memory_map = &rpmallocMap,
                              .memory_unmap = &rpmallocUnmmap,
-                             .page_size = MEMORY_PAGE_SIZE,
-                             .span_size = MEMORY_PAGE_SIZE,
+                             .page_size = VMEM_PAGE_SIZE,
+                             .span_size = VMEM_PAGE_SIZE,
                              .span_map_count = 64,
                              .enable_huge_pages = 0};
 

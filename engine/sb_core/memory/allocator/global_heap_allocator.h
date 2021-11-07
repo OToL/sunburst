@@ -26,7 +26,7 @@ public:
 
     usize getAlignment() const
     {
-        return ALIGNMENT_DEFAULT;
+        return DEFAULT_MEMORY_ALIGNMENT;
     }
 
     usize getBlockSize(void * ptr) const;

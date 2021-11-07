@@ -12,7 +12,7 @@ namespace sb::internal {
 template <typename TType, typename THeap, typename... TArgs>
 TType * newImpl(THeap & heap, TArgs &&... args)
 {
-    MemoryArena arena = heap.allocate(alignOf<TType>(), sizeof(TType));
+    MemoryArena arena = heap.allocate(alignof(TType), sizeof(TType));
 
     if (!memory_arena::isEmpty(arena))
     {

@@ -40,7 +40,7 @@ TEST_CASE("Check types size", "[core]")
     STATIC_REQUIRE(8 == sizeof(uptr));
     
     int x = 1;
-    if (sb_not_expected(x != 0))
+    if (sb_dont_expect(x != 0))
     {
         x = 2;
     }

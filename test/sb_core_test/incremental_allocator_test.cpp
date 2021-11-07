@@ -22,7 +22,7 @@ TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
     SECTION("Packed alignment")
     {
         IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY},
-                                                              TEST_BACKSTORE_CAPACITY, ALIGNMENT_1B);
+                                                              TEST_BACKSTORE_CAPACITY, 1U);
 
         for (usize idx = 0; idx != TEST_BACKSTORE_CAPACITY; ++idx)
         {
@@ -47,13 +47,13 @@ TEST_CASE("Incremetal Allocator allocate", "[incremental_allocator]")
     SECTION("Default aligmnent")
     {
         IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY},
-                                                              TEST_BACKSTORE_CAPACITY, ALIGNMENT_4B);
+                                                              TEST_BACKSTORE_CAPACITY, 4U);
 
-        for (usize idx = 0; idx != (TEST_BACKSTORE_CAPACITY / ALIGNMENT_4B + 1); ++idx)
+        for (usize idx = 0; idx != (TEST_BACKSTORE_CAPACITY / 4U + 1); ++idx)
         {
             auto mem_arena = test_alloc.allocate(1);
             REQUIRE(!memory_arena::isEmpty(mem_arena));
-            REQUIRE(reinterpret_cast<uptr>(mem_arena.data) == idx * ALIGNMENT_4B);
+            REQUIRE(reinterpret_cast<uptr>(mem_arena.data) == idx * 4U);
             REQUIRE(test_alloc.owns(mem_arena.data));
         }
 
@@ -68,11 +68,11 @@ TEST_CASE("Incremetal Allocator aligned allocate", "[incremental_allocator]")
         IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY},
                                                               TEST_BACKSTORE_CAPACITY);
 
-        for (usize idx = 0; idx != (TEST_BACKSTORE_CAPACITY / ALIGNMENT_4B + 1); ++idx)
+        for (usize idx = 0; idx != (TEST_BACKSTORE_CAPACITY / 4U + 1); ++idx)
         {
-            auto mem_arena = test_alloc.allocate(ALIGNMENT_4B, 1);
+            auto mem_arena = test_alloc.allocate(4U, 1);
             REQUIRE(!memory_arena::isEmpty(mem_arena));
-            REQUIRE(reinterpret_cast<uptr>(mem_arena.data) == idx * ALIGNMENT_4B);
+            REQUIRE(reinterpret_cast<uptr>(mem_arena.data) == idx * 4U);
             REQUIRE(test_alloc.owns(mem_arena.data));
         }
 
@@ -84,7 +84,7 @@ TEST_CASE("Incremetal Allocator aligned allocate", "[incremental_allocator]")
         IncrementalAllocator<MemoryArenaAllocator> test_alloc(MemoryArena{nullptr, TEST_BACKSTORE_CAPACITY},
                                                               TEST_BACKSTORE_CAPACITY);
 
-        REQUIRE(memory_arena::isEmpty(test_alloc.allocate(ALIGNMENT_4B, 0)));
+        REQUIRE(memory_arena::isEmpty(test_alloc.allocate(4U, 0)));
     }
 }
 

@@ -1,4 +1,4 @@
-#include <sb_core/bit_utility.h>
+#include <sb_core/bit.h>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>

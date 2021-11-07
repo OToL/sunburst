@@ -14,14 +14,14 @@ class IncrementalAllocator final : public IncrementalAllocatorBase
 public:
     IncrementalAllocator() = default;
 
-    IncrementalAllocator(TMemProvider const & mem_provider, usize capacity, Alignment default_align = ALIGNMENT_DEFAULT)
+    IncrementalAllocator(TMemProvider const & mem_provider, usize capacity, Alignment default_align = DEFAULT_MEMORY_ALIGNMENT)
         : Base()
         , _mem_provider(mem_provider)
     {
         Base::init(_mem_provider.allocate(default_align, capacity), default_align);
     }
 
-    IncrementalAllocator(usize capacity, Alignment default_align = ALIGNMENT_DEFAULT)
+    IncrementalAllocator(usize capacity, Alignment default_align = DEFAULT_MEMORY_ALIGNMENT)
         : Base()
         , _mem_provider()
     {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/string/string_utility.h>
+#include <sb_core/string/utility.h>
 #include <sb_core/error/error.h>
 
 #include <sb_std/cstring>
@@ -87,7 +87,7 @@ public:
 
     TChar back() const
     {
-        sb_warning(0 != _len)
+        sb_warn(0 != _len)
 
             auto backChar = TChar{};
 
@@ -101,7 +101,7 @@ public:
 
     bool push_back(TChar c)
     {
-        sb_warning(_len != (CAPACITY - 1))
+        sb_warn(_len != (CAPACITY - 1))
 
             if (_len != (CAPACITY - 1))
         {

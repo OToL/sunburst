@@ -1,6 +1,7 @@
 #pragma once
 
-#include <sb_core/conversion.h>
+#include <sb_core/cast.h>
+#include <sb_core/string/conversion.h>
 
 #include <sb_std/utility>
 
@@ -70,37 +71,37 @@ inline void expandFmtArgs(sbstd::span<FmtArg> argList, T const & arg, TArgs &&..
     // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
     arg_desc.value = TypeDesc::storeValue(arg);
     arg_desc.fmt_cb = [](void const * arg_value, sbstd::span<char> dest) {
-        return convertToString(TypeDesc::extractValue(arg_value), dest);
+        return toString(TypeDesc::extractValue(arg_value), dest);
     };
 
     expandFmtArgs(argList.subspan(1), args...);
 }
 
-usize stringFormat(sbstd::span<char> dest_buffer, char const * const format, sbstd::span<FmtArg> agrs);
+usize formatString(sbstd::span<char> dest_buffer, char const * const format, sbstd::span<FmtArg> agrs);
 
 template <typename... TArgs>
-inline usize stringFormat(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args)
+inline usize formatString(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args)
 {
-    return sb::stringFormat({dest_buffer, capacity}, format, sbstd::forward<TArgs>(args)...);
+    return sb::formatString({dest_buffer, capacity}, format, sbstd::forward<TArgs>(args)...);
 }
 
 } // namespace sb::internal
 
 template <typename... TArgs>
-inline sb::usize sb::stringFormat(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args)
+inline sb::usize sb::formatString(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args)
 {
     internal::FmtArg arg_list[sizeof...(TArgs)];
     expandFmtArgs(arg_list, args...);
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
-    return internal::stringFormat(dest_buffer, format, {arg_list, sizeof...(TArgs)});
+    return internal::formatString(dest_buffer, format, {arg_list, sizeof...(TArgs)});
 }
 
 namespace sb {
 
-inline usize stringFormat(sbstd::span<char> dest_buffer, char const * const format)
+inline usize formatString(sbstd::span<char> dest_buffer, char const * const format)
 {
-    return internal::stringFormat(dest_buffer, format, {});
+    return internal::formatString(dest_buffer, format, {});
 }
 
 } // namespace sb

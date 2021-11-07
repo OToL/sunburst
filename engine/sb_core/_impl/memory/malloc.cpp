@@ -1,6 +1,7 @@
-#include "malloc_wrap.h"
+#include "malloc_cfg.h"
 #include "malloc.h"
-#include <sb_core/conversion.h>
+#include <sb_core/cast.h>
+#include <sb_core/memory/utility.h>
 
 void sb::internal::mallocInitialize()
 {
@@ -26,7 +27,7 @@ sb::MemoryArena sb::internal::malloc(usize size)
 
 sb::MemoryArena sb::internal::malloc(Alignment alignment, usize size)
 {
-    void * const mem_ptr = sbMallocWrapAlignedAlloc(getUnderlyingValue(alignment), size);
+    void * const mem_ptr = sbMallocWrapAlignedAlloc(alignment, size);
 
     if (nullptr != mem_ptr)
     {

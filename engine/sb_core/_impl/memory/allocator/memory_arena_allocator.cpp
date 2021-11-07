@@ -1,5 +1,5 @@
 #include <sb_core/memory/allocator/memory_arena_allocator.h>
-#include <sb_core/bit_utility.h>
+#include <sb_core/bit.h>
 #include <sb_core/error/error.h>
 
 sb::MemoryArenaAllocator::MemoryArenaAllocator(MemoryArena arena)
@@ -36,7 +36,7 @@ sb::MemoryArena sb::MemoryArenaAllocator::allocate(Alignment const alignment, us
 
 void sb::MemoryArenaAllocator::deallocate(void * ptr)
 {
-    sb_warning(memory_arena::isInRange(_arena, ptr));
+    sb_warn(memory_arena::isInRange(_arena, ptr));
     _empty = false;
 }
 
