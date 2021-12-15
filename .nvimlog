@@ -1,3 +1,0 @@
-INFO  2021-07-25T07:56:48.767 16184 set_init_2:754: startup runtimepath/packpath value: C:\Users\barch\AppData\Local\nvim,C:\Users\barch\AppData\Local\nvim-data\site,c:\Program Files (x86)\nvim\share\nvim\runtime,C:/Program Files (x86)/nvim/lib/nvim,C:\Users\barch\AppData\Local\nvim-data\site\after,C:\Users\barch\AppData\Local\nvim\after
-INFO  2021-07-25T07:56:49.385 16184 wmain:559: starting main loop
-INFO  2021-07-25T07:56:52.491 16184 os_exit:586: Nvim exit: 0
