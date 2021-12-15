@@ -1,4 +1,4 @@
-#include <sb_core/system/system.h>
+#include <sb_core/os.h>
 
 #include <sb_std/cstdio>
 #include <sb_std/cunistd>

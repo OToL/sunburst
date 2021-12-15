@@ -16,10 +16,17 @@ inline constexpr TDst integral_cast(TSrc src)
     return static_cast<TDst>(src);
 }
 
-template <typename TSrc>
+template <typename TSrc, typename TDst = sbstd::underlying_type_t<TSrc>>
 inline constexpr auto integral_cast(TSrc src) -> sbstd::enable_if_t<sbstd::is_enum_v<TSrc>, sbstd::underlying_type_t<TSrc>>
 {
-    return (sbstd::underlying_type_t<TSrc>)src;
+    if constexpr (sbstd::is_same_v<TDst, sbstd::underlying_type_t<TSrc>>)
+    {
+        return static_cast<sbstd::underlying_type_t<TSrc>>(src);
+    }
+    else
+    {
+        return integral_cast<TDst>(static_cast<sbstd::underlying_type_t<TSrc>>(src));
+    }
 }
 
 template <typename TDst, typename TSrc>

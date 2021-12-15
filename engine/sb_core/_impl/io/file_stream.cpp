@@ -1,6 +1,6 @@
 #include <sb_core/io/file_stream.h>
 #include <sb_core/io/virtual_file_system.h>
-#include <sb_core/error/error.h>
+#include <sb_core/error.h>
 
 sb::FileStream & sb::FileStream::operator=(FileStream && src)
 {
@@ -22,21 +22,21 @@ sb::FileSize sb::FileStream::read(sbstd::span<u8> buffer, FileSize cnt)
 {
     sb_assert(file_hdl::isValid(_hdl));
 
-    return VFS::getDefault()->readFile(_hdl, buffer, cnt);
+    return vfs::readFile(_hdl, buffer, cnt);
 }
 
 sb::FileSize sb::FileStream::write(sbstd::span<u8 const> buffer, FileSize cnt)
 {
     sb_assert(file_hdl::isValid(_hdl));
 
-    return VFS::getDefault()->writeFile(_hdl, buffer, cnt);
+    return vfs::writeFile(_hdl, buffer, cnt);
 }
 
 sb::FileSize sb::FileStream::getLength() const
 {
     sb_assert(file_hdl::isValid(_hdl));
 
-    return VFS::getDefault()->getFileLength(_hdl);
+    return vfs::getFileLength(_hdl);
 }
 
 void sb::FileStream::reset(FileHdl hdl)
@@ -45,7 +45,7 @@ void sb::FileStream::reset(FileHdl hdl)
     {
         if (file_hdl::isValid(_hdl))
         {
-            VFS::getDefault()->closeFile(_hdl);
+            vfs::closeFile(_hdl);
         }
 
         _hdl = hdl;

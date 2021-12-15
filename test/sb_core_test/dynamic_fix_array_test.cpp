@@ -1,4 +1,4 @@
-#include <sb_core/container/fix_array.h>
+#include <sb_core/container/dynamic_fix_array.h>
 #include <sb_core/bit.h>
 
 #include <sb_unit/test_object_cnt.h>
@@ -14,8 +14,8 @@ using namespace sb;
 constexpr usize TEST_FARRAY_CAPACITY = 10;
 constexpr usize TEST_FARRAY_REF[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
-using TestFArrayPOD = FArray<usize, TEST_FARRAY_CAPACITY>;
-using TestFArray = FArray<TestObjectCnt, TEST_FARRAY_CAPACITY>;
+using TestFArrayPOD = DFArray<usize, TEST_FARRAY_CAPACITY>;
+using TestFArray = DFArray<TestObjectCnt, TEST_FARRAY_CAPACITY>;
 
 namespace {
 
@@ -53,7 +53,7 @@ void FillTestFArrayEmplace(TestFArray & test_array)
 
 } // namespace
 
-TEST_CASE("FArray POD default ctor", "[fix_array]")
+TEST_CASE("DFArray POD default ctor", "[dynamic_fix_array]")
 {
     TestFArrayPOD test_array;
 
@@ -61,7 +61,7 @@ TEST_CASE("FArray POD default ctor", "[fix_array]")
     REQUIRE(test_array.empty());
 }
 
-TEST_CASE("FArray POD push back", "[fix_array]")
+TEST_CASE("DFArray POD push back", "[dynamic_fix_array]")
 {
     TestFArrayPOD test_array;
 
@@ -70,7 +70,7 @@ TEST_CASE("FArray POD push back", "[fix_array]")
     REQUIRE(sbstd::equal(begin(test_array), end(test_array), sbstd::begin(TEST_FARRAY_REF)));
 }
 
-TEST_CASE("FArray POD back", "[fix_array]")
+TEST_CASE("DFArray POD back", "[dynamic_fix_array]")
 {
     TestFArrayPOD test_array;
 
@@ -81,7 +81,7 @@ TEST_CASE("FArray POD back", "[fix_array]")
     REQUIRE(test_array.back() == 2U);
 }
 
-TEST_CASE("FArray push_back dtor", "[fix_array]")
+TEST_CASE("DFArray push_back dtor", "[dynamic_fix_array]")
 {
     TestObjectCnt::resetStats();
 
@@ -94,7 +94,7 @@ TEST_CASE("FArray push_back dtor", "[fix_array]")
     REQUIRE(TestObjectCnt::getStats() == 0ULL);
 }
 
-TEST_CASE("FArray emplace_back dtor", "[fix_array]")
+TEST_CASE("DFArray emplace_back dtor", "[dynamic_fix_array]")
 {
     TestObjectCnt::resetStats();
 
@@ -107,7 +107,7 @@ TEST_CASE("FArray emplace_back dtor", "[fix_array]")
     REQUIRE(TestObjectCnt::getStats() == 0ULL);
 }
 
-TEST_CASE("FArray erase first element", "[fix_array]")
+TEST_CASE("DFArray erase first element", "[dynamic_fix_array]")
 {
     TestObjectCnt::resetStats();
 
@@ -127,7 +127,7 @@ TEST_CASE("FArray erase first element", "[fix_array]")
     REQUIRE(TestObjectCnt::getStats() == 0ULL);
 }
 
-TEST_CASE("FArray erase last element", "[fix_array]")
+TEST_CASE("DFArray erase last element", "[dynamic_fix_array]")
 {
     TestObjectCnt::resetStats();
 
@@ -147,7 +147,7 @@ TEST_CASE("FArray erase last element", "[fix_array]")
     REQUIRE(TestObjectCnt::getStats() == 0ULL);
 }
 
-TEST_CASE("FArray erase middle element", "[fix_array]")
+TEST_CASE("DFArray erase middle element", "[dynamic_fix_array]")
 {
     TestObjectCnt::resetStats();
 
@@ -170,7 +170,7 @@ TEST_CASE("FArray erase middle element", "[fix_array]")
     REQUIRE(TestObjectCnt::getStats() == 0ULL);
 }
 
-TEST_CASE("FArray aligned storage", "[fix_array]")
+TEST_CASE("DFArray aligned storage", "[dynamic_fix_array]")
 {
 #pragma warning(push)
 #pragma warning(disable : 4324)
@@ -180,7 +180,7 @@ TEST_CASE("FArray aligned storage", "[fix_array]")
     };
 #pragma warning(pop)
 
-    FArray<AlignedType, 10> aligned_array;
+    DFArray<AlignedType, 10> aligned_array;
     aligned_array.emplace_back(1U);
 
     REQUIRE(isAlignedTo(aligned_array.data(), 32U));

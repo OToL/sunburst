@@ -5,19 +5,19 @@ namespace sb {
 void zeroMemory(void * const memPtr, usize const byteCount);
 
 template <typename T>
-void zeroStruct(T * const objPtr)
+void zeroMemory(T * const objPtr)
 {
     zeroMemory(objPtr, sizeof(T));
 }
 
 template <typename T>
-void zeroStruct(T & obj)
+void zeroMemory(T & obj)
 {
     zeroMemory(&obj, sizeof(T));
 }
 
 template <typename T, usize COUNT>
-void zeroStruct(T (&objPtr)[COUNT])
+void zeroMemory(T (&objPtr)[COUNT])
 {
     zeroMemory(objPtr, sizeof(T) * COUNT);
 }

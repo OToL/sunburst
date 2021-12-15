@@ -22,9 +22,4 @@ function(sb_setup_environment ROOT_DIR_PATH)
         set(SB_APP_EXTENSION "" PARENT_SCOPE)
     endif()
 
-    if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
-        message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
-        file(DOWNLOAD "https://github.com/conan-io/cmake-conan/raw/v0.15/conan.cmake" "${CMAKE_BINARY_DIR}/conan.cmake")
-    endif()
-
 endfunction()

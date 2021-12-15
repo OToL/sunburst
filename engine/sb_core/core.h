@@ -32,3 +32,9 @@ using Alignment = usize;
 #define sb_ctf_equal(value_name, value) (SB_CTF_##value_name == SB_CTF_##value_name##_##value)
 
 #define sb_base(...) using Base = __VA_ARGS__
+
+#define sb_copy_protect(entity_name) \
+    entity_name(entity_name const &) = delete; \
+    entity_name(entity_name &&) = delete; \
+    entity_name & operator=(entity_name const &) = delete; \
+    entity_name & operator=(entity_name &&) = delete

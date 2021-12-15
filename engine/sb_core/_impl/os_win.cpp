@@ -1,7 +1,7 @@
-#include <sb_core/system/system.h>
-#include <sb_core/error/error.h>
+#include <sb_core/os.h>
+#include <sb_core/error.h>
 #include <sb_core/cast.h>
-#include <sb_core/system/windows/windows.h>
+#include <sb_core/extern/windows/windows.h>
 
 #include <sb_std/cstdio>
 

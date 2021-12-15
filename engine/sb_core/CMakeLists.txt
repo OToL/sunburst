@@ -8,9 +8,9 @@ add_library(sb_core STATIC
     _impl/string_format.cpp
     _impl/log.cpp
     _impl/string/string_conversion.cpp
-    _impl/error/error.cpp
-    _impl/error/error_code.cpp
+    _impl/error.cpp
     _impl/hash/crc32.cpp
+    _impl/os_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
     _impl/hash/crc64.cpp
     _impl/io/file_stream.cpp
     _impl/io/virtual_file_system.cpp
@@ -26,14 +26,13 @@ add_library(sb_core STATIC
     _impl/memory/allocator/container_allocator_wrapper.cpp
     _impl/memory/global_heap.cpp
     _impl/memory/memory.cpp
-    _impl/memory/malloc.cpp
     _impl/memory/memory_utility.cpp
-    _impl/extern/rpmalloc/rpmalloc_wrap.cpp
+    _impl/memory/malloc_rpmalloc.cpp
     _impl/extern/rpmalloc/rpmalloc.c
     _impl/memory/virtual_memory_backstore_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
     _impl/io/local_file_system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
-    _impl/system/system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
-    _impl/memory/malloc_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp)
+    _impl/memory/malloc_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
+    _impl/memory/memory_system.cpp)
 
 set_source_files_properties(_impl/extern/rpmalloc/rpmalloc.c 
     PROPERTIES 

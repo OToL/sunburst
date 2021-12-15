@@ -1,8 +1,7 @@
-#include "rpmalloc_wrap.h"
-#include "rpmalloc.h"
-
+#include "malloc_rpmalloc.h"
+#include <sb_core/_impl/extern/rpmalloc/rpmalloc.h>
 #include <sb_core/memory/virtual_memory_backstore.h>
-#include <sb_core/error/error.h>
+#include <sb_core/error.h>
 
 namespace {
 

@@ -3,7 +3,7 @@
 namespace sb::internal {
 
 template <typename TType, typename TAllocator>
-class SmallArrayBase
+class DynamicSmallArrayBase
 {
 public:
     using value_type = TType;
@@ -16,15 +16,15 @@ public:
     using size_type = usize;
     using difference_type = iptrdiff;
 
-    SmallArrayBase & operator=(SmallArrayBase const &) = delete;
-    SmallArrayBase(SmallArrayBase const &) = delete;
+    DynamicSmallArrayBase & operator=(DynamicSmallArrayBase const &) = delete;
+    DynamicSmallArrayBase(DynamicSmallArrayBase const &) = delete;
 
 protected:
-    SmallArrayBase() = default;
-    ~SmallArrayBase() = default;
+    DynamicSmallArrayBase() = default;
+    ~DynamicSmallArrayBase() = default;
 
-    SmallArrayBase(SmallArrayBase &&) = default;
-    SmallArrayBase & operator=(SmallArrayBase &&) = default;
+    DynamicSmallArrayBase(DynamicSmallArrayBase &&) = default;
+    DynamicSmallArrayBase & operator=(DynamicSmallArrayBase &&) = default;
 
     struct Impl : public TAllocator
     {

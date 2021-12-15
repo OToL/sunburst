@@ -2,11 +2,11 @@
 
 #include <sb_core/core.h>
 #include <sb_core/cast.h>
-#include <sb_core/error/error.h>
+#include <sb_core/error.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/utility.h>
 #include <sb_core/memory/allocator/container_allocator.h>
-#include <sb_core/_impl/container/small_array_base.h>
+#include <sb_core/_impl/container/dynamic_small_array_base.h>
 
 #include <sb_std/algorithm>
 #include <sb_std/iterator>
@@ -16,12 +16,12 @@
 namespace sb {
 
 template <typename TType, usize BASE_CAPACITY, typename TAllocator = ContainerAllocator>
-class SmallArray : public internal::SmallArrayBase<TType, TAllocator>
+class DynamicSmallArray : public internal::DynamicSmallArrayBase<TType, TAllocator>
 {
-    sb_base(internal::SmallArrayBase<TType, TAllocator>);
+    sb_base(internal::DynamicSmallArrayBase<TType, TAllocator>);
 
     template <typename, usize, typename>
-    friend class SmallArray;
+    friend class DynamicSmallArray;
 
     using Impl = typename Base::Impl;
 
@@ -40,20 +40,20 @@ public:
     using allocator_type = TAllocator;
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    SmallArray()
-        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]))
+    DynamicSmallArray()
+        : DynamicSmallArray(reinterpret_cast<pointer>(&_buffer[0]))
     {
     }
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    explicit SmallArray(allocator_type const & alloc)
-        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
+    explicit DynamicSmallArray(allocator_type const & alloc)
+        : DynamicSmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
     }
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    explicit SmallArray(size_type count, allocator_type const & alloc = allocator_type())
-        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
+    explicit DynamicSmallArray(size_type count, allocator_type const & alloc = allocator_type())
+        : DynamicSmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
         buyMore(count);
 
@@ -61,8 +61,8 @@ public:
     }
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    SmallArray(size_type count, value_type const & value, allocator_type const & alloc = allocator_type())
-        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
+    DynamicSmallArray(size_type count, value_type const & value, allocator_type const & alloc = allocator_type())
+        : DynamicSmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
         buyMore(count);
 
@@ -71,8 +71,8 @@ public:
 
     template <class TIterator>
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    SmallArray(TIterator first, TIterator last, allocator_type const & alloc = allocator_type())
-        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
+    DynamicSmallArray(TIterator first, TIterator last, allocator_type const & alloc = allocator_type())
+        : DynamicSmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
         buyMore(integral_cast<size_type>(last - first));
 
@@ -81,8 +81,8 @@ public:
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src)
-        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), src._impl.get_allocator())
+    DynamicSmallArray(DynamicSmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src)
+        : DynamicSmallArray(reinterpret_cast<pointer>(&_buffer[0]), src._impl.get_allocator())
     {
         buyMore(src.size());
 
@@ -90,8 +90,8 @@ public:
     }
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    SmallArray(SmallArray const & src)
-        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), src._impl.get_allocator())
+    DynamicSmallArray(DynamicSmallArray const & src)
+        : DynamicSmallArray(reinterpret_cast<pointer>(&_buffer[0]), src._impl.get_allocator())
     {
         buyMore(src.size());
 
@@ -100,8 +100,8 @@ public:
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src, allocator_type const & alloc)
-        : SmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
+    DynamicSmallArray(DynamicSmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src, allocator_type const & alloc)
+        : DynamicSmallArray(reinterpret_cast<pointer>(&_buffer[0]), alloc)
     {
         buyMore(src.size());
 
@@ -110,7 +110,7 @@ public:
 
     template <usize BASE_CAPACITY_SRC>
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TAllocator> && src)
+    DynamicSmallArray(DynamicSmallArray<TType, BASE_CAPACITY_SRC, TAllocator> && src)
         : _impl(src._impl.get_allocator())
     {
         if (!src.isSmallStorage() && (src.size() > BASE_CAPACITY))
@@ -131,7 +131,7 @@ public:
     }
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    SmallArray(SmallArray && src)
+    DynamicSmallArray(DynamicSmallArray && src)
         : _impl(src._impl.get_allocator())
     {
         if (!src.isSmallStorage() && (src.size() > BASE_CAPACITY))
@@ -153,7 +153,7 @@ public:
 
     template <usize BASE_CAPACITY_SRC>
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    SmallArray(SmallArray<TType, BASE_CAPACITY_SRC, TAllocator> && src, allocator_type const & alloc)
+    DynamicSmallArray(DynamicSmallArray<TType, BASE_CAPACITY_SRC, TAllocator> && src, allocator_type const & alloc)
         : _impl(alloc)
     {
         if (!src.isSmallStorage() && (src.size() > BASE_CAPACITY))
@@ -173,7 +173,7 @@ public:
         }
     }
 
-    ~SmallArray()
+    ~DynamicSmallArray()
     {
         clear();
 
@@ -184,7 +184,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC>
-    void swap(SmallArray<TType, BASE_CAPACITY_SRC, TAllocator> & src)
+    void swap(DynamicSmallArray<TType, BASE_CAPACITY_SRC, TAllocator> & src)
     {
         if (!isSmallStorage() && !src.isSmallStorage())
         {
@@ -477,7 +477,7 @@ public:
     }
 
     // NOLINTNEXTLINE(bugprone-unhandled-self-assignment)
-    SmallArray & operator=(SmallArray const & src)
+    DynamicSmallArray & operator=(DynamicSmallArray const & src)
     {
         if (this != &src)
         {
@@ -488,7 +488,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
-    SmallArray & operator=(SmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src)
+    DynamicSmallArray & operator=(DynamicSmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> const & src)
     {
         assign(src.begin(), src.end());
 
@@ -496,7 +496,7 @@ public:
     }
 
     // NOLINTNEXTLINE(bugprone-unhandled-self-assignment)
-    SmallArray & operator=(SmallArray && src)
+    DynamicSmallArray & operator=(DynamicSmallArray && src)
     {
         if (this != &src)
         {
@@ -508,7 +508,7 @@ public:
     }
 
     template <usize BASE_CAPACITY_SRC, typename TSrcAllocator>
-    SmallArray & operator=(SmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> && src)
+    DynamicSmallArray & operator=(DynamicSmallArray<TType, BASE_CAPACITY_SRC, TSrcAllocator> && src)
     {
         clear();
         this->swap(src);
@@ -651,13 +651,13 @@ public:
 
 private:
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    SmallArray(pointer begin, allocator_type const & alloc)
+    DynamicSmallArray(pointer begin, allocator_type const & alloc)
         : _impl(begin, begin + BASE_CAPACITY, alloc)
     {
     }
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    SmallArray(pointer begin)
+    DynamicSmallArray(pointer begin)
         : _impl(begin, begin + BASE_CAPACITY)
     {
     }
@@ -726,55 +726,55 @@ private:
 };
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallArray<TType, BASE_CAPACITY, TAllocator>::iterator
-    begin(sb::SmallArray<TType, BASE_CAPACITY, TAllocator> & vect)
+typename sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator>::iterator
+    begin(sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator> & vect)
 {
     return vect.begin();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallArray<TType, BASE_CAPACITY, TAllocator>::iterator
-    end(sb::SmallArray<TType, BASE_CAPACITY, TAllocator> & vect)
+typename sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator>::iterator
+    end(sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator> & vect)
 {
     return vect.end();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
-    begin(sb::SmallArray<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    begin(sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.begin();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
-    end(sb::SmallArray<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    end(sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.end();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
-    cbegin(sb::SmallArray<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    cbegin(sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.cbegin();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, typename TAllocator>
-typename sb::SmallArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
-    cend(sb::SmallArray<TType, BASE_CAPACITY, TAllocator> const & vect)
+typename sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator>::const_iterator
+    cend(sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator> const & vect)
 {
     return vect.cend();
 }
 
 template <typename TType, sb::usize BASE_CAPACITY, sb::usize BASE_CAPACITY2, typename TAllocator>
-void swap(sb::SmallArray<TType, BASE_CAPACITY, TAllocator> & vect1,
-          typename sb::SmallArray<TType, BASE_CAPACITY2, TAllocator> & vect2)
+void swap(sb::DynamicSmallArray<TType, BASE_CAPACITY, TAllocator> & vect1,
+          typename sb::DynamicSmallArray<TType, BASE_CAPACITY2, TAllocator> & vect2)
 {
     vect1.swap(vect2);
 }
 
 template <typename TType, usize BASE_CAPACITY, typename TAllocator = ContainerAllocator>
-using SArray = SmallArray<TType, BASE_CAPACITY, TAllocator>;
+using DSArray = DynamicSmallArray<TType, BASE_CAPACITY, TAllocator>;
 
 } // namespace sb

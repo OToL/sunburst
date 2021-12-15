@@ -1,5 +1,5 @@
 #include <sb_core/memory/allocator/null_allocator.h>
-#include <sb_core/error/error.h>
+#include <sb_core/error.h>
 
 sb::NullAllocator::NullAllocator(InitParams const &) { }
 

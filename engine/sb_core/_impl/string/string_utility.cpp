@@ -1,5 +1,5 @@
 #include <sb_core/string/utility.h>
-#include <sb_core/error/error.h>
+#include <sb_core/error.h>
 
 char * sb::strCatT(char * sb_noalias dst, usize dst_len, usize dst_capacity, char const * sb_noalias concat)
 {

@@ -1,7 +1,6 @@
 #pragma once
 
-#include <sb_core/error/error.h>
-#include <sb_core/error/error_code.h>
+#include <sb_core/error.h>
 #include <sb_core/log.h>
 
 #include <sb_std/inplace_function>

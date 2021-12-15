@@ -1,6 +1,6 @@
 #include <sb_core/core.h>
 #include <sb_core/cast.h>
-#include <sb_core/error/error.h>
+#include <sb_core/error.h>
 #include <sb_core/string/conversion.h>
 #include <sb_core/string/utility.h>
 

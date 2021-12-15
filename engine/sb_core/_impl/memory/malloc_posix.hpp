@@ -1,12 +1,11 @@
 #include <sb_core/_impl/memory/malloc_platform.h>
-#include <sb_core/_impl/memory/malloc.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/core.h>
-#include <sb_core/error/error.h>
+#include <sb_core/error.h>
 #include <sb_core/bit.h>
 #include <sb_core/cast.h>
 
-namespace sb::internal {
+namespace sb {
 
 usize const SYS_MALLOC_DEFAULT_ALIGNMENT = sizeof(void *);
 
@@ -51,7 +50,7 @@ sb::MemoryArena platformMalloc(usize alignment, usize size)
 
 sb::MemoryArena platformMalloc(usize size)
 {
-    return ::sb::internal::malloc(DEFAULT_MEMORY_ALIGNMENT, size);
+    return platformMalloc(DEFAULT_MEMORY_ALIGNMENT, size);
 }
 
 void platformFree(void * mem_ptr)

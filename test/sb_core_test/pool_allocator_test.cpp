@@ -1,6 +1,6 @@
 #include <sb_core/memory/allocator/pool_allocator.h>
 #include <sb_core/memory/allocator/memory_arena_allocator.h>
-#include <sb_core/container/fix_array.h>
+#include <sb_core/container/dynamic_fix_array.h>
 
 #include <sb_std/algorithm>
 
@@ -161,7 +161,7 @@ TEST_CASE("Pool Allocator deallocate", "[pool_allocator]")
     };
 
     TestOp ops[] = {{5U, 3U}, {6U, 1U}, {2U, 5U}, {3U, 4U}};
-    FArray<void *, TEST_OBJECT_COUNT> alloc_objs;
+    DFArray<void *, TEST_OBJECT_COUNT> alloc_objs;
 
     for (auto const & op : ops)
     {

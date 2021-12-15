@@ -1,7 +1,7 @@
 #include <sb_unit/test_object_cnt.h>
 
 #include <sb_core/core.h>
-#include <sb_core/error/error.h>
+#include <sb_core/error.h>
 
 namespace sb {
 

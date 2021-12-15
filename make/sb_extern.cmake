@@ -1,4 +1,21 @@
-include(${CMAKE_BINARY_DIR}/conan.cmake)
+set(CONANA_FILE_LIST "conanbuildinfo.cmake" "../conanbuildinfo.cmake" "conanbuildinfo_multi.cmake" "../conanbuildinfo_multi.cmake")
+foreach(CONAN_FILE ${CONANA_FILE_LIST})
+    set(CONAN_FILE_PATH "${CMAKE_BINARY_DIR}/${CONAN_FILE}")
+    message(STATUS "Conan: checking ${CONAN_FILE_PATH}")
+    if(EXISTS "${CONAN_FILE_PATH}")
+		set(CONAN_CMAKE_FILE_PATH "${CONAN_FILE_PATH}")
+        if(CONAN_FILE MATCHES "_multi.cmake")
+            set(CONAN_CMAKE_MULTI TRUE)
+        endif()
+        break()
+    endif()
+endforeach()
+
+if(NOT CONAN_CMAKE_FILE_PATH)
+    message(FATAL_ERROR "Cannot locate conanbuildinfo.cmake, did you run make/gen_conan?")
+endif()
+
+include(${CONAN_CMAKE_FILE_PATH})
 
 function(sb_alias_conan_target CONAN_TARGET SB_TARGET)
 
@@ -11,48 +28,27 @@ function(sb_alias_conan_target CONAN_TARGET SB_TARGET)
 endfunction()
 
 function(sb_setup_extern)
-    
-    conan_cmake_run(
-        REQUIRES
-            catch2/2.11.3
-            glm/0.9.9.8
-            stb/20200203
-            glfw/3.3.2 
-            tinyobjloader/1.0.6
-        BASIC_SETUP
-            CMAKE_TARGETS) 
-    conan_load_buildinfo()
+
+    conan_basic_setup(TARGETS)
 
     sb_alias_conan_target(catch2 catch)
-    
-    sb_alias_conan_target(tinyobjloader tinyobjloader)
-    target_compile_definitions(CONAN_PKG::tinyobjloader
-        INTERFACE 
-            TINYOBJLOADER_IMPLEMENTATION)
-    
-    sb_alias_conan_target(glfw glfw)
-    target_compile_definitions(CONAN_PKG::glfw
-        INTERFACE 
-            GLFW_INCLUDE_VULKAN)    
-        
+    if(CONAN_CMAKE_MULTI)
+        set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT_RELEASE}/lib/cmake/Catch2" PARENT_SCOPE)
+    else()
+        set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT}/lib/cmake/Catch2" PARENT_SCOPE)
+    endif()
+
     sb_alias_conan_target(stb stb)
     target_compile_definitions(CONAN_PKG::stb
         INTERFACE
             STB_IMAGE_IMPLEMENTATION) 
-    
+
     sb_alias_conan_target(glm glm)
     target_compile_definitions(CONAN_PKG::glm 
         INTERFACE
             GLM_FORCE_RADIANS
             GLM_FORCE_DEPTH_ZERO_TO_ONE
             GLM_FORCE_DEFAULT_ALIGNED_GENTYPES)
-
-    # Visual Studio supports multiple configurations at once and catch2 cmake files are separated
-    #if(CONAN_CMAKE_MULTI)
-        #set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT_RELEASE}/lib/cmake/Catch2" PARENT_SCOPE)
-    #elseif()
-        set(SB_CATCH_CMAKE_DIR_PATH "${CONAN_CATCH2_ROOT}/lib/cmake/Catch2" PARENT_SCOPE)
-    #endif()
 
     if(SB_TARGET_PLATFORM_ID STREQUAL "windows")
         if(SB_TOOLCHAIN_ID STREQUAL "msvc")
@@ -69,6 +65,5 @@ function(sb_setup_extern)
             message(STATUS "Sanitizers are not available with toolchain '${SB_TOOLCHAIN_ID}'")
         endif()
     endif()
-
 
 endfunction()

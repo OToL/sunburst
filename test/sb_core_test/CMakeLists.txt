@@ -10,11 +10,11 @@ add_executable(sb_core_test
     fnv1a64_test.cpp
     hash64_str_test.cpp
     hash32_str_test.cpp
-    small_array_test.cpp
+    dynamic_small_array_test.cpp
     string_utility_test.cpp
     string_format_test.cpp
-    "file_hdl_test.cpp"
-    fix_array_test.cpp
+    file_hdl_test.cpp
+    dynamic_fix_array_test.cpp
     ring_buffer_Test.cpp
     fix_string_test.cpp
     memory_arena_allocator_test.cpp

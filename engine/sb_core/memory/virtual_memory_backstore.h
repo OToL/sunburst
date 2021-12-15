@@ -12,7 +12,7 @@
 
 namespace sb {
 
-constexpr inline usize VMEM_PAGE_SIZE = internal::VMEM_PAGE_SIZE;
+using internal::VMEM_PAGE_SIZE;
 
 MemoryArena reserveVMem(usize size, char const * name);
 

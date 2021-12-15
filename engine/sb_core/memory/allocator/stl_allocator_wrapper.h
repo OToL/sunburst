@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sb_core/system/system.h>
+#include <sb_core/os.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/utility.h>
 #include <sb_core/memory/allocator/allocator.h>

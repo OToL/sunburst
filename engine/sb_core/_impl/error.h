@@ -1,5 +1,4 @@
 #include <sb_core/_impl/config.h>
-#include <sb_core/error/error_code.h>
 
 #include <sb_std/utility>
 

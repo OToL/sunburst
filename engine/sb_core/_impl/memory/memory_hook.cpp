@@ -1,4 +1,4 @@
-#include "malloc.h"
+#include "memory_system.h"
 
 #pragma warning(push)
 #pragma warning(disable : 4073)
@@ -10,17 +10,12 @@ class MemoryHook
 public:
     MemoryHook()
     {
-        sb::internal::mallocInitialize();
+        sb::memory_system::initialize();
     }
-
-    MemoryHook(MemoryHook const &) = default;
-    MemoryHook(MemoryHook &&) = default;
-    MemoryHook & operator=(MemoryHook const &) = default;
-    MemoryHook & operator=(MemoryHook &&) = default;
 
     ~MemoryHook()
     {
-        sb::internal::mallocTerminate();
+        sb::memory_system::terminate();
     }
 };
 

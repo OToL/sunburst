@@ -1,8 +1,29 @@
 #pragma once
 
-#include <sb_core/core.h>
+#include "core.h"
 
 namespace sb {
+
+enum class ErrorCode : u32
+{
+    OK,
+    CANCELLED,
+    INVALID_ARGUMENT,
+    DEADLINE_EXCEEDED,
+    NOT_FOUND,
+    ALREADY_EXISTS,
+    PERMISSION_DENIED,
+    UNAUTHENTICATED,
+    RESOURCE_EXHAUSTED,
+    FAILED_PRECONDITION,
+    ABORTED,
+    OUT_OF_RANGE,
+    UNIMPLEMENTED,
+    INTERNAL,
+    UNAVAILABLE,
+    DATA_LOSS,
+    UNKNOWN
+};
 
 enum class ErrorLevel : u8
 {
@@ -11,6 +32,8 @@ enum class ErrorLevel : u8
                 // bugs, etc.)
     NOTICE      // The error has been properly handled
 };
+
+char const * toString(ErrorCode status_code);
 
 } // namespace sb
 
@@ -28,4 +51,4 @@ enum class ErrorLevel : u8
 #define sb_dont_expect(cond, ...) sb_dont_expect_internal(cond, ##__VA_ARGS__)
 #define sb_report_notice(...) sb_expect_internal(false, ##__VA_ARGS__)
 
-#include <sb_core/_impl/error/error.h>
+#include <sb_core/_impl/error.h>

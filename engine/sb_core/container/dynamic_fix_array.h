@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/error/error.h>
+#include <sb_core/error.h>
 
 #include <sb_std/type_traits>
 #include <sb_std/utility>
@@ -15,7 +15,8 @@ namespace sb {
 // @todo: try_pushback
 template <typename TType, usize CAPACITY>
 // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-class FixArray
+// Dynamic Array with Fix size capacity
+class DynamicFixArray
 {
 public:
     using value_type = TType;
@@ -28,10 +29,10 @@ public:
     using size_type = usize;
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    FixArray() = default;
+    DynamicFixArray() = default;
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-member-init)
-    FixArray(size_type count, value_type const & value)
+    DynamicFixArray(size_type count, value_type const & value)
     {
         sb_assert(count <= CAPACITY);
 
@@ -39,12 +40,12 @@ public:
         _size = count;
     }
 
-    FixArray(FixArray const &) = delete;
-    FixArray(FixArray &&) = delete;
-    FixArray & operator=(FixArray const &) = delete;
-    FixArray & operator=(FixArray &&) = delete;
+    DynamicFixArray(DynamicFixArray const &) = delete;
+    DynamicFixArray(DynamicFixArray &&) = delete;
+    DynamicFixArray & operator=(DynamicFixArray const &) = delete;
+    DynamicFixArray & operator=(DynamicFixArray &&) = delete;
 
-    ~FixArray()
+    ~DynamicFixArray()
     {
         clear();
     }
@@ -199,30 +200,30 @@ private:
 };
 
 template <typename TType, usize CAPACITY>
-typename FixArray<TType, CAPACITY>::iterator begin(FixArray<TType, CAPACITY> & vect)
+typename DynamicFixArray<TType, CAPACITY>::iterator begin(DynamicFixArray<TType, CAPACITY> & vect)
 {
     return vect.begin();
 }
 
 template <typename TType, usize CAPACITY>
-typename FixArray<TType, CAPACITY>::iterator end(FixArray<TType, CAPACITY> & vect)
+typename DynamicFixArray<TType, CAPACITY>::iterator end(DynamicFixArray<TType, CAPACITY> & vect)
 {
     return vect.end();
 }
 
 template <typename TType, usize CAPACITY>
-typename FixArray<TType, CAPACITY>::const_iterator begin(FixArray<TType, CAPACITY> const & vect)
+typename DynamicFixArray<TType, CAPACITY>::const_iterator begin(DynamicFixArray<TType, CAPACITY> const & vect)
 {
     return vect.begin();
 }
 
 template <typename TType, usize CAPACITY>
-typename FixArray<TType, CAPACITY>::const_iterator end(FixArray<TType, CAPACITY> const & vect)
+typename DynamicFixArray<TType, CAPACITY>::const_iterator end(DynamicFixArray<TType, CAPACITY> const & vect)
 {
     return vect.end();
 }
 
 template <typename TType, usize CAPACITY>
-using FArray = FixArray<TType, CAPACITY>;
+using DFArray = DynamicFixArray<TType, CAPACITY>;
 
 } // namespace sb

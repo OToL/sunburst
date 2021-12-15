@@ -1,11 +1,11 @@
 #include <sb_unit/test_object_cnt.h>
 #include <sb_unit/test_allocator.h>
 
-#include <sb_core/container/small_array.h>
+#include <sb_core/container/dynamic_small_array.h>
 #include <sb_core/memory/allocator/allocator_wrapper.h>
 #include <sb_core/memory/allocator/container_allocator_wrapper.h>
 #include <sb_core/memory/global_heap.h>
-#include <sb_core/error/error.h>
+#include <sb_core/error.h>
 
 #include <sb_std/limits>
 
@@ -14,47 +14,47 @@
 
 using namespace sb;
 
-class SArrayFixture
+class DSArrayFixture
 {
 public:
-    SArrayFixture()
+    DSArrayFixture()
     {
         TestObjectCnt::resetStats();
     }
 
-    SArrayFixture(SArrayFixture const &) = default;
-    SArrayFixture(SArrayFixture &&) = default;
-    SArrayFixture & operator=(SArrayFixture const &) = default;
-    SArrayFixture & operator=(SArrayFixture &&) = default;
+    DSArrayFixture(DSArrayFixture const &) = default;
+    DSArrayFixture(DSArrayFixture &&) = default;
+    DSArrayFixture & operator=(DSArrayFixture const &) = default;
+    DSArrayFixture & operator=(DSArrayFixture &&) = default;
 
-    ~SArrayFixture()
+    ~DSArrayFixture()
     {
         REQUIRE(TestObjectCnt::getStats() == 0U);
     }
 };
 
 template <usize CAPACITY>
-using SArrayTest = SArray<TestObjectCnt, CAPACITY>;
+using DSArrayTest = DSArray<TestObjectCnt, CAPACITY>;
 
 template <usize CAPACITY>
-using SArrayTestA = SArray<TestObjectCnt, CAPACITY, ContainerAllocatorWrapper>;
-using SArrayTestAlloc = ContainerAllocatorWrapper;
+using DSArrayTestA = DSArray<TestObjectCnt, CAPACITY, ContainerAllocatorWrapper>;
+using DSArrayTestAlloc = ContainerAllocatorWrapper;
 
-using SMALL_VECTOR = SArrayFixture;
+using SMALL_VECTOR = DSArrayFixture;
 
-TEST_CASE_METHOD(SArrayFixture, "Default SArray ctor", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "Default DSArray ctor", "[dyamic_small_array]")
 {
-    SArrayTest<5> vect;
+    DSArrayTest<5> vect;
 
     REQUIRE(vect.empty());
     REQUIRE(5U == vect.capacity());
 }
 
-TEST_CASE_METHOD(SArrayFixture, "Set SArray size", "[small_vect]")
+TEST_CASE_METHOD(DSArrayFixture, "Set DSArray size", "[small_vect]")
 {
-    SECTION("Set SArray size to the internal storage")
+    SECTION("Set DSArray size to the internal storage")
     {
-        SArrayTest<5> small_vect(5);
+        DSArrayTest<5> small_vect(5);
 
         REQUIRE_FALSE(small_vect.empty());
         REQUIRE(small_vect.size() == 5U);
@@ -64,12 +64,12 @@ TEST_CASE_METHOD(SArrayFixture, "Set SArray size", "[small_vect]")
         REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{0}));
     }
 
-    SECTION("Set SArray size to internal storage capacity shall not allocate memory")
+    SECTION("Set DSArray size to internal storage capacity shall not allocate memory")
     {
         TestAllocator alloc_stats;
-        SArrayTestAlloc stl_alloc{alloc_stats};
+        DSArrayTestAlloc stl_alloc{alloc_stats};
 
-        SArrayTestA<5> small_vect(5, stl_alloc);
+        DSArrayTestA<5> small_vect(5, stl_alloc);
 
         REQUIRE_FALSE(small_vect.empty());
         REQUIRE(small_vect.size() == 5U);
@@ -81,9 +81,9 @@ TEST_CASE_METHOD(SArrayFixture, "Set SArray size", "[small_vect]")
         REQUIRE_FALSE(alloc_stats.owns(small_vect.data()));
     }
 
-    SECTION("Set SArray size greater than internal storage shall use external memory")
+    SECTION("Set DSArray size greater than internal storage shall use external memory")
     {
-        SArrayTest<5> small_vect(10);
+        DSArrayTest<5> small_vect(10);
 
         REQUIRE_FALSE(small_vect.empty());
         REQUIRE(small_vect.size() == 10U);
@@ -92,13 +92,13 @@ TEST_CASE_METHOD(SArrayFixture, "Set SArray size", "[small_vect]")
         REQUIRE_FALSE(small_vect.isSmallStorage());
     }
 
-    SECTION("Set SArray size greater than internal storage shall allocate memory from its allocator")
+    SECTION("Set DSArray size greater than internal storage shall allocate memory from its allocator")
     {
         TestAllocator alloc_stats;
 
         {
-            SArrayTestAlloc stl_alloc{alloc_stats};
-            SArrayTestA<5> small_vect(10, stl_alloc);
+            DSArrayTestAlloc stl_alloc{alloc_stats};
+            DSArrayTestA<5> small_vect(10, stl_alloc);
 
             REQUIRE_FALSE(small_vect.empty());
             REQUIRE(small_vect.size() == 10U);
@@ -114,16 +114,16 @@ TEST_CASE_METHOD(SArrayFixture, "Set SArray size", "[small_vect]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray ctor with default value", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor with default value", "[dyamic_small_array]")
 {
     TestObjectCnt init_obj{1};
 
     REQUIRE(TestObjectCnt::getStats() == 1U);
 
-    SECTION("SArray with default value within internal storage")
+    SECTION("DSArray with default value within internal storage")
     {
         {
-            SArrayTest<5> small_vect(5, init_obj);
+            DSArrayTest<5> small_vect(5, init_obj);
 
             REQUIRE_FALSE(small_vect.empty());
             REQUIRE(small_vect.size() == 5U);
@@ -135,13 +135,13 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor with default value", "[small_vector
         REQUIRE(TestObjectCnt::getStats() == 1U);
     }
 
-    SECTION("SArray with default value within internal storage shall not allocate memory")
+    SECTION("DSArray with default value within internal storage shall not allocate memory")
     {
         {
             TestAllocator alloc_stats;
-            SArrayTestAlloc stl_alloc{alloc_stats};
+            DSArrayTestAlloc stl_alloc{alloc_stats};
 
-            SArrayTestA<5> small_vect(5, init_obj, stl_alloc);
+            DSArrayTestA<5> small_vect(5, init_obj, stl_alloc);
 
             REQUIRE_FALSE(small_vect.empty());
             REQUIRE(small_vect.size() == 5U);
@@ -158,7 +158,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor with default value", "[small_vector
 
     SECTION("SnallVector with default value bigger than internal storage")
     {
-        SArrayTest<5> small_vect(10, init_obj);
+        DSArrayTest<5> small_vect(10, init_obj);
 
         REQUIRE_FALSE(small_vect.empty());
         REQUIRE(small_vect.size() == 10U);
@@ -172,9 +172,9 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor with default value", "[small_vector
         TestAllocator alloc_stats;
 
         {
-            SArrayTestAlloc stl_alloc{alloc_stats};
+            DSArrayTestAlloc stl_alloc{alloc_stats};
 
-            SArrayTestA<5> small_vect(10, init_obj, stl_alloc);
+            DSArrayTestA<5> small_vect(10, init_obj, stl_alloc);
 
             REQUIRE_FALSE(small_vect.empty());
             REQUIRE(small_vect.size() == 10U);
@@ -219,7 +219,7 @@ bool areTestObjectsSequencial(sbstd::span<TestObjectCnt> objects, usize start_id
     return true;
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray ctor range insert", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor range insert", "[dyamic_small_array]")
 {
     SECTION("Fit in internal storage")
     {
@@ -229,7 +229,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor range insert", "[small_vector]")
         SECTION("Objects are inserted in order")
         {
             {
-                SArrayTest<5> small_vect(sbstd::begin(objs), sbstd::end(objs));
+                DSArrayTest<5> small_vect(sbstd::begin(objs), sbstd::end(objs));
 
                 REQUIRE(!small_vect.empty());
                 REQUIRE(small_vect.size() == 5U);
@@ -243,10 +243,10 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor range insert", "[small_vector]")
         SECTION("No memory is allocated when inserted range is smaller or equal to internal storage")
         {
             TestAllocator alloc_stats;
-            SArrayTestAlloc stl_alloc{alloc_stats};
+            DSArrayTestAlloc stl_alloc{alloc_stats};
 
             {
-                SArrayTestA<5> small_vect(sbstd::begin(objs), sbstd::end(objs), stl_alloc);
+                DSArrayTestA<5> small_vect(sbstd::begin(objs), sbstd::end(objs), stl_alloc);
 
                 REQUIRE(!small_vect.empty());
                 REQUIRE(small_vect.size() == 5U);
@@ -272,7 +272,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor range insert", "[small_vector]")
         SECTION("Objects are inserted in order")
         {
             {
-                SArrayTest<5> small_vect(sbstd::begin(objs), sbstd::end(objs));
+                DSArrayTest<5> small_vect(sbstd::begin(objs), sbstd::end(objs));
 
                 REQUIRE_FALSE(small_vect.empty());
                 REQUIRE(small_vect.size() == 10U);
@@ -286,10 +286,10 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor range insert", "[small_vector]")
         SECTION("Memory is allocated when exceeding internal storage size")
         {
             TestAllocator alloc_stats;
-            SArrayTestAlloc stl_alloc{alloc_stats};
+            DSArrayTestAlloc stl_alloc{alloc_stats};
 
             {
-                SArrayTestA<5> small_vect(sbstd::begin(objs), sbstd::end(objs), stl_alloc);
+                DSArrayTestA<5> small_vect(sbstd::begin(objs), sbstd::end(objs), stl_alloc);
 
                 REQUIRE_FALSE(small_vect.empty());
                 REQUIRE(small_vect.size() == 10U);
@@ -306,18 +306,18 @@ TEST_CASE_METHOD(SArrayFixture, "SArray ctor range insert", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray copy ctor", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray copy ctor", "[dyamic_small_array]")
 {
     SECTION("Objects are copied in order and fit in internal storage")
     {
-        SArrayTest<4> src_vec(3);
+        DSArrayTest<4> src_vec(3);
         initTestObjectSequence(src_vec);
         REQUIRE(src_vec.isSmallStorage());
 
         REQUIRE(TestObjectCnt::getStats() == 3U);
 
         {
-            SArrayTest<5> dst_vec(src_vec);
+            DSArrayTest<5> dst_vec(src_vec);
 
             REQUIRE(TestObjectCnt::getStats() == 6U);
 
@@ -332,13 +332,13 @@ TEST_CASE_METHOD(SArrayFixture, "SArray copy ctor", "[small_vector]")
     SECTION("Objects are copied in order and no extra memory is allocated when fitting in internal storage")
     {
         TestAllocator src_alloc_stats;
-        SArrayTestAlloc src_stl_alloc{src_alloc_stats};
+        DSArrayTestAlloc src_stl_alloc{src_alloc_stats};
 
         TestAllocator dst_alloc_stats;
-        SArrayTestAlloc dst_stl_alloc{dst_alloc_stats};
+        DSArrayTestAlloc dst_stl_alloc{dst_alloc_stats};
 
         {
-            SArrayTestA<4> src_vec(3, src_stl_alloc);
+            DSArrayTestA<4> src_vec(3, src_stl_alloc);
             initTestObjectSequence(src_vec);
 
             REQUIRE(src_vec.isSmallStorage());
@@ -346,7 +346,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray copy ctor", "[small_vector]")
             REQUIRE_FALSE(src_alloc_stats.owns(src_vec.data()));
             REQUIRE(TestObjectCnt::getStats() == 3U);
 
-            SArrayTestA<5> dst_vec(src_vec, dst_stl_alloc);
+            DSArrayTestA<5> dst_vec(src_vec, dst_stl_alloc);
 
             REQUIRE(TestObjectCnt::getStats() == 6U);
             REQUIRE(dst_vec.size() == src_vec.size());
@@ -362,13 +362,13 @@ TEST_CASE_METHOD(SArrayFixture, "SArray copy ctor", "[small_vector]")
 
     SECTION("Objects are copied in order and internal storage is not used when exceeded")
     {
-        SArrayTest<10> src_vec(6);
+        DSArrayTest<10> src_vec(6);
         initTestObjectSequence(src_vec);
         REQUIRE(src_vec.isSmallStorage());
 
         REQUIRE(TestObjectCnt::getStats() == 6U);
 
-        SArrayTest<5> dst_vec(src_vec);
+        DSArrayTest<5> dst_vec(src_vec);
         REQUIRE_FALSE(dst_vec.isSmallStorage());
 
         REQUIRE(TestObjectCnt::getStats() == 12U);
@@ -380,13 +380,13 @@ TEST_CASE_METHOD(SArrayFixture, "SArray copy ctor", "[small_vector]")
     SECTION("Objects are copied in order and memory is allocated outside internal storage")
     {
         TestAllocator src_alloc;
-        SArrayTestAlloc src_stl_alloc{src_alloc};
+        DSArrayTestAlloc src_stl_alloc{src_alloc};
 
         TestAllocator dst_alloc;
-        SArrayTestAlloc dst_stl_alloc{dst_alloc};
+        DSArrayTestAlloc dst_stl_alloc{dst_alloc};
 
         {
-            SArrayTestA<10> src_vec(6, src_stl_alloc);
+            DSArrayTestA<10> src_vec(6, src_stl_alloc);
             initTestObjectSequence(src_vec);
 
             REQUIRE(src_vec.isSmallStorage());
@@ -395,7 +395,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray copy ctor", "[small_vector]")
 
             REQUIRE(TestObjectCnt::getStats() == 6U);
 
-            SArrayTestA<5> dst_vec(src_vec, dst_stl_alloc);
+            DSArrayTestA<5> dst_vec(src_vec, dst_stl_alloc);
 
             REQUIRE(TestObjectCnt::getStats() == 12U);
 
@@ -411,18 +411,18 @@ TEST_CASE_METHOD(SArrayFixture, "SArray copy ctor", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray move ctor", "[dyamic_small_array]")
 {
     SECTION("Objects moved between internal storage")
     {
-        SArrayTest<3> src_vec(3);
+        DSArrayTest<3> src_vec(3);
         void const * const src_data = src_vec.data();
         initTestObjectSequence(src_vec);
 
         REQUIRE(src_vec.isSmallStorage());
         REQUIRE(TestObjectCnt::getStats() == 3U);
 
-        SArrayTest<5> dst_vec(sbstd::move(src_vec));
+        DSArrayTest<5> dst_vec(sbstd::move(src_vec));
 
         REQUIRE(dst_vec.size() == 3U);
         REQUIRE(dst_vec.isSmallStorage());
@@ -439,10 +439,10 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
     SECTION("Objects moved between internal storage does not allocate memory")
     {
         TestAllocator alloc;
-        SArrayTestAlloc src_alloc{alloc};
-        SArrayTestAlloc dst_alloc{alloc};
+        DSArrayTestAlloc src_alloc{alloc};
+        DSArrayTestAlloc dst_alloc{alloc};
 
-        SArrayTestA<3> src_vec(3, src_alloc);
+        DSArrayTestA<3> src_vec(3, src_alloc);
         void const * const src_data = src_vec.data();
         initTestObjectSequence(src_vec);
 
@@ -452,7 +452,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
 
         REQUIRE(TestObjectCnt::getStats() == 3U);
 
-        SArrayTestA<5> dst_vec(sbstd::move(src_vec), dst_alloc);
+        DSArrayTestA<5> dst_vec(sbstd::move(src_vec), dst_alloc);
         REQUIRE(dst_vec.size() == 3U);
         REQUIRE(dst_vec.isSmallStorage());
         REQUIRE(src_data != dst_vec.data());
@@ -469,14 +469,14 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
 
     SECTION("Objects moved from internal storage to smaller one allocates memory")
     {
-        SArrayTest<5> src_vec(5);
+        DSArrayTest<5> src_vec(5);
         void const * const src_data = src_vec.data();
         initTestObjectSequence(src_vec);
         REQUIRE(src_vec.isSmallStorage());
 
         REQUIRE(TestObjectCnt::getStats() == 5U);
 
-        SArrayTest<3> dst_vec(sbstd::move(src_vec));
+        DSArrayTest<3> dst_vec(sbstd::move(src_vec));
         REQUIRE(dst_vec.size() == 5U);
         REQUIRE_FALSE(dst_vec.isSmallStorage());
         REQUIRE(src_data != dst_vec.data());
@@ -494,10 +494,10 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTestAlloc src_alloc{test_alloc};
-            SArrayTestAlloc dst_alloc{test_alloc};
+            DSArrayTestAlloc src_alloc{test_alloc};
+            DSArrayTestAlloc dst_alloc{test_alloc};
 
-            SArrayTestA<5> src_vec(5, src_alloc);
+            DSArrayTestA<5> src_vec(5, src_alloc);
             void const * const src_data = src_vec.data();
             initTestObjectSequence(src_vec);
 
@@ -507,7 +507,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
 
             REQUIRE(TestObjectCnt::getStats() == 5U);
 
-            SArrayTestA<3> dst_vec(sbstd::move(src_vec), dst_alloc);
+            DSArrayTestA<3> dst_vec(sbstd::move(src_vec), dst_alloc);
             REQUIRE(dst_vec.size() == 5U);
 
             REQUIRE_FALSE(dst_vec.isSmallStorage());
@@ -528,14 +528,14 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
 
     SECTION("Objects are moved from heap to heap")
     {
-        SArrayTest<3> src_vec(10);
+        DSArrayTest<3> src_vec(10);
         auto const src_data = src_vec.data();
         initTestObjectSequence(src_vec);
         REQUIRE_FALSE(src_vec.isSmallStorage());
 
         REQUIRE(TestObjectCnt::getStats() == 10U);
 
-        SArrayTest<5> dst_vec(sbstd::move(src_vec));
+        DSArrayTest<5> dst_vec(sbstd::move(src_vec));
         REQUIRE(dst_vec.size() == 10U);
 
         REQUIRE_FALSE(dst_vec.isSmallStorage());
@@ -554,10 +554,10 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTestAlloc src_alloc{test_alloc};
-            SArrayTestAlloc dst_alloc{test_alloc};
+            DSArrayTestAlloc src_alloc{test_alloc};
+            DSArrayTestAlloc dst_alloc{test_alloc};
 
-            SArrayTestA<3> src_vec(10, src_alloc);
+            DSArrayTestA<3> src_vec(10, src_alloc);
             auto const src_data = src_vec.data();
             initTestObjectSequence(src_vec);
 
@@ -567,7 +567,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
 
             REQUIRE(TestObjectCnt::getStats() == 10U);
 
-            SArrayTestA<5> dst_vec(sbstd::move(src_vec), dst_alloc);
+            DSArrayTestA<5> dst_vec(sbstd::move(src_vec), dst_alloc);
             REQUIRE(dst_vec.size() == 10U);
             REQUIRE_FALSE(dst_vec.isSmallStorage());
             REQUIRE(src_data == dst_vec.data());
@@ -587,7 +587,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
 
     SECTION("Move from heap to small storage")
     {
-        SArrayTest<5> src_vec(10);
+        DSArrayTest<5> src_vec(10);
         void const * const src_data = src_vec.data();
 
         initTestObjectSequence(src_vec);
@@ -595,7 +595,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
 
         REQUIRE(TestObjectCnt::getStats() == 10U);
 
-        SArrayTest<15> dst_vec(sbstd::move(src_vec));
+        DSArrayTest<15> dst_vec(sbstd::move(src_vec));
 
         for (usize idx = 0; idx != dst_vec.size(); ++idx)
         {
@@ -614,10 +614,10 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTestAlloc src_alloc{test_alloc};
-            SArrayTestAlloc dst_alloc{test_alloc};
+            DSArrayTestAlloc src_alloc{test_alloc};
+            DSArrayTestAlloc dst_alloc{test_alloc};
 
-            SArrayTestA<5> src_vec(10, src_alloc);
+            DSArrayTestA<5> src_vec(10, src_alloc);
             void const * const src_data = src_vec.data();
             initTestObjectSequence(src_vec);
 
@@ -626,7 +626,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
 
             REQUIRE(TestObjectCnt::getStats() == 10U);
 
-            SArrayTestA<15> dst_vec(sbstd::move(src_vec), dst_alloc);
+            DSArrayTestA<15> dst_vec(sbstd::move(src_vec), dst_alloc);
 
             for (usize idx = 0; idx != dst_vec.size(); ++idx)
             {
@@ -645,9 +645,9 @@ TEST_CASE_METHOD(SArrayFixture, "SArray move ctor", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray emplace back", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray emplace back", "[dyamic_small_array]")
 {
-    SArrayTest<5> vect;
+    DSArrayTest<5> vect;
 
     auto const & new_value = vect.emplace_back(0xFFU);
     REQUIRE_FALSE(vect.empty());
@@ -656,11 +656,11 @@ TEST_CASE_METHOD(SArrayFixture, "SArray emplace back", "[small_vector]")
     REQUIRE(TestObjectCnt::getStats() == 1U);
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray push back", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray push back", "[dyamic_small_array]")
 {
     SECTION("Push lvalue")
     {
-        SArrayTest<5> vect;
+        DSArrayTest<5> vect;
 
         TestObjectCnt const obj{0xFFU};
         REQUIRE(TestObjectCnt::getStats() == 1U);
@@ -676,7 +676,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray push back", "[small_vector]")
 
     SECTION("Push rvalue")
     {
-        SArrayTest<5> vect;
+        DSArrayTest<5> vect;
 
         vect.push_back({0xFFU});
 
@@ -688,11 +688,11 @@ TEST_CASE_METHOD(SArrayFixture, "SArray push back", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray clear", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray clear", "[dyamic_small_array]")
 {
     SECTION("Fit in internal storage")
     {
-        SArrayTest<5> vect(3);
+        DSArrayTest<5> vect(3);
 
         REQUIRE(TestObjectCnt::getStats() == 3U);
 
@@ -709,8 +709,8 @@ TEST_CASE_METHOD(SArrayFixture, "SArray clear", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTestAlloc src_alloc{test_alloc};
-            SArrayTestA<5> vect(10U, src_alloc);
+            DSArrayTestAlloc src_alloc{test_alloc};
+            DSArrayTestA<5> vect(10U, src_alloc);
             initTestObjectSequence(vect);
 
             REQUIRE_FALSE(vect.empty());
@@ -732,9 +732,9 @@ TEST_CASE_METHOD(SArrayFixture, "SArray clear", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray sub-script accessors", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray sub-script accessors", "[dyamic_small_array]")
 {
-    SArrayTest<5> vect{5};
+    DSArrayTest<5> vect{5};
     initTestObjectSequence(vect);
 
     for (usize idx = 0; idx != 5; ++idx)
@@ -747,11 +747,11 @@ TEST_CASE_METHOD(SArrayFixture, "SArray sub-script accessors", "[small_vector]")
     REQUIRE(vect.back().getId() == 4U);
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray capacity reservation", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray capacity reservation", "[dyamic_small_array]")
 {
     SECTION("Reserving within internal storage does not allocate memory")
     {
-        SArrayTest<5> vect(2);
+        DSArrayTest<5> vect(2);
         auto const small_storage_data = vect.data();
 
         REQUIRE(vect.isSmallStorage());
@@ -769,7 +769,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray capacity reservation", "[small_vector]")
 
     SECTION("Reserving less than the current capacity leaves the vector capacity and size unchanged")
     {
-        SArrayTest<5> vect(2);
+        DSArrayTest<5> vect(2);
         auto const small_storage_data = vect.data();
 
         REQUIRE(vect.isSmallStorage());
@@ -790,8 +790,8 @@ TEST_CASE_METHOD(SArrayFixture, "SArray capacity reservation", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTestAlloc vect_alloc{test_alloc};
-            SArrayTestA<5> vect(3U, vect_alloc);
+            DSArrayTestAlloc vect_alloc{test_alloc};
+            DSArrayTestA<5> vect(3U, vect_alloc);
             initTestObjectSequence(vect);
 
             auto const small_storage_data = vect.data();
@@ -819,11 +819,11 @@ TEST_CASE_METHOD(SArrayFixture, "SArray capacity reservation", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray shrink to fit", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray shrink to fit", "[dyamic_small_array]")
 {
     SECTION("Shrink to fit has no effect when fitting in small storage")
     {
-        SArrayTest<5> vect(3);
+        DSArrayTest<5> vect(3);
         initTestObjectSequence(vect);
 
         REQUIRE(vect.isSmallStorage());
@@ -844,8 +844,8 @@ TEST_CASE_METHOD(SArrayFixture, "SArray shrink to fit", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTestAlloc vect_alloc{test_alloc};
-            SArrayTestA<5> vect(vect_alloc);
+            DSArrayTestAlloc vect_alloc{test_alloc};
+            DSArrayTestA<5> vect(vect_alloc);
             auto const small_vect_data = vect.data();
 
             vect.resize(7U);
@@ -882,8 +882,8 @@ TEST_CASE_METHOD(SArrayFixture, "SArray shrink to fit", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTestAlloc vect_alloc{test_alloc};
-            SArrayTestA<5> vect{3, vect_alloc};
+            DSArrayTestAlloc vect_alloc{test_alloc};
+            DSArrayTestA<5> vect{3, vect_alloc};
             auto const small_vect_data = vect.data();
             initTestObjectSequence(vect);
 
@@ -909,9 +909,9 @@ TEST_CASE_METHOD(SArrayFixture, "SArray shrink to fit", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray pop back", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray pop back", "[dyamic_small_array]")
 {
-    SArrayTest<5> vect(3);
+    DSArrayTest<5> vect(3);
     initTestObjectSequence(vect);
 
     REQUIRE(vect.size() == 3U);
@@ -930,17 +930,17 @@ TEST_CASE_METHOD(SArrayFixture, "SArray pop back", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray maximum size", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray maximum size", "[dyamic_small_array]")
 {
-    SArrayTest<5> vect;
-    REQUIRE(sbstd::numeric_limits<SArrayTest<5>::size_type>::max() == vect.max_size());
+    DSArrayTest<5> vect;
+    REQUIRE(sbstd::numeric_limits<DSArrayTest<5>::size_type>::max() == vect.max_size());
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray resize", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray resize", "[dyamic_small_array]")
 {
     SECTION("Resize using the same size does not affect the vector")
     {
-        SArrayTest<5> vect(2U);
+        DSArrayTest<5> vect(2U);
         initTestObjectSequence(vect);
 
         REQUIRE(vect.size() == 2U);
@@ -956,7 +956,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray resize", "[small_vector]")
 
     SECTION("Resize within internal storage does not allocate memory")
     {
-        SArrayTest<5> vect(2U);
+        DSArrayTest<5> vect(2U);
         initTestObjectSequence(vect);
 
         REQUIRE(vect.size() == 2U);
@@ -982,8 +982,8 @@ TEST_CASE_METHOD(SArrayFixture, "SArray resize", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTestAlloc vect_alloc{test_alloc};
-            SArrayTestA<5> vect{2, vect_alloc};
+            DSArrayTestAlloc vect_alloc{test_alloc};
+            DSArrayTestA<5> vect{2, vect_alloc};
             auto const small_storage_data = vect.data();
             initTestObjectSequence(vect);
 
@@ -1016,8 +1016,8 @@ TEST_CASE_METHOD(SArrayFixture, "SArray resize", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTestAlloc vect_alloc{test_alloc};
-            SArrayTestA<5> vect{7, vect_alloc};
+            DSArrayTestAlloc vect_alloc{test_alloc};
+            DSArrayTestA<5> vect{7, vect_alloc};
             auto const vect_data = vect.data();
             initTestObjectSequence(vect);
 
@@ -1045,7 +1045,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray resize", "[small_vector]")
 
     SECTION("Resize with value")
     {
-        SArrayTest<5> vect(2U);
+        DSArrayTest<5> vect(2U);
         initTestObjectSequence(vect);
 
         REQUIRE(vect.size() == 2U);
@@ -1067,13 +1067,13 @@ TEST_CASE_METHOD(SArrayFixture, "SArray resize", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray assign value", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray assign value", "[dyamic_small_array]")
 {
     SECTION("Assign multiple times an object in small storage")
     {
         TestObjectCnt const REF_OBJECT(0xFFU);
 
-        SArrayTest<5> vect(3);
+        DSArrayTest<5> vect(3);
         initTestObjectSequence(vect);
 
         REQUIRE(vect.isSmallStorage());
@@ -1092,7 +1092,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign value", "[small_vector]")
     {
         TestObjectCnt const REF_OBJECT(0xFFU);
 
-        SArrayTest<5> vect(3);
+        DSArrayTest<5> vect(3);
         initTestObjectSequence(vect);
 
         REQUIRE(vect.isSmallStorage());
@@ -1113,8 +1113,8 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign value", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTestAlloc vect_alloc{test_alloc};
-            SArrayTestA<5> vect(3, vect_alloc);
+            DSArrayTestAlloc vect_alloc{test_alloc};
+            DSArrayTestA<5> vect(3, vect_alloc);
             auto const small_vect_data = vect.data();
             initTestObjectSequence(vect);
 
@@ -1142,8 +1142,8 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign value", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTestAlloc vect_alloc{test_alloc};
-            SArrayTestA<5> vect(10, vect_alloc);
+            DSArrayTestAlloc vect_alloc{test_alloc};
+            DSArrayTestA<5> vect(10, vect_alloc);
             auto const vect_data = vect.data();
             initTestObjectSequence(vect);
 
@@ -1166,17 +1166,17 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign value", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray assign operator", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray assign operator", "[dyamic_small_array]")
 {
     SECTION("Assign a smaller vector which fits in internal storage while using interal storage")
     {
-        SArrayTest<3> vect_src(3);
+        DSArrayTest<3> vect_src(3);
         initTestObjectSequence(vect_src);
 
         REQUIRE(TestObjectCnt::getStats() == 3U);
         REQUIRE(vect_src.isSmallStorage());
 
-        SArrayTest<5> vect(5);
+        DSArrayTest<5> vect(5);
         initTestObjectSequence(vect, 10);
 
         REQUIRE(TestObjectCnt::getStats() == 8U);
@@ -1199,14 +1199,14 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign operator", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTest<5> vect_src(5);
+            DSArrayTest<5> vect_src(5);
             initTestObjectSequence(vect_src);
 
             REQUIRE(TestObjectCnt::getStats() == 5U);
             REQUIRE(vect_src.isSmallStorage());
 
-            SArrayTestAlloc vect_alloc{test_alloc};
-            SArrayTestA<3> vect(3, vect_alloc);
+            DSArrayTestAlloc vect_alloc{test_alloc};
+            DSArrayTestA<3> vect(3, vect_alloc);
             initTestObjectSequence(vect, 10);
 
             REQUIRE(TestObjectCnt::getStats() == 8U);
@@ -1234,14 +1234,14 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign operator", "[small_vector]")
         TestAllocator test_alloc;
 
         {
-            SArrayTest<3> vect_src(3);
+            DSArrayTest<3> vect_src(3);
             initTestObjectSequence(vect_src);
 
             REQUIRE(TestObjectCnt::getStats() == 3U);
             REQUIRE(vect_src.isSmallStorage());
 
-            SArrayTestAlloc vect_alloc{test_alloc};
-            SArrayTestA<3> vect(10, vect_alloc);
+            DSArrayTestAlloc vect_alloc{test_alloc};
+            DSArrayTestA<3> vect(10, vect_alloc);
             initTestObjectSequence(vect, 10);
 
             REQUIRE(TestObjectCnt::getStats() == 13U);
@@ -1265,11 +1265,11 @@ TEST_CASE_METHOD(SArrayFixture, "SArray assign operator", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray swap", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray swap", "[dyamic_small_array]")
 {
     SECTION("Swap heap storage")
     {
-        SArrayTest<3> vect1(10), vect2(5);
+        DSArrayTest<3> vect1(10), vect2(5);
 
         initTestObjectSequence(vect1);
         initTestObjectSequence(vect2, 20U);
@@ -1301,7 +1301,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray swap", "[small_vector]")
 
     SECTION("Swap vectors using internal storage")
     {
-        SArrayTest<20> vect1(10), vect2(5);
+        DSArrayTest<20> vect1(10), vect2(5);
 
         initTestObjectSequence(vect1);
         initTestObjectSequence(vect2, 20U);
@@ -1327,7 +1327,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray swap", "[small_vector]")
 
     SECTION("Swap from heap to internal storage")
     {
-        SArrayTest<5> vect1(5), vect2(10);
+        DSArrayTest<5> vect1(5), vect2(10);
 
         initTestObjectSequence(vect1);
         initTestObjectSequence(vect2, 20U);
@@ -1358,7 +1358,7 @@ TEST_CASE_METHOD(SArrayFixture, "SArray swap", "[small_vector]")
 
     SECTION("Swap from internal to heap storage")
     {
-        SArrayTest<5> vect2(5), vect1(10);
+        DSArrayTest<5> vect2(5), vect1(10);
 
         initTestObjectSequence(vect2);
         initTestObjectSequence(vect1, 20U);
@@ -1388,10 +1388,10 @@ TEST_CASE_METHOD(SArrayFixture, "SArray swap", "[small_vector]")
     }
 }
 
-TEST_CASE_METHOD(SArrayFixture, "SArray without allocator has not overhead", "[small_vector]")
+TEST_CASE_METHOD(DSArrayFixture, "DSArray without allocator has not overhead", "[dyamic_small_array]")
 {
     // sizeof(m_begin) + sizeof(m_end) + sizeof(m_storage_end) + sizeof(small storage test = void *)
-    // STATIC_REQUIRE(sizeof(SArray<b8, sizeof(void *)>) == 4 * sizeof(void *));
+    // STATIC_REQUIRE(sizeof(DSArray<b8, sizeof(void *)>) == 4 * sizeof(void *));
 }
 
 #include <extern_epilog.h>

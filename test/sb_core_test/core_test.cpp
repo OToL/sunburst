@@ -3,7 +3,7 @@
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
 
-#include <sb_core/error/error.h>
+#include <sb_core/error.h>
 
 using namespace sb;
 
@@ -38,12 +38,6 @@ TEST_CASE("Check types size", "[core]")
     STATIC_REQUIRE(4 == sizeof(f32));
     STATIC_REQUIRE(8 == sizeof(usize));
     STATIC_REQUIRE(8 == sizeof(uptr));
-    
-    int x = 1;
-    if (sb_dont_expect(x != 0))
-    {
-        x = 2;
-    }
 }
 
 #include <extern_epilog.h>

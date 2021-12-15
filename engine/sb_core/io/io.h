@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/system/system.h>
+#include <sb_core/os.h>
 
 namespace sb {
 
