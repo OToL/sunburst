@@ -3,7 +3,7 @@
 // @todo: use Win32 API (CreateFile, etc.)
 #include "local_file_system_posix.hpp"
 
-sb::b8 sb::internal::platformFileExists(char const * path)
+sb::b8 sb::localFileExists(char const * path)
 {
     DWORD dwAttrib = GetFileAttributesA(path);
 

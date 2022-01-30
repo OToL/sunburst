@@ -1,15 +1,11 @@
 #include <sb_core/_impl/config.h>
+#include <sb_core/string/format.h>
 
 #include <sb_std/utility>
 
 #if sb_ctf_enabled(ERROR_FACILITY)
 
 #    include <sb_std/span>
-
-namespace sb {
-template <typename... TArgs>
-usize formatString(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args);
-}
 
 namespace sb::internal {
 

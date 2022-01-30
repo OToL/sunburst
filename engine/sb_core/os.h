@@ -14,8 +14,9 @@
 
 namespace sb {
 
-using internal::SYS_PATH_SEPARATOR;
-using internal::SYS_PATH_MAX_LEN;
+using internal::LOCAL_PATH_SEPERATOR;
+using internal::LOCAL_PATH_INVALID_SEPERATOR;
+using internal::LOCAL_PATH_MAX_LEN;
 
 void getWorkingDirectory(sbstd::span<char> buffer);
 void outputDebugString(char const * msg);

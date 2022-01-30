@@ -31,7 +31,7 @@ namespace hash_str = hash64_str;
 using HashStr = Hash64Str;
 using HashStrValue = u64;
 
-constexpr HashStr operator"" _hs(char const * str, usize len)
+consteval HashStr operator"" _hs(char const * str, usize len)
 {
     return {computeHash64({str, len})};
 }

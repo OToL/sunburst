@@ -2,28 +2,30 @@
 
 #include <sb_core/core.h>
 #include <sb_core/io/io.h>
-#include "io.h"
+#include "file_system.h"
 
-namespace sb::internal {
+namespace sb {
 
-LayerFile platformOpenFileRead(char const * path, FileFormat fmt);
+File openLocalFileRead(char const * path, FileFormat fmt);
 
-LayerFile platformOpenFileReadWrite(char const * path, FileWriteMode mode, FileFormat fmt);
+File openLocalFileWrite(char const * path, FileWriteMode mode, FileFormat fmt);
 
-LayerFile platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt);
+File createLocalFile(char const * path, FileFormat fmt);
 
-LayerFile platformCreateFileReadWrite(char const * path, FileFormat fmt);
+File createLocalFileWrite(char const * path, FileFormat fmt);
 
-LayerFile platformCreateFileWrite(char const * path, FileFormat fmt);
+FileSize readLocalFile(File hdl, u8 * buffer, FileSize count);
 
-FileSize platformReadFile(LayerFile hdl, u8 * buffer, FileSize count);
+FileSize writeLocalFile(File hdl, u8 const * buffer, FileSize count);
 
-FileSize platformWriteFile(LayerFile hdl, u8 const * buffer, FileSize count);
+FileSize getLocalFileLength(File hdl);
 
-FileSize platformFileLength(LayerFile hdl);
+void closeLocalFile(File hdl);
 
-void platformCloseFile(LayerFile hdl);
+b8 localFileExists(char const * path);
 
-b8 platformFileExists(char const * path);
+b8 isLocalFileValid(File hdl);
+
+FileSystem getLocalFileSystem();
 
 } // namespace sb::internal

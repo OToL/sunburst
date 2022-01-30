@@ -12,10 +12,7 @@ class ObjectPoolAllocator final : public IAllocator
     sb_base(PoolAllocator<TMemProvider>);
 
 public:
-    ObjectPoolAllocator()
-        : Base()
-    {
-    }
+    ObjectPoolAllocator() = default;
 
     ObjectPoolAllocator(usize obj_count)
         : _allocator(sizeof(TObject), obj_count, alignof(TObject))

@@ -1,4 +1,4 @@
-if(SB_ENABLE_SANPLE)
+if(SB_ENABLE_SAMPLE)
     file(GLOB children RELATIVE ${CMAKE_CURRENT_LIST_DIR} *)
 
     foreach(child_iter ${children})

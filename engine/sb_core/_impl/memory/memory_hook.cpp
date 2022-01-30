@@ -1,4 +1,5 @@
 #include "memory_system.h"
+#include <sb_core/core.h>
 
 #pragma warning(push)
 #pragma warning(disable : 4073)

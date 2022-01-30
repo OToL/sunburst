@@ -1,10 +1,12 @@
 #pragma once
 
 #include <sb_core/core.h>
+#include <sb_core/utility.h>
 #include <sb_core/string/utility.h>
 #include <sb_core/error.h>
 
 #include <sb_std/cstring>
+#include <sb_std/string_view>
 
 namespace sb {
 
@@ -13,6 +15,8 @@ template <usize CAPACITY, typename TChar = char>
 class FixString
 {
     static_assert(CAPACITY != 0, "FixString cannot 0 as CAPACITY");
+
+    using StringView = sbstd::basic_string_view<TChar>;
 
 public:
     FixString()
@@ -30,6 +34,23 @@ public:
         {
             _len = strCpyT(_data, src);
         }
+    }
+
+    FixString(TChar const * src, usize len)
+    {
+        if ((nullptr == src) || (0 == len))
+        {
+            _data[0] = TChar{};
+        }
+        else
+        {
+            _len = strCpyT(&_data[0], minValue(CAPACITY, len + 1), src);
+        }
+    }
+
+    FixString(StringView const & view)
+        : FixString(view.data(), view.size())
+    {
     }
 
     template <usize SRC_CAPACITY>
@@ -85,11 +106,23 @@ public:
         return _data[idx];
     }
 
+    template <usize LCAPACITY>
+    b8 operator==(FixString<LCAPACITY> const & lvalue)
+    {
+        if (_len != lvalue._len)
+        {
+            return false;
+        }
+
+        // @todo: use character size agnostic comparison
+        return (0 == strcmp(_data, lvalue._data));
+    }
+
     TChar back() const
     {
         sb_warn(0 != _len)
 
-            auto backChar = TChar{};
+        auto backChar = TChar{};
 
         if (0 != _len)
         {
@@ -103,7 +136,7 @@ public:
     {
         sb_warn(_len != (CAPACITY - 1))
 
-            if (_len != (CAPACITY - 1))
+        if (_len != (CAPACITY - 1))
         {
             _data[_len] = c;
             ++_len;

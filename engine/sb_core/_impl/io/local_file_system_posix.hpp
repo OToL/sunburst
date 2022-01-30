@@ -1,14 +1,14 @@
+#include "local_file_system.h"
 #include <sb_core/core.h>
-#include <sb_core/string/format.h>
 #include <sb_core/error.h>
 #include <sb_core/cast.h>
 #include <sb_core/io/io.h>
+#include <sb_core/string/format.h>
 #include <sb_core/string/fix_string.h>
-#include <sb_core/_impl/io/local_file_system.h>
 
 #include <sb_std/cstdio>
 
-sb::internal::LayerFile sb::internal::platformOpenFileRead(char const * path, FileFormat fmt)
+sb::File sb::openLocalFileRead(char const * path, FileFormat fmt)
 {
     FixString<3> flags{"r"};
 
@@ -28,42 +28,7 @@ sb::internal::LayerFile sb::internal::platformOpenFileRead(char const * path, Fi
     return {};
 }
 
-sb::internal::LayerFile sb::internal::platformOpenFileReadWrite(char const * path, FileWriteMode mode, FileFormat fmt)
-{
-    FixString<5> flags;
-
-    if (mode == FileWriteMode::APPEND)
-    {
-        flags.append("a+");
-    }
-    else if (mode == FileWriteMode::TRUNC)
-    {
-        flags.append("w+");
-    }
-    else
-    {
-        sb_warn(false, "Unhandled write mode {}", integral_cast<>(mode));
-    }
-
-    if (fmt == FileFormat::BIN)
-    {
-        flags.push_back('b');
-    }
-
-    flags.push_back('x');
-
-    FILE * hdl = nullptr;
-    auto const res = fopen_s(&hdl, path, flags.data());
-
-    if (sb_expect(0 == res))
-    {
-        return {(void *)hdl};
-    }
-
-    return {};
-}
-
-sb::internal::LayerFile sb::internal::platformOpenFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
+sb::File sb::openLocalFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
     FixString<5> flags;
 
@@ -85,8 +50,6 @@ sb::internal::LayerFile sb::internal::platformOpenFileWrite(char const * path, F
         flags.push_back('b');
     }
 
-    flags.push_back('x');
-
     FILE * hdl = nullptr;
     auto const res = fopen_s(&hdl, path, flags.data());
 
@@ -98,61 +61,21 @@ sb::internal::LayerFile sb::internal::platformOpenFileWrite(char const * path, F
     return {};
 }
 
-sb::internal::LayerFile sb::internal::platformCreateFileWrite(char const * path, FileFormat fmt)
-{
-    FixString<3> flags{"w"};
-
-    if (fmt == FileFormat::BIN)
-    {
-        flags.push_back('b');
-    }
-
-    FILE * hdl = nullptr;
-    auto const res = fopen_s(&hdl, path, flags.data());
-
-    if (sb_expect(0 == res))
-    {
-        return {(void *)hdl};
-    }
-
-    return {};
-}
-
-sb::internal::LayerFile sb::internal::platformCreateFileReadWrite(char const * path, FileFormat fmt)
-{
-    FixString<3> flags{"w+"};
-
-    if (fmt == FileFormat::BIN)
-    {
-        flags.push_back('b');
-    }
-
-    FILE * hdl = nullptr;
-    auto const res = fopen_s(&hdl, path, flags.data());
-
-    if (sb_expect(0 == res))
-    {
-        return {(void *)hdl};
-    }
-
-    return {};
-}
-
-void sb::internal::platformCloseFile(LayerFile hdl)
+void sb::closeLocalFile(File hdl)
 {
     sb_assert(nullptr != hdl.value);
 
     fclose(reinterpret_cast<FILE *>(hdl.value));
 }
 
-sb::FileSize sb::internal::platformReadFile(LayerFile hdl, u8 * buffer, FileSize count)
+sb::FileSize sb::readLocalFile(File hdl, u8 * buffer, FileSize count)
 {
     sb_assert(nullptr != hdl.value);
 
     return integral_cast<FileSize>(fread((void *)buffer, 1, (usize)count, reinterpret_cast<FILE *>(hdl.value)));
 }
 
-sb::FileSize sb::internal::platformWriteFile(LayerFile hdl, u8 const * buffer, FileSize count)
+sb::FileSize sb::writeLocalFile(File hdl, u8 const * buffer, FileSize count)
 {
     sb_assert(nullptr != hdl.value);
 
@@ -160,7 +83,7 @@ sb::FileSize sb::internal::platformWriteFile(LayerFile hdl, u8 const * buffer, F
 }
 
 // @todo: could be optimized
-sb::FileSize sb::internal::platformFileLength(LayerFile hdl)
+sb::FileSize sb::getLocalFileLength(File hdl)
 {
     sb_assert(nullptr != hdl.value);
 
@@ -179,4 +102,9 @@ sb::FileSize sb::internal::platformFileLength(LayerFile hdl)
     sb_assert(res == 0);
 
     return file_len;
+}
+
+sb::b8 sb::isLocalFileValid(File hdl) 
+{
+    return (nullptr != hdl.value);
 }

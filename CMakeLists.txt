@@ -12,7 +12,7 @@ endif()
 OPTION(SB_ENABLE_UNITTEST "Enable unit tests executable targets" ON)
 OPTION(SB_ENABLE_WARNING_AS_ERROR "Treat compilation warnings as errors" ON)
 OPTION(SB_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" OFF)
-OPTION(SB_ENABLE_SANPLE "Enable sample applications" ON)
+OPTION(SB_ENABLE_SAMPLE "Enable sample applications" ON)
 OPTION(SB_ENABLE_SANITIZER_UNDEFINED_BEHAVIOR "Enable undefined behavior sanitizer" OFF)
 OPTION(SB_ENABLE_CLANG_TIDY "Enable clang tidy static analyzer" OFF)
 

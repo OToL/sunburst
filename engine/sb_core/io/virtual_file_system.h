@@ -18,24 +18,20 @@ struct virtual_file_system
 public:
     using LayerName = HashStr;
 
-    struct InitParams
+    struct MountResult
     {
+        b8 success;
+        LayerName name;
     };
 
-    static b8 initialize(InitParams const & init);
+    static b8 initialize();
     static b8 terminate();
 
     static b8 fileExists(char const * path);
 
-    static FileHdl openFile(char const * path, FileWriteMode mode = FileWriteMode::APPEND, FileFormat fmt = FileFormat::BIN,
-                     bool create_if_not_exist = false);
     static FileHdl openFileWrite(char const * path, FileWriteMode mode = FileWriteMode::APPEND,
-                          FileFormat fmt = FileFormat::BIN, bool create_if_not_exist = false);
+                                 FileFormat fmt = FileFormat::BIN);
     static FileHdl openFileRead(char const * path, FileFormat fmt = FileFormat::BIN);
-
-    static FileHdl createFile(char const * path, FileFormat fmt = FileFormat::BIN);
-    static FileHdl createFileWrite(char const * path, FileFormat fmt = FileFormat::BIN);
-
     static void closeFile(FileHdl hdl);
 
     static FileSize readFile(FileHdl hdl, sbstd::span<u8> buffer, FileSize cnt = -1);
@@ -45,6 +41,9 @@ public:
     static FileProps getFileProps(FileHdl hdl);
 
     static sbstd::span<u8> readFile(char const * path, IAllocator & alloc, FileFormat fmt = FileFormat::BIN);
+
+    static MountResult mountLocalFileSystem(char const * vfs_path, char const * local_path, LayerName name = {});
+    static b8 umount(LayerName name);
 };
 
 using vfs = virtual_file_system;

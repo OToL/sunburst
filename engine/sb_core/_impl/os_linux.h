@@ -2,7 +2,7 @@
 
 namespace sb::internal {
 
-inline constexpr char SYS_PATH_SEPARATOR = '/';
-inline constexpr u32 SYS_PATH_MAX_LEN = 255U;
+inline constexpr char LOCAL_PATH_SEPERATOR = '/';
+inline constexpr u32 LOCAL_PATH_MAX_LEN = 255U;
 
 } // namespace sb::detail

@@ -6,6 +6,7 @@
 #include <sb_std/type_traits>
 #include <sb_std/utility>
 #include <sb_std/algorithm>
+#include <sb_std/memory>
 
 namespace sb {
 
@@ -77,6 +78,21 @@ public:
         return (0 == _size);
     }
 
+    iterator expand(size_type cnt)
+    {
+        if (sb_expect((_size + cnt) <= CAPACITY))
+        {
+            auto new_start_iter = end();
+
+            sbstd::uninitialized_default_construct((pointer)_data + _size, ((pointer)_data) + _size + cnt);
+            _size += cnt;
+
+            return new_start_iter;
+        }
+
+        return end();
+    }
+
     void push_back(const_reference value)
     {
         sb_assert(CAPACITY != _size, "Static vector capacity exceeded");
@@ -126,26 +142,17 @@ public:
         return *(reinterpret_cast<const_pointer>(&_data[0]) + _size - 1);
     }
 
-    iterator erase(iterator pos)
+    iterator erase(const_iterator pos)
     {
         sb_assert((begin() <= pos) && (pos < end()));
 
-        pointer item2Rem = pos;
-        const_pointer const endItem = end();
+        iterator mutable_pos = begin() + (pos - begin());
 
-        if ((item2Rem + 1) != endItem)
-        {
-            while ((item2Rem + 1) != endItem)
-            {
-                *item2Rem = sbstd::move(*(item2Rem + 1));
-                ++item2Rem;
-            }
-        }
-
-        item2Rem->~value_type();
+        sbstd::move(mutable_pos + 1, end(), mutable_pos);
+        (end() - 1)->~value_type();
         --_size;
 
-        return pos;
+        return mutable_pos;
     }
 
     const_pointer data() const

@@ -7,390 +7,146 @@
 #include <sb_core/log.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/global_heap.h>
+#include <sb_core/memory/allocator/object_pool_allocator.h>
+#include <sb_core/memory/allocator/global_heap_allocator.h>
+#include <sb_core/container/dynamic_small_array.h>
+#include <sb_core/container/dynamic_fix_array.h>
 
-namespace sb { namespace internal {
+namespace sb {
 
-    class VirtualFileSystem
-    {
-        //    struct LayerDesc
-        //    {
-        //        VFS::LayerName id;
-        //        FixString<VFS_PATH_MAX_LEN + 1> vfs_path;
-        //        FixString<SYS_PATH_MAX_LEN + 1> local_path;
-        //    };
+using FixVFSPath = FixString<VFS_PATH_MAX_LEN + 1>;
+using FixFSPath = FixString<LOCAL_PATH_MAX_LEN + 1>;
+using FileGen = u16;
 
-        using FileGen = u16;
-
-        //    struct FileDesc
-        //    {
-        //        FileProps props;
-        //        internal::LayerFile hdl;
-        //        u16 gen;
-        //    };
-
-        //    union FileHelper
-        //    {
-        //        struct
-        //        {
-        //            u16 hdl;
-        //            u16 gen;
-        //        } unpacked;
-
-        //        FileHdl::ValueType packed;
-        //    };
-        //    static_assert(sizeof(FileHelper) == sizeof(FileHdl::ValueType));
-
-    public:
-        sb_copy_protect(VirtualFileSystem);
-
-        //    LayerDesc * findLayer(VFS::LayerName layer_id)
-        //    {
-        //        auto const layer_iter =
-        //            sbstd::find_if(begin(layers), end(layers),
-        //                           [layer_id](LayerDesc const & layer_desc) { return layer_desc.id == layer_id; });
-
-        //        return (layer_iter == end(layers)) ? nullptr : layer_iter;
-        //    }
-
-        VirtualFileSystem()
-            : _curr_file_gen(0U)
-            , _opened_file_count(0U)
-        {
-        }
-
-        ~VirtualFileSystem()
-        {
-            sb_warn(0 == _opened_file_count, "Not all files have been closed before destroying the File System");
-        }
-
-        //    FileDesc & getFileDesc(FileHdl hdl)
-        //    {
-        //        sb_assert(isValid(hdl));
-
-        //        FileHelper helper_hdl = {.packed = hdl.value};
-
-        //        MemoryArena arena = file_desc_pool.getArena();
-        //        FileDesc * const file_desc = static_cast<FileDesc *>(arena.data) + helper_hdl.unpacked.hdl;
-
-        //        sb_assert(memory_arena::isInRange(arena, file_desc));
-        //        sb_assert(helper_hdl.unpacked.gen == file_desc->gen);
-
-        //        return *file_desc;
-        //    }
-
-        void closeFile(FileHdl /*hdl*/)
-        {
-            //        sb_assert(0 < opened_file_count);
-
-            //        auto & desc = getFileDesc(hdl);
-            //        internal::platformCloseFile(desc.hdl);
-
-            //        destroyFileDesc(hdl);
-
-            //        --opened_file_count;
-        }
-
-        FileSize readFile(FileHdl /*hdl*/, u8 * /*buffer*/, FileSize /*cnt*/)
-        {
-            //        auto const & desc = getFileDesc(hdl);
-
-            //        if (sb_expect(0 != (desc.props.access.value & FileAccessFlags::READ)))
-            //        {
-            //            return internal::platformReadFile(desc.hdl, buffer, cnt);
-            //        }
-
-            return 0;
-        }
-
-        FileSize writeFile(FileHdl /*hdl*/, u8 const * /*buffer*/, FileSize /*cnt*/)
-        {
-            //        auto const & desc = getFileDesc(hdl);
-
-            //        if (sb_expect(0 != (desc.props.access.value & FileAccessFlags::WRITE)))
-            //        {
-            //            return internal::platformWriteFile(desc.hdl, buffer, cnt);
-            //        }
-
-            return 0;
-        }
-
-        FileSize getFileLength(FileHdl /*hdl*/)
-        {
-            //        auto const & desc = getFileDesc(hdl);
-            //        return internal::platformFileLength(desc.hdl);
-
-            return 0;
-        }
-
-        FileProps getFileProps(FileHdl /*hdl*/)
-        {
-            //        auto const & desc = getFileDesc(hdl);
-            //        return desc.props;
-
-            return {};
-        }
-
-        b8 fileExists(char const * /*path*/)
-        {
-            //        for (auto const & layer_desc : layers)
-            //        {
-            //            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
-            //            {
-            //                char local_file_path[SYS_PATH_MAX_LEN + 1];
-            //                buildLocalFilePath(local_file_path, layer_desc, path);
-
-            //                if (internal::platformFileExists(&local_file_path[0]))
-            //                {
-            //                    return true;
-            //                }
-            //            }
-            //        }
-
-            return false;
-        }
-
-
-        //    static void buildLocalFilePath(char (&local_file_path)[SYS_PATH_MAX_LEN + 1], LayerDesc const &
-        //    layer_desc,
-        //                                   char const * file_path)
-        //    {
-        //        strCpyT(local_file_path, layer_desc.local_path.c_str());
-        //        concatSysPath(local_file_path, layer_desc.local_path.length(), file_path +
-        //        layer_desc.vfs_path.length()); normalizeSysPath(&local_file_path[0]);
-        //    }
-
-        FileHdl openFileRead(char const * /*path*/, FileFormat /*fmt*/)
-        {
-            //        for (auto const & layer_desc : layers)
-            //        {
-            //            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
-            //            {
-            //                char local_file_path[SYS_PATH_MAX_LEN + 1];
-            //                buildLocalFilePath(local_file_path, layer_desc, path);
-
-            //                auto const local_file_hdl = internal::platformOpenFileRead(&local_file_path[0], fmt);
-
-            //                if (layerfile_isValid(local_file_hdl))
-            //                {
-            //                    FileProps const file_props = {.fmt = fmt, .access = FileAccessFlags::READ};
-            //                    FileHdl file_hdl = createFile(local_file_hdl, file_props);
-
-            //                    if (sb_expect(isValid(file_hdl), "Out of file descriptors"))
-            //                    {
-            //                        ++opened_file_count;
-            //                        return file_hdl;
-            //                    }
-            //                    else
-            //                    {
-            //                        internal::platformCloseFile({local_file_hdl});
-            //                    }
-
-            //                    break;
-            //                }
-            //            }
-            //        }
-
-            return {};
-        }
-
-        FileHdl openFileReadWrite(char const * /*path*/, FileWriteMode /*mode*/, FileFormat /*fmt*/)
-        {
-            //        for (auto const & layer_desc : layers)
-            //        {
-            //            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
-            //            {
-            //                char local_file_path[SYS_PATH_MAX_LEN + 1];
-            //                buildLocalFilePath(local_file_path, layer_desc, path);
-
-            //                auto const local_file_hdl = internal::platformOpenFileReadWrite(&local_file_path[0], mode,
-            //                fmt);
-
-            //                if (layerfile_isValid(local_file_hdl))
-            //                {
-            //                    FileProps const file_props = {.fmt = fmt,
-            //                                                  .access = FileAccessFlags::READ |
-            //                                                  FileAccessFlags::WRITE};
-            //                    FileHdl file_hdl = createFile(local_file_hdl, file_props);
-
-            //                    if (sb_expect(isValid(file_hdl), "Out of file descriptors"))
-            //                    {
-            //                        ++opened_file_count;
-            //                        return file_hdl;
-            //                    }
-            //                    else
-            //                    {
-            //                        internal::platformCloseFile({local_file_hdl});
-            //                    }
-
-            //                    break;
-            //                }
-            //            }
-            //        }
-
-            return {};
-        }
-
-        FileHdl openFileWrite(char const * /*path*/, FileWriteMode /*mode*/, FileFormat /*fmt*/)
-        {
-            //        for (auto const & layer_desc : layers)
-            //        {
-            //            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
-            //            {
-            //                char local_file_path[SYS_PATH_MAX_LEN + 1];
-            //                buildLocalFilePath(local_file_path, layer_desc, path);
-
-            //                auto const local_file_hdl = internal::platformOpenFileWrite(&local_file_path[0], mode,
-            //                fmt);
-
-            //                if (layerfile_isValid(local_file_hdl))
-            //                {
-            //                    FileProps const file_props = {.fmt = fmt, .access = FileAccessFlags::WRITE};
-            //                    FileHdl file_hdl = createFile(local_file_hdl, file_props);
-
-            //                    if (sb_expect(isValid(file_hdl), "Out of file descriptors"))
-            //                    {
-            //                        ++opened_file_count;
-            //                        return file_hdl;
-            //                    }
-            //                    else
-            //                    {
-            //                        internal::platformCloseFile({local_file_hdl});
-            //                    }
-
-            //                    break;
-            //                }
-            //            }
-            //        }
-
-            return {};
-        }
-
-        FileHdl createFileReadWrite(char const * /*path*/, FileFormat /*fmt*/)
-        {
-            //        for (auto const & layer_desc : layers)
-            //        {
-            //            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
-            //            {
-            //                char local_file_path[SYS_PATH_MAX_LEN + 1];
-            //                buildLocalFilePath(local_file_path, layer_desc, path);
-
-            //                auto const local_file_hdl = internal::platformCreateFileReadWrite(&local_file_path[0],
-            //                fmt);
-
-            //                if (layerfile_isValid(local_file_hdl))
-            //                {
-            //                    FileProps const file_props = {.fmt = fmt,
-            //                                                  .access = FileAccessFlags::READ |
-            //                                                  FileAccessFlags::WRITE};
-            //                    FileHdl file_hdl = createFile(local_file_hdl, file_props);
-
-            //                    if (sb_expect(isValid(file_hdl), "Out of file descriptors"))
-            //                    {
-            //                        ++opened_file_count;
-            //                        return file_hdl;
-            //                    }
-            //                    else
-            //                    {
-            //                        internal::platformCloseFile({local_file_hdl});
-            //                    }
-
-            //                    break;
-            //                }
-            //            }
-            //        }
-
-            return {};
-        }
-
-        FileHdl createFileWrite(char const * /*path*/, FileFormat /*fmt*/)
-        {
-            //        for (auto const & layer_desc : layers)
-            //        {
-            //            if (strStartsWith(path, layer_desc.vfs_path.c_str()))
-            //            {
-            //                char local_file_path[SYS_PATH_MAX_LEN + 1];
-            //                buildLocalFilePath(local_file_path, layer_desc, path);
-
-            //                auto const local_file_hdl = internal::platformCreateFileWrite(&local_file_path[0], fmt);
-
-            //                if (layerfile_isValid(local_file_hdl))
-            //                {
-            //                    FileProps const file_props = {.fmt = fmt, .access = FileAccessFlags::WRITE};
-            //                    FileHdl file_hdl = createFile(local_file_hdl, file_props);
-
-            //                    if (sb_expect(isValid(file_hdl), "Out of file descriptors"))
-            //                    {
-            //                        ++opened_file_count;
-            //                        return file_hdl;
-            //                    }
-            //                    else
-            //                    {
-            //                        internal::platformCloseFile({local_file_hdl});
-            //                    }
-
-            //                    break;
-            //                }
-            //            }
-            //        }
-
-            return {};
-        }
-
-        // private:
-        //    using FileDescPool = ObjectPoolAllocator<FileDesc, GlobalHeapAllocator>;
-
-        //    FileHdl createFile(internal::LayerFile layer_hdl, FileProps props)
-        //    {
-        //        FileDesc * const file_desc = static_cast<FileDesc *>(file_desc_pool.allocate().data);
-
-        //        if (sb_expect(nullptr != file_desc))
-        //        {
-        //            *file_desc = {props, layer_hdl, ++curr_file_gen};
-
-        //            MemoryArena arena = file_desc_pool.getArena();
-        //            auto const base_obj = static_cast<FileDesc *>(arena.data);
-
-        //            FileHelper const helper_hdl = {.unpacked = {integral_cast<u16>(sbstd::distance(base_obj,
-        //            file_desc)),
-        //                                                        integral_cast<u16>(file_desc->gen)}};
-
-        //            return FileHdl{helper_hdl.packed};
-        //        }
-
-        //        return FileHdl{};
-        //    }
-
-        //    void destroyFileDesc(FileHdl hdl)
-        //    {
-        //        sb_assert(isValid(hdl));
-
-        //        FileHelper helper_hdl = {.packed = hdl.value};
-
-        //        MemoryArena const arena = file_desc_pool.getArena();
-        //        FileDesc * const file_desc = static_cast<FileDesc *>(arena.data) + helper_hdl.unpacked.hdl;
-
-        //        sb_assert(memory_arena::isInRange(arena, (void *)file_desc));
-        //        sb_assert(helper_hdl.unpacked.gen == file_desc->gen);
-
-        //        *file_desc = {};
-        //        file_desc_pool.deallocate((void *)file_desc);
-        //    }
-
-        //    FileDescPool file_desc_pool;
-        //    sb::DFArray<LayerDesc, VFS_LAYER_MAX_COUNT> layers;
-        FileGen _curr_file_gen;
-        u16 _opened_file_count;
-    };
-
-    VirtualFileSystem * g_vfs = nullptr;
-
-}} // namespace sb::internal
-
-sb::b8 sb::virtual_file_system::initialize(InitParams const & /*init*/)
+struct LayerDesc
 {
-    if (sb_expect(nullptr == internal::g_vfs, "Virtual File System is already initialized"))
+    vfs::LayerName name;
+    FileSystemType type;
+    FixVFSPath vfs_root_path;
+    FixFSPath fs_path;
+};
+
+struct FileDesc
+{
+    FileProps props;
+    FileSystemType fs_type;
+    FileGen gen;
+    sb::File hdl;
+};
+
+union FileHelper
+{
+    struct
     {
-        internal::g_vfs = sb_new(GHEAP, internal::VirtualFileSystem);
+        u16 hdl;
+        u16 gen;
+    } unpacked;
+
+    FileHdl::ValueType packed;
+};
+
+struct VirtualFileSystemState
+{
+    sb_copy_protect(VirtualFileSystemState);
+
+public:
+    VirtualFileSystemState()
+        : file_desc_pool(50)
+    {
+    }
+
+    using LayerNameGen = u16;
+    using FileDescPool = ObjectPoolAllocator<FileDesc, GlobalHeapAllocator>;
+
+    FileDescPool file_desc_pool;
+    DFArray<LayerDesc, sb::VFS_LAYER_MAX_COUNT> layers;
+    DSArray<FileSystem, 5> file_systems;
+    LayerNameGen curr_layer_name_gen = 0;
+    FileGen curr_file_gen = 0;
+    u16 opened_file_count = 0;
+};
+
+VirtualFileSystemState * g_vfs_state = nullptr;
+
+auto findVFSLayer(VirtualFileSystemState const & vfs_data, vfs::LayerName layer_name)
+{
+    auto const layer_iter =
+        sbstd::find_if(begin(vfs_data.layers), end(vfs_data.layers),
+                       [layer_name](LayerDesc const & layer_desc) { return layer_desc.name == layer_name; });
+
+    return layer_iter;
+}
+
+auto findVFSLayer(VirtualFileSystemState const & vfs_data, char const * layer_path)
+{
+    auto const layer_iter =
+        sbstd::find_if(begin(vfs_data.layers), end(vfs_data.layers), [layer_path](LayerDesc const & layer_desc) {
+            return strStartsWith(layer_path, layer_desc.vfs_root_path.c_str());
+        });
+
+    return layer_iter;
+}
+
+void constructFSPath(FixFSPath & fs_path, LayerDesc const & layer, char const * file_path)
+{
+    fs_path = layer.fs_path;
+    fs_path.append(file_path + layer.vfs_root_path.length());
+    normalizeLocalPath(fs_path.data());
+}
+
+FileHdl createFileDesc(VirtualFileSystemState & vfs_data, sb::File fs_file, FileProps props, FileSystemType fs_type)
+{
+    FileDesc * const file_desc = static_cast<FileDesc *>(vfs_data.file_desc_pool.allocate().data);
+    if (sb_expect(nullptr != file_desc))
+    {
+        *file_desc = {.props = props, .fs_type = fs_type, .gen = ++g_vfs_state->curr_file_gen, .hdl = fs_file};
+
+        MemoryArena arena = g_vfs_state->file_desc_pool.getArena();
+        auto const base_obj = static_cast<FileDesc *>(arena.data);
+
+        FileHelper const helper_hdl = {
+            .unpacked = {integral_cast<u16>(sbstd::distance(base_obj, file_desc)), integral_cast<u16>(file_desc->gen)}};
+
+        return FileHdl{helper_hdl.packed};
+    }
+
+    return FileHdl{};
+}
+
+FileDesc & getFileDesc(VirtualFileSystemState & vfs_data, FileHdl hdl)
+{
+    sb_assert(isValid(hdl));
+
+    FileHelper const helper_hdl = {.packed = hdl.value};
+
+    MemoryArena arena = vfs_data.file_desc_pool.getArena();
+    FileDesc * const file_desc = static_cast<FileDesc *>(arena.data) + helper_hdl.unpacked.hdl;
+
+    sb_assert(isInRange(arena, file_desc));
+    sb_assert(helper_hdl.unpacked.gen == file_desc->gen);
+
+    return *file_desc;
+}
+
+void destroyFileDesc(VirtualFileSystemState & vfs_data, FileDesc & file_desc)
+{
+    sb_assert(isInRange(vfs_data.file_desc_pool.getArena(), (void *)&file_desc));
+
+    file_desc = {};
+    vfs_data.file_desc_pool.deallocate(&file_desc);
+}
+
+} // namespace sb
+
+sb::b8 sb::virtual_file_system::initialize()
+{
+    if (sb_expect(nullptr == g_vfs_state, "Virtual File System is already initialized"))
+    {
+        g_vfs_state = sb_new(GHEAP, VirtualFileSystemState);
+
+        // order must be the same as FileSystemType enum
+        g_vfs_state->file_systems.push_back(getLocalFileSystem());
+
         return true;
     }
 
@@ -399,10 +155,12 @@ sb::b8 sb::virtual_file_system::initialize(InitParams const & /*init*/)
 
 sb::b8 sb::virtual_file_system::terminate()
 {
-    if (sb_expect(nullptr != internal::g_vfs, "Virtual File System is not initialized"))
+    if (sb_expect(nullptr != g_vfs_state, "Virtual File System is not initialized"))
     {
-        sb_delete(GHEAP, internal::g_vfs);
-        internal::g_vfs = nullptr;
+        sb_warn(0 == g_vfs_state->opened_file_count, "{} files are still opened", g_vfs_state->opened_file_count);
+
+        sb_delete(GHEAP, g_vfs_state);
+        g_vfs_state = nullptr;
 
         return true;
     }
@@ -410,82 +168,107 @@ sb::b8 sb::virtual_file_system::terminate()
     return false;
 }
 
-sb::FileHdl sb::virtual_file_system::openFile(char const * path, FileWriteMode mode, FileFormat fmt,
-                                              bool create_if_not_exist)
+sb::FileHdl sb::virtual_file_system::openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt)
 {
-    sb_assert(nullptr != internal::g_vfs);
+    sb_assert(nullptr != g_vfs_state);
     sb_assert(nullptr != path);
     sb_warn(isVFSPathValid(path));
 
-    FileHdl file_hdl = internal::g_vfs->openFileReadWrite(path, mode, fmt);
-
-    if (create_if_not_exist && !isValid(file_hdl))
+    auto const layer_iter = findVFSLayer(*g_vfs_state, path);
+    if (layer_iter != end(g_vfs_state->layers))
     {
-        file_hdl = createFile(path, fmt);
+        FixFSPath fs_path;
+        FileSystem & fs = g_vfs_state->file_systems[integral_cast<>(layer_iter->type)];
+
+        constructFSPath(fs_path, *layer_iter, path);
+        auto fs_file = fs.open_file_write(fs_path.c_str(), mode, fmt);
+
+        if (fs.is_file_valid(fs_file))
+        {
+            FileProps const file_props = {.fmt = fmt, .access = FileAccessFlags::WRITE};
+            FileHdl file_hdl = createFileDesc(*g_vfs_state, fs_file, file_props, layer_iter->type);
+
+            if (sb_expect(isValid(file_hdl), "Out of file descriptors"))
+            {
+                ++g_vfs_state->opened_file_count;
+                return file_hdl;
+            }
+            else
+            {
+                fs.close_file(fs_file);
+            }
+        }
     }
 
-    return file_hdl;
-}
-
-sb::FileHdl sb::virtual_file_system::openFileWrite(char const * path, FileWriteMode mode, FileFormat fmt,
-                                                   bool create_if_not_exist)
-{
-    sb_assert(nullptr != internal::g_vfs);
-    sb_assert(nullptr != path);
-    sb_warn(isVFSPathValid(path));
-
-    FileHdl file_hdl = internal::g_vfs->openFileWrite(path, mode, fmt);
-
-    if (create_if_not_exist && !isValid(file_hdl))
-    {
-        file_hdl = createFileWrite(path, fmt);
-    }
-
-    return file_hdl;
+    return {};
 }
 
 sb::FileHdl sb::virtual_file_system::openFileRead(char const * path, FileFormat fmt)
 {
-    sb_assert(nullptr != internal::g_vfs);
+    sb_assert(nullptr != g_vfs_state);
     sb_assert(nullptr != path);
     sb_warn(isVFSPathValid(path));
 
-    return internal::g_vfs->openFileRead(path, fmt);
+    auto const layer_iter = findVFSLayer(*g_vfs_state, path);
+    if (layer_iter != end(g_vfs_state->layers))
+    {
+        FixFSPath fs_path;
+        FileSystem & fs = g_vfs_state->file_systems[integral_cast<>(layer_iter->type)];
+
+        constructFSPath(fs_path, *layer_iter, path);
+        auto fs_file = fs.open_file_read(fs_path.c_str(), fmt);
+
+        if (fs.is_file_valid(fs_file))
+        {
+            FileProps const file_props = {.fmt = fmt, .access = FileAccessFlags::READ};
+            FileHdl file_hdl = createFileDesc(*g_vfs_state, fs_file, file_props, layer_iter->type);
+
+            if (sb_expect(isValid(file_hdl), "Out of file descriptors"))
+            {
+                ++g_vfs_state->opened_file_count;
+                return file_hdl;
+            }
+            else
+            {
+                fs.close_file(fs_file);
+            }
+        }
+    }
+
+    return {};
 }
 
 void sb::virtual_file_system::closeFile(FileHdl hdl)
 {
-    sb_assert(nullptr != internal::g_vfs);
-    sb_assert(isValid(hdl));
+    sb_assert(nullptr != g_vfs_state);
+    sb_assert(0 < g_vfs_state->opened_file_count);
 
-    return internal::g_vfs->closeFile(hdl);
-}
+    if (sb_expect(isValid(hdl)))
+    {
+        auto & file_desc = getFileDesc(*g_vfs_state, hdl);
 
-sb::FileHdl sb::virtual_file_system::createFileWrite(char const * path, FileFormat fmt)
-{
-    sb_assert(nullptr != internal::g_vfs);
-    sb_assert(nullptr != path) sb_warn(isVFSPathValid(path));
+        g_vfs_state->file_systems[integral_cast<>(file_desc.fs_type)].close_file(file_desc.hdl);
+        destroyFileDesc(*g_vfs_state, file_desc);
 
-    return internal::g_vfs->createFileWrite(path, fmt);
-}
-
-sb::FileHdl sb::virtual_file_system::createFile(char const * path, FileFormat fmt)
-{
-    sb_assert(nullptr != internal::g_vfs);
-    sb_assert(nullptr != path) sb_warn(isVFSPathValid(path));
-
-    return internal::g_vfs->createFileReadWrite(path, fmt);
+        --g_vfs_state->opened_file_count;
+    }
 }
 
 sb::FileSize sb::virtual_file_system::readFile(FileHdl hdl, sbstd::span<u8> buffer, FileSize cnt)
 {
-    sb_assert(nullptr != internal::g_vfs);
+    sb_assert(nullptr != g_vfs_state);
     sb_assert(-1 <= cnt);
     sb_assert(integral_cast<FileSize>(buffer.size()) >= cnt);
 
     if (sb_expect(isValid(hdl)))
     {
-        return internal::g_vfs->readFile(hdl, buffer.data(), (cnt == -1) ? (FileSize)buffer.size() : cnt);
+        auto const & file_desc = getFileDesc(*g_vfs_state, hdl);
+
+        if (sb_expect(0 != (file_desc.props.access.value & FileAccessFlags::READ)))
+        {
+            return g_vfs_state->file_systems[integral_cast<>(file_desc.fs_type)].read_file(
+                file_desc.hdl, buffer.data(), integral_cast<FileSize>(buffer.size()));
+        }
     }
 
     return 0;
@@ -493,13 +276,19 @@ sb::FileSize sb::virtual_file_system::readFile(FileHdl hdl, sbstd::span<u8> buff
 
 sb::FileSize sb::virtual_file_system::writeFile(FileHdl hdl, sbstd::span<u8 const> buffer, FileSize cnt)
 {
-    sb_assert(nullptr != internal::g_vfs);
+    sb_assert(nullptr != g_vfs_state);
     sb_assert(-1 <= cnt);
     sb_assert(integral_cast<FileSize>(buffer.size()) >= cnt);
 
     if (sb_expect(isValid(hdl)))
     {
-        return internal::g_vfs->writeFile(hdl, buffer.data(), (cnt == -1) ? (FileSize)buffer.size() : cnt);
+        auto const & file_desc = getFileDesc(*g_vfs_state, hdl);
+
+        if (sb_expect(0 != (file_desc.props.access.value & FileAccessFlags::WRITE)))
+        {
+            return g_vfs_state->file_systems[integral_cast<>(file_desc.fs_type)].write_file(
+                file_desc.hdl, buffer.data(), integral_cast<FileSize>(buffer.size()));
+        }
     }
 
     return 0;
@@ -507,11 +296,12 @@ sb::FileSize sb::virtual_file_system::writeFile(FileHdl hdl, sbstd::span<u8 cons
 
 sb::FileSize sb::virtual_file_system::getFileLength(FileHdl hdl)
 {
-    sb_assert(nullptr != internal::g_vfs);
+    sb_assert(nullptr != g_vfs_state);
 
     if (sb_expect(isValid(hdl)))
     {
-        return internal::g_vfs->getFileLength(hdl);
+        auto const & file_desc = getFileDesc(*g_vfs_state, hdl);
+        return g_vfs_state->file_systems[integral_cast<>(file_desc.fs_type)].get_file_length(file_desc.hdl);
     }
 
     return 0;
@@ -519,11 +309,12 @@ sb::FileSize sb::virtual_file_system::getFileLength(FileHdl hdl)
 
 sb::FileProps sb::virtual_file_system::getFileProps(FileHdl hdl)
 {
-    sb_assert(nullptr != internal::g_vfs);
+    sb_assert(nullptr != g_vfs_state);
 
     if (sb_expect(isValid(hdl)))
     {
-        return internal::g_vfs->getFileProps(hdl);
+        auto const & file_desc = getFileDesc(*g_vfs_state, hdl);
+        return file_desc.props;
     }
 
     return {};
@@ -531,9 +322,19 @@ sb::FileProps sb::virtual_file_system::getFileProps(FileHdl hdl)
 
 sb::b8 sb::virtual_file_system::fileExists(char const * path)
 {
-    sb_assert(nullptr != internal::g_vfs);
+    sb_assert(nullptr != g_vfs_state);
 
-    return internal::g_vfs->fileExists(path);
+    auto const layer_iter = findVFSLayer(*g_vfs_state, path);
+
+    if (layer_iter != end(g_vfs_state->layers))
+    {
+        FixFSPath fs_path;
+        constructFSPath(fs_path, *layer_iter, path);
+
+        return g_vfs_state->file_systems[integral_cast<>(layer_iter->type)].file_exists(fs_path.c_str());
+    }
+
+    return false;
 }
 
 sbstd::span<sb::u8> sb::virtual_file_system::readFile(char const * path, IAllocator & alloc, FileFormat fmt)
@@ -568,4 +369,70 @@ sbstd::span<sb::u8> sb::virtual_file_system::readFile(char const * path, IAlloca
     closeFile(fd);
 
     return file_content;
+}
+
+sb::vfs::MountResult sb::virtual_file_system::mountLocalFileSystem(char const * vfs_path, char const * local_path,
+                                                                   LayerName name)
+{
+    sb_assert(nullptr != g_vfs_state);
+    sb_assert(nullptr != vfs_path);
+    sb_assert(nullptr != local_path);
+
+    if (sb_dont_expect((0 == *vfs_path) || !isVFSPathValid(vfs_path), "Invalid vfs path '{}'", vfs_path))
+    {
+        return {};
+    }
+
+    if (sb_dont_expect((0 == *local_path) || !isLocalPathValid(local_path), "Invalid local path '{}'", local_path))
+    {
+        return {};
+    }
+
+    if (!isValid(name))
+    {
+        char buffer[125];
+        auto const char_cnt = formatString(buffer, "local_filesystem_{}", g_vfs_state->curr_layer_name_gen++);
+        name = hash_str::make(buffer, char_cnt);
+    }
+
+    auto const layer_iter = findVFSLayer(*g_vfs_state, name);
+    if (sb_dont_expect(end(g_vfs_state->layers) != layer_iter, "Layer with this name already exists"))
+    {
+        return {};
+    }
+
+    auto const new_layer = g_vfs_state->layers.expand(1);
+    new_layer->name = name;
+    new_layer->vfs_root_path = vfs_path;
+    new_layer->fs_path = local_path;
+    new_layer->type = FileSystemType::LOCAL;
+
+    normalizeLocalPath(new_layer->fs_path.data());
+    if (LOCAL_PATH_SEPERATOR != new_layer->fs_path.back())
+    {
+        new_layer->fs_path.push_back(LOCAL_PATH_SEPERATOR);
+        sb_warn(LOCAL_PATH_SEPERATOR == new_layer->fs_path.back());
+    }
+
+    if (VFS_PATH_SEPARATOR != new_layer->vfs_root_path.back())
+    {
+        new_layer->vfs_root_path.push_back(VFS_PATH_SEPARATOR);
+        sb_warn(VFS_PATH_SEPARATOR == new_layer->vfs_root_path.back());
+    }
+
+    return {true, name};
+}
+
+sb::b8 sb::virtual_file_system::umount(LayerName name)
+{
+    sb_assert(nullptr != g_vfs_state);
+
+    auto const layer_iter = findVFSLayer(*g_vfs_state, name);
+    if (sb_expect(layer_iter != end(g_vfs_state->layers), "Cannot find layer to unmount"))
+    {
+        g_vfs_state->layers.erase(layer_iter);
+        return true;
+    }
+
+    return false;
 }

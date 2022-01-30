@@ -17,6 +17,11 @@ enum class FileFormat : u8
     TEXT
 };
 
+enum class FileSystemType : u8
+{
+    LOCAL
+};
+
 struct FileAccessFlags 
 { 
     using ValueType = u8; 

@@ -7,5 +7,6 @@
 namespace SB_STD_NS {
 
     SB_SRC_STD_USE(string_view);
+    SB_SRC_STD_USE(basic_string_view);
 
 }

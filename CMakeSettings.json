@@ -8,7 +8,14 @@
       "buildRoot": "${projectDir}\\build\\vs2022-win64\\ninja-debug",
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
-      "ctestCommandArgs": ""
+      "ctestCommandArgs": "",
+      "variables": [
+        {
+          "name": "SB_ENABLE_SAMPLE_SANDBOX",
+          "value": "True",
+          "type": "BOOL"
+        }
+      ]
     }
   ]
 }

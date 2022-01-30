@@ -2,6 +2,7 @@
 
 #include "config.h"
 #include <sb_core/core.h>
+#include <sb_core/string/format.h>
 
 #include <sb_std/utility>
 
@@ -9,11 +10,8 @@
 
 namespace sb::internal {
 
-static inline sb::LogLevel gs_log_min_level = sb::LogLevel::DEBUG;
-static inline sb::b8 gs_log_quiet = false;
-
-template <typename... TArgs>
-usize formatString(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args);
+inline sb::LogLevel gs_log_min_level = sb::LogLevel::DEBUG;
+inline sb::b8 gs_log_quiet = false;
 
 inline void setLogQuiet(b8 quiet)
 {
