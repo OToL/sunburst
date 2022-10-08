@@ -12,7 +12,7 @@ endif()
 OPTION(SB_ENABLE_UNITTEST "Enable unit tests executable targets" ON)
 OPTION(SB_ENABLE_WARNING_AS_ERROR "Treat compilation warnings as errors" ON)
 OPTION(SB_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" OFF)
-OPTION(SB_ENABLE_SAMPLE "Enable sample applications" ON)
+OPTION(SB_ENABLE_SAMPLES "Enable sample applications" ON)
 OPTION(SB_ENABLE_SANITIZER_UNDEFINED_BEHAVIOR "Enable undefined behavior sanitizer" OFF)
 OPTION(SB_ENABLE_CLANG_TIDY "Enable clang tidy static analyzer" OFF)
 
@@ -42,10 +42,12 @@ sb_setup_toolchain_warnings(sb_cxx_common)
 sb_setup_toolchain_sanitizers(sb_cxx_common)
 sb_setup_toolchain_properties(sb_cxx_common)
 
-add_subdirectory("engine")
-add_subdirectory("sample")
-
 if(SB_ENABLE_UNITTEST)
     enable_testing()
-    add_subdirectory("test")
+endif()
+
+add_subdirectory("engine")
+
+if(SB_ENABLE_SAMPLES)
+    add_subdirectory("samples")
 endif()

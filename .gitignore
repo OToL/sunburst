@@ -1,6 +1,8 @@
 .DS_Store
 .vscode/
 .vs/
-build/
+/build/
 *.pdb
 .nvimlog
+.nvimrc
+__pycache__

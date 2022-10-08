@@ -1,3 +1,5 @@
-add_subdirectory("sb_stub")
-add_subdirectory("sb_core")
-add_subdirectory("sb_unit")
+add_subdirectory("src")
+
+if(SB_ENABLE_UNITTEST)
+    add_subdirectory("test")
+endif()

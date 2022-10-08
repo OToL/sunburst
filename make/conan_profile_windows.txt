@@ -1,0 +1,6 @@
+include(default)
+
+[settings]
+catch2:compiler.cppstd=20
+catch2:compiler.runtime=dynamic
+

@@ -4,18 +4,14 @@
       "name": "x64-Debug",
       "generator": "Ninja",
       "configurationType": "Debug",
-      "inheritEnvironments": [ "msvc_x64_x64" ],
-      "buildRoot": "${projectDir}\\build\\vs2022-win64\\ninja-debug",
-      "cmakeCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x64" ],
+      "buildRoot": "${projectDir}\\build\\win64-ninja-clang",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "variables": [
-        {
-          "name": "SB_ENABLE_SAMPLE_SANDBOX",
-          "value": "True",
-          "type": "BOOL"
-        }
-      ]
+      "cmakeToolchain": "${projectDir}\\make\\cmake_toolchain_win64_clang.cmake",
+      "variables": [],
+      "cmakeCommandArgs": ""
     }
   ]
 }

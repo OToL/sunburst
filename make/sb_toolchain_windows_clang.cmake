@@ -12,7 +12,7 @@ function(sb_setup_toolchain_properties BASE_TARGET_NAME)
         message(FATAL_ERROR "Unknown target CPU architecture")
     endif()
 
-    target_compile_features(${BASE_TARGET_NAME}_public INTERFACE cxx_std_20)
+    target_compile_features(${BASE_TARGET_NAME}_public INTERFACE cxx_std_23)
     target_compile_definitions(${BASE_TARGET_NAME}_public 
         INTERFACE 
             SB_COMPILER_CLANG
@@ -34,7 +34,16 @@ function(sb_setup_toolchain_warnings BASE_TARGET_NAME)
         -Wno-c++98-compat-pedantic
         -Wno-gnu-zero-variadic-macro-arguments
         -Wno-exit-time-destructors
+        -Wno-reserved-identifier
         -Wno-global-constructors
+        -Wno-declaration-after-statement
+        -Wno-c++20-compat
+        -Wno-missing-variable-declarations
+        -Wno-unknown-warning-option
+        -Wno-non-virtual-dtor
+        -Wno-deprecated-copy-with-dtor
+        -Wno-nested-anon-types
+        -Wno-gnu-anonymous-struct
         -Wno-missing-prototypes)
 
     if(SB_ENABLE_WARNING_AS_ERROR)
