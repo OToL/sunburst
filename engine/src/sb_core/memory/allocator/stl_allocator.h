@@ -4,9 +4,9 @@
 #include <sb_core/memory/global_heap.h>
 #include <sb_core/memory/memory.h>
 
-#include <sb_std/type_traits>
-#include <sb_std/limits>
-#include <sb_std/utility>
+#include <sb_slw/type_traits>
+#include <sb_slw/limits>
+#include <sb_slw/utility>
 
 namespace sb {
 
@@ -21,8 +21,8 @@ public:
     using const_reference = T const &;
     using size_type = usize;
     using difference_type = iptrdiff;
-    using propagate_on_container_move_assignment = sbstd::true_type;
-    using is_always_equal = sbstd::true_type;
+    using propagate_on_container_move_assignment = slw::true_type;
+    using is_always_equal = slw::true_type;
 
     template <class U>
     struct rebind
@@ -71,13 +71,13 @@ public:
 
     size_type max_size() const
     {
-        return sbstd::numeric_limits<size_type>::max() / sizeof(value_type);
+        return slw::numeric_limits<size_type>::max() / sizeof(value_type);
     }
 
     template <class U, class... TArgs>
     void construct(U * p, TArgs &&... args)
     {
-        new ((void *)p) U(sbstd::forward<TArgs>(args)...);
+        new ((void *)p) U(slw::forward<TArgs>(args)...);
     }
 
     template <class U>

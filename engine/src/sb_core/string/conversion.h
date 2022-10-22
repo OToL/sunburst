@@ -4,24 +4,24 @@
 #include <sb_core/compiler.h>
 #include <sb_core/_impl/string/conversion.h>
 
-#include <sb_std/type_traits>
-#include <sb_std/utility>
+#include <sb_slw/type_traits>
+#include <sb_slw/utility>
 
 namespace sb {
 
 // Ensures null termination
 template <typename TSrc>
-inline usize toString(TSrc && src, sbstd::span<char> dest) requires sbstd::is_integral<sbstd::decay_t<TSrc>>::value || sbstdx::is_string_raw<sbstd::decay_t<TSrc>>::value
+inline usize toString(TSrc && src, slw::span<char> dest) requires slw::is_integral<slw::decay_t<TSrc>>::value || slwx::is_string_raw<slw::decay_t<TSrc>>::value
 {
-    using DecayedType = sbstd::decay_t<TSrc>;
+    using DecayedType = slw::decay_t<TSrc>;
 
-    if constexpr (sbstdx::is_string_raw<DecayedType>::value)
+    if constexpr (slwx::is_string_raw<DecayedType>::value)
     {
         return internal::stringToCharBuffer(&src[0], dest);
     }
-    else if constexpr (sbstd::is_integral<DecayedType>::value)
+    else if constexpr (slw::is_integral<DecayedType>::value)
     {
-        return internal::decimalToString(sbstd::forward<TSrc>(src), dest);
+        return internal::decimalToString(slw::forward<TSrc>(src), dest);
     }
     else
     {

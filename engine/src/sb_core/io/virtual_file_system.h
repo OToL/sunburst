@@ -7,7 +7,7 @@
 
 #include <sb_core/core.h>
 
-#include <sb_std/span>
+#include <sb_slw/span>
 
 namespace sb {
 
@@ -34,13 +34,13 @@ public:
     static FileHdl openFileRead(char const * path, FileFormat fmt = FileFormat::BIN);
     static void closeFile(FileHdl hdl);
 
-    static FileSize readFile(FileHdl hdl, sbstd::span<u8> buffer, FileSize cnt = -1);
-    static FileSize writeFile(FileHdl hdl, sbstd::span<u8 const> buffer, FileSize cnt = -1);
+    static FileSize readFile(FileHdl hdl, slw::span<u8> buffer, FileSize cnt = -1);
+    static FileSize writeFile(FileHdl hdl, slw::span<u8 const> buffer, FileSize cnt = -1);
 
     static FileSize getFileLength(FileHdl hdl);
     static FileProps getFileProps(FileHdl hdl);
 
-    static sbstd::span<u8> readFile(char const * path, IAllocator & alloc, FileFormat fmt = FileFormat::BIN);
+    static slw::span<u8> readFile(char const * path, IAllocator & alloc, FileFormat fmt = FileFormat::BIN);
 
     static MountResult mountLocalFileSystem(char const * vfs_path, char const * local_path, LayerName name = {});
     static b8 umount(LayerName name);

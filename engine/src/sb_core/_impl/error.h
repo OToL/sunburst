@@ -1,11 +1,11 @@
 #include <sb_core/_impl/config.h>
 #include <sb_core/string/format.h>
 
-#include <sb_std/utility>
+#include <sb_slw/utility>
 
 #if sb_ctf_enabled(ERROR_FACILITY)
 
-#    include <sb_std/span>
+#    include <sb_slw/span>
 
 namespace sb::internal {
 
@@ -19,7 +19,7 @@ template <typename... TArgs>
 void reportError(ErrorLevel type, char const * const file, u32 const line, char const * msg, TArgs... args)
 {
     char fmt_msg[255];
-    sb::formatString(fmt_msg, msg, sbstd::forward<TArgs>(args)...);
+    sb::formatString(fmt_msg, msg, slw::forward<TArgs>(args)...);
 
     reportError(type, file, line, &fmt_msg[0]);
 }
@@ -36,7 +36,7 @@ void reportError(ErrorLevel type, char const * const file, u32 const line, Error
                  TArgs... args)
 {
     char fmt_msg[255];
-    sb::formatString(fmt_msg, msg, sbstd::forward<TArgs>(args)...);
+    sb::formatString(fmt_msg, msg, slw::forward<TArgs>(args)...);
 
     reportError(type, file, line, stastus_code, &fmt_msg[0]);
 }

@@ -1,5 +1,5 @@
 #include <sb_core/string/format.h>
-#include <sb_std/iterator>
+#include <sb_slw/iterator>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>

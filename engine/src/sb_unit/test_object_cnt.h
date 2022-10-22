@@ -1,6 +1,6 @@
 #include <sb_core/core.h>
 
-#include <sb_std/span>
+#include <sb_slw/span>
 
 namespace sb {
 
@@ -63,9 +63,9 @@ public:
 
     static void resetStats();
 
-    static void initSequence(sbstd::span<TestObjectCnt> objects, ValueType start_id = 0U);
+    static void initSequence(slw::span<TestObjectCnt> objects, ValueType start_id = 0U);
 
-    static bool areSequencial(sbstd::span<TestObjectCnt> objects, ValueType start_id = 0U);
+    static bool areSequencial(slw::span<TestObjectCnt> objects, ValueType start_id = 0U);
 
 private:
     b8 _valid = true;

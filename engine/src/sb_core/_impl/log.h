@@ -4,7 +4,7 @@
 #include <sb_core/core.h>
 #include <sb_core/string/format.h>
 
-#include <sb_std/utility>
+#include <sb_slw/utility>
 
 #if sb_ctf_enabled(LOG_FACILITY)
 
@@ -38,7 +38,7 @@ struct LogFilter
         else
         {
             char fmt_msg[255];
-            formatString(fmt_msg, sizeof(fmt_msg), msg, sbstd::forward<TArgs>(args)...);
+            formatString(fmt_msg, sizeof(fmt_msg), msg, slw::forward<TArgs>(args)...);
 
             internal::logMessage(lvl, file, line, &fmt_msg[0]);
         }

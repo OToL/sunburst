@@ -56,7 +56,7 @@ sb::FileInputStream::~FileInputStream()
     }
 }
 
-sb::FileSize sb::FileInputStream::read(sbstd::span<u8> buffer, FileSize cnt)
+sb::FileSize sb::FileInputStream::read(slw::span<u8> buffer, FileSize cnt)
 {
     if (_hdl.isValid() && !buffer.empty())
     {

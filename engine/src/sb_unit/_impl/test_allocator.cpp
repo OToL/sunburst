@@ -5,7 +5,7 @@
 
 #include <sb_unit/test_allocator.h>
 
-#include <sb_std/algorithm>
+#include <sb_slw/algorithm>
 
 namespace sb {
 
@@ -28,7 +28,7 @@ sb::MemoryArena TestAllocator::allocate(size_t const size)
         _stats.allocated_byte += size;
         ++_stats.alloc_count;
 
-        auto const alloc_desc = sbstd::find_if(begin(_allocs), end(_allocs), [mem_arena](AllocDesc const & val) {
+        auto const alloc_desc = slw::find_if(begin(_allocs), end(_allocs), [mem_arena](AllocDesc const & val) {
             return (val.mem <= mem_arena.data) &&
                    (reinterpret_cast<uintptr_t>(mem_arena.data) <= (reinterpret_cast<uintptr_t>(val.mem) + val.size));
         });
@@ -49,7 +49,7 @@ sb::MemoryArena TestAllocator::allocate(sb::Alignment alignment, size_t const si
         _stats.allocated_byte += getGlobalHeap().getBlockSize(mem_arena.data);
         ++_stats.alloc_count;
 
-        auto const alloc_desc = sbstd::find_if(begin(_allocs), end(_allocs), [mem_arena](AllocDesc const & val) {
+        auto const alloc_desc = slw::find_if(begin(_allocs), end(_allocs), [mem_arena](AllocDesc const & val) {
             return (val.mem <= mem_arena.data) &&
                    (reinterpret_cast<uintptr_t>(mem_arena.data) < (reinterpret_cast<uintptr_t>(val.mem) + val.size));
         });
@@ -75,7 +75,7 @@ void TestAllocator::deallocate(void * ptr)
         --_stats.alloc_count;
 
         auto const alloc_desc =
-            sbstd::find_if(begin(_allocs), end(_allocs), [ptr](AllocDesc const & val) { return val.mem == ptr; });
+            slw::find_if(begin(_allocs), end(_allocs), [ptr](AllocDesc const & val) { return val.mem == ptr; });
         sb_assert(alloc_desc != end(_allocs));
         _allocs.erase(alloc_desc);
     }
@@ -85,7 +85,7 @@ void TestAllocator::deallocate(void * ptr)
 
 bool TestAllocator::owns(void const * ptr) const
 {
-    auto const alloc_desc = sbstd::find_if(begin(_allocs), end(_allocs), [ptr](AllocDesc const & val) {
+    auto const alloc_desc = slw::find_if(begin(_allocs), end(_allocs), [ptr](AllocDesc const & val) {
         return (val.mem <= ptr) &&
                (reinterpret_cast<uintptr_t>(ptr) <= (reinterpret_cast<uintptr_t>(val.mem) + val.size));
     });

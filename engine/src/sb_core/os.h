@@ -10,7 +10,7 @@
 #    error "Unhandled platform"
 #endif
 
-#include <sb_std/span>
+#include <sb_slw/span>
 
 namespace sb {
 
@@ -18,7 +18,7 @@ using internal::LOCAL_PATH_SEPERATOR;
 using internal::LOCAL_PATH_INVALID_SEPERATOR;
 using internal::LOCAL_PATH_MAX_LEN;
 
-void getWorkingDirectory(sbstd::span<char> buffer);
+void getWorkingDirectory(slw::span<char> buffer);
 void outputDebugString(char const * msg);
 
 } // namespace sb

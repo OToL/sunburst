@@ -2,7 +2,7 @@
 
 #include <sb_core/core.h>
 
-#include <sb_std/new>
+#include <sb_slw/new>
 
 namespace sb {
 
@@ -20,14 +20,14 @@ inline constexpr Alignment DEFAULT_MEMORY_ALIGNMENT = 8ULL;
 void * operator new(sb::usize byte_count);
 void * operator new[](sb::usize byte_count);
 
-void * operator new(sb::usize byte_count, sbstd::align_val_t alignment);
-void * operator new[](sb::usize byte_count, sbstd::align_val_t alignment);
+void * operator new(sb::usize byte_count, slw::align_val_t alignment);
+void * operator new[](sb::usize byte_count, slw::align_val_t alignment);
 
-void * operator new(sb::usize byte_count, sbstd::nothrow_t const & tag) noexcept;
-void * operator new[](sb::usize byte_count, sbstd::nothrow_t const & tag) noexcept;
+void * operator new(sb::usize byte_count, slw::nothrow_t const & tag) noexcept;
+void * operator new[](sb::usize byte_count, slw::nothrow_t const & tag) noexcept;
 
-void * operator new(sb::usize byte_count, sbstd::align_val_t alignment, sbstd::nothrow_t const & tag) noexcept;
-void * operator new[](sb::usize byte_count, sbstd::align_val_t alignment, sbstd::nothrow_t const & tag) noexcept;
+void * operator new(sb::usize byte_count, slw::align_val_t alignment, slw::nothrow_t const & tag) noexcept;
+void * operator new[](sb::usize byte_count, slw::align_val_t alignment, slw::nothrow_t const & tag) noexcept;
 
 // placement
 // void* operator new  ( sb::usize count, void* ptr );
@@ -36,20 +36,20 @@ void * operator new[](sb::usize byte_count, sbstd::align_val_t alignment, sbstd:
 void operator delete(void * ptr) noexcept;
 void operator delete[](void * ptr) noexcept;
 
-void operator delete(void * ptr, sbstd::align_val_t al) noexcept;
-void operator delete[](void * ptr, sbstd::align_val_t al) noexcept;
+void operator delete(void * ptr, slw::align_val_t al) noexcept;
+void operator delete[](void * ptr, slw::align_val_t al) noexcept;
 
 void operator delete(void * ptr, sb::usize sz) noexcept;
 void operator delete[](void * ptr, sb::usize sz) noexcept;
 
-void operator delete(void * ptr, sb::usize sz, sbstd::align_val_t al) noexcept;
-void operator delete[](void * ptr, sb::usize sz, sbstd::align_val_t al) noexcept;
+void operator delete(void * ptr, sb::usize sz, slw::align_val_t al) noexcept;
+void operator delete[](void * ptr, sb::usize sz, slw::align_val_t al) noexcept;
 
-void operator delete(void * ptr, const sbstd::nothrow_t & tag) noexcept;
-void operator delete[](void * ptr, const sbstd::nothrow_t & tag) noexcept;
+void operator delete(void * ptr, const slw::nothrow_t & tag) noexcept;
+void operator delete[](void * ptr, const slw::nothrow_t & tag) noexcept;
 
-void operator delete(void * ptr, sbstd::align_val_t al, const sbstd::nothrow_t & tag) noexcept;
-void operator delete[](void * ptr, sbstd::align_val_t al, const sbstd::nothrow_t & tag) noexcept;
+void operator delete(void * ptr, slw::align_val_t al, const slw::nothrow_t & tag) noexcept;
+void operator delete[](void * ptr, slw::align_val_t al, const slw::nothrow_t & tag) noexcept;
 
 // placement
 // void* operator new  ( sb::usize count, void* ptr ) noexcept;

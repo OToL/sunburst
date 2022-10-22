@@ -6,7 +6,7 @@
 #include <sb_core/string/format.h>
 #include <sb_core/string/fix_string.h>
 
-#include <sb_std/cstdio>
+#include <sb_slw/cstdio>
 
 sb::File sb::openLocalFileRead(char const * path, FileFormat fmt)
 {

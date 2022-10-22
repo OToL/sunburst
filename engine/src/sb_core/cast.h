@@ -3,8 +3,8 @@
 #include <sb_core/core.h>
 #include <sb_core/compiler.h>
 
-#include <sb_std/type_traits>
-#include <sb_std/utility>
+#include <sb_slw/type_traits>
+#include <sb_slw/utility>
 
 // Those functions follow stl cast naming convention for consistency
 namespace sb {
@@ -16,16 +16,16 @@ inline constexpr TDst integral_cast(TSrc src)
     return static_cast<TDst>(src);
 }
 
-template <typename TSrc, typename TDst = sbstd::underlying_type_t<TSrc>>
-inline constexpr auto integral_cast(TSrc src) -> sbstd::enable_if_t<sbstd::is_enum_v<TSrc>, sbstd::underlying_type_t<TSrc>>
+template <typename TSrc, typename TDst = slw::underlying_type_t<TSrc>>
+inline constexpr auto integral_cast(TSrc src) -> slw::enable_if_t<slw::is_enum_v<TSrc>, slw::underlying_type_t<TSrc>>
 {
-    if constexpr (sbstd::is_same_v<TDst, sbstd::underlying_type_t<TSrc>>)
+    if constexpr (slw::is_same_v<TDst, slw::underlying_type_t<TSrc>>)
     {
-        return static_cast<sbstd::underlying_type_t<TSrc>>(src);
+        return static_cast<slw::underlying_type_t<TSrc>>(src);
     }
     else
     {
-        return integral_cast<TDst>(static_cast<sbstd::underlying_type_t<TSrc>>(src));
+        return integral_cast<TDst>(static_cast<slw::underlying_type_t<TSrc>>(src));
     }
 }
 

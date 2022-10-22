@@ -54,7 +54,7 @@ static sb::u64 const CRC64_TAB[256] = {
     0x913f6188692d6f4bULL, 0xd3cf8063c0c759d8ULL, 0x5dedc41a34bbeeb2ULL, 0x1f1d25f19d51d821ULL, 0xd80c07cd676f8394ULL,
     0x9afce626ce85b507ULL};
 
-sb::u64 sb::computeCRC64(sbstd::span<u8 const> buffer)
+sb::u64 sb::computeCRC64(slw::span<u8 const> buffer)
 {
     u64 crc_value = 0ULL;
 
@@ -69,7 +69,7 @@ sb::u64 sb::computeCRC64(sbstd::span<u8 const> buffer)
     return crc_value;
 }
 
-sb::u64 sb::computeCRC64(sbstd::string_view buffer)
+sb::u64 sb::computeCRC64(slw::string_view buffer)
 {
     u64 crc_value = 0ULL;
 

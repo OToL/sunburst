@@ -7,7 +7,7 @@
 #include <sb_core/memory/global_heap.h>
 #include <sb_core/error.h>
 
-#include <sb_std/limits>
+#include <sb_slw/limits>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
@@ -61,7 +61,7 @@ TEST_CASE_METHOD(DSArrayFixture, "Set DSArray size", "[small_vect]")
         REQUIRE(TestObjectCnt::getStats() == 5U);
         REQUIRE(small_vect.isSmallStorage());
 
-        REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{0}));
+        REQUIRE(slw::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{0}));
     }
 
     SECTION("Set DSArray size to internal storage capacity shall not allocate memory")
@@ -75,7 +75,7 @@ TEST_CASE_METHOD(DSArrayFixture, "Set DSArray size", "[small_vect]")
         REQUIRE(small_vect.size() == 5U);
         REQUIRE(TestObjectCnt::getStats() == 5U);
         REQUIRE(small_vect.isSmallStorage());
-        REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{0}));
+        REQUIRE(slw::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{0}));
 
         REQUIRE(alloc_stats.getStats().alloc_count == 0ULL);
         REQUIRE_FALSE(alloc_stats.owns(small_vect.data()));
@@ -88,7 +88,7 @@ TEST_CASE_METHOD(DSArrayFixture, "Set DSArray size", "[small_vect]")
         REQUIRE_FALSE(small_vect.empty());
         REQUIRE(small_vect.size() == 10U);
         REQUIRE(TestObjectCnt::getStats() == 10U);
-        REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{0}));
+        REQUIRE(slw::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{0}));
         REQUIRE_FALSE(small_vect.isSmallStorage());
     }
 
@@ -103,7 +103,7 @@ TEST_CASE_METHOD(DSArrayFixture, "Set DSArray size", "[small_vect]")
             REQUIRE_FALSE(small_vect.empty());
             REQUIRE(small_vect.size() == 10U);
             REQUIRE(TestObjectCnt::getStats() == 10U);
-            REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{0}));
+            REQUIRE(slw::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{0}));
             REQUIRE_FALSE(small_vect.isSmallStorage());
 
             REQUIRE(alloc_stats.getStats().alloc_count != 0ULL);
@@ -128,7 +128,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor with default value", "[dyamic_sma
             REQUIRE_FALSE(small_vect.empty());
             REQUIRE(small_vect.size() == 5U);
             REQUIRE(TestObjectCnt::getStats() == 6U);
-            REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{init_obj}));
+            REQUIRE(slw::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{init_obj}));
             REQUIRE(small_vect.isSmallStorage());
         }
 
@@ -146,7 +146,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor with default value", "[dyamic_sma
             REQUIRE_FALSE(small_vect.empty());
             REQUIRE(small_vect.size() == 5U);
             REQUIRE(TestObjectCnt::getStats() == 6U);
-            REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{init_obj}));
+            REQUIRE(slw::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{init_obj}));
             REQUIRE(small_vect.isSmallStorage());
 
             REQUIRE(alloc_stats.getStats().alloc_count == 0ULL);
@@ -163,7 +163,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor with default value", "[dyamic_sma
         REQUIRE_FALSE(small_vect.empty());
         REQUIRE(small_vect.size() == 10U);
         REQUIRE(TestObjectCnt::getStats() == 11U);
-        REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{init_obj}));
+        REQUIRE(slw::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{init_obj}));
         REQUIRE_FALSE(small_vect.isSmallStorage());
     }
 
@@ -179,7 +179,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor with default value", "[dyamic_sma
             REQUIRE_FALSE(small_vect.empty());
             REQUIRE(small_vect.size() == 10U);
             REQUIRE(TestObjectCnt::getStats() == 11U);
-            REQUIRE(sbstd::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{init_obj}));
+            REQUIRE(slw::all_of(begin(small_vect), end(small_vect), TestObjectCnt::CompEqual{init_obj}));
             REQUIRE_FALSE(small_vect.isSmallStorage());
 
             REQUIRE(alloc_stats.getStats().alloc_count == 1ULL);
@@ -191,7 +191,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor with default value", "[dyamic_sma
     }
 }
 
-void initTestObjectSequence(sbstd::span<TestObjectCnt> objects, usize start_id = 0)
+void initTestObjectSequence(slw::span<TestObjectCnt> objects, usize start_id = 0)
 {
     usize obj_id = start_id;
 
@@ -202,7 +202,7 @@ void initTestObjectSequence(sbstd::span<TestObjectCnt> objects, usize start_id =
     }
 }
 
-bool areTestObjectsSequencial(sbstd::span<TestObjectCnt> objects, usize start_id = 0)
+bool areTestObjectsSequencial(slw::span<TestObjectCnt> objects, usize start_id = 0)
 {
     usize obj_id = start_id;
 
@@ -229,12 +229,12 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor range insert", "[dyamic_small_arr
         SECTION("Objects are inserted in order")
         {
             {
-                DSArrayTest<5> small_vect(sbstd::begin(objs), sbstd::end(objs));
+                DSArrayTest<5> small_vect(slw::begin(objs), slw::end(objs));
 
                 REQUIRE(!small_vect.empty());
                 REQUIRE(small_vect.size() == 5U);
                 REQUIRE(TestObjectCnt::getStats() == 10U);
-                REQUIRE(sbstd::equal(sbstd::begin(objs), sbstd::end(objs), begin(small_vect)));
+                REQUIRE(slw::equal(slw::begin(objs), slw::end(objs), begin(small_vect)));
             }
 
             REQUIRE(TestObjectCnt::getStats() == 5U);
@@ -246,7 +246,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor range insert", "[dyamic_small_arr
             DSArrayTestAlloc stl_alloc{alloc_stats};
 
             {
-                DSArrayTestA<5> small_vect(sbstd::begin(objs), sbstd::end(objs), stl_alloc);
+                DSArrayTestA<5> small_vect(slw::begin(objs), slw::end(objs), stl_alloc);
 
                 REQUIRE(!small_vect.empty());
                 REQUIRE(small_vect.size() == 5U);
@@ -257,7 +257,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor range insert", "[dyamic_small_arr
                 REQUIRE(!alloc_stats.owns(small_vect.data()));
                 REQUIRE(alloc_stats.getStats().alloc_count == 0ULL);
 
-                REQUIRE(sbstd::equal(sbstd::begin(objs), sbstd::end(objs), begin(small_vect)));
+                REQUIRE(slw::equal(slw::begin(objs), slw::end(objs), begin(small_vect)));
             }
 
             REQUIRE(TestObjectCnt::getStats() == 5U);
@@ -272,12 +272,12 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor range insert", "[dyamic_small_arr
         SECTION("Objects are inserted in order")
         {
             {
-                DSArrayTest<5> small_vect(sbstd::begin(objs), sbstd::end(objs));
+                DSArrayTest<5> small_vect(slw::begin(objs), slw::end(objs));
 
                 REQUIRE_FALSE(small_vect.empty());
                 REQUIRE(small_vect.size() == 10U);
                 REQUIRE(TestObjectCnt::getStats() == 20U);
-                REQUIRE(sbstd::equal(begin(small_vect), end(small_vect), sbstd::begin(objs)));
+                REQUIRE(slw::equal(begin(small_vect), end(small_vect), slw::begin(objs)));
             }
 
             REQUIRE(TestObjectCnt::getStats() == 10U);
@@ -289,11 +289,11 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray ctor range insert", "[dyamic_small_arr
             DSArrayTestAlloc stl_alloc{alloc_stats};
 
             {
-                DSArrayTestA<5> small_vect(sbstd::begin(objs), sbstd::end(objs), stl_alloc);
+                DSArrayTestA<5> small_vect(slw::begin(objs), slw::end(objs), stl_alloc);
 
                 REQUIRE_FALSE(small_vect.empty());
                 REQUIRE(small_vect.size() == 10U);
-                REQUIRE(sbstd::equal(begin(small_vect), end(small_vect), sbstd::begin(objs)));
+                REQUIRE(slw::equal(begin(small_vect), end(small_vect), slw::begin(objs)));
                 REQUIRE(TestObjectCnt::getStats() == 20U);
 
                 REQUIRE(alloc_stats.getStats().alloc_count == 1U);
@@ -322,7 +322,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray copy ctor", "[dyamic_small_array]")
             REQUIRE(TestObjectCnt::getStats() == 6U);
 
             REQUIRE(dst_vec.size() == src_vec.size());
-            REQUIRE(sbstd::equal(begin(src_vec), end(src_vec), begin(dst_vec)));
+            REQUIRE(slw::equal(begin(src_vec), end(src_vec), begin(dst_vec)));
             REQUIRE(dst_vec.isSmallStorage());
         }
 
@@ -350,7 +350,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray copy ctor", "[dyamic_small_array]")
 
             REQUIRE(TestObjectCnt::getStats() == 6U);
             REQUIRE(dst_vec.size() == src_vec.size());
-            REQUIRE(sbstd::equal(begin(src_vec), end(src_vec), begin(dst_vec)));
+            REQUIRE(slw::equal(begin(src_vec), end(src_vec), begin(dst_vec)));
             REQUIRE(dst_vec.isSmallStorage());
             REQUIRE(dst_alloc_stats.getStats().alloc_count == 0U);
             REQUIRE_FALSE(dst_alloc_stats.owns(dst_vec.data()));
@@ -374,7 +374,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray copy ctor", "[dyamic_small_array]")
         REQUIRE(TestObjectCnt::getStats() == 12U);
 
         REQUIRE(dst_vec.size() == src_vec.size());
-        REQUIRE(sbstd::equal(begin(src_vec), end(src_vec), begin(dst_vec)));
+        REQUIRE(slw::equal(begin(src_vec), end(src_vec), begin(dst_vec)));
     }
 
     SECTION("Objects are copied in order and memory is allocated outside internal storage")
@@ -400,7 +400,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray copy ctor", "[dyamic_small_array]")
             REQUIRE(TestObjectCnt::getStats() == 12U);
 
             REQUIRE(dst_vec.size() == src_vec.size());
-            REQUIRE(sbstd::equal(begin(src_vec), end(src_vec), begin(dst_vec)));
+            REQUIRE(slw::equal(begin(src_vec), end(src_vec), begin(dst_vec)));
             REQUIRE_FALSE(dst_vec.isSmallStorage());
             REQUIRE(dst_alloc.getStats().alloc_count != 0U);
             REQUIRE(dst_alloc.owns(dst_vec.data()));
@@ -422,7 +422,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray move ctor", "[dyamic_small_array]")
         REQUIRE(src_vec.isSmallStorage());
         REQUIRE(TestObjectCnt::getStats() == 3U);
 
-        DSArrayTest<5> dst_vec(sbstd::move(src_vec));
+        DSArrayTest<5> dst_vec(slw::move(src_vec));
 
         REQUIRE(dst_vec.size() == 3U);
         REQUIRE(dst_vec.isSmallStorage());
@@ -452,7 +452,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray move ctor", "[dyamic_small_array]")
 
         REQUIRE(TestObjectCnt::getStats() == 3U);
 
-        DSArrayTestA<5> dst_vec(sbstd::move(src_vec), dst_alloc);
+        DSArrayTestA<5> dst_vec(slw::move(src_vec), dst_alloc);
         REQUIRE(dst_vec.size() == 3U);
         REQUIRE(dst_vec.isSmallStorage());
         REQUIRE(src_data != dst_vec.data());
@@ -476,7 +476,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray move ctor", "[dyamic_small_array]")
 
         REQUIRE(TestObjectCnt::getStats() == 5U);
 
-        DSArrayTest<3> dst_vec(sbstd::move(src_vec));
+        DSArrayTest<3> dst_vec(slw::move(src_vec));
         REQUIRE(dst_vec.size() == 5U);
         REQUIRE_FALSE(dst_vec.isSmallStorage());
         REQUIRE(src_data != dst_vec.data());
@@ -507,7 +507,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray move ctor", "[dyamic_small_array]")
 
             REQUIRE(TestObjectCnt::getStats() == 5U);
 
-            DSArrayTestA<3> dst_vec(sbstd::move(src_vec), dst_alloc);
+            DSArrayTestA<3> dst_vec(slw::move(src_vec), dst_alloc);
             REQUIRE(dst_vec.size() == 5U);
 
             REQUIRE_FALSE(dst_vec.isSmallStorage());
@@ -535,7 +535,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray move ctor", "[dyamic_small_array]")
 
         REQUIRE(TestObjectCnt::getStats() == 10U);
 
-        DSArrayTest<5> dst_vec(sbstd::move(src_vec));
+        DSArrayTest<5> dst_vec(slw::move(src_vec));
         REQUIRE(dst_vec.size() == 10U);
 
         REQUIRE_FALSE(dst_vec.isSmallStorage());
@@ -567,7 +567,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray move ctor", "[dyamic_small_array]")
 
             REQUIRE(TestObjectCnt::getStats() == 10U);
 
-            DSArrayTestA<5> dst_vec(sbstd::move(src_vec), dst_alloc);
+            DSArrayTestA<5> dst_vec(slw::move(src_vec), dst_alloc);
             REQUIRE(dst_vec.size() == 10U);
             REQUIRE_FALSE(dst_vec.isSmallStorage());
             REQUIRE(src_data == dst_vec.data());
@@ -595,7 +595,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray move ctor", "[dyamic_small_array]")
 
         REQUIRE(TestObjectCnt::getStats() == 10U);
 
-        DSArrayTest<15> dst_vec(sbstd::move(src_vec));
+        DSArrayTest<15> dst_vec(slw::move(src_vec));
 
         for (usize idx = 0; idx != dst_vec.size(); ++idx)
         {
@@ -626,7 +626,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray move ctor", "[dyamic_small_array]")
 
             REQUIRE(TestObjectCnt::getStats() == 10U);
 
-            DSArrayTestA<15> dst_vec(sbstd::move(src_vec), dst_alloc);
+            DSArrayTestA<15> dst_vec(slw::move(src_vec), dst_alloc);
 
             for (usize idx = 0; idx != dst_vec.size(); ++idx)
             {
@@ -933,7 +933,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray pop back", "[dyamic_small_array]")
 TEST_CASE_METHOD(DSArrayFixture, "DSArray maximum size", "[dyamic_small_array]")
 {
     DSArrayTest<5> vect;
-    REQUIRE(sbstd::numeric_limits<DSArrayTest<5>::size_type>::max() == vect.max_size());
+    REQUIRE(slw::numeric_limits<DSArrayTest<5>::size_type>::max() == vect.max_size());
 }
 
 TEST_CASE_METHOD(DSArrayFixture, "DSArray resize", "[dyamic_small_array]")
@@ -974,7 +974,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray resize", "[dyamic_small_array]")
             REQUIRE(idx == vect[idx].getId());
         }
 
-        REQUIRE(sbstd::all_of(begin(vect) + 2, end(vect), TestObjectCnt::CompEqual{0U}));
+        REQUIRE(slw::all_of(begin(vect) + 2, end(vect), TestObjectCnt::CompEqual{0U}));
     }
 
     SECTION("Resize with greater value than internal storage allocates memory")
@@ -1005,7 +1005,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray resize", "[dyamic_small_array]")
                 REQUIRE(idx == vect[idx].getId());
             }
 
-            REQUIRE(sbstd::all_of(begin(vect) + 2, end(vect), TestObjectCnt::CompEqual{0U}));
+            REQUIRE(slw::all_of(begin(vect) + 2, end(vect), TestObjectCnt::CompEqual{0U}));
         }
 
         REQUIRE(test_alloc.getStats().alloc_count == 0U);
@@ -1063,7 +1063,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray resize", "[dyamic_small_array]")
             REQUIRE(idx == vect[idx].getId());
         }
 
-        REQUIRE(sbstd::all_of(begin(vect) + 2, end(vect), TestObjectCnt::CompEqual{2U}));
+        REQUIRE(slw::all_of(begin(vect) + 2, end(vect), TestObjectCnt::CompEqual{2U}));
     }
 }
 
@@ -1084,7 +1084,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray assign value", "[dyamic_small_array]")
 
         REQUIRE(vect.size() == 4U);
         REQUIRE(vect.isSmallStorage());
-        REQUIRE(sbstd::all_of(begin(vect), end(vect), TestObjectCnt::CompEqual{REF_OBJECT}));
+        REQUIRE(slw::all_of(begin(vect), end(vect), TestObjectCnt::CompEqual{REF_OBJECT}));
         REQUIRE(TestObjectCnt::getStats() == 5U);
     }
 
@@ -1103,7 +1103,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray assign value", "[dyamic_small_array]")
 
         REQUIRE(vect.size() == 2U);
         REQUIRE(vect.isSmallStorage());
-        REQUIRE(sbstd::all_of(begin(vect), end(vect), TestObjectCnt::CompEqual{REF_OBJECT}));
+        REQUIRE(slw::all_of(begin(vect), end(vect), TestObjectCnt::CompEqual{REF_OBJECT}));
         REQUIRE(TestObjectCnt::getStats() == 3U);
     }
 
@@ -1127,7 +1127,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray assign value", "[dyamic_small_array]")
 
             REQUIRE(vect.size() == 10U);
             REQUIRE_FALSE(vect.isSmallStorage());
-            REQUIRE(sbstd::all_of(begin(vect), end(vect), TestObjectCnt::CompEqual{REF_OBJECT}));
+            REQUIRE(slw::all_of(begin(vect), end(vect), TestObjectCnt::CompEqual{REF_OBJECT}));
             REQUIRE(TestObjectCnt::getStats() == 11U);
             REQUIRE(test_alloc.getStats().alloc_count != 0U);
             REQUIRE(vect.data() != small_vect_data);
@@ -1157,7 +1157,7 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray assign value", "[dyamic_small_array]")
             REQUIRE(vect.size() == 2U);
             REQUIRE_FALSE(vect.isSmallStorage());
             REQUIRE(vect.data() == vect_data);
-            REQUIRE(sbstd::all_of(begin(vect), end(vect), TestObjectCnt::CompEqual{REF_OBJECT}));
+            REQUIRE(slw::all_of(begin(vect), end(vect), TestObjectCnt::CompEqual{REF_OBJECT}));
             REQUIRE(TestObjectCnt::getStats() == 3U);
             REQUIRE(test_alloc.getStats().alloc_count != 0U);
         }

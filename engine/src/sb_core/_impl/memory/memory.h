@@ -4,8 +4,8 @@
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/memory_arena.h>
 
-#include <sb_std/utility>
-#include <sb_std/type_traits>
+#include <sb_slw/utility>
+#include <sb_slw/type_traits>
 
 namespace sb::internal {
 
@@ -16,7 +16,7 @@ TType * newImpl(THeap & heap, TArgs &&... args)
 
     if (!memory_arena::isEmpty(arena))
     {
-        return ::new (arena.data) TType(sbstd::forward<TArgs &&>(args)...);
+        return ::new (arena.data) TType(slw::forward<TArgs &&>(args)...);
     }
 
     return nullptr;

@@ -5,7 +5,7 @@
 #include <sb_core/memory/utility.h>
 #include <sb_core/memory/allocator/container_allocator.h>
 
-#include <sb_std/type_traits>
+#include <sb_slw/type_traits>
 
 namespace sb {
 
@@ -14,7 +14,7 @@ class RingBuffer
 {
 public:
     using ValueType = TType;
-    static constexpr bool IS_TRIVIAL_VALUE = sbstd::is_trivial_v<ValueType>;
+    static constexpr bool IS_TRIVIAL_VALUE = slw::is_trivial_v<ValueType>;
 
     RingBuffer(usize capacity, TAllocator alloc)
         : _alloc(alloc)
@@ -110,14 +110,14 @@ public:
                 curr_head_ptr->~TType();
             }
 
-            new (curr_head_ptr) ValueType(sbstd::forward<TArgs>(args)...);
+            new (curr_head_ptr) ValueType(slw::forward<TArgs>(args)...);
 
             _head = (_head + 1) % _capacity;
             _tail = _head;
         }
         else
         {
-            new (curr_head_ptr) ValueType(sbstd::forward<TArgs>(args)...);
+            new (curr_head_ptr) ValueType(slw::forward<TArgs>(args)...);
 
             _head = (_head + 1) % _capacity;
             _full = (_head == _tail);
@@ -155,7 +155,7 @@ public:
         {
             TType * curr_head_ptr = _data + _head;
 
-            new (curr_head_ptr) ValueType(sbstd::forward<TArgs>(args)...);
+            new (curr_head_ptr) ValueType(slw::forward<TArgs>(args)...);
 
             _head = (_head + 1) % _capacity;
             _full = (_head == _tail);

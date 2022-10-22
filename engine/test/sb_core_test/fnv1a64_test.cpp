@@ -1,8 +1,8 @@
 #include <sb_core/hash/fnv1a.h>
-#include <sb_std/iterator>
+#include <sb_slw/iterator>
 
-#include <sb_std/xutility>
-#include <sb_std/iterator>
+#include <sb_slw/xutility>
+#include <sb_slw/iterator>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
@@ -17,8 +17,8 @@ static u64 const FNV64_STR_TEST_HASH = 0x9b90b3ce8e37ea0cULL;
 
 TEST_CASE("Null FNV64", "[fnv64]")
 {
-    REQUIRE(0ULL == computeFNV1a64(sbstd::span<u8>{}));
-    REQUIRE(0ULL == computeFNV1a64({sbstd::data(FNV64_ARRAY_TEST), 0}));
+    REQUIRE(0ULL == computeFNV1a64(slw::span<u8>{}));
+    REQUIRE(0ULL == computeFNV1a64({slw::data(FNV64_ARRAY_TEST), 0}));
     REQUIRE(0ULL == computeFNV1a64(""));
 }
 

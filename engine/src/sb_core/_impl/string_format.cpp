@@ -2,10 +2,10 @@
 #include <sb_core/string/utility.h>
 #include <sb_core/error.h>
 
-#include <sb_std/cctype>
-#include <sb_std/type_traits>
+#include <sb_slw/cctype>
+#include <sb_slw/type_traits>
 
-sb::usize sb::internal::formatString(sbstd::span<char> dest_buffer, char const * const format, sbstd::span<FmtArg> args)
+sb::usize sb::internal::formatString(slw::span<char> dest_buffer, char const * const format, slw::span<FmtArg> args)
 {
     usize copied_bytes = 0;
 
@@ -53,7 +53,7 @@ sb::usize sb::internal::formatString(sbstd::span<char> dest_buffer, char const *
                         }
                     }
                     // Argument specification
-                    else if (sb_expect(sbstd::isdigit(next_token), "Only digit is allowed in argument specification") &&
+                    else if (sb_expect(slw::isdigit(next_token), "Only digit is allowed in argument specification") &&
                              sb_expect(0 >= lastParamIdx, "You cannot mix indexed and auto-increment "
                                                          "argument specification") &&
                              sb_expect('}' == format_iter[2], "Format argument index must be within [0-9] range"))
@@ -80,7 +80,7 @@ sb::usize sb::internal::formatString(sbstd::span<char> dest_buffer, char const *
                     }
 
                     copied_bytes += args[(u32)arg_idx].fmt_cb(
-                        args[(u32)arg_idx].value, sbstd::span<char>{dest_iter, dest_capacity - copied_bytes});
+                        args[(u32)arg_idx].value, slw::span<char>{dest_iter, dest_capacity - copied_bytes});
                     dest_iter = dest_buffer.data() + copied_bytes;
 
                     continue;

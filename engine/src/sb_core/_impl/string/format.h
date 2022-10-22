@@ -3,17 +3,17 @@
 #include <sb_core/cast.h>
 #include <sb_core/string/conversion.h>
 
-#include <sb_std/utility>
+#include <sb_slw/utility>
 
 namespace sb::internal {
 
 template <typename T>
-inline usize fmtArgFwCall(void const * value, sbstd::span<char> dest_buffer)
+inline usize fmtArgFwCall(void const * value, slw::span<char> dest_buffer)
 {
     return fmtArg(*reinterpret_cast<T *>(value), dest_buffer);
 }
 
-using FmtFwCallCB = usize (*)(void const *, sbstd::span<char>);
+using FmtFwCallCB = usize (*)(void const *, slw::span<char>);
 
 struct FmtArg
 {
@@ -21,7 +21,7 @@ struct FmtArg
     FmtFwCallCB fmt_cb;
 };
 
-inline void expandFmtArgs(sbstd::span<FmtArg>) { }
+inline void expandFmtArgs(slw::span<FmtArg>) { }
 
 template <typename T, typename = void>
 struct FmtArgDesc
@@ -30,7 +30,7 @@ struct FmtArgDesc
 };
 
 template <typename T>
-struct FmtArgDesc<T, sbstd::enable_if_t<sbstdx::is_string_raw<sbstd::decay_t<T>>::value>>
+struct FmtArgDesc<T, slw::enable_if_t<slwx::is_string_raw<slw::decay_t<T>>::value>>
 {
     using ValueType = char const *;
 
@@ -46,9 +46,9 @@ struct FmtArgDesc<T, sbstd::enable_if_t<sbstdx::is_string_raw<sbstd::decay_t<T>>
 };
 
 template <typename T>
-struct FmtArgDesc<T, sbstd::enable_if_t<sbstd::is_arithmetic<T>::value>>
+struct FmtArgDesc<T, slw::enable_if_t<slw::is_arithmetic<T>::value>>
 {
-    using ValueType = sbstd::remove_cv_t<sbstd::remove_reference_t<T>>;
+    using ValueType = slw::remove_cv_t<slw::remove_reference_t<T>>;
 
     inline static void const * storeValue(ValueType const & value)
     {
@@ -62,7 +62,7 @@ struct FmtArgDesc<T, sbstd::enable_if_t<sbstd::is_arithmetic<T>::value>>
 };
 
 template <typename T, typename... TArgs>
-inline void expandFmtArgs(sbstd::span<FmtArg> argList, T const & arg, TArgs &&... args)
+inline void expandFmtArgs(slw::span<FmtArg> argList, T const & arg, TArgs &&... args)
 {
     FmtArg & arg_desc = argList[0];
 
@@ -70,25 +70,25 @@ inline void expandFmtArgs(sbstd::span<FmtArg> argList, T const & arg, TArgs &&..
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
     arg_desc.value = TypeDesc::storeValue(arg);
-    arg_desc.fmt_cb = [](void const * arg_value, sbstd::span<char> dest) {
+    arg_desc.fmt_cb = [](void const * arg_value, slw::span<char> dest) {
         return toString(TypeDesc::extractValue(arg_value), dest);
     };
 
     expandFmtArgs(argList.subspan(1), args...);
 }
 
-usize formatString(sbstd::span<char> dest_buffer, char const * const format, sbstd::span<FmtArg> agrs);
+usize formatString(slw::span<char> dest_buffer, char const * const format, slw::span<FmtArg> agrs);
 
 template <typename... TArgs>
 inline usize formatString(char * dest_buffer, usize capacity, char const * const format, TArgs &&... args)
 {
-    return sb::formatString({dest_buffer, capacity}, format, sbstd::forward<TArgs>(args)...);
+    return sb::formatString({dest_buffer, capacity}, format, slw::forward<TArgs>(args)...);
 }
 
 } // namespace sb::internal
 
 template <typename... TArgs>
-inline sb::usize sb::formatString(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args)
+inline sb::usize sb::formatString(slw::span<char> dest_buffer, char const * const format, TArgs &&... args)
 {
     internal::FmtArg arg_list[sizeof...(TArgs)];
     expandFmtArgs(arg_list, args...);
@@ -99,7 +99,7 @@ inline sb::usize sb::formatString(sbstd::span<char> dest_buffer, char const * co
 
 namespace sb {
 
-inline usize formatString(sbstd::span<char> dest_buffer, char const * const format)
+inline usize formatString(slw::span<char> dest_buffer, char const * const format)
 {
     return internal::formatString(dest_buffer, format, {});
 }

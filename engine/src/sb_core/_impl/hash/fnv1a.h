@@ -4,7 +4,7 @@
 
 namespace sb {
 
-inline constexpr u32 computeFNV1a32(sbstd::span<u8 const> buffer)
+inline constexpr u32 computeFNV1a32(slw::span<u8 const> buffer)
 {
     auto const buffer_size = buffer.size();
 
@@ -28,7 +28,7 @@ inline constexpr u32 computeFNV1a32(sbstd::span<u8 const> buffer)
     return hval;
 }
 
-inline constexpr u32 computeFNV1a32(sbstd::string_view buffer)
+inline constexpr u32 computeFNV1a32(slw::string_view buffer)
 {
     auto const buffer_size = buffer.size();
 
@@ -73,7 +73,7 @@ inline constexpr u32 computeFNV1a32(char const * const str)
     return hval;
 }
 
-inline constexpr u64 computeFNV1a64(sbstd::span<u8 const> buffer)
+inline constexpr u64 computeFNV1a64(slw::span<u8 const> buffer)
 {
     auto const len = buffer.size();
 
@@ -98,7 +98,7 @@ inline constexpr u64 computeFNV1a64(sbstd::span<u8 const> buffer)
     return hval;
 }
 
-inline constexpr u64 computeFNV1a64(sbstd::string_view buffer)
+inline constexpr u64 computeFNV1a64(slw::string_view buffer)
 {
     auto const len = buffer.size();
 

@@ -8,8 +8,8 @@
 
 #if sb_ctf_enabled(ERROR_FACILITY)
 
-#    include <sb_std/cassert>
-#    include <sb_std/cstdio>
+#    include <sb_slw/cassert>
+#    include <sb_slw/cstdio>
 
 static sb::ErrorHook g_error_hdl;
 

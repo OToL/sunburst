@@ -4,7 +4,7 @@
 #include <sb_core/string/utility.h>
 #include <sb_core/core.h>
 
-#include <sb_std/algorithm>
+#include <sb_slw/algorithm>
 
 constexpr char const * INVALID_LOGICAL_PATH_SEPARATOR = "\\";
 
@@ -15,7 +15,7 @@ sb::b8 sb::isVFSPathValid(char const * vfs_path)
     return ((VFS_PATH_SEPARATOR == *vfs_path) && (nullptr == strchr(vfs_path, *INVALID_LOGICAL_PATH_SEPARATOR)));
 }
 
-char * sb::concatLocalPath(sbstd::span<char> base_path, usize base_path_len, char const * path_cat)
+char * sb::concatLocalPath(slw::span<char> base_path, usize base_path_len, char const * path_cat)
 {
     sb_assert(base_path[base_path_len] == 0);
     usize concat_offset = base_path_len;
@@ -38,7 +38,7 @@ char * sb::concatLocalPath(sbstd::span<char> base_path, usize base_path_len, cha
     return base_path.data();
 }
 
-char * sb::concatLocalPath(sbstd::span<char> base_path, char const * path_cat)
+char * sb::concatLocalPath(slw::span<char> base_path, char const * path_cat)
 {
     auto const base_path_len = strlen(base_path.data());
 

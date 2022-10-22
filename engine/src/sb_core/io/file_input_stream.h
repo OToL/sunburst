@@ -4,7 +4,7 @@
 #include "file_hdl.h"
 #include <sb_core/memory/memory_arena.h>
 
-#include <sb_std/span>
+#include <sb_slw/span>
 
 namespace sb {
 
@@ -28,7 +28,7 @@ public:
         return _hdl.isValid();
     }
 
-    FileSize read(sbstd::span<u8> buffer, FileSize cnt = -1);
+    FileSize read(slw::span<u8> buffer, FileSize cnt = -1);
 
     FileSize getLength();
 

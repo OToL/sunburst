@@ -1,6 +1,6 @@
 #include <sb_core/hash/crc.h>
 
-#include <sb_std/iterator>
+#include <sb_slw/iterator>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
@@ -15,7 +15,7 @@ static u32 const CRC32_STR_TEST_HASH = 0xc7c7535eU;
 
 TEST_CASE("Null CRC32", "[crc32]")
 {
-    REQUIRE(0U == computeCRC32(sbstd::span<u8>{}));
+    REQUIRE(0U == computeCRC32(slw::span<u8>{}));
     REQUIRE(0U == computeCRC32({reinterpret_cast<u8 const *>("Hello"), 0}));
     REQUIRE(0U == computeCRC32(""));
 }

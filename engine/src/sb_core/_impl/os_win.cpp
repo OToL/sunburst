@@ -3,11 +3,11 @@
 #include <sb_core/cast.h>
 #include <sb_core/extern/windows/windows.h>
 
-#include <sb_std/cstdio>
+#include <sb_slw/cstdio>
 
 #include <direct.h>
 
-void sb::getWorkingDirectory(sbstd::span<char> buffer)
+void sb::getWorkingDirectory(slw::span<char> buffer)
 {
     sb_assert(!buffer.empty());
 

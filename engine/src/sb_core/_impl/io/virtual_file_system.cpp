@@ -1,4 +1,6 @@
 #include "local_file_system.h"
+#include "sb_core/io/file_hdl.h"
+#include "sb_core/memory/memory_arena.h"
 #include <sb_core/io/virtual_file_system.h>
 #include <sb_core/io/io.h>
 #include <sb_core/io/path.h>
@@ -54,6 +56,7 @@ public:
         : file_desc_pool(50)
     {
     }
+    ~VirtualFileSystemState() = default;
 
     using LayerNameGen = u16;
     using FileDescPool = ObjectPoolAllocator<FileDesc, GlobalHeapAllocator>;
@@ -71,7 +74,7 @@ VirtualFileSystemState * g_vfs_state = nullptr;
 auto findVFSLayer(VirtualFileSystemState const & vfs_data, vfs::LayerName layer_name)
 {
     auto const layer_iter =
-        sbstd::find_if(begin(vfs_data.layers), end(vfs_data.layers),
+        slw::find_if(begin(vfs_data.layers), end(vfs_data.layers),
                        [layer_name](LayerDesc const & layer_desc) { return layer_desc.name == layer_name; });
 
     return layer_iter;
@@ -80,7 +83,7 @@ auto findVFSLayer(VirtualFileSystemState const & vfs_data, vfs::LayerName layer_
 auto findVFSLayer(VirtualFileSystemState const & vfs_data, char const * layer_path)
 {
     auto const layer_iter =
-        sbstd::find_if(begin(vfs_data.layers), end(vfs_data.layers), [layer_path](LayerDesc const & layer_desc) {
+        slw::find_if(begin(vfs_data.layers), end(vfs_data.layers), [layer_path](LayerDesc const & layer_desc) {
             return strStartsWith(layer_path, layer_desc.vfs_root_path.c_str());
         });
 
@@ -105,7 +108,7 @@ FileHdl createFileDesc(VirtualFileSystemState & vfs_data, sb::File fs_file, File
         auto const base_obj = static_cast<FileDesc *>(arena.data);
 
         FileHelper const helper_hdl = {
-            .unpacked = {integral_cast<u16>(sbstd::distance(base_obj, file_desc)), integral_cast<u16>(file_desc->gen)}};
+            .unpacked = {integral_cast<u16>(slw::distance(base_obj, file_desc)), integral_cast<u16>(file_desc->gen)}};
 
         return FileHdl{helper_hdl.packed};
     }
@@ -116,7 +119,6 @@ FileHdl createFileDesc(VirtualFileSystemState & vfs_data, sb::File fs_file, File
 FileDesc & getFileDesc(VirtualFileSystemState & vfs_data, FileHdl hdl)
 {
     sb_assert(hdl.isValid());
-
     FileHelper const helper_hdl = {.packed = hdl.value};
 
     MemoryArena arena = vfs_data.file_desc_pool.getArena();
@@ -131,7 +133,6 @@ FileDesc & getFileDesc(VirtualFileSystemState & vfs_data, FileHdl hdl)
 void destroyFileDesc(VirtualFileSystemState & vfs_data, FileDesc & file_desc)
 {
     sb_assert(isInRange(vfs_data.file_desc_pool.getArena(), (void *)&file_desc));
-
     file_desc = {};
     vfs_data.file_desc_pool.deallocate(&file_desc);
 }
@@ -254,7 +255,7 @@ void sb::virtual_file_system::closeFile(FileHdl hdl)
     }
 }
 
-sb::FileSize sb::virtual_file_system::readFile(FileHdl hdl, sbstd::span<u8> buffer, FileSize cnt)
+sb::FileSize sb::virtual_file_system::readFile(FileHdl hdl, slw::span<u8> buffer, FileSize cnt)
 {
     sb_assert(nullptr != g_vfs_state);
     sb_assert(-1 <= cnt);
@@ -274,7 +275,7 @@ sb::FileSize sb::virtual_file_system::readFile(FileHdl hdl, sbstd::span<u8> buff
     return 0;
 }
 
-sb::FileSize sb::virtual_file_system::writeFile(FileHdl hdl, sbstd::span<u8 const> buffer, FileSize cnt)
+sb::FileSize sb::virtual_file_system::writeFile(FileHdl hdl, slw::span<u8 const> buffer, FileSize cnt)
 {
     sb_assert(nullptr != g_vfs_state);
     sb_assert(-1 <= cnt);
@@ -337,7 +338,7 @@ sb::b8 sb::virtual_file_system::fileExists(char const * path)
     return false;
 }
 
-sbstd::span<sb::u8> sb::virtual_file_system::readFile(char const * path, IAllocator & alloc, FileFormat fmt)
+slw::span<sb::u8> sb::virtual_file_system::readFile(char const * path, IAllocator & alloc, FileFormat fmt)
 {
     auto const fd = openFileRead(path, fmt);
     if (!fd.isValid())
@@ -362,7 +363,7 @@ sbstd::span<sb::u8> sb::virtual_file_system::readFile(char const * path, IAlloca
         return {};
     }
 
-    sbstd::span<u8> const file_content((u8 *)arena.data, arena.size);
+    slw::span<u8> const file_content(reinterpret_cast<u8 *>(arena.data), arena.size);
     auto const read_cnt = readFile(fd, file_content);
     sb_warn(integral_cast<usize>(read_cnt) == file_content.size());
 
@@ -392,7 +393,7 @@ sb::vfs::MountResult sb::virtual_file_system::mountLocalFileSystem(char const * 
     {
         char buffer[125];
         auto const char_cnt = formatString(buffer, "local_filesystem_{}", g_vfs_state->curr_layer_name_gen++);
-        name = hash_str::make(buffer, char_cnt);
+        name = hash_str::make(slw::data(buffer), char_cnt);
     }
 
     auto const layer_iter = findVFSLayer(*g_vfs_state, name);

@@ -4,7 +4,7 @@
 #include <sb_unit/test_object_cnt.h>
 #include <sb_unit/test_allocator.h>
 
-#include <sb_std/xutility>
+#include <sb_slw/xutility>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
@@ -133,14 +133,14 @@ TEST_CASE("RingBuffer put_overflow", "[ring_buffer]")
 
         REQUIRE(ring_buffer.size() == ring_buffer.capacity());
 
-        for (usize idx = 0; idx != (TEST_RING_BUFFER_CAPACITY - sbstd::size(OVERFLOW_REF)); ++idx)
+        for (usize idx = 0; idx != (TEST_RING_BUFFER_CAPACITY - slw::size(OVERFLOW_REF)); ++idx)
         {
-            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + sbstd::size(OVERFLOW_REF)]);
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + slw::size(OVERFLOW_REF)]);
         }
 
-        REQUIRE(sbstd::size(OVERFLOW_REF) == ring_buffer.size());
+        REQUIRE(slw::size(OVERFLOW_REF) == ring_buffer.size());
 
-        for (usize idx = 0; idx != sbstd::size(OVERFLOW_REF); ++idx)
+        for (usize idx = 0; idx != slw::size(OVERFLOW_REF); ++idx)
         {
             REQUIRE(ring_buffer.pop() == OVERFLOW_REF[idx]);
         }
@@ -184,15 +184,15 @@ TEST_CASE("RingBuffer put_overflow", "[ring_buffer]")
         REQUIRE(ring_buffer.size() == ring_buffer.capacity());
         REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
 
-        for (usize idx = 0; idx != (TEST_RING_BUFFER_CAPACITY - sbstd::size(OVERFLOW_REF)); ++idx)
+        for (usize idx = 0; idx != (TEST_RING_BUFFER_CAPACITY - slw::size(OVERFLOW_REF)); ++idx)
         {
-            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + sbstd::size(OVERFLOW_REF)]);
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + slw::size(OVERFLOW_REF)]);
         }
 
         REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
-        REQUIRE(sbstd::size(OVERFLOW_REF) == ring_buffer.size());
+        REQUIRE(slw::size(OVERFLOW_REF) == ring_buffer.size());
 
-        for (usize idx = 0; idx != sbstd::size(OVERFLOW_REF); ++idx)
+        for (usize idx = 0; idx != slw::size(OVERFLOW_REF); ++idx)
         {
             REQUIRE(ring_buffer.pop() == OVERFLOW_REF[idx]);
         }
@@ -236,14 +236,14 @@ TEST_CASE("RingBuffer emplace_put_overflow", "[ring_buffer]")
 
         REQUIRE(ring_buffer.size() == ring_buffer.capacity());
 
-        for (usize idx = 0; idx != (TEST_RING_BUFFER_CAPACITY - sbstd::size(OVERFLOW_REF)); ++idx)
+        for (usize idx = 0; idx != (TEST_RING_BUFFER_CAPACITY - slw::size(OVERFLOW_REF)); ++idx)
         {
-            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + sbstd::size(OVERFLOW_REF)]);
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + slw::size(OVERFLOW_REF)]);
         }
 
-        REQUIRE(sbstd::size(OVERFLOW_REF) == ring_buffer.size());
+        REQUIRE(slw::size(OVERFLOW_REF) == ring_buffer.size());
 
-        for (usize idx = 0; idx != sbstd::size(OVERFLOW_REF); ++idx)
+        for (usize idx = 0; idx != slw::size(OVERFLOW_REF); ++idx)
         {
             REQUIRE(ring_buffer.pop() == OVERFLOW_REF[idx]);
         }
@@ -287,15 +287,15 @@ TEST_CASE("RingBuffer emplace_put_overflow", "[ring_buffer]")
         REQUIRE(ring_buffer.size() == ring_buffer.capacity());
         REQUIRE(TestObjectCnt::getStats() == ring_buffer.capacity());
 
-        for (usize idx = 0; idx != (TEST_RING_BUFFER_CAPACITY - sbstd::size(OVERFLOW_REF)); ++idx)
+        for (usize idx = 0; idx != (TEST_RING_BUFFER_CAPACITY - slw::size(OVERFLOW_REF)); ++idx)
         {
-            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + sbstd::size(OVERFLOW_REF)]);
+            REQUIRE(ring_buffer.pop() == TEST_RING_BUFFER_REF[idx + slw::size(OVERFLOW_REF)]);
         }
 
         REQUIRE(TestObjectCnt::getStats() == ring_buffer.size());
-        REQUIRE(sbstd::size(OVERFLOW_REF) == ring_buffer.size());
+        REQUIRE(slw::size(OVERFLOW_REF) == ring_buffer.size());
 
-        for (usize idx = 0; idx != sbstd::size(OVERFLOW_REF); ++idx)
+        for (usize idx = 0; idx != slw::size(OVERFLOW_REF); ++idx)
         {
             REQUIRE(ring_buffer.pop() == OVERFLOW_REF[idx]);
         }

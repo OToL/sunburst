@@ -3,8 +3,9 @@
 #include <sb_core/error.h>
 #include <sb_core/hook.h>
 #include <sb_core/string/format.h>
+#include <sb_core/memory/memory_arena.h>
 
-#include <sb_std/iterator>
+#include <sb_slw/iterator>
 
 static sb::LogHook g_log_hdl;
 
@@ -12,7 +13,7 @@ static char const * const LOG_TYPE_TO_STR[] = {"ERROR", "WARNING", "INFO", "DEBU
 
 void sb::internal::logMessage(LogLevel type, char const * file, u32 line, char const * msg)
 {
-    sb_assert((u8)type < sbstd::size(LOG_TYPE_TO_STR));
+    sb_assert((u8)type < slw::size(LOG_TYPE_TO_STR));
 
     if (nullptr != g_log_hdl)
     {

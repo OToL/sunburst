@@ -3,8 +3,8 @@
 
 #include <sb_unit/test_object_cnt.h>
 
-#include <sb_std/algorithm>
-#include <sb_std/iterator>
+#include <sb_slw/algorithm>
+#include <sb_slw/iterator>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
@@ -67,7 +67,7 @@ TEST_CASE("DFArray POD push back", "[dynamic_fix_array]")
 
     FillTestFArrayPush(test_array);
 
-    REQUIRE(sbstd::equal(begin(test_array), end(test_array), sbstd::begin(TEST_FARRAY_REF)));
+    REQUIRE(slw::equal(begin(test_array), end(test_array), slw::begin(TEST_FARRAY_REF)));
 }
 
 TEST_CASE("DFArray POD back", "[dynamic_fix_array]")
@@ -121,7 +121,7 @@ TEST_CASE("DFArray erase first element", "[dynamic_fix_array]")
         REQUIRE(test_array.size() == (test_array.capacity() - 1));
         REQUIRE(TestObjectCnt::getStats() == 9ULL);
 
-        REQUIRE(sbstd::equal(begin(test_array), end(test_array), sbstd::begin(TEST_FARRAY_REF) + 1));
+        REQUIRE(slw::equal(begin(test_array), end(test_array), slw::begin(TEST_FARRAY_REF) + 1));
     }
 
     REQUIRE(TestObjectCnt::getStats() == 0ULL);
@@ -141,7 +141,7 @@ TEST_CASE("DFArray erase last element", "[dynamic_fix_array]")
         REQUIRE(test_array.size() == (test_array.capacity() - 1));
         REQUIRE(TestObjectCnt::getStats() == (test_array.capacity() - 1));
 
-        REQUIRE(sbstd::equal(begin(test_array), end(test_array) - 1, sbstd::begin(TEST_FARRAY_REF)));
+        REQUIRE(slw::equal(begin(test_array), end(test_array) - 1, slw::begin(TEST_FARRAY_REF)));
     }
 
     REQUIRE(TestObjectCnt::getStats() == 0ULL);
@@ -162,9 +162,8 @@ TEST_CASE("DFArray erase middle element", "[dynamic_fix_array]")
         REQUIRE(test_array.size() == (test_array.capacity() - 1));
         REQUIRE(TestObjectCnt::getStats() == (test_array.capacity() - 1));
 
-        REQUIRE(sbstd::equal(begin(test_array), begin(test_array) + ERASE_OFFSET, sbstd::begin(TEST_FARRAY_REF)));
-        REQUIRE(sbstd::equal(begin(test_array) + ERASE_OFFSET, end(test_array),
-                             sbstd::begin(TEST_FARRAY_REF) + ERASE_OFFSET + 1));
+        REQUIRE(slw::equal(begin(test_array), begin(test_array) + ERASE_OFFSET, slw::begin(TEST_FARRAY_REF)));
+        REQUIRE(slw::equal(begin(test_array) + ERASE_OFFSET, end(test_array), slw::begin(TEST_FARRAY_REF) + ERASE_OFFSET + 1));
     }
 
     REQUIRE(TestObjectCnt::getStats() == 0ULL);

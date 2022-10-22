@@ -1,7 +1,7 @@
 #pragma once
 
-#include <sb_std/cstddef>
-#include <sb_std/cstdint>
+#include <sb_slw/cstddef>
+#include <sb_slw/cstdint>
 
 namespace sb {
 

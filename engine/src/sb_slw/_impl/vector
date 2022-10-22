@@ -1,0 +1,11 @@
+#pragma once
+
+#include <sb_slw/std.h>
+
+#include SB_SRC_STD_INC(vector)
+    
+namespace SB_STD_NS::internal {
+
+	SB_SRC_STD_USE(vector);
+
+}

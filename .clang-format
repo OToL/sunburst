@@ -16,7 +16,7 @@ PointerAlignment: Middle
 CompactNamespaces: true
 FixNamespaceComments: true
 IndentCaseLabels: true
-ColumnLimit: 120
+ColumnLimit: 150
 BreakConstructorInitializers: BeforeComma
 AlignAfterOpenBracket: Align
 Cpp11BracedListStyle: true

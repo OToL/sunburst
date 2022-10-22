@@ -12,32 +12,32 @@ void * operator new[](sb::usize byte_count)
     return sb::getGlobalHeap().allocate(byte_count).data;
 }
 
-void * operator new(sb::usize byte_count, sbstd::align_val_t alignment)
+void * operator new(sb::usize byte_count, slw::align_val_t alignment)
 {
     return sb::getGlobalHeap().allocate(static_cast<sb::Alignment>(alignment), byte_count).data;
 }
 
-void * operator new[](sb::usize byte_count, sbstd::align_val_t alignment)
+void * operator new[](sb::usize byte_count, slw::align_val_t alignment)
 {
     return sb::getGlobalHeap().allocate(static_cast<sb::Alignment>(alignment), byte_count).data;
 }
 
-void * operator new(sb::usize byte_count, sbstd::nothrow_t const &) noexcept
+void * operator new(sb::usize byte_count, slw::nothrow_t const &) noexcept
 {
     return sb::getGlobalHeap().allocate(byte_count).data;
 }
 
-void * operator new[](sb::usize byte_count, sbstd::nothrow_t const &) noexcept
+void * operator new[](sb::usize byte_count, slw::nothrow_t const &) noexcept
 {
     return sb::getGlobalHeap().allocate(byte_count).data;
 }
 
-void * operator new(sb::usize byte_count, sbstd::align_val_t alignment, sbstd::nothrow_t const &) noexcept
+void * operator new(sb::usize byte_count, slw::align_val_t alignment, slw::nothrow_t const &) noexcept
 {
     return sb::getGlobalHeap().allocate(static_cast<sb::Alignment>(alignment), byte_count).data;
 }
 
-void * operator new[](sb::usize byte_count, sbstd::align_val_t alignment, sbstd::nothrow_t const &) noexcept
+void * operator new[](sb::usize byte_count, slw::align_val_t alignment, slw::nothrow_t const &) noexcept
 {
     return sb::getGlobalHeap().allocate(static_cast<sb::Alignment>(alignment), byte_count).data;
 }
@@ -58,7 +58,7 @@ void operator delete[](void * ptr) noexcept
     }
 }
 
-void operator delete(void * ptr, sbstd::align_val_t) noexcept
+void operator delete(void * ptr, slw::align_val_t) noexcept
 {
     if (nullptr != ptr)
     {
@@ -66,7 +66,7 @@ void operator delete(void * ptr, sbstd::align_val_t) noexcept
     }
 }
 
-void operator delete[](void * ptr, sbstd::align_val_t) noexcept
+void operator delete[](void * ptr, slw::align_val_t) noexcept
 {
     if (nullptr != ptr)
     {
@@ -90,7 +90,7 @@ void operator delete[](void * ptr, sb::usize) noexcept
     }
 }
 
-void operator delete(void * ptr, sb::usize, sbstd::align_val_t) noexcept
+void operator delete(void * ptr, sb::usize, slw::align_val_t) noexcept
 {
     if (nullptr != ptr)
     {
@@ -98,7 +98,7 @@ void operator delete(void * ptr, sb::usize, sbstd::align_val_t) noexcept
     }
 }
 
-void operator delete[](void * ptr, sb::usize, sbstd::align_val_t) noexcept
+void operator delete[](void * ptr, sb::usize, slw::align_val_t) noexcept
 {
     if (nullptr != ptr)
     {
@@ -106,7 +106,7 @@ void operator delete[](void * ptr, sb::usize, sbstd::align_val_t) noexcept
     }
 }
 
-void operator delete(void * ptr, const sbstd::nothrow_t &) noexcept
+void operator delete(void * ptr, const slw::nothrow_t &) noexcept
 {
     if (nullptr != ptr)
     {
@@ -114,7 +114,7 @@ void operator delete(void * ptr, const sbstd::nothrow_t &) noexcept
     }
 }
 
-void operator delete[](void * ptr, const sbstd::nothrow_t &) noexcept
+void operator delete[](void * ptr, const slw::nothrow_t &) noexcept
 {
     if (nullptr != ptr)
     {
@@ -122,7 +122,7 @@ void operator delete[](void * ptr, const sbstd::nothrow_t &) noexcept
     }
 }
 
-void operator delete(void * ptr, sbstd::align_val_t, const sbstd::nothrow_t &) noexcept
+void operator delete(void * ptr, slw::align_val_t, const slw::nothrow_t &) noexcept
 {
     if (nullptr != ptr)
     {
@@ -130,7 +130,7 @@ void operator delete(void * ptr, sbstd::align_val_t, const sbstd::nothrow_t &) n
     }
 }
 
-void operator delete[](void * ptr, sbstd::align_val_t, const sbstd::nothrow_t &) noexcept
+void operator delete[](void * ptr, slw::align_val_t, const slw::nothrow_t &) noexcept
 {
     if (nullptr != ptr)
     {

@@ -1,6 +1,6 @@
 #include <sb_core/hash/crc.h>
 
-#include <sb_std/iterator>
+#include <sb_slw/iterator>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
@@ -15,7 +15,7 @@ static u64 const CRC64_STR_TEST_HASH = 0x69172790b5f8880fULL;
 
 TEST_CASE("Null CRC64", "[crc64]")
 {
-    REQUIRE(0ULL == computeCRC64(sbstd::span<u8>{}));
+    REQUIRE(0ULL == computeCRC64(slw::span<u8>{}));
     REQUIRE(0ULL == computeCRC64({reinterpret_cast<u8 const *>("Hello"), 0}));
     REQUIRE(0ULL == computeCRC64(""));
 }

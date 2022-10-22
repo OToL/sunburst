@@ -2,7 +2,7 @@
 
 #include <sb_core/core.h>
 
-#include <sb_std/span>
+#include <sb_slw/span>
 
 /// String formatting facility inspired by fmtlib:
 /// - https://docs.python.org/2/library/string.html
@@ -12,7 +12,7 @@ namespace sb {
 
 /// Returns the number of characters copied without the null terminated character ('\0')
 template <typename... TArgs>
-usize formatString(sbstd::span<char> dest_buffer, char const * const format, TArgs &&... args);
+usize formatString(slw::span<char> dest_buffer, char const * const format, TArgs &&... args);
 
 } // namespace sb
 

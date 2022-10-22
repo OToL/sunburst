@@ -2,7 +2,7 @@
 #include <sb_core/memory/allocator/memory_arena_allocator.h>
 #include <sb_core/container/dynamic_fix_array.h>
 
-#include <sb_std/algorithm>
+#include <sb_slw/algorithm>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
@@ -172,7 +172,7 @@ TEST_CASE("Pool Allocator deallocate", "[pool_allocator]")
 
             REQUIRE(!memory_arena::isEmpty(mem_arena));
             REQUIRE(test_alloc.owns(mem_arena.data));
-            REQUIRE(end(alloc_objs) == sbstd::find(begin(alloc_objs), end(alloc_objs), mem_arena.data));
+            REQUIRE(end(alloc_objs) == slw::find(begin(alloc_objs), end(alloc_objs), mem_arena.data));
 
             alloc_objs.push_back(mem_arena.data);
 
@@ -184,7 +184,7 @@ TEST_CASE("Pool Allocator deallocate", "[pool_allocator]")
         {
             auto obj_ptr = alloc_objs.back();
 
-            auto obj_iter = sbstd::find(begin(alloc_objs), end(alloc_objs), obj_ptr);
+            auto obj_iter = slw::find(begin(alloc_objs), end(alloc_objs), obj_ptr);
             REQUIRE(end(alloc_objs) != obj_ptr);
             alloc_objs.erase(obj_iter);
 

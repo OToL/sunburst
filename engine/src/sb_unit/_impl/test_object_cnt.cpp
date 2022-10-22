@@ -88,7 +88,7 @@ TestObjectCnt::Stats TestObjectCnt::getStats()
     return gs_stats;
 }
 
-void TestObjectCnt::initSequence(sbstd::span<TestObjectCnt> objects, usize start_id)
+void TestObjectCnt::initSequence(slw::span<TestObjectCnt> objects, usize start_id)
 {
     usize obj_id = start_id;
 
@@ -99,7 +99,7 @@ void TestObjectCnt::initSequence(sbstd::span<TestObjectCnt> objects, usize start
     }
 }
 
-bool TestObjectCnt::areSequencial(sbstd::span<TestObjectCnt> objects, usize start_id)
+bool TestObjectCnt::areSequencial(slw::span<TestObjectCnt> objects, usize start_id)
 {
     usize obj_id = start_id;
 

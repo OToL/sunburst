@@ -1,0 +1,10 @@
+#pragma once
+
+#include "std.h"
+#include SB_SRC_STD_INC(array)
+
+namespace SB_STD_NS {
+
+	SB_SRC_STD_USE(array);
+
+}

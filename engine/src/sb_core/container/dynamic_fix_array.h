@@ -3,10 +3,10 @@
 #include <sb_core/core.h>
 #include <sb_core/error.h>
 
-#include <sb_std/type_traits>
-#include <sb_std/utility>
-#include <sb_std/algorithm>
-#include <sb_std/memory>
+#include <sb_slw/type_traits>
+#include <sb_slw/utility>
+#include <sb_slw/algorithm>
+#include <sb_slw/memory>
 
 namespace sb {
 
@@ -37,7 +37,7 @@ public:
     {
         sb_assert(count <= CAPACITY);
 
-        sbstd::uninitialized_fill((pointer)_data, ((pointer)_data) + count, value);
+        slw::uninitialized_fill((pointer)_data, ((pointer)_data) + count, value);
         _size = count;
     }
 
@@ -84,7 +84,7 @@ public:
         {
             auto new_start_iter = end();
 
-            sbstd::uninitialized_default_construct((pointer)_data + _size, ((pointer)_data) + _size + cnt);
+            slw::uninitialized_default_construct((pointer)_data + _size, ((pointer)_data) + _size + cnt);
             _size += cnt;
 
             return new_start_iter;
@@ -105,7 +105,7 @@ public:
     {
         sb_assert(CAPACITY != _size, "Static vector capacity exceeded");
 
-        new (end()) value_type{sbstd::move(value)};
+        new (end()) value_type{slw::move(value)};
         ++_size;
     }
 
@@ -122,7 +122,7 @@ public:
     {
         sb_assert(CAPACITY != _size, "Static vector capacity exceeded");
 
-        new (end()) value_type{sbstd::forward<TArgs>(args)...};
+        new (end()) value_type{slw::forward<TArgs>(args)...};
         ++_size;
 
         return back();
@@ -148,7 +148,7 @@ public:
 
         iterator mutable_pos = begin() + (pos - begin());
 
-        sbstd::move(mutable_pos + 1, end(), mutable_pos);
+        slw::move(mutable_pos + 1, end(), mutable_pos);
         (end() - 1)->~value_type();
         --_size;
 

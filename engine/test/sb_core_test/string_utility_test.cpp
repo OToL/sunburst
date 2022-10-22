@@ -1,6 +1,6 @@
 #include <sb_core/string/utility.h>
 
-#include <sb_std/iterator>
+#include <sb_slw/iterator>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
@@ -8,15 +8,15 @@
 using namespace sb;
 
 static char const STRCPYT_TEST_SRC[] = "Hello World";
-static const usize STRCPYT_TEST_LEN = sbstd::size(STRCPYT_TEST_SRC) - 1;
-static const usize STRCPYT_TEST_CAPACITY = sbstd::size(STRCPYT_TEST_SRC);
+static const usize STRCPYT_TEST_LEN = slw::size(STRCPYT_TEST_SRC) - 1;
+static const usize STRCPYT_TEST_CAPACITY = slw::size(STRCPYT_TEST_SRC);
 
 TEST_CASE("strCpyT", "[string_utility]")
 {
     SECTION("StrCpyT fit")
     {
         char buffer[20];
-        memset(&buffer[0], 0xFF, sbstd::size(buffer));
+        memset(&buffer[0], 0xFF, slw::size(buffer));
 
         auto const copy_cnt = strCpyT(buffer, &STRCPYT_TEST_SRC[0]);
 

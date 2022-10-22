@@ -5,8 +5,8 @@
 #include <sb_core/string/utility.h>
 #include <sb_core/error.h>
 
-#include <sb_std/cstring>
-#include <sb_std/string_view>
+#include <sb_slw/cstring>
+#include <sb_slw/string_view>
 
 namespace sb {
 
@@ -16,7 +16,7 @@ class FixString
 {
     static_assert(CAPACITY != 0, "FixString cannot 0 as CAPACITY");
 
-    using StringView = sbstd::basic_string_view<TChar>;
+    using StringView = slw::basic_string_view<TChar>;
 
 public:
     FixString()
@@ -153,7 +153,7 @@ public:
         strCatT(&_data[0], _len, CAPACITY, str);
 
         // @todo: implement my own strncat which returns the numbers of copied character
-        _len = sbstd::strlen(&_data[0]);
+        _len = slw::strlen(&_data[0]);
 
         return *this;
     }

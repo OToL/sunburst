@@ -4,9 +4,8 @@
 
 #include <sb_unit/test_allocator.h>
 
-#include <sb_std/iterator>
-
-#include <sb_std/algorithm>
+#include <sb_slw/iterator>
+#include <sb_slw/algorithm>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
@@ -22,12 +21,12 @@ TEST_CASE("STL Allocator Wrapper", "[stl_allocator]")
 
         u32 const array_test[] = {0, 1, 2, 3, 4};
 
-        sbstd::copy(sbstd::begin(array_test), sbstd::end(array_test), back_inserter(vector_test));
+        slw::copy(slw::begin(array_test), slw::end(array_test), back_inserter(vector_test));
 
         REQUIRE(test_alloc.getStats().allocated_byte != 0U);
         REQUIRE(test_alloc.getStats().allocated_byte >= sizeof(array_test));
 
-        for (u32 idx = 0; idx != sbstd::size(array_test); ++idx)
+        for (u32 idx = 0; idx != slw::size(array_test); ++idx)
         {
             REQUIRE(array_test[idx] == idx);
             REQUIRE(array_test[idx] == vector_test[idx]);
