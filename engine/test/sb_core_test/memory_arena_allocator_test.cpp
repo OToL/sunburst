@@ -2,6 +2,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -170,4 +171,3 @@ TEST_CASE("Memory Arena Allocator owns", "[memory_arena_allocator]")
     REQUIRE(!alloc.owns(&my_array[0] + sizeof(my_array)));
 }
 
-#include <extern_epilog.h>

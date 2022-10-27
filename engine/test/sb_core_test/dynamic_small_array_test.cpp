@@ -11,6 +11,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -1394,4 +1395,3 @@ TEST_CASE_METHOD(DSArrayFixture, "DSArray without allocator has not overhead", "
     // STATIC_REQUIRE(sizeof(DSArray<b8, sizeof(void *)>) == 4 * sizeof(void *));
 }
 
-#include <extern_epilog.h>

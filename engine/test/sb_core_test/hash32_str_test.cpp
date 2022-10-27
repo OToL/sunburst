@@ -2,6 +2,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -52,4 +53,3 @@ TEST_CASE("Hash32Str literal", "[hash32_str]")
     STATIC_REQUIRE((computeHash32(HASH_STR_TEST_STRING) == "Hello Hash"_h32s.value));
 }
 
-#include <extern_epilog.h>

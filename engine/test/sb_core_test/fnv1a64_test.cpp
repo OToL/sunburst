@@ -6,6 +6,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -36,4 +37,3 @@ TEST_CASE("String FNV64 hash", "[fnv64]")
     REQUIRE(FNV64_STR_TEST_HASH == fnv_val);
 }
 
-#include <extern_epilog.h>

@@ -9,7 +9,7 @@ enum class ErrorCode : u32
     OK,
     CANCELLED,
     INVALID_ARGUMENT,
-    DEADLINE_EXCEEDED,
+    TIME_OUT,
     NOT_FOUND,
     ALREADY_EXISTS,
     PERMISSION_DENIED,

@@ -3,7 +3,7 @@
 #include <sb_core/string/format.h>
 #include <sb_core/cast.h>
 #include <sb_core/error.h>
-#include <sb_core/bit.h>
+#include <sb_core/bit_operations.h>
 #include <sb_core/extern/windows/windows.h>
 
 sb::MemoryArena sb::reserveVMem(usize size, [[maybe_unused]] char const * name)

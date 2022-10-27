@@ -2,6 +2,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -141,4 +142,3 @@ TEST_CASE("FixString push_back", "[fix_string]")
     REQUIRE(testStr.length() == 7ULL);
 }
 
-#include <extern_epilog.h>

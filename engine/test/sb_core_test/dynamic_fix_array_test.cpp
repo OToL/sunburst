@@ -1,5 +1,5 @@
 #include <sb_core/container/dynamic_fix_array.h>
-#include <sb_core/bit.h>
+#include <sb_core/bit_operations.h>
 
 #include <sb_unit/test_object_cnt.h>
 
@@ -8,6 +8,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -185,4 +186,3 @@ TEST_CASE("DFArray aligned storage", "[dynamic_fix_array]")
     REQUIRE(isAlignedTo(aligned_array.data(), 32U));
 }
 
-#include <extern_epilog.h>

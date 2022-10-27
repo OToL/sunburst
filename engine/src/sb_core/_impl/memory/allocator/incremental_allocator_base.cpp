@@ -1,6 +1,6 @@
 #include "incremental_allocator_base.h"
 #include <sb_core/error.h>
-#include <sb_core/bit.h>
+#include <sb_core/bit_operations.h>
 
 void sb::IncrementalAllocatorBase::init(MemoryArena arena, Alignment default_align)
 {

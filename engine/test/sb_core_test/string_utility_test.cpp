@@ -4,6 +4,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -62,4 +63,3 @@ TEST_CASE("strStartsWith", "[string_utility]")
     }
 }
 
-#include <extern_epilog.h>

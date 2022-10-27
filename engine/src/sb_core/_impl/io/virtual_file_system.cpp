@@ -69,7 +69,7 @@ public:
     u16 opened_file_count = 0;
 };
 
-VirtualFileSystemState * g_vfs_state = nullptr;
+static VirtualFileSystemState * g_vfs_state = nullptr;
 
 auto findVFSLayer(VirtualFileSystemState const & vfs_data, vfs::LayerName layer_name)
 {

@@ -9,6 +9,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -37,7 +38,6 @@ TEST_CASE("STL Allocator Wrapper", "[stl_allocator]")
     REQUIRE(test_alloc.getStats().allocated_byte == 0U);
 }
 
-#include <extern_epilog.h>
 
 #if 0
 

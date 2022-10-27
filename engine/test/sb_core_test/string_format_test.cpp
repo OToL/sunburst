@@ -3,6 +3,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -161,4 +162,3 @@ TEST_CASE("String format numeric arguments", "[string_format]")
     }
 }
 
-#include <extern_epilog.h>

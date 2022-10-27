@@ -4,6 +4,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -120,4 +121,3 @@ TEST_CASE("Incremetal Allocator deallocate all", "[incremental_allocator]")
     REQUIRE(alloc_count_1 == alloc_count_2);
 }
 
-#include <extern_epilog.h>

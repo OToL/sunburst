@@ -2,6 +2,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -81,4 +82,3 @@ TEST_CASE("Unsigned integral to buffer", "[conversion]")
     REQUIRE(byte_cnt == 20U);
 }
 
-#include <extern_epilog.h>

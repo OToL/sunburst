@@ -4,10 +4,6 @@
 
 namespace sb {
 
-inline i32 countLeadingZeros(u32 val);
-
-inline i32 countLeadingZeros(u64 val);
-
 // returns true for 'val = 0' to avoid a branch
 template <typename T>
 inline constexpr b8 isPowerOf2(T val)
@@ -82,10 +78,3 @@ inline constexpr b8 isAlignedTo(T val, usize alignment)
 }
 } // namespace sb
 
-#if defined(SB_PLATFORM_WINDOWS)
-#    include "_impl/bit_win.h"
-#elif defined(SB_PLATFORM_LINUX)
-#    include "_impl/bit_linux.h"
-#else
-#    error "Unsupported platform"
-#endif

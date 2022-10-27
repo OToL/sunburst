@@ -4,6 +4,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -34,4 +35,3 @@ TEST_CASE("String CRC32 hash", "[crc32]")
     REQUIRE(CRC32_STR_TEST_HASH == test_crc);
 }
 
-#include <extern_epilog.h>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "std.h"
+#include "_impl/std_wrap.h"
 
 #if defined(SB_TARGET_FAMILY_UNIX)
 #   include SB_SRC_STD_INC(unistd.h)

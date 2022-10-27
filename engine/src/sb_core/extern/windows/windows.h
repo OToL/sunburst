@@ -2,5 +2,5 @@
 
 #pragma warning(push)
 #pragma warning(disable : 5039)
-#include <windows.h>
+#include <Windows.h>
 #pragma warning(pop)

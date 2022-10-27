@@ -1,4 +1,6 @@
-vim.cmd([[set makeprg=ninja\ -C\ build/win64-ninja-clang/]])
+vim.cmd([[
+    set errorformat^=%-GIn\ file\ included\ %.%#
+    set makeprg=ninja\ -C\ build/win64-ninja-clang/]])
 
 local Terminal = require("toggleterm.terminal").Terminal
 

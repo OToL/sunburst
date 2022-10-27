@@ -26,21 +26,22 @@ endfunction()
 
 function(sb_setup_toolchain_warnings BASE_TARGET_NAME)
     set(WARNING_IGNORE_LIST 
+        # TODO: fix later
         -Wno-sign-conversion
+        -Wno-exit-time-destructors
+        -Wno-global-constructors
+
+        # Don't care
+        -Wno-unused-macros
         -Wno-extra-semi-stmt
         -Wno-old-style-cast
-        -Wno-nonportable-system-include-path
         -Wno-c++98-compat
         -Wno-c++98-compat-pedantic
         -Wno-gnu-zero-variadic-macro-arguments
-        -Wno-exit-time-destructors
         -Wno-reserved-identifier
-        -Wno-global-constructors
         -Wno-declaration-after-statement
         -Wno-c++20-compat
-        -Wno-missing-variable-declarations
         -Wno-unknown-warning-option
-        -Wno-non-virtual-dtor
         -Wno-deprecated-copy-with-dtor
         -Wno-nested-anon-types
         -Wno-gnu-anonymous-struct

@@ -35,4 +35,4 @@
 #pragma clang diagnostic ignored "-Winconsistent-missing-destructor-override"
 #pragma clang diagnostic ignored "-Wno-reserved-id-macro"
 #pragma clang diagnostic ignored "-Wno-static-in-inline"
-
+#pragma clang diagnostic ignored "-Wno-nonportable-system-include-path"

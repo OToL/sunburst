@@ -2,6 +2,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -23,4 +24,3 @@ TEST_CASE("Null Allocator aligned allocate", "[null_allocator]")
     REQUIRE(!test_alloc.owns(mem_arena.data));
 }
 
-#include <extern_epilog.h>

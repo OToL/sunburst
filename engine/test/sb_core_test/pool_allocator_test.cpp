@@ -6,6 +6,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 using namespace sb;
 
@@ -195,4 +196,3 @@ TEST_CASE("Pool Allocator deallocate", "[pool_allocator]")
     }
 }
 
-#include <extern_epilog.h>

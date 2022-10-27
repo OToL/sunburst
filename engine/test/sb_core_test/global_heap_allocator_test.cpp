@@ -1,5 +1,5 @@
 #include <sb_core/memory/allocator/global_heap_allocator.h>
-#include <sb_core/bit.h>
+#include <sb_core/bit_operations.h>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>

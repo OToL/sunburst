@@ -2,6 +2,7 @@
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>
+#include <extern_epilog.h>
 
 #include <sb_core/error.h>
 
@@ -40,4 +41,3 @@ TEST_CASE("Check types size", "[core]")
     STATIC_REQUIRE(8 == sizeof(uptr));
 }
 
-#include <extern_epilog.h>
