@@ -3,7 +3,7 @@
 #include <sb_core/core.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/memory_arena.h>
-#include <sb_core/memory/allocator/allocator.h>
+#include <sb_core/memory/allocator.h>
 
 namespace sb {
 

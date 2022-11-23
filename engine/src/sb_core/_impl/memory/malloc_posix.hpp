@@ -2,8 +2,9 @@
 #include <sb_core/memory/memory.h>
 #include <sb_core/core.h>
 #include <sb_core/error.h>
-#include <sb_core/bit_operations.h>
+#include <sb_core/memory/memory.h>
 #include <sb_core/cast.h>
+#include <sb_core/math/math.h>
 
 namespace sb {
 

@@ -1,11 +1,9 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/memory/memory.h>
 #include <sb_core/memory/memory_arena.h>
 
 #include <sb_slw/utility>
-#include <sb_slw/type_traits>
 
 namespace sb::internal {
 
@@ -14,7 +12,7 @@ TType * newImpl(THeap & heap, TArgs &&... args)
 {
     MemoryArena arena = heap.allocate(alignof(TType), sizeof(TType));
 
-    if (!memory_arena::isEmpty(arena))
+    if (!arena.isEmpty())
     {
         return ::new (arena.data) TType(slw::forward<TArgs &&>(args)...);
     }

@@ -2,6 +2,8 @@
 
 #include <sb_core/_impl/config.h>
 
+#include <sb_slw/forward_decls>
+
 #if sb_ctf_equal(HASH_POLICY, CRC)
 #    include "crc.h"
 #else
@@ -10,7 +12,16 @@
 
 namespace sb {
 
-inline constexpr u32 computeHash32(slw::string_view buffer)
+inline constexpr u32 computeHash32(char const * str, size_t len)
+{
+#if sb_ctf_equal(HASH_POLICY, CRC)
+    return computeCRC32(str, len);
+#else // SB_CTV_HASH_POLICY_FNV1A
+    return computeFNV1a32(str, len);
+#endif
+}
+
+inline constexpr u32 computeHash32(slw::string_view_fw const & buffer)
 {
 #if sb_ctf_equal(HASH_POLICY, CRC)
     return computeCRC32(buffer);
@@ -19,7 +30,7 @@ inline constexpr u32 computeHash32(slw::string_view buffer)
 #endif
 }
 
-inline constexpr u32 computeHash32(slw::span<u8 const> buffer)
+inline constexpr u32 computeHash32(slw::span_fw<u8 const> const & buffer)
 {
 #if sb_ctf_equal(HASH_POLICY, CRC)
     return computeCRC32(buffer);
@@ -37,7 +48,16 @@ inline constexpr u32 computeHash32(char const * const str)
 #endif
 }
 
-inline constexpr u64 computeHash64(slw::string_view buffer)
+inline constexpr u64 computeHash64(char const * const str, size_t len)
+{
+#if sb_ctf_equal(HASH_POLICY, CRC)
+    return computeCRC64(str, len);
+#else // SB_CTV_HASH_POLICY_FNV1A
+    return computeFNV1a64(str, len);
+#endif
+}
+
+inline constexpr u64 computeHash64(slw::string_view_fw const & buffer)
 {
 #if sb_ctf_equal(HASH_POLICY, CRC)
     return computeCRC64(buffer);
@@ -46,7 +66,7 @@ inline constexpr u64 computeHash64(slw::string_view buffer)
 #endif
 }
 
-inline constexpr u64 computeHash64(slw::span<u8 const> buffer)
+inline constexpr u64 computeHash64(slw::span_fw<u8 const> const & buffer)
 {
 #if sb_ctf_equal(HASH_POLICY, CRC)
     return computeCRC64(buffer);
@@ -64,7 +84,7 @@ inline constexpr u64 computeHash64(char const * const str)
 #endif
 }
 
-inline constexpr u64 computeHash(slw::string_view buffer)
+inline constexpr u64 computeHash(slw::string_view_fw const &buffer)
 {
 #if sb_ctf_equal(HASH_POLICY, CRC)
 #    if sb_ctf_equal(HASH_SIZE, 32BIT)
@@ -81,7 +101,7 @@ inline constexpr u64 computeHash(slw::string_view buffer)
 #endif
 }
 
-inline constexpr u64 computeHash(slw::span<u8 const> buffer)
+inline constexpr u64 computeHash(slw::span_fw<u8 const> const &buffer)
 {
 #if sb_ctf_equal(HASH_POLICY, CRC)
 #    if sb_ctf_equal(HASH_SIZE, 32BIT)

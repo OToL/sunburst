@@ -1,5 +1,5 @@
-#include <sb_core/container/dynamic_fix_array.h>
-#include <sb_core/bit_operations.h>
+#include <sb_core/containers/dynamic_fix_array.h>
+#include <sb_core/memory/memory.h>
 
 #include <sb_unit/test_object_cnt.h>
 

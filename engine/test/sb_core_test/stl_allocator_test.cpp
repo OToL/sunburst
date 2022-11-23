@@ -1,6 +1,6 @@
 #include <sb_core/core.h>
-#include <sb_core/memory/allocator/stl_allocator_wrapper.h>
-#include <sb_core/container/dynamic_array.h>
+#include <sb_core/memory/allocators/stl_allocator_wrapper.h>
+#include <sb_core/containers/dynamic_array.h>
 
 #include <sb_unit/test_allocator.h>
 

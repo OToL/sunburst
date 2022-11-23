@@ -4,6 +4,7 @@
 
 #include <sb_slw/cctype>
 #include <sb_slw/type_traits>
+#include <sb_slw/span>
 
 sb::usize sb::internal::formatString(slw::span<char> dest_buffer, char const * const format, slw::span<FmtArg> args)
 {

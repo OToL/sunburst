@@ -10,28 +10,28 @@ add_library(sb_core STATIC
     _impl/string/string_conversion.cpp
     _impl/error.cpp
     _impl/hash/crc32.cpp
-    _impl/os_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
-    _impl/profiling_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
+    _impl/hash/fnv1a.cpp
+    _impl/system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
+    _impl/profiling_system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
     _impl/hash/crc64.cpp
     _impl/io/file_input_stream.cpp
     _impl/io/virtual_file_system.cpp
     _impl/io/path.cpp
     _impl/string/string_utility.cpp
-    _impl/memory/allocator/global_heap_allocator.cpp
-    _impl/memory/allocator/null_allocator.cpp
-    _impl/memory/allocator/incremental_allocator_base.cpp
-    _impl/memory/allocator/memory_arena_allocator.cpp
-    _impl/memory/allocator/pool_allocator_base.cpp
-    _impl/memory/allocator/allocator_wrapper.cpp
-    _impl/memory/allocator/container_allocator.cpp
-    _impl/memory/allocator/container_allocator_wrapper.cpp
+    _impl/memory/allocators/global_heap_allocator.cpp
+    _impl/memory/allocators/null_allocator.cpp
+    _impl/memory/allocators/incremental_allocator_base.cpp
+    _impl/memory/allocators/memory_arena_allocator.cpp
+    _impl/memory/allocators/pool_allocator_base.cpp
+    _impl/memory/allocators/allocator_wrapper.cpp
+    _impl/memory/allocators/container_allocator.cpp
+    _impl/memory/allocators/container_allocator_wrapper.cpp
     _impl/memory/global_heap.cpp
     _impl/memory/memory.cpp
-    _impl/memory/memory_utility.cpp
     _impl/memory/malloc_rpmalloc.cpp
     _impl/memory/memory_system.cpp
     _impl/extern/rpmalloc/rpmalloc.c
-    _impl/memory/virtual_memory_backstore_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
+    _impl/memory/memory_system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
     _impl/io/local_file_system_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
     _impl/memory/malloc_${SB_TARGET_PLATFORM_FILE_SUFFIX}.cpp
     _impl/io/local_file_system.cpp)

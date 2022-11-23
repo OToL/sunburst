@@ -17,10 +17,16 @@
 #endif
 
 #define sb_unreacheable_code() sb_debug_break()
+
 #define sb_static_unreachable_code(msg) sb_static_unreachable_code_internal(msg)
 
-// common intrisics
-#define sb_noalias sb_noalias_internal
 #define sb_nobreak()
+
+#define sb_noalias sb_noalias_internal
+
+#define sb_restrict __restrict
+
 #define sb_debug_break() sb_debug_break_internal
+
+// requires including sb_core/extern/intrinsics.h
 #define sb_lzcnt(val) sb_lzcnt_internal(val)

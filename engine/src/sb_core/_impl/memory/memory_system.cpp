@@ -1,19 +1,32 @@
 #include "malloc_cfg.h"
-#include "memory_system.h"
-#include <sb_core/memory/utility.h>
+#include <sb_core/memory/memory_system.h>
+#include <sb_core/memory/memory.h>
+#include <sb_core/error.h>
 
-void sb::memory_system::initialize() 
+static sb::b8 g_isInitialized = false;
+
+void sb::memory_system::initialize()
 {
+    sb_assert(!g_isInitialized);
+
     sb_initialize_malloc_backend();
+    g_isInitialized = true;
 }
 
-void sb::memory_system::terminate() 
+sb::b8 sb::memory_system::isInitialize()
 {
+    return g_isInitialized;
+}
+
+void sb::memory_system::terminate()
+{
+    sb_assert(g_isInitialized);
+
     sb_terminate_malloc_backend();
 }
 
-sb::MemoryArena sb::memory_system::malloc(usize size) 
-{ 
+sb::MemoryArena sb::memory_system::malloc(usize size)
+{
     void * const mem_ptr = sb_malloc_backend_alloc(size);
 
     if (nullptr != mem_ptr)
@@ -24,7 +37,7 @@ sb::MemoryArena sb::memory_system::malloc(usize size)
     notifyOOM(size, "aligned malloc OOM");
 }
 
-sb::MemoryArena sb::memory_system::malloc(Alignment alignment, usize size) 
+sb::MemoryArena sb::memory_system::malloc(Alignment alignment, usize size)
 {
     void * const mem_ptr = sb_malloc_backend_alloca(alignment, size);
 
@@ -36,7 +49,7 @@ sb::MemoryArena sb::memory_system::malloc(Alignment alignment, usize size)
     notifyOOM(size, "aligned malloc OOM");
 }
 
-sb::usize sb::memory_system::getBlockSize(void * memPtr)
+sb::usize sb::memory_system::getMallocBlockSize(void * memPtr)
 {
     return sb_malloc_backend_usable_size(memPtr);
 }

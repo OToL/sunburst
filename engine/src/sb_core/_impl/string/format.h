@@ -4,16 +4,17 @@
 #include <sb_core/string/conversion.h>
 
 #include <sb_slw/utility>
+#include <sb_slw/span>
 
 namespace sb::internal {
 
 template <typename T>
-inline usize fmtArgFwCall(void const * value, slw::span<char> dest_buffer)
+inline usize fmtArgFwCall(void const * value, slw::span_fw<char> dest_buffer)
 {
     return fmtArg(*reinterpret_cast<T *>(value), dest_buffer);
 }
 
-using FmtFwCallCB = usize (*)(void const *, slw::span<char>);
+using FmtFwCallCB = usize (*)(void const *, slw::span_fw<char> const &);
 
 struct FmtArg
 {
@@ -21,7 +22,7 @@ struct FmtArg
     FmtFwCallCB fmt_cb;
 };
 
-inline void expandFmtArgs(slw::span<FmtArg>) { }
+inline void expandFmtArgs(slw::span_fw<FmtArg> const &) { }
 
 template <typename T, typename = void>
 struct FmtArgDesc
@@ -70,7 +71,7 @@ inline void expandFmtArgs(slw::span<FmtArg> argList, T const & arg, TArgs &&... 
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-array-to-pointer-decay)
     arg_desc.value = TypeDesc::storeValue(arg);
-    arg_desc.fmt_cb = [](void const * arg_value, slw::span<char> dest) {
+    arg_desc.fmt_cb = [](void const * arg_value, slw::span<char> const &dest) {
         return toString(TypeDesc::extractValue(arg_value), dest);
     };
 
@@ -88,7 +89,7 @@ inline usize formatString(char * dest_buffer, usize capacity, char const * const
 } // namespace sb::internal
 
 template <typename... TArgs>
-inline sb::usize sb::formatString(slw::span<char> dest_buffer, char const * const format, TArgs &&... args)
+inline sb::usize sb::formatString(slw::span<char> const &dest_buffer, char const * const format, TArgs &&... args)
 {
     internal::FmtArg arg_list[sizeof...(TArgs)];
     expandFmtArgs(arg_list, args...);
@@ -105,3 +106,4 @@ inline usize formatString(slw::span<char> dest_buffer, char const * const format
 }
 
 } // namespace sb
+

@@ -1,0 +1,24 @@
+#pragma once
+
+#include "_impl/std_wrap.h"
+
+namespace SB_SRC_STD_NS {
+
+    template<typename T, size_t Extends>
+    class span;
+
+    template<class T>
+    class char_traits;
+
+    template<class CharT, class Traits>
+    class basic_string_view;
+}
+
+namespace SB_STD_NS {
+
+    template <typename T, size_t Extends = (size_t)-1>
+    using span_fw = SB_SRC_STD_NS::span<T, Extends>;
+
+    using string_view_fw = SB_SRC_STD_NS::basic_string_view<char, SB_SRC_STD_NS::char_traits<char>>;
+}
+

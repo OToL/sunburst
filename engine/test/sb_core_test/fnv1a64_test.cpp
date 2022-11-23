@@ -3,6 +3,8 @@
 
 #include <sb_slw/xutility>
 #include <sb_slw/iterator>
+#include <sb_slw/span>
+#include <sb_slw/string_view>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>

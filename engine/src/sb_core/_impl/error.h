@@ -44,16 +44,10 @@ void reportError(ErrorLevel type, char const * const file, u32 const line, Error
 } // namespace sb::internal
 
 #    define sb_assert_internal(cond, ...)                                                                                \
-        if (!(cond))                                                                                                   \
-        {                                                                                                              \
-            sb::internal::reportError(sb::ErrorLevel::CRITICAL, __FILE__, __LINE__, ##__VA_ARGS__);                    \
-        }
+        !(cond) && (sb::internal::reportError(sb::ErrorLevel::CRITICAL, __FILE__, __LINE__, ##__VA_ARGS__), sb_debug_break(), true)
 
 #    define sb_warn_internal(cond, ...)                                                                                  \
-        if (!(cond))                                                                                                   \
-        {                                                                                                              \
-            sb::internal::reportError(sb::ErrorLevel::WARNING, __FILE__, __LINE__, ##__VA_ARGS__);                     \
-        }
+        !(cond) && (sb::internal::reportError(sb::ErrorLevel::WARNING, __FILE__, __LINE__, ##__VA_ARGS__), sb_debug_break(), true)
 
 #    define sb_expect_internal(cond, ...)                                                                                \
         ((cond) || (sb::internal::reportError(sb::ErrorLevel::NOTICE, __FILE__, __LINE__, ##__VA_ARGS__), false))

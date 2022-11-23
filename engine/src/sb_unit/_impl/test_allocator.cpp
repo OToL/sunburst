@@ -1,4 +1,4 @@
-#include <sb_core/os.h>
+#include <sb_core/system.h>
 #include <sb_core/error.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/global_heap.h>
@@ -23,7 +23,7 @@ sb::MemoryArena TestAllocator::allocate(size_t const size)
 {
     MemoryArena mem_arena = sb::getGlobalHeap().allocate(size);
 
-    if (!memory_arena::isEmpty(mem_arena))
+    if (!mem_arena.isEmpty())
     {
         _stats.allocated_byte += size;
         ++_stats.alloc_count;
@@ -43,7 +43,7 @@ sb::MemoryArena TestAllocator::allocate(sb::Alignment alignment, size_t const si
 {
     MemoryArena mem_arena = getGlobalHeap().allocate(alignment, size);
 
-    if (!memory_arena::isEmpty(mem_arena))
+    if (!mem_arena.isEmpty())
     {
         // @todo: we habe to do this because malloc does not return the MemArena of the proper capacity
         _stats.allocated_byte += getGlobalHeap().getBlockSize(mem_arena.data);

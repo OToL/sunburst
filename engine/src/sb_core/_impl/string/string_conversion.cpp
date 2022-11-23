@@ -7,13 +7,13 @@
 #include <sb_slw/charconv>
 #include <sb_slw/span>
 
-sb::usize sb::internal::stringToCharBuffer(char const * src, slw::span<char> dst)
+sb::usize sb::internal::stringToCharBuffer(char const * src, slw::span<char> const &dst)
 {
     return sb::strCpyT(dst.data(), integral_cast<usize>(dst.size()), src);
 }
 
 template <typename T>
-sb::usize sb::internal::decimalToString(T src, slw::span<char> dest)
+sb::usize sb::internal::decimalToString(T src, slw::span_fw<char> const &dest)
 {
     slw::to_chars_result const res = slw::to_chars(dest.data(), dest.data() + dest.size(), src);
 
@@ -43,13 +43,13 @@ sb::usize sb::internal::decimalToString(T src, slw::span<char> dest)
     return 0;
 }
 
-template sb::usize sb::internal::decimalToString<sb::i64>(i64 src, slw::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::i32>(i32 src, slw::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::i16>(i16 src, slw::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::i8>(i8 src, slw::span<char> dest);
+template sb::usize sb::internal::decimalToString<sb::i64>(i64 src, slw::span_fw<char> const &dest);
+template sb::usize sb::internal::decimalToString<sb::i32>(i32 src, slw::span_fw<char> const &dest);
+template sb::usize sb::internal::decimalToString<sb::i16>(i16 src, slw::span_fw<char> const &dest);
+template sb::usize sb::internal::decimalToString<sb::i8>(i8 src, slw::span_fw<char> const &dest);
 
-template sb::usize sb::internal::decimalToString<sb::u64>(u64 src, slw::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::u32>(u32 src, slw::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::u16>(u16 src, slw::span<char> dest);
-template sb::usize sb::internal::decimalToString<sb::u8>(u8 src, slw::span<char> dest);
-template sb::usize sb::internal::decimalToString<unsigned long>(unsigned long src, slw::span<char> dest);
+template sb::usize sb::internal::decimalToString<sb::u64>(u64 src, slw::span_fw<char> const &dest);
+template sb::usize sb::internal::decimalToString<sb::u32>(u32 src, slw::span_fw<char> const &dest);
+template sb::usize sb::internal::decimalToString<sb::u16>(u16 src, slw::span_fw<char> const &dest);
+template sb::usize sb::internal::decimalToString<sb::u8>(u8 src, slw::span_fw<char> const &dest);
+template sb::usize sb::internal::decimalToString<unsigned long>(unsigned long src, slw::span_fw<char> const &dest);

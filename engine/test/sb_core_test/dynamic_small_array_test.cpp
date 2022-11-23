@@ -1,9 +1,9 @@
 #include <sb_unit/test_object_cnt.h>
 #include <sb_unit/test_allocator.h>
 
-#include <sb_core/container/dynamic_small_array.h>
-#include <sb_core/memory/allocator/allocator_wrapper.h>
-#include <sb_core/memory/allocator/container_allocator_wrapper.h>
+#include <sb_core/containers/dynamic_small_array.h>
+#include <sb_core/memory/allocators/allocator_wrapper.h>
+#include <sb_core/memory/allocators/container_allocator_wrapper.h>
 #include <sb_core/memory/global_heap.h>
 #include <sb_core/error.h>
 

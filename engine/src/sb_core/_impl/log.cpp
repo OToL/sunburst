@@ -1,7 +1,7 @@
 #include <sb_core/log.h>
-#include <sb_core/os.h>
+#include <sb_core/system.h>
 #include <sb_core/error.h>
-#include <sb_core/hook.h>
+#include <sb_core/hooks.h>
 #include <sb_core/string/format.h>
 #include <sb_core/memory/memory_arena.h>
 

@@ -6,6 +6,7 @@
 
 #include <sb_slw/type_traits>
 #include <sb_slw/utility>
+#include <sb_slw/span>
 
 namespace sb {
 

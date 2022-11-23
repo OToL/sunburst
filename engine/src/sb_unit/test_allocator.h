@@ -1,6 +1,6 @@
 #include <sb_core/core.h>
-#include <sb_core/container/dynamic_array.h>
-#include <sb_core/memory/allocator/allocator.h>
+#include <sb_core/containers/dynamic_array.h>
+#include <sb_core/memory/allocator.h>
 
 namespace sb {
 

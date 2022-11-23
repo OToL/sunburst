@@ -1,0 +1,11 @@
+#pragma once
+
+#include <sb_core/core.h>
+
+namespace sb::internal {
+
+inline constexpr char FS_PATH_SEPERATOR = '\\';
+inline constexpr char FS_PATH_INVALID_SEPERATOR = '/';
+inline constexpr u32 FS_PATH_MAX_LEN = 260U;
+
+} // namespace sb::internal

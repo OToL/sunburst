@@ -5,26 +5,27 @@
 #include <sb_core/core.h>
 
 #include <sb_slw/algorithm>
+#include <sb_slw/span>
 
 constexpr char const * INVALID_LOGICAL_PATH_SEPARATOR = "\\";
 
-sb::b8 sb::isVFSPathValid(char const * vfs_path)
+sb::b8 sb::isVfsPathValid(char const * vfs_path)
 {
     sb_assert(nullptr != vfs_path);
 
     return ((VFS_PATH_SEPARATOR == *vfs_path) && (nullptr == strchr(vfs_path, *INVALID_LOGICAL_PATH_SEPARATOR)));
 }
 
-char * sb::concatLocalPath(slw::span<char> base_path, usize base_path_len, char const * path_cat)
+char * sb::concatFsPath(slw::span<char> const &base_path, usize base_path_len, char const * path_cat)
 {
     sb_assert(base_path[base_path_len] == 0);
     usize concat_offset = base_path_len;
 
-    if (base_path[concat_offset - 1] != LOCAL_PATH_SEPERATOR)
+    if (base_path[concat_offset - 1] != FS_PATH_SEPERATOR)
     {
         if (sb_expect(base_path_len < base_path.size()))
         {
-            base_path[concat_offset] = LOCAL_PATH_SEPERATOR;
+            base_path[concat_offset] = FS_PATH_SEPERATOR;
             ++concat_offset;
         }
         else
@@ -38,23 +39,23 @@ char * sb::concatLocalPath(slw::span<char> base_path, usize base_path_len, char 
     return base_path.data();
 }
 
-char * sb::concatLocalPath(slw::span<char> base_path, char const * path_cat)
+char * sb::concatFsPath(slw::span<char> const & base_path, char const * path_cat)
 {
     auto const base_path_len = strlen(base_path.data());
 
-    return concatLocalPath(base_path, base_path_len, path_cat);
+    return concatFsPath(base_path, base_path_len, path_cat);
 }
 
-char * sb::normalizeLocalPath(char * path)
+char * sb::normalizeFsPath(char * path)
 {
     sb_assert(nullptr != path);
 
     char * path_iter = path;
     while (*path_iter != 0)
     {
-        if (*path_iter == LOCAL_PATH_INVALID_SEPERATOR)
+        if (*path_iter == FS_PATH_INVALID_SEPERATOR)
         {
-            *path_iter = LOCAL_PATH_SEPERATOR;
+            *path_iter = FS_PATH_SEPERATOR;
         }
 
         ++path_iter;
@@ -63,7 +64,7 @@ char * sb::normalizeLocalPath(char * path)
     return path;
 }
 
-sb::b8 sb::isLocalPathValid([[maybe_unused]] char const * local_path)
+sb::b8 sb::isFsPathValid([[maybe_unused]] char const * local_path)
 {
     sb_assert(nullptr != local_path);
     return true;

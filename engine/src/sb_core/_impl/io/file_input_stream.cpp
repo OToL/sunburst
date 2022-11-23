@@ -1,7 +1,7 @@
 #include <sb_core/io/file_input_stream.h>
 #include <sb_core/io/virtual_file_system.h>
 #include <sb_core/error.h>
-#include <sb_core/utility.h>
+#include <sb_core/math/math.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/global_heap.h>
 
@@ -50,17 +50,17 @@ sb::FileInputStream::~FileInputStream()
 {
     reset();
 
-    if (memory_arena::isValid(_buffer))
+    if (_buffer.isValid())
     {
         sb_free(GHEAP, _buffer);
     }
 }
 
-sb::FileSize sb::FileInputStream::read(slw::span<u8> buffer, FileSize cnt)
+sb::FileSize sb::FileInputStream::read(slw::span<u8> const &buffer, FileSize cnt)
 {
     if (_hdl.isValid() && !buffer.empty())
     {
-        if (memory_arena::isValid(_buffer))
+        if (_buffer.isValid())
         {
             FileSize const requested_size = (-1 == cnt) ? integral_cast<FileSize>(buffer.size()) : cnt;
             FileSize read_size = 0;

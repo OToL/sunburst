@@ -10,7 +10,7 @@
 
 namespace sb::internal {
 
-inline sb::LogLevel gs_log_min_level = sb::LogLevel::DEBUG;
+inline sb::LogLevel gs_log_min_level = sb::LogLevel::VERBOSE;
 inline sb::b8 gs_log_quiet = false;
 
 inline void setLogQuiet(b8 quiet)

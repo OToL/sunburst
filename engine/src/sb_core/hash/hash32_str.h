@@ -6,33 +6,27 @@
 
 namespace sb {
 
-namespace hash32_str {
+struct Hash32Str
+{
+    using ValueType = u32;
 
-    struct Hash32Str
-    {
-        using ValueType = u32;
+    u32 value = 0U;
 
-        u32 value;
-    };
-
-    constexpr Hash32Str make(char const * str)
+    static constexpr Hash32Str make(char const * str)
     {
         return {computeHash32(str)};
     }
 
-    constexpr Hash32Str make(char const * str, usize len)
+    static constexpr Hash32Str make(char const * str, usize len)
     {
-        return {computeHash32({str, len})};
+        return {computeHash32(str, len)};
     }
 
-    constexpr b8 isValid(Hash32Str hash_val)
+    constexpr b8 isValid() const
     {
-        return (hash_val.value != 0);
+        return (value != 0U);
     }
-
-} // namespace hash32str
-
-using hash32_str::Hash32Str;
+};
 
 constexpr b8 operator==(Hash32Str lval, Hash32Str rval)
 {
@@ -46,8 +40,7 @@ constexpr b8 operator!=(Hash32Str lval, Hash32Str rval)
 
 constexpr Hash32Str operator"" _h32s(char const * str, usize len)
 {
-    return {computeHash32({str, len})};
+    return Hash32Str::make(str, len);
 }
 
 } // namespace sb
-

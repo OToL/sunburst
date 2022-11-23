@@ -28,7 +28,7 @@ public:
         return _hdl.isValid();
     }
 
-    FileSize read(slw::span<u8> buffer, FileSize cnt = -1);
+    FileSize read(slw::span_fw<u8> const & buffer, FileSize cnt = -1);
 
     FileSize getLength();
 

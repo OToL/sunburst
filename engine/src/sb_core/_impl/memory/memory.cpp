@@ -1,6 +1,22 @@
 #include <sb_core/memory/memory.h>
-#include <sb_core/memory/allocator/global_heap_allocator.h>
+#include <sb_core/memory/allocators/global_heap_allocator.h>
 #include <sb_core/memory/global_heap.h>
+#include <sb_core/system.h>
+
+#include <sb_slw/cstdlib>
+#include <sb_slw/cstring>
+
+void sb::zeroMemory(void * const memPtr, usize const byteCount)
+{
+    slw::memset(memPtr, 0, byteCount);
+}
+
+[[noreturn]] void sb::notifyOOM([[maybe_unused]] usize requestedSize, char const * message)
+{
+    outputDebugString(message);
+
+    slw::exit(-1);
+}
 
 void * operator new(sb::usize byte_count)
 {

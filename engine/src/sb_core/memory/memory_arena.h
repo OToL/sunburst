@@ -4,36 +4,30 @@
 
 namespace sb {
 
-namespace memory_arena {
+struct MemoryArena
+{
+    void * data = nullptr;
+    usize size = 0ULL;
 
-    struct MemoryArena
+    constexpr inline b8 isInRange(void const * ptr, size_t data_size) const
     {
-        void * data;
-        usize size;
-    };
-
-    constexpr inline b8 isInRange(MemoryArena arena, void const * ptr, size_t data_size)
-    {
-        return ((arena.data <= ptr) &&
-                ((static_cast<u8 const *>(arena.data) + arena.size) >= (static_cast<u8 const *>(ptr) + data_size)));
+        return ((data <= ptr) && ((static_cast<u8 const *>(data) + size) >= (static_cast<u8 const *>(ptr) + data_size)));
     }
 
-    constexpr inline b8 isInRange(MemoryArena arena, void const * ptr)
+    constexpr inline b8 isInRange(void const * ptr) const
     {
-        return ((arena.data <= ptr) && ((static_cast<u8 const *>(arena.data) + arena.size) > ptr));
+        return ((data <= ptr) && ((static_cast<u8 const *>(data) + size) > ptr));
     }
 
-    constexpr inline b8 isEmpty(MemoryArena arena)
+    constexpr inline b8 isEmpty() const
     {
-        return (0U == arena.size);
+        return (0U == size);
     }
 
-    constexpr inline b8 isValid(MemoryArena arena)
+    constexpr inline b8 isValid() const
     {
-        return !isEmpty(arena) && (nullptr != arena.data);
+        return (0U != size) && (nullptr != data);
     }
-} // namespace memory_arena
-
-using memory_arena::MemoryArena;
+};
 
 } // namespace sb

@@ -7,17 +7,18 @@
 #include <sb_core/core.h>
 #include <sb_core/cast.h>
 #include <sb_core/log.h>
+#include <sb_core/string/fix_string.h>
 #include <sb_core/memory/memory.h>
 #include <sb_core/memory/global_heap.h>
-#include <sb_core/memory/allocator/object_pool_allocator.h>
-#include <sb_core/memory/allocator/global_heap_allocator.h>
-#include <sb_core/container/dynamic_small_array.h>
-#include <sb_core/container/dynamic_fix_array.h>
+#include <sb_core/memory/allocators/object_pool_allocator.h>
+#include <sb_core/memory/allocators/global_heap_allocator.h>
+#include <sb_core/containers/dynamic_small_array.h>
+#include <sb_core/containers/dynamic_fix_array.h>
 
 namespace sb {
 
 using FixVFSPath = FixString<VFS_PATH_MAX_LEN + 1>;
-using FixFSPath = FixString<LOCAL_PATH_MAX_LEN + 1>;
+using FixFSPath = FixString<FS_PATH_MAX_LEN + 1>;
 using FileGen = u16;
 
 struct LayerDesc
@@ -94,7 +95,7 @@ void constructFSPath(FixFSPath & fs_path, LayerDesc const & layer, char const * 
 {
     fs_path = layer.fs_path;
     fs_path.append(file_path + layer.vfs_root_path.length());
-    normalizeLocalPath(fs_path.data());
+    normalizeFsPath(fs_path.data());
 }
 
 FileHdl createFileDesc(VirtualFileSystemState & vfs_data, sb::File fs_file, FileProps props, FileSystemType fs_type)
@@ -124,7 +125,7 @@ FileDesc & getFileDesc(VirtualFileSystemState & vfs_data, FileHdl hdl)
     MemoryArena arena = vfs_data.file_desc_pool.getArena();
     FileDesc * const file_desc = static_cast<FileDesc *>(arena.data) + helper_hdl.unpacked.hdl;
 
-    sb_assert(isInRange(arena, file_desc));
+    sb_assert(arena.isInRange( file_desc));
     sb_assert(helper_hdl.unpacked.gen == file_desc->gen);
 
     return *file_desc;
@@ -132,12 +133,17 @@ FileDesc & getFileDesc(VirtualFileSystemState & vfs_data, FileHdl hdl)
 
 void destroyFileDesc(VirtualFileSystemState & vfs_data, FileDesc & file_desc)
 {
-    sb_assert(isInRange(vfs_data.file_desc_pool.getArena(), (void *)&file_desc));
+    sb_assert(vfs_data.file_desc_pool.getArena().isInRange((void *)&file_desc));
     file_desc = {};
     vfs_data.file_desc_pool.deallocate(&file_desc);
 }
 
 } // namespace sb
+
+sb::b8 sb::virtual_file_system::isInitialized()
+{
+    return (nullptr != g_vfs_state);
+}
 
 sb::b8 sb::virtual_file_system::initialize()
 {
@@ -173,7 +179,7 @@ sb::FileHdl sb::virtual_file_system::openFileWrite(char const * path, FileWriteM
 {
     sb_assert(nullptr != g_vfs_state);
     sb_assert(nullptr != path);
-    sb_warn(isVFSPathValid(path));
+    sb_warn(isVfsPathValid(path));
 
     auto const layer_iter = findVFSLayer(*g_vfs_state, path);
     if (layer_iter != end(g_vfs_state->layers))
@@ -208,7 +214,7 @@ sb::FileHdl sb::virtual_file_system::openFileRead(char const * path, FileFormat 
 {
     sb_assert(nullptr != g_vfs_state);
     sb_assert(nullptr != path);
-    sb_warn(isVFSPathValid(path));
+    sb_warn(isVfsPathValid(path));
 
     auto const layer_iter = findVFSLayer(*g_vfs_state, path);
     if (layer_iter != end(g_vfs_state->layers))
@@ -356,7 +362,7 @@ slw::span<sb::u8> sb::virtual_file_system::readFile(char const * path, IAllocato
     }
 
     sb::MemoryArena const arena = alloc.allocate(integral_cast<usize>(file_size));
-    if (!memory_arena::isValid(arena))
+    if (!arena.isValid())
     {
         sb_log_warning("Failed to allocate memory to back '{}' content", path);
         closeFile(fd);
@@ -379,21 +385,21 @@ sb::vfs::MountResult sb::virtual_file_system::mountLocalFileSystem(char const * 
     sb_assert(nullptr != vfs_path);
     sb_assert(nullptr != local_path);
 
-    if (sb_dont_expect((0 == *vfs_path) || !isVFSPathValid(vfs_path), "Invalid vfs path '{}'", vfs_path))
+    if (sb_dont_expect((0 == *vfs_path) || !isVfsPathValid(vfs_path), "Invalid vfs path '{}'", vfs_path))
     {
         return {};
     }
 
-    if (sb_dont_expect((0 == *local_path) || !isLocalPathValid(local_path), "Invalid local path '{}'", local_path))
+    if (sb_dont_expect((0 == *local_path) || !isFsPathValid(local_path), "Invalid local path '{}'", local_path))
     {
         return {};
     }
 
-    if (!isValid(name))
+    if (!name.isValid())
     {
         char buffer[125];
         auto const char_cnt = formatString(buffer, "local_filesystem_{}", g_vfs_state->curr_layer_name_gen++);
-        name = hash_str::make(slw::data(buffer), char_cnt);
+        name = HashStr::make(slw::data(buffer), char_cnt);
     }
 
     auto const layer_iter = findVFSLayer(*g_vfs_state, name);
@@ -408,11 +414,11 @@ sb::vfs::MountResult sb::virtual_file_system::mountLocalFileSystem(char const * 
     new_layer->fs_path = local_path;
     new_layer->type = FileSystemType::LOCAL;
 
-    normalizeLocalPath(new_layer->fs_path.data());
-    if (LOCAL_PATH_SEPERATOR != new_layer->fs_path.back())
+    normalizeFsPath(new_layer->fs_path.data());
+    if (FS_PATH_SEPERATOR != new_layer->fs_path.back())
     {
-        new_layer->fs_path.push_back(LOCAL_PATH_SEPERATOR);
-        sb_warn(LOCAL_PATH_SEPERATOR == new_layer->fs_path.back());
+        new_layer->fs_path.push_back(FS_PATH_SEPERATOR);
+        sb_warn(FS_PATH_SEPERATOR == new_layer->fs_path.back());
     }
 
     if (VFS_PATH_SEPARATOR != new_layer->vfs_root_path.back())

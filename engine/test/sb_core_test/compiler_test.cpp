@@ -5,6 +5,7 @@
 #include <extern_epilog.h>
 
 #include <sb_core/error.h>
+#include <sb_core/extern/intrinsics.h>
 
 using namespace sb;
 

@@ -11,7 +11,7 @@ enum class LogLevel : u8
                 // performance hitch, too many alive objects, etc.
     INFO,       // Useful information regarding high level application logic e.g. state
                 // transition, saving, etc.
-    DEBUG       // Verbose logging for debug purpose
+    VERBOSE     // Verbose logging for debug purpose
 };
 
 void setLogQuiet(b8 quiet);
@@ -23,6 +23,7 @@ void setLogMinLevel(LogLevel min_level);
 #define sb_log_error(msg, ...) sb_log(::sb::LogLevel::ERROR, msg, ##__VA_ARGS__)
 #define sb_log_warning(msg, ...) sb_log(::sb::LogLevel::WARNING, msg, ##__VA_ARGS__)
 #define sb_log_info(msg, ...) sb_log(::sb::LogLevel::INFO, msg, ##__VA_ARGS__)
-#define sb_log_debug(msg, ...) sb_log(::sb::LogLevel::DEBUG, msg, ##__VA_ARGS__)
+#define sb_log_verbose(msg, ...) sb_log(::sb::LogLevel::VERBOSE, msg, ##__VA_ARGS__)
 
 #include "_impl/log.h"
+

@@ -4,7 +4,7 @@
 #include <sb_core/error.h>
 #include <sb_core/log.h>
 #include <sb_core/cast.h>
-#include <sb_core/hook.h>
+#include <sb_core/hooks.h>
 
 #if sb_ctf_enabled(ERROR_FACILITY)
 
@@ -75,11 +75,6 @@ void sb::internal::reportError(ErrorLevel type, char const * const file, u32 con
     {
         logDefaultErrorMsg(type, file, line, stastus_code, msg);
     }
-
-    if (ErrorLevel::CRITICAL == type)
-    {
-        sb_debug_break();
-    }
 }
 
 void sb::internal::reportError(ErrorLevel type, char const * const file, u32 const line, ErrorCode status_code)
@@ -91,11 +86,6 @@ void sb::internal::reportError(ErrorLevel type, char const * const file, u32 con
     else
     {
         logDefaultErrorMsg(type, file, line, status_code, ERROR_DEFAULT_MSG[integral_cast<>(type)]);
-    }
-
-    if ((ErrorLevel::CRITICAL == type) || (ErrorLevel::WARNING == type))
-    {
-        sb_debug_break();
     }
 }
 

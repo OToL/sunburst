@@ -11,29 +11,29 @@ static constexpr char const * const HASH_STR_TEST_STRING = "Hello Hash";
 TEST_CASE("Hash32Str default ctor", "[hash32_str]")
 {
     Hash32Str const hash = {};
-    REQUIRE_FALSE(hash32_str::isValid(hash));
+    REQUIRE_FALSE(hash.isValid());
 }
 
 TEST_CASE("Set Hash32Str from string", "[hash32_str]")
 {
-    Hash32Str const hash(hash32_str::make(HASH_STR_TEST_STRING));
+    Hash32Str const hash = Hash32Str::make(HASH_STR_TEST_STRING);
 
     REQUIRE(hash.value == computeHash32(HASH_STR_TEST_STRING));
-    REQUIRE(hash32_str::isValid(hash));
+    REQUIRE(hash.isValid());
 }
 
 TEST_CASE("Set Hash32Str from value", "[hash32_str]")
 {
     u32 const HASH_TEST_VALUE = computeHash32(HASH_STR_TEST_STRING);
-    Hash32Str const hash(hash32_str::make(HASH_STR_TEST_STRING));
+    Hash32Str const hash = Hash32Str::make(HASH_STR_TEST_STRING);
 
     REQUIRE(hash.value == HASH_TEST_VALUE);
-    REQUIRE(hash32_str::isValid(hash));
+    REQUIRE(hash.isValid());
 }
 
 TEST_CASE("Hash32Str assignment", "[hash32_str]")
 {
-    Hash32Str hash(hash32_str::make(HASH_STR_TEST_STRING));
+    Hash32Str hash = Hash32Str::make(HASH_STR_TEST_STRING);
     Hash32Str const hash2("Test"_h32s);
 
     REQUIRE(hash != hash2);
@@ -45,7 +45,7 @@ TEST_CASE("Hash32Str assignment", "[hash32_str]")
 
 TEST_CASE("Hash32Str constexpr check", "[hash32_str]")
 {
-    STATIC_REQUIRE((computeHash32(HASH_STR_TEST_STRING) == hash32_str::make(HASH_STR_TEST_STRING).value));
+    STATIC_REQUIRE((computeHash32(HASH_STR_TEST_STRING) == Hash32Str::make(HASH_STR_TEST_STRING).value));
 }
 
 TEST_CASE("Hash32Str literal", "[hash32_str]")

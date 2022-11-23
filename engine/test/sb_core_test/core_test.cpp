@@ -4,8 +4,6 @@
 #include <catch2/catch.hpp>
 #include <extern_epilog.h>
 
-#include <sb_core/error.h>
-
 using namespace sb;
 
 #define SB_CTF_TEST SB_CTF_ENABLED

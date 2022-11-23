@@ -9,9 +9,8 @@
 
 namespace sb {
 
-namespace hash_str = hash32_str;
 using HashStr = Hash32Str;
-using HashStrValue = u32;
+using HashStrValue = typename HashStr::ValueType;
 
 constexpr HashStr operator"" _hs(char const * str, usize len)
 {
@@ -26,14 +25,12 @@ constexpr HashStr operator"" _hs(char const * str, usize len)
 
 namespace sb {
 
-namespace hash_str = hash64_str;
-
 using HashStr = Hash64Str;
-using HashStrValue = u64;
+using HashStrValue = typename HashStr::ValueType;
 
 consteval HashStr operator"" _hs(char const * str, usize len)
 {
-    return {computeHash64({str, len})};
+    return {computeHash64(str, len)};
 }
 
 } // namespace sb

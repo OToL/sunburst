@@ -2,11 +2,53 @@
 
 #include <sb_core/core.h>
 
+#if defined(SB_PLATFORM_WINDOWS)
+#    include <sb_core/_impl/memory/memory_win.h>
+#else
+#    error "Unsupported platform"
+#endif
+
 #include <sb_slw/new>
 
 namespace sb {
 
 inline constexpr Alignment DEFAULT_MEMORY_ALIGNMENT = 8ULL;
+using internal::MEMORY_PAGE_SIZE;
+
+// 'align' has to be a power of 2
+template <typename T>
+inline constexpr T alignUp(T value, usize align)
+{
+    return (T)((((usize)value) + align - 1) & ~(align - 1));
+}
+
+template <typename T>
+inline constexpr b8 isAlignedTo(T val, usize alignment)
+{
+    return (0 == (((usize)val) & (alignment - 1)));
+}
+
+void zeroMemory(void * const memPtr, usize const byteCount);
+
+template <typename T>
+void zeroMemory(T * const objPtr)
+{
+    zeroMemory(objPtr, sizeof(T));
+}
+
+template <typename T>
+void zeroMemory(T & obj)
+{
+    zeroMemory(&obj, sizeof(T));
+}
+
+template <typename T, usize COUNT>
+void zeroMemory(T (&objPtr)[COUNT])
+{
+    zeroMemory(objPtr, sizeof(T) * COUNT);
+}
+
+[[noreturn]] void notifyOOM(usize requestedSize, char const * message);
 
 } // namespace sb
 

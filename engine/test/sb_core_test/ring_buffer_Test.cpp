@@ -1,5 +1,5 @@
-#include <sb_core/container/ring_buffer.h>
-#include <sb_core/memory/allocator/container_allocator_wrapper.h>
+#include <sb_core/containers/ring_buffer.h>
+#include <sb_core/memory/allocators/container_allocator_wrapper.h>
 
 #include <sb_unit/test_object_cnt.h>
 #include <sb_unit/test_allocator.h>

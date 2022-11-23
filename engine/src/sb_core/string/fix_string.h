@@ -1,7 +1,7 @@
 #pragma once
 
 #include <sb_core/core.h>
-#include <sb_core/utility.h>
+#include <sb_core/math/math.h>
 #include <sb_core/string/utility.h>
 #include <sb_core/error.h>
 
@@ -120,7 +120,7 @@ public:
 
     TChar back() const
     {
-        sb_warn(0 != _len)
+        sb_warn(0 != _len);
 
         auto backChar = TChar{};
 
@@ -134,7 +134,7 @@ public:
 
     bool push_back(TChar c)
     {
-        sb_warn(_len != (CAPACITY - 1))
+        sb_warn(_len != (CAPACITY - 1));
 
         if (_len != (CAPACITY - 1))
         {

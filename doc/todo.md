@@ -1,16 +1,7 @@
-# TECH TESTS
-
-- [~] Vulkan simple triangle macos
-- [ ] Implement imgui rendrer using Vulkan
-- [ ] Cloth simulation
-- [ ] Terrain rendering
-- [ ] Vehicle/Boat simulation
-
 # CODE QUALITY
 
 - [ ] replace gtest
 - [ ] static analyzers
-- [ ] Re-enable clang formatting
 - [ ] Increase the number of warnings as error (SB_TOOLCHAIN_*_WARNING_IGNORE_LIST)
 - [ ] clang sanitizers
 - [ ] Use fuzzing for unit tests (libfuzeer)
@@ -18,28 +9,28 @@
 
 # BUILD SYSTEM
 
-- [ ] Investigate modern cmake best practices
-- [ ] Investigate using CMake test command
-- [ ] Use cmake format
 - [ ] Use pre-compile headers
-- [ ] Clean definition of 3rd parties
-- [ ] Try writing config.cmake 
-- [ ] Try using conan
-- [ ] Use ninja
 
-# 3RD::GTEST
+# ENGINE
 
-- [ ] Rename ObjectTracker to ObjectStats
-- [ ] Move AllocatorStats to sb::core e.g. as a composer
-- [ ] Check for memory leak before returning from the program
+- [ ] memory system interface: malloc/free --> allocate/deallocate, allocateVMem-->reserveAndMapVMem 
+- [ ] memory_system proper initialization during static init instead of using magic static
+- [ ] Possibility to mount more than just FS (mountLocalFileSystem)
+- [ ] move rpmalloc to _impl/extern
+- [ ] Implement buffered FileInputStream
+- [ ] Integrate an external profiler e.g. tracy
+- [ ] Minimize span inclusion in header
+- [ ] Minimize type_traits
 
-# 3RD::LIBC++
+# SAMPLES 
 
-- [ ] Cleanup sbstd usage
-- [ ] Try using eastl
+## IDEAS
 
-# SB::CORE
+- [ ] Implement imgui rendrer using Vulkan
+- [ ] Cloth simulation
+- [ ] Terrain rendering
+- [ ] Vehicle/Boat simulation
 
-- [ ] introduce byte type to replace u8
-- [ ] typedef the character type used for filesystem path i.e. char vs utf16 vs etc.
+## R/PLACE
 
+- 

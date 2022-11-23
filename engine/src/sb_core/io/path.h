@@ -3,15 +3,17 @@
 #include "io.h"
 #include <sb_core/core.h>
 
-#include <sb_slw/span>
+#include <sb_slw/forward_decls>
 
 namespace sb {
 
-b8 isVFSPathValid(char const * vfs_path);
+// virtual file system path utilities
+b8 isVfsPathValid(char const * vfs_path);
 
-b8 isLocalPathValid(char const * local_path);
-char * concatLocalPath(slw::span<char> base_path, char const * path_cat);
-char * concatLocalPath(slw::span<char> base_path, usize base_path_len, char const * path_cat);
-char * normalizeLocalPath(char * path);
+// file system path operations utilities
+b8 isFsPathValid(char const * local_path);
+char * concatFsPath(slw::span_fw<char> const &base_path, char const * path_cat);
+char * concatFsPath(slw::span_fw<char> const &base_path, usize base_path_len, char const * path_cat);
+char * normalizeFsPath(char * path);
 
 } // namespace sb

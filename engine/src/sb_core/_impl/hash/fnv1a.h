@@ -1,13 +1,12 @@
 #pragma once
 
 #include <sb_core/core.h>
+#include <vcruntime.h>
 
 namespace sb {
 
-inline constexpr u32 computeFNV1a32(slw::span<u8 const> buffer)
+inline constexpr u32 computeFNV1a32(u8 const * buffer, size_t buffer_size)
 {
-    auto const buffer_size = buffer.size();
-
     if (0 == buffer_size)
     {
         return 0U;
@@ -15,7 +14,7 @@ inline constexpr u32 computeFNV1a32(slw::span<u8 const> buffer)
 
     u32 hval = 0x811C9DC5U;
 
-    u8 const * bp = buffer.data();
+    u8 const * bp = buffer;
     u8 const * const be = bp + buffer_size;
 
     while (bp < be)
@@ -28,10 +27,8 @@ inline constexpr u32 computeFNV1a32(slw::span<u8 const> buffer)
     return hval;
 }
 
-inline constexpr u32 computeFNV1a32(slw::string_view buffer)
+inline constexpr u32 computeFNV1a32(char const * buffer, size_t buffer_size)
 {
-    auto const buffer_size = buffer.size();
-
     if (0 == buffer_size)
     {
         return 0U;
@@ -39,7 +36,7 @@ inline constexpr u32 computeFNV1a32(slw::string_view buffer)
 
     u32 hval = 0x811C9DC5U;
 
-    char const * bp = buffer.data();
+    char const * bp = buffer;
     char const * const be = bp + buffer_size;
 
     while (bp < be)
@@ -51,6 +48,7 @@ inline constexpr u32 computeFNV1a32(slw::string_view buffer)
 
     return hval;
 }
+
 
 inline constexpr u32 computeFNV1a32(char const * const str)
 {
@@ -73,55 +71,6 @@ inline constexpr u32 computeFNV1a32(char const * const str)
     return hval;
 }
 
-inline constexpr u64 computeFNV1a64(slw::span<u8 const> buffer)
-{
-    auto const len = buffer.size();
-
-    if (0 == len)
-    {
-        return 0ULL;
-    }
-
-    u64 hval = 0xCBF29CE484222325ULL;
-
-    u8 const * bp = buffer.data();
-    u8 const * be = bp + len;
-
-    while (bp < be)
-    {
-        hval ^= (u64)*bp++;
-        hval *= 0x100000001b3ULL;
-        // hval `+= (hval << 1) + (hval << 4) + (hval << 5) + (hval << 7) + (hval << 8) +
-        // (hval << 40);
-    }
-
-    return hval;
-}
-
-inline constexpr u64 computeFNV1a64(slw::string_view buffer)
-{
-    auto const len = buffer.size();
-
-    if (0 == len)
-    {
-        return 0ULL;
-    }
-
-    u64 hval = 0xCBF29CE484222325ULL;
-
-    char const * bp = buffer.data();
-    char const * be = bp + len;
-
-    while (bp < be)
-    {
-        hval ^= (u64)*bp++;
-        hval *= 0x100000001b3ULL;
-        // hval `+= (hval << 1) + (hval << 4) + (hval << 5) + (hval << 7) + (hval << 8) +
-        // (hval << 40);
-    }
-
-    return hval;
-}
 
 inline constexpr u64 computeFNV1a64(char const * const str)
 {
@@ -139,6 +88,52 @@ inline constexpr u64 computeFNV1a64(char const * const str)
         hval ^= (u64)*s++;
         hval *= 0x100000001b3ULL;
         // hval += (hval << 1) + (hval << 4) + (hval << 5) + (hval << 7) + (hval << 8) +
+        // (hval << 40);
+    }
+
+    return hval;
+}
+
+inline constexpr u64 computeFNV1a64(char const * data, size_t len)
+{
+    if (0 == len)
+    {
+        return 0ULL;
+    }
+
+    u64 hval = 0xCBF29CE484222325ULL;
+
+    char const * bp = data;
+    char const * be = bp + len;
+
+    while (bp < be)
+    {
+        hval ^= (u64)*bp++;
+        hval *= 0x100000001b3ULL;
+        // hval `+= (hval << 1) + (hval << 4) + (hval << 5) + (hval << 7) + (hval << 8) +
+        // (hval << 40);
+    }
+
+    return hval;
+}
+
+inline constexpr u64 computeFNV1a64(u8 const * data, size_t len)
+{
+    if (0 == len)
+    {
+        return 0ULL;
+    }
+
+    u64 hval = 0xCBF29CE484222325ULL;
+
+    u8 const * bp = data;
+    u8 const * be = bp + len;
+
+    while (bp < be)
+    {
+        hval ^= (u64)*bp++;
+        hval *= 0x100000001b3ULL;
+        // hval `+= (hval << 1) + (hval << 4) + (hval << 5) + (hval << 7) + (hval << 8) +
         // (hval << 40);
     }
 

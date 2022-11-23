@@ -1,6 +1,7 @@
 #include <sb_core/hash/crc.h>
 
 #include <sb_slw/iterator>
+#include <sb_slw/span>
 
 #include <extern_prolog.h>
 #include <catch2/catch.hpp>

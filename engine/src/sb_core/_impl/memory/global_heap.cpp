@@ -1,6 +1,6 @@
 #include <sb_core/memory/global_heap.h>
 #include <sb_core/error.h>
-#include "memory_system.h"
+#include <sb_core/memory/memory_system.h>
 
 sb::MemoryArena sb::GlobalHeap::allocate(usize const size)
 {
@@ -32,7 +32,7 @@ sb::b8 sb::GlobalHeap::owns(void const *) const
 
 sb::usize sb::GlobalHeap::getBlockSize(void * ptr) const
 {
-    return memory_system::getBlockSize(ptr);
+    return memory_system::getMallocBlockSize(ptr);
 }
 
 sb::GlobalHeap & sb::getGlobalHeap()
