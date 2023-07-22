@@ -23,7 +23,6 @@ local unittestrun = Terminal:new({
     direction = "float"
 })
 function sbRunUnitTests()
-    print("hello world")
     unittestrun:toggle()
 end
 
@@ -38,6 +37,19 @@ function sbRunPlayground()
     playgroundrun:toggle()
 end
 
+local adventrun = Terminal:new({
+    cmd = "sb_advent_2022.exe",
+    dir = "build/win64-ninja-clang/samples/sb_advent_2022",
+    hidden = true,
+    close_on_exit = false,
+    direction = "float"
+})
+function sbRunAdvent()
+    --adventrun:toggle()
+    vim.api.nvim_exec("!start cmd  /k \"mode con: cols=180 lines=80 && cd build/win64-ninja-clang/samples/sb_advent_2022 && sb_advent_2022.exe && pause && exit\"", true)
+end
+
+
 local gitstatus = Terminal:new({
     cmd = "git status",
     hidden = true,
@@ -51,10 +63,13 @@ end
 function sbRun(buffer_name)
     if (string.find(buffer_name, "sb_playground")) then
         sbRunPlayground()
+    elseif (string.find(buffer_name, "sb_advent_2022")) then
+        sbRunAdvent()
     else
         sbRunUnitTests()
     end
 end
 
 -- Lua mapping example
-vim.api.nvim_set_keymap("n", "<C-k>r", "<cmd>lua sbRun(vim.api.nvim_buf_get_name(0))<CR>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap("n", "<F5>", "<cmd>lua sbRun(vim.api.nvim_buf_get_name(0))<CR>", {noremap = true, silent = true})
+

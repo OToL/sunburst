@@ -1,17 +1,17 @@
 #include <sb_core/string/utility.h>
 #include <sb_core/error.h>
 
-char * sb::strCatT(char * sb_noalias dst, usize dst_len, usize dst_capacity, char const * sb_noalias concat)
+char * sb::concatStringT(char * sb_noalias dst, usize dst_len, usize dst_capacity, char const * sb_noalias concat)
 {
     sb_assert(dst_len <= dst_capacity);
     sb_assert(dst[dst_len] == 0);
 
-    strCpyT(dst + dst_len, dst_capacity - dst_len, concat);
+    copyStringT(dst + dst_len, dst_capacity - dst_len, concat);
 
     return dst;
 }
 
-sb::usize sb::strCpyT(char * sb_noalias output, usize capacity, char const * sb_noalias src)
+sb::usize sb::copyStringT(char * sb_noalias output, usize capacity, char const * sb_noalias src)
 {
     if (0 == capacity)
     {

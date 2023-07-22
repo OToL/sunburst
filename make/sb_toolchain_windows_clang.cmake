@@ -20,6 +20,8 @@ function(sb_setup_toolchain_properties BASE_TARGET_NAME)
     target_compile_options(${BASE_TARGET_NAME}_public
         INTERFACE
             -fno-exceptions
+            #-O3
+            #-D_ITERATOR_DEBUG_LEVEL=0
             -Wno-deprecated-declarations)
 
 endfunction()

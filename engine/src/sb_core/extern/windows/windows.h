@@ -4,3 +4,8 @@
 #pragma warning(disable : 5039)
 #include <Windows.h>
 #pragma warning(pop)
+
+#undef min
+#undef max
+#undef ERROR
+

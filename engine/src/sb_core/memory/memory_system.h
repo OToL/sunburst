@@ -6,7 +6,7 @@
 namespace sb::memory_system {
 
 void initialize();
-b8 isInitialize();
+b8 isInitialized();
 void terminate();
 
 MemoryArena malloc(usize size);

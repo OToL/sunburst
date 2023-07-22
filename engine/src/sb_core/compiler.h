@@ -28,5 +28,3 @@
 
 #define sb_debug_break() sb_debug_break_internal
 
-// requires including sb_core/extern/intrinsics.h
-#define sb_lzcnt(val) sb_lzcnt_internal(val)

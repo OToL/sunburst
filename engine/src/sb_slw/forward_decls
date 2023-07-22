@@ -7,8 +7,13 @@ namespace SB_SRC_STD_NS {
     template<typename T, size_t Extends>
     class span;
 
+#if defined(_MSC_VER)
+    template<class T>
+    struct char_traits;
+#else
     template<class T>
     class char_traits;
+#endif
 
     template<class CharT, class Traits>
     class basic_string_view;

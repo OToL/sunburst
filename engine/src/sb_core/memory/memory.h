@@ -31,12 +31,6 @@ inline constexpr b8 isAlignedTo(T val, usize alignment)
 void zeroMemory(void * const memPtr, usize const byteCount);
 
 template <typename T>
-void zeroMemory(T * const objPtr)
-{
-    zeroMemory(objPtr, sizeof(T));
-}
-
-template <typename T>
 void zeroMemory(T & obj)
 {
     zeroMemory(&obj, sizeof(T));

@@ -6,7 +6,7 @@
 
 namespace sb {
 
-void getWorkingDirectory(slw::span_fw<char> & buffer);
+void getWorkingDirectory(slw::span_fw<char> const & buffer);
 void outputDebugString(char const * msg);
 
 } // namespace sb

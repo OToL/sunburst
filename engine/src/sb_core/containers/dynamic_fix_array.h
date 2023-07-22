@@ -78,6 +78,11 @@ public:
         return (0 == _size);
     }
 
+    bool full() const
+    {
+        return (CAPACITY == _size);
+    }
+
     iterator expand(size_type cnt)
     {
         if (sb_expect((_size + cnt) <= CAPACITY))

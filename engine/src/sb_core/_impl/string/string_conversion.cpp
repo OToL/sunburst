@@ -9,7 +9,7 @@
 
 sb::usize sb::internal::stringToCharBuffer(char const * src, slw::span<char> const &dst)
 {
-    return sb::strCpyT(dst.data(), integral_cast<usize>(dst.size()), src);
+    return sb::copyStringT(dst.data(), integral_cast<usize>(dst.size()), src);
 }
 
 template <typename T>

@@ -1,11 +1,14 @@
 # CODE QUALITY
 
-- [ ] replace gtest
 - [ ] static analyzers
 - [ ] Increase the number of warnings as error (SB_TOOLCHAIN_*_WARNING_IGNORE_LIST)
 - [ ] clang sanitizers
 - [ ] Use fuzzing for unit tests (libfuzeer)
-- [ ] Use clang-tidy
+
+# TOOLING
+
+- [ ] Neovim "todo" management (e.g. telescope listing, etc.)
+- [ ] Neovim inline go to defintion with edition
 
 # BUILD SYSTEM
 
@@ -13,8 +16,8 @@
 
 # ENGINE
 
-- [ ] memory system interface: malloc/free --> allocate/deallocate, allocateVMem-->reserveAndMapVMem 
 - [ ] memory_system proper initialization during static init instead of using magic static
+- [ ] memory_system pass MemoryArena to free and getMallocBlockSize
 - [ ] Possibility to mount more than just FS (mountLocalFileSystem)
 - [ ] move rpmalloc to _impl/extern
 - [ ] Implement buffered FileInputStream

@@ -11,6 +11,8 @@ namespace SB_STD_NS {
     SB_SRC_STD_USE(find_if);
     SB_SRC_STD_USE(distance);
     SB_SRC_STD_USE(copy);
+    SB_SRC_STD_USE(count);
+    SB_SRC_STD_USE(count_if);
     SB_SRC_STD_USE(fill);
     SB_SRC_STD_USE(distance);
     SB_SRC_STD_USE(swap);

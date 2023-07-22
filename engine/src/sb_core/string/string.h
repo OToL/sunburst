@@ -1,9 +1,9 @@
 #pragma once
 
-#include <sb_std/string>
+#include <sb_slw/string>
 
 namespace sb {
 
-using String = sbstd::string;
+using String = slw::string;
 
 }

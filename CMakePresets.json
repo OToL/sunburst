@@ -1,0 +1,28 @@
+{
+    "version": 5,
+    "configurePresets": [
+        {
+            "name": "clang-debug",
+            "displayName": "Clang 15.0.0 x86_64-pc-windows-msvc",
+            "description": "Using compilers: C = c:\\Program Files\\LLVM\\bin\\clang.exe, CXX = c:\\Program Files\\LLVM\\bin\\clang++.exe",
+            "binaryDir": "${sourceDir}/build/win64-ninja-clang",
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_C_COMPILER": "c:\\Program Files\\LLVM\\bin\\clang.exe",
+                "CMAKE_CXX_COMPILER": "c:\\Program Files\\LLVM\\bin\\clang++.exe",
+                "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/make/cmake_toolchain_win64_clang.cmake",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": 1,
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "clang-debug",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "clang-debug"
+        }
+    ]
+}

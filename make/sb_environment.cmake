@@ -14,7 +14,7 @@ function(sb_setup_environment ROOT_DIR_PATH)
     set(SB_EXTERN_LIB_DIR_PATH "${ROOT_DIR_PATH}/extern/lib" PARENT_SCOPE)
     set(SB_EXTERN_BIN_DIR_PATH "${ROOT_DIR_PATH}/extern/bin" PARENT_SCOPE)
     set(SB_EXTERN_APP_DIR_PATH "${ROOT_DIR_PATH}/extern/app" PARENT_SCOPE)
-    set(SB_ENGINE_MEMORY_HOOK_FILE_PATH "${ROOT_DIR_PATH}/engine/src/sb_core/_impl/memory/memory_hook.cpp" PARENT_SCOPE)
+    set(SB_ENGINE_MEMORY_HOOK_FILE_PATH "${ROOT_DIR_PATH}/engine/src/sb_core/_impl/memory/memory_system_init.cpp" PARENT_SCOPE)
 
     if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
         set(SB_APP_EXTENSION ".exe" PARENT_SCOPE)

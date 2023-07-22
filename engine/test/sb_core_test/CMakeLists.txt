@@ -1,7 +1,7 @@
 include(${SB_CATCH_CMAKE_DIR_PATH}/catch.cmake)
 
 add_executable(sb_core_test
-    compiler_test.cpp
+    bit_test.cpp
     core_test.cpp
     math_test.cpp
     memory_test.cpp

@@ -34,7 +34,7 @@ char * sb::concatFsPath(slw::span<char> const &base_path, usize base_path_len, c
         }
     }
 
-    strCpyT(base_path.data() + concat_offset, integral_cast<usize>(base_path.size() - concat_offset), path_cat);
+    copyStringT(base_path.data() + concat_offset, integral_cast<usize>(base_path.size() - concat_offset), path_cat);
 
     return base_path.data();
 }

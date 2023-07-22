@@ -32,7 +32,7 @@ public:
         }
         else
         {
-            _len = strCpyT(_data, src);
+            _len = copyStringT(_data, src);
         }
     }
 
@@ -44,7 +44,7 @@ public:
         }
         else
         {
-            _len = strCpyT(&_data[0], minValue(CAPACITY, len + 1), src);
+            _len = copyStringT(&_data[0], minValue(CAPACITY, len + 1), src);
         }
     }
 
@@ -56,23 +56,23 @@ public:
     template <usize SRC_CAPACITY>
     FixString(FixString<SRC_CAPACITY, TChar> const & src)
     {
-        _len = strCpyT(_data, src.c_str());
+        _len = copyStringT(_data, src.c_str());
     }
 
     FixString(FixString<CAPACITY, TChar> const & src)
     {
-        _len = strCpyT(_data, src.c_str());
+        _len = copyStringT(_data, src.c_str());
     }
 
     template <usize SRC_CAPACITY>
     FixString(FixString<SRC_CAPACITY, TChar> && src)
     {
-        _len = strCpyT(_data, src.c_str());
+        _len = copyStringT(_data, src.c_str());
     }
 
     FixString(FixString && src)
     {
-        _len = strCpyT(_data, src.c_str());
+        _len = copyStringT(_data, src.c_str());
     }
 
     ~FixString() = default;
@@ -150,7 +150,7 @@ public:
 
     FixString & append(TChar const * str)
     {
-        strCatT(&_data[0], _len, CAPACITY, str);
+        concatStringT(&_data[0], _len, CAPACITY, str);
 
         // @todo: implement my own strncat which returns the numbers of copied character
         _len = slw::strlen(&_data[0]);
@@ -171,7 +171,7 @@ public:
     template <usize SRC_CAPACITY>
     FixString & operator=(FixString<SRC_CAPACITY, TChar> const & src)
     {
-        _len = strCpyT(_data, src.c_str());
+        _len = copyStringT(_data, src.c_str());
 
         return *this;
     }
@@ -181,7 +181,7 @@ public:
     {
         if (this != &src)
         {
-            _len = strCpyT(_data, src.c_str());
+            _len = copyStringT(_data, src.c_str());
         }
 
         return *this;
@@ -190,7 +190,7 @@ public:
     template <usize SRC_CAPACITY>
     FixString & operator=(FixString<SRC_CAPACITY, TChar> && src)
     {
-        _len = strCpyT(_data, src.c_str());
+        _len = copyStringT(_data, src.c_str());
 
         return *this;
     }
@@ -200,7 +200,7 @@ public:
     {
         if (this != &src)
         {
-            _len = strCpyT(_data, src.c_str());
+            _len = copyStringT(_data, src.c_str());
         }
 
         return *this;
@@ -208,7 +208,7 @@ public:
 
     FixString & operator=(TChar const * src)
     {
-        _len = strCpyT(_data, src);
+        _len = copyStringT(_data, src);
 
         return *this;
     }

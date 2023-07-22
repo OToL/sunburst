@@ -13,7 +13,7 @@ void sb::memory_system::initialize()
     g_isInitialized = true;
 }
 
-sb::b8 sb::memory_system::isInitialize()
+sb::b8 sb::memory_system::isInitialized()
 {
     return g_isInitialized;
 }

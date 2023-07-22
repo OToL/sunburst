@@ -8,10 +8,9 @@
 
 #include <direct.h>
 
-void sb::getWorkingDirectory(slw::span<char> & buffer)
+void sb::getWorkingDirectory(slw::span<char> const & buffer)
 {
     sb_assert(!buffer.empty());
-
     _getcwd(buffer.data(), integral_cast<int>(buffer.size_bytes()));
 }
 
